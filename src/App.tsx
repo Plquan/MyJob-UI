@@ -15,38 +15,40 @@ export default function App() {
   return (
     <>
       {/* Header */}
-      <header className="fixed top-0 left-0 right-0 z-50 bg-white shadow-sm py-2 flex items-center justify-between px-4">
+      <header className="fixed top-0 left-0 right-0 z-50 bg-white shadow-sm py-3 flex items-center justify-between px-6">
       {/* Logo bên trái */}
       <div className="flex items-center">
-        <SearchOutlined className="text-purple-700 text-xl mr-2" />
-        <div>
-          <span className="text-xl font-bold text-blue-700">VINHUNI</span>
-          <div className="text-xs text-gray-500 -mt-1">MyJob</div>
+        <div className="flex items-center gap-3">
+          <img 
+            src="/assets/vinhuni.png" 
+            alt="VINHUNI Logo" 
+            className="h-10 w-auto"
+          />
         </div>
       </div>
 
       {/* Thanh menu giữa */}
-      <nav className="flex items-center space-x-6 text-gray-700 text-sm mx-4">
+      <nav className="flex items-center space-x-8 text-gray-700 text-base mx-6">
         <div className="flex items-center cursor-pointer hover:text-purple-700">
-          <SearchOutlined className="mr-2" />
+          <SearchOutlined className="mr-2 text-lg" />
           <span>Ngành nghề/ Địa điểm</span>
         </div>
         <div className="flex items-center cursor-pointer hover:text-purple-700">
-          <BankOutlined className="mr-2" />
+          <BankOutlined className="mr-2 text-lg" />
           <span>Công ty</span>
         </div>
         <div className="flex items-center cursor-pointer hover:text-purple-700">
-          <FileTextOutlined className="mr-2" />
+          <FileTextOutlined className="mr-2 text-lg" />
           <span>Cẩm nang việc làm</span>
         </div>
         <div className="flex items-center cursor-pointer hover:text-purple-700">
-          <FileTextOutlined className="mr-2" />
+          <FileTextOutlined className="mr-2 text-lg" />
           <span>Mẫu CV xin việc</span>
         </div>
       </nav>
 
       {/* Dropdown và Nút nhà tuyển dụng */}
-      <div className="flex items-center space-x-4">
+      <div className="flex items-center space-x-6">
         <Dropdown menu={{ items: [
           {
             key: '1',
@@ -59,21 +61,21 @@ export default function App() {
             icon: <EditOutlined />
           }
         ]}} placement="bottomRight" arrow>
-          <div className="flex items-center text-sm text-purple-700 cursor-pointer">
-            <UserOutlined className="mr-2" />
+          <div className="flex items-center text-base text-purple-700 cursor-pointer">
+            <UserOutlined className="mr-2 text-lg" />
             <span>Đăng ký / Đăng nhập</span>
           </div>
         </Dropdown>
 
-        <Button type="default" className="border border-gray-300 flex items-center">
-          <BankOutlined className="mr-2" />
+        <Button type="default" className="border border-gray-300 flex items-center h-9 px-4">
+          <BankOutlined className="mr-2 text-lg" />
           Nhà tuyển dụng
         </Button>
       </div>
     </header>
 
       {/* Main content with fixed sidebar and content */}
-      <div className="pt-16 min-h-screen flex flex-col md:flex-row bg-gray-50">
+      <div className="pt-18 min-h-screen flex flex-col md:flex-row bg-gray-50">
         {/* Sidebar navigation (fixed like header) */}
         <div className="fixed top-14 left-0 w-64 bg-white shadow-sm p-4 h-[calc(100vh-56px)] overflow-y-auto hidden md:block z-40">
           <div className="flex flex-col items-center mb-6 p-4">
