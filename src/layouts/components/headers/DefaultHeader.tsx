@@ -1,7 +1,17 @@
-import { useNavigate } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import { Dropdown, Button } from 'antd';
 import { UserOutlined, EditOutlined, SearchOutlined, BankOutlined, FileTextOutlined } from '@ant-design/icons';
 import ROUTE_PATH from '../../../routes/routePath';
+import { Link } from 'react-router-dom';
+import { Header } from 'antd/es/layout/layout';
+
+const menuItems = [
+  { icon: <SearchOutlined className="mr-2" />, label: 'Ngành nghề/ Địa điểm', path: '/jobs' },
+  { icon: <BankOutlined className="mr-2" />, label: 'Công ty', path: '/companies' },
+  { icon: <FileTextOutlined className="mr-2" />, label: 'Cẩm nang việc làm', path: '/guide' },
+  { icon: <FileTextOutlined className="mr-2" />, label: 'Mẫu CV xin việc', path: '/cv-samples' },
+];
+
 
 const DefaultHeader = () => {
   const navigate = useNavigate();
@@ -11,7 +21,7 @@ const DefaultHeader = () => {
     if (key === 'register') navigate(ROUTE_PATH.CANDIDATE_REGISTER);
   };
 
-  const menuItems = [
+  const  DropdownItems = [
     {
       key: 'login',
       label: 'Đăng nhập',
@@ -25,42 +35,49 @@ const DefaultHeader = () => {
   ];
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 bg-white shadow-sm py-3 flex items-center justify-between px-6">
+    <Header className=" top-0 left-0 right-0 z-50 bg-white! shadow-sm py-3 flex items-center justify-between px-6 z-50">
       {/* Logo bên trái */}
       <div className="flex items-center">
-        <div className="flex items-center gap-3">
+      <div className="flex items-center gap-3">
+        <Link to={ROUTE_PATH.HOME}>
           <img 
             src="/assets/vinhuni.png" 
             alt="VINHUNI Logo" 
             className="h-10 w-auto"
           />
-        </div>
+        </Link>
       </div>
+    </div>
 
       {/* Thanh menu giữa */}
-      <nav className="h-full flex items-center space-x-8 text-gray-700 text-sm mx-6">
-        {[
-            { icon: <SearchOutlined className="mr-2" />, label: 'Ngành nghề/ Địa điểm' },
-            { icon: <BankOutlined className="mr-2" />, label: 'Công ty' },
-            { icon: <FileTextOutlined className="mr-2" />, label: 'Cẩm nang việc làm' },
-            { icon: <FileTextOutlined className="mr-2" />, label: 'Mẫu CV xin việc' },
-        ].map((item, index) => (
-            <div
-            key={index}
-            className="flex items-center cursor-pointer hover:text-[#6A5ACD] relative after:content-[''] after:absolute after:bottom-[-22px] after:left-0 after:h-[2px] after:bg-blue-400 hover:after:w-full after:transition-all after:duration-900"
-            >
-            {item.icon}
-            <span>{item.label}</span>
-            </div>
-        ))}
-        </nav>
+
+      <nav className="h-full flex items-center space-x-8 text-[13.5px] mx-6">
+      {menuItems.map((item, index) => (
+        <NavLink
+          key={index}
+          to={item.path}
+          className={({ isActive }) =>
+            `flex items-center cursor-pointer relative
+             hover:text-[#6A5ACD]
+             after:content-['']
+             after:absolute after:bottom-0 after:left-0 after:h-[2px]
+             after:bg-blue-400 after:transition-all after:duration-300
+             ${isActive ? 'after:w-full text-[#6A5ACD]' : 'after:w-0'}`
+          }
+        >
+          {item.icon}
+          <span className="text-black ml-1">{item.label}</span>
+        </NavLink>
+      ))}
+    </nav>
+
 
 
       {/* Dropdown và Nút nhà tuyển dụng */}
       <div className="flex items-center space-x-6">
         <Dropdown
           menu={{
-            items: menuItems,
+            items: DropdownItems,
             onClick: handleMenuClick,
           }}
           placement="bottomRight"
@@ -77,7 +94,7 @@ const DefaultHeader = () => {
           Nhà tuyển dụng
         </Button>
       </div>
-    </header>
+    </Header>
   );
 };
 
