@@ -1,6 +1,6 @@
 import { Form, Input, Button } from 'antd';
 import { EyeInvisibleOutlined, EyeTwoTone } from '@ant-design/icons';
-
+import ROUTE_PATH from '../../../../routes/routePath';
 const FormLogin = ({ mounted }: { mounted: boolean }) => {
     const [form] = Form.useForm();
     const slideLogin = mounted ? 'translate-y-0 opacity-100 transition-all duration-600 ease-out' : 'translate-y-80 opacity-0';
@@ -49,7 +49,7 @@ const FormLogin = ({ mounted }: { mounted: boolean }) => {
                   htmlType="submit"
                   className="w-full h-12 rounded-xl text-lg font-semibold"
                   style={{
-                    background: 'linear-gradient(90deg, #1a1a1a 0%, #b721ff 100%)',
+                    background: 'linear-gradient(90deg, #1a1a1a 0%,  rgb(66, 52, 151) 100%)',
                     border: 'none',
                     color: '#fff',
                     boxShadow: '0 2px 8px 0 rgba(87, 6, 146, 0.10)',
@@ -65,7 +65,7 @@ const FormLogin = ({ mounted }: { mounted: boolean }) => {
               <a href="#" className="text-gray-500 hover:underline">Quên mật khẩu?</a>
             </div>
             <div className="text-center text-sm">
-              Chưa có tài khoản? <a href="#" className="text-[#e10098] font-semibold hover:underline">Đăng ký ngay</a>
+              Chưa có tài khoản? <a href={ROUTE_PATH.EMPLOYER_REGISTER} className="text-[#7B68EE] font-semibold hover:underline">Đăng ký ngay</a>
             </div>
           </div>
         </div>

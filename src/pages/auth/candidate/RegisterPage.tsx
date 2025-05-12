@@ -1,12 +1,12 @@
 import { Form, Input, Button, Checkbox } from 'antd';
 import { EyeInvisibleOutlined, EyeTwoTone } from '@ant-design/icons';
-
-const Register = () => {
+import ROUTE_PATH from '../../../routes/routePath';
+const RegisterPage = () => {
   const [form] = Form.useForm();
   
   return (
     <div className="flex h-screen w-full items-center justify-center" style={{
-      background: 'radial-gradient(ellipse at top left, #1a144b 0%, #a12b8c 60%, #c13fa0 100%)'
+      background: 'linear-gradient(120deg, rgb(0,0,0) 0%, rgb(123,104,238) 100%)'
     }}>
       <div className="w-full max-w-[500px] bg-white px-8 py-4 rounded-lg shadow-lg" style={{ minHeight: 0 }}>
         <h2 className="text-center text-l font-bold mb-5 pt-5">Đăng ký tài khoản</h2>
@@ -84,7 +84,7 @@ const Register = () => {
         </Form>
         
         <div className="text-center mt-2 text-sm mb-5">
-            Đã có tài khoản? <a href="#" className="text-blue-500 hover:underline">Đăng nhập ngay</a>
+            Đã có tài khoản? <a href={ROUTE_PATH.CANDIDATE_LOGIN} className="text-blue-500 hover:underline">Đăng nhập ngay</a>
         </div>
 
       </div>
@@ -92,4 +92,4 @@ const Register = () => {
   );
 };
 
-export default Register;
+export default RegisterPage;

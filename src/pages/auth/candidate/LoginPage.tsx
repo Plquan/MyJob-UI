@@ -1,7 +1,7 @@
 import { Form, Input, Button, Divider } from 'antd';
 import { EyeInvisibleOutlined, EyeTwoTone, GoogleOutlined, GithubOutlined } from '@ant-design/icons';
-
-const Login = () => {
+import ROUTE_PATH from '../../../routes/routePath';
+const LoginPage = () => {
   const [form] = Form.useForm();
 
   return (
@@ -55,14 +55,14 @@ const Login = () => {
           <a href="#" className="text-blue-500 hover:underline">Quên mật khẩu?</a>
         </div>
         <div className="text-center text-sm mb-3">
-          Chưa có tài khoản? <a href="#" className="text-blue-500 hover:underline">Đăng ký ngay</a>
+          Chưa có tài khoản? <a href={ROUTE_PATH.CANDIDATE_REGISTER} className="text-blue-500 hover:underline">Đăng ký ngay</a>
         </div>
         <div className="text-center text-sm mb-5">
-          <a href="#" className="text-blue-500 font-bold hover:underline">&larr; Trở về Trang chủ</a>
+          <a href={ROUTE_PATH.HOME} className="text-blue-500 font-bold hover:underline">&larr; Trở về Trang chủ</a>
         </div>
       </div>
     </div>
   );
 };
 
-export default Login;
+export default LoginPage;

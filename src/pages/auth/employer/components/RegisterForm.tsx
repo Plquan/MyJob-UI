@@ -1,7 +1,7 @@
 import { Form, Input, Button, Select } from 'antd';
 import { EyeInvisibleOutlined, EyeTwoTone, CheckOutlined } from '@ant-design/icons';
 import { useState } from 'react';
-
+import ROUTE_PATH from '../../../../routes/routePath';
 const { Option } = Select;
 
 const RegisterForm = ({ mounted }: { mounted: boolean }) => {
@@ -97,7 +97,7 @@ const RegisterForm = ({ mounted }: { mounted: boolean }) => {
             >
               <Input.Password
                 placeholder="Nhập lại mật khẩu"
-                className="rounded-md mb-5 h-8 text-base"
+                className="rounded-md  h-8 text-base"
                 iconRender={visible => (visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />)}
               />
             </Form.Item>
@@ -151,18 +151,19 @@ const RegisterForm = ({ mounted }: { mounted: boolean }) => {
             </div>
             <Form.Item
               name="companyField"
-              label={<span><span className="text-red-500 mr-1">*</span>Lĩnh vực</span>}
+              label={<span><span className="text-red-500 mr-1"></span>Lĩnh vực</span>}
               rules={[{ required: true, message: 'Vui lòng chọn lĩnh vực!' }]}
             >
               <Select placeholder="Chọn lĩnh vực">
                 <Option value="it">Công nghệ thông tin</Option>
                 <Option value="marketing">Marketing</Option>
                 <Option value="finance">Tài chính</Option>
-                {/* Thêm các lĩnh vực khác nếu cần */}
+                {/* Thêm các lĩnh vực khác nếu cần */}.
+                
               </Select>
             </Form.Item>
             <Form.Item
-              label={<span><span className="text-red-500 mr-1">*</span>Địa chỉ công ty</span>}
+              label={<span><span className="text-red-500 mr-1"></span>Địa chỉ công ty</span>}
               required
             >
                 <Form.Item
@@ -191,7 +192,7 @@ const RegisterForm = ({ mounted }: { mounted: boolean }) => {
         )}
 
         <div className="text-center text-sm mt-7 mb-2">
-          Bạn đã có tài khoản? <a href="#" className="text-blue-600  hover:underline">Đăng nhập</a>
+          Bạn đã có tài khoản? <a href={ROUTE_PATH.EMPLOYER_LOGIN} className="text-blue-600  hover:underline">Đăng nhập</a>
         </div>
       </div>
     </div>
