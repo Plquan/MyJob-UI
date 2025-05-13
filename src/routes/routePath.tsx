@@ -6,5 +6,6 @@ const ROUTE_PATH = {
     EMPLOYER_REGISTER: '/employer/register',
     JOBS: '/jobs',
     COMPANIES: '/companies',
+    CANDIDATE_PROFILE: '/candidate/profile',
   }
 export default ROUTE_PATH;

@@ -5,6 +5,7 @@ import EmployerRegisterPage from "../pages/auth/employer/RegisterPage";
 import HomePage from "../pages/home/HomePage";
 import JobsPage from "../pages/jobs/JobPage";
 import CompanyPage from "../pages/company/CompanyPage";
+import CandidateProfilePage from "../pages/candidate-profile/CandidateProfilePage";
 
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import ROUTE_PATH from "./routePath";
@@ -20,6 +21,7 @@ const AppRoutes = () => {
             <Route path={ROUTE_PATH.EMPLOYER_REGISTER} element={<EmployerRegisterPage />} />
             <Route path={ROUTE_PATH.JOBS} element={<JobsPage />} />
             <Route path={ROUTE_PATH.COMPANIES} element={<CompanyPage />} />
+            <Route path={ROUTE_PATH.CANDIDATE_PROFILE} element={<CandidateProfilePage />} />
         </Routes>
        </BrowserRouter>
     )

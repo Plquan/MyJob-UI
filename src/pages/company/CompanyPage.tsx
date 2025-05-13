@@ -1,6 +1,6 @@
 import { Input, Select, Button, Card, Avatar } from "antd";
 import { CarryOutOutlined, EnvironmentOutlined, FlagOutlined, SearchOutlined, TeamOutlined, UsergroupAddOutlined, UserOutlined } from "@ant-design/icons";
-import Footer from "../../layouts/components/footer";
+import Footer from "../../layouts/components/footer/DefaultFooter";
 import DefaultHeader from "../../layouts/components/headers/DefaultHeader";
 import CompanyForm from "./components/CompanyForm";
 const { Option } = Select;
@@ -8,8 +8,8 @@ const { Option } = Select;
 const companies = [
     {
       id: 1,
-      cover: 'https://via.placeholder.com/400x150/00ff99/ffffff?text=GSI+Banner',
-      logoText: 'GSI',
+      cover: '/assets/hiring-banner.png',
+      logo: '/assets/vinhuni.png',
       followers: 1,
       name: 'GSI GROUP LIMITED',
       industry: 'Gia công phần mềm',
@@ -19,8 +19,8 @@ const companies = [
     },
     {
       id: 2,
-      cover: 'https://via.placeholder.com/400x150/ff6600/ffffff?text=Khang+Duy',
-      logoText: 'KD',
+      cover: '/assets/hiring-banner.png',
+      logo: '/assets/vinhuni.png',
       followers: 0,
       name: 'Công Ty TNHH Dược Phẩm Khang Duy',
       industry: 'Kế toán',
@@ -30,8 +30,8 @@ const companies = [
     },
     {
       id: 3,
-      cover: 'https://via.placeholder.com/400x150/0033cc/ffffff?text=Bidicomed',
-      logoText: 'BD',
+      cover: '/assets/hiring-banner.png',
+      logo: '/assets/vinhuni.png',
       followers: 0,
       name: 'Công Ty Cổ Phần Bidicomed',
       industry: 'Kinh doanh',
@@ -39,7 +39,17 @@ const companies = [
       employees: '1000+ nhân viên',
       jobs: '1 việc làm'
     },
-    // Bạn có thể thêm nhiều hơn...
+    {
+      id: 4,
+      cover: '/assets/hiring-banner.png',
+      logo: '/assets/vinhuni.png',
+      followers: 0,
+      name: 'Công Ty Cổ Phần Bidicomed',
+      industry: 'Kinh doanh',
+      location: 'Cần Thơ',
+      employees: '1000+ nhân viên',
+      jobs: '1 việc làm'
+    },
   ];
   
 
@@ -68,82 +78,73 @@ const CompanyPage = () => {
 
   {/* Công ty nổi bật */}
 {/* Công ty nổi bật */}
-<div className="bg-white p-6 rounded-xl shadow-md max-w-7xl mx-auto">
-  <h2 className="text-lg font-extrabold mb-5">
+<div className="bg-white p-4 rounded-xl shadow-md max-w-4xl mx-auto">
+  <h2 className="text-base font-bold mb-4">
     <span className="text-red-500">{companies.length}</span> công ty
   </h2>
 
-  {/* Grid 3 cột, responsive */}
-  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
     {companies.map(company => (
-      <Card
-        key={company.id}
-        hoverable
-        className="border rounded-lg overflow-hidden"
-        style={{ width: '100%' }}  // 100% để card giãn full width của grid cell
-      >
-        {/* Banner + overlay */}
-        <div className="relative">
-          <img
-            alt="cover"
-            src={company.cover}
-            className="w-full h-36 object-cover"
+    <Card
+    key={company.id}
+    hoverable
+    className="rounded-lg shadow-sm border"
+  >
+    {/* Banner + Avatar + Follow */}
+    <div className="relative">
+      <img
+        alt="cover"
+        src={company.cover}
+        className="w-full h-28 object-cover rounded-t-lg"
+      />
+  
+      {/* Follower count */}
+      <div className="absolute right-3 top-2 flex items-center text-xs text-gray-600">
+        <UsergroupAddOutlined style={{ fontSize: 14 }} />
+        <span className="ml-1">{company.followers} lượt theo dõi</span>
+      </div>
+  
+      {/* Logo */}
+      <div className="absolute left-3 -bottom-6">
+        <div className="bg-white p-1 rounded-md shadow-md">
+          <Avatar
+            size={48}
+            src={company.logo}
+            style={{ backgroundColor: '#fff' }}
+            icon={<UserOutlined />}
           />
-          {/* Avatar */}
-          <div className="absolute left-4 -bottom-8">
-            <Avatar
-              size={64}
-              style={{ backgroundColor: '#000', border: '2px solid #fff' }}
-            >
-              {company.logoText}
-            </Avatar>
-          </div>
-          {/* Follower count */}
-          <div className="absolute right-4 top-4 flex items-center text-gray-600 text-sm">
-            <UsergroupAddOutlined />
-            <span className="ml-1">{company.followers} lượt theo dõi</span>
-          </div>
         </div>
-
-        {/* Nội dung dưới banner */}
-        <div className="pt-10 px-4 pb-4">
-          <h3 className="font-semibold text-lg">{company.name}</h3>
-
-          <div className="mt-3 space-y-2 text-gray-600 text-sm">
-            <div className="flex items-center">
-              <FlagOutlined />
-              <span className="ml-2">{company.industry}</span>
-            </div>
-            <div className="flex items-center">
-              <EnvironmentOutlined />
-              <span className="ml-2">{company.location}</span>
-            </div>
-            <div className="flex items-center">
-              <TeamOutlined />
-              <span className="ml-2">{company.employees}</span>
-            </div>
-            <div className="flex items-center">
-              <CarryOutOutlined />
-              <span className="ml-2">{company.jobs}</span>
-            </div>
-          </div>
-
-          <Button
-            block
-            style={{
-              backgroundColor: '#F17F01',
-              borderColor: '#F17F01',
-              color: '#fff',
-              marginTop: 16,
-            }}
-          >
-            Đang theo dõi
-          </Button>
+      </div>
+    </div>
+  
+    {/* Nội dung */}
+    <div className="pt-8">
+      <h3 className="text-base font-semibold mb-1">{company.name}</h3>
+      <div className="space-y-1 text-gray-600 text-xs">
+        <div className="flex items-center">
+          <FlagOutlined className="text-sm" />
+          <span className="ml-2">{company.industry}</span>
         </div>
-      </Card>
+        <div className="flex items-center">
+          <EnvironmentOutlined className="text-sm" />
+          <span className="ml-2">{company.location}</span>
+        </div>
+        <div className="flex items-center">
+          <TeamOutlined className="text-sm" />
+          <span className="ml-2">{company.employees}</span>
+        </div>
+        <div className="flex items-center">
+          <CarryOutOutlined className="text-sm" />
+          <span className="ml-2">{company.jobs}</span>
+        </div>
+      </div>
+    </div>
+  </Card>
+  
     ))}
   </div>
 </div>
+
 
 </div>
 <Footer />

@@ -2,7 +2,7 @@ import { Select, Typography, Card, Breadcrumb, Empty } from 'antd';
 import DefaultHeader from '../../layouts/components/headers/DefaultHeader';
 import AdvancedFilter from './components/AdvancedFilter';
 import HeartOutlined from '@ant-design/icons/lib/icons/HeartOutlined';
-import Footer from '../../layouts/components/footer';
+import Footer from '../../layouts/components/footer/DefaultFooter';
 
 const { Title } = Typography;
 

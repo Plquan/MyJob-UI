@@ -4,15 +4,15 @@ import {
 
 } from "@ant-design/icons";
 import TrendingSection from "./components/TrendingSection";
-import TrendingCompany from "./components/TrendingCompany";
+import FeaturedCompanySection from "./components/FeaturedCompanySection";
 import DefaultHeader from "../../layouts/components/headers/DefaultHeader";
-import Footer from "../../layouts/components/footer";
+import DefaultFooter from "../../layouts/components/footer/DefaultFooter";
+import FeaturedJobsSection from "./components/FeaturedJobsSection";
 
 export default function HomePage() {
   return (
     <>
-       <DefaultHeader />
-
+  <DefaultHeader />
 <section className="bg-gradient-to-r from-[rgb(0,0,0)] to-[rgb(123,104,238)] pt-24 pb-16 text-center text-white">
 <h1 style={{ fontFamily: 'FZ Poppins', fontWeight: 900}} className="text-[80px] md:text-[60px] leading-tight text-center">
 <span className="bg-gradient-to-r from-blue-400 to-purple-600 bg-clip-text text-transparent">
@@ -93,57 +93,9 @@ export default function HomePage() {
 
 <TrendingSection />
 </section>
-<TrendingCompany />
+<FeaturedCompanySection />
 
-{/* Việc làm nổi bật */}
-<section className="bg-white py-16">
-  <div className="max-w-6xl mx-auto">
-    <h2 className="text-3xl font-bold text-center mb-10 text-purple-700">Việc làm nổi bật</h2>
-    <div className="flex flex-wrap justify-center gap-8 mb-8">
-      {/* Card việc làm */}
-      {[
-        {
-          logo: 'https://fpt-telecom.vn/assets/images/logo.png',
-          title: 'Tuyển dụng Frontend Developer (React.js)',
-          company: 'FPT Telecom',
-          location: 'Thành phố Hà Nội',
-          salary: '15.000.000 ₫',
-          type: 'Toàn thời gian'
-        },
-        {
-          logo: 'https://fpt-telecom.vn/assets/images/logo.png',
-          title: 'Chuyên Viên Kinh Doanh Kênh Phân Phối B2C',
-          company: 'FPT Telecom',
-          location: 'Thành phố Hồ Chí Minh',
-          salary: '20.000.000 ₫',
-          type: 'Toàn thời gian'
-        },
-        {
-          logo: 'https://fpt-telecom.vn/assets/images/logo.png',
-          title: 'Nhân Viên Kỹ Thuật FPT Telecom - Q. Tân Bình',
-          company: 'FPT Telecom',
-          location: 'Thành phố Hồ Chí Minh',
-          salary: '10.000.000 ₫',
-          type: 'Toàn thời gian'
-        },
-      ].map((job, idx) => (
-        <div key={idx} className="bg-white rounded-xl shadow-md p-6 w-[320px] flex flex-col border border-gray-100">
-          <div className="flex items-center gap-2 mb-2">
-            <img src={job.logo} alt={job.company} className="w-8 h-8 object-contain rounded-full border" />
-            <div className="font-semibold text-base truncate" title={job.title}>{job.title}</div>
-          </div>
-          <div className="text-gray-500 text-sm mb-1 truncate">{job.company}</div>
-          <div className="flex items-center text-gray-600 text-sm mb-1 gap-1"><span>📍</span>{job.location}</div>
-          <div className="flex items-center text-yellow-600 text-sm mb-1 gap-1"><span>💰</span>{job.salary}</div>
-          <div className="flex items-center text-gray-600 text-sm mb-4 gap-1"><span>⏰</span>{job.type}</div>
-          <button className="mt-auto px-6 py-2 rounded-lg bg-gradient-to-r from-purple-600 to-pink-500 text-white font-semibold shadow hover:opacity-90 transition">Ứng tuyển ngay</button>
-        </div>
-      ))}
-    </div>
-  </div>
-</section>
-
-
+<FeaturedJobsSection />
 
 {/* Banner doanh nghiệp */}
 <section className="bg-[#f5f8fa] py-20">
@@ -169,7 +121,7 @@ export default function HomePage() {
     </div>
   </div>
 </section>
-   <Footer/>
+   <DefaultFooter/>
     </>
   );
 }
