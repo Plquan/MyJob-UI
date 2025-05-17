@@ -56,7 +56,6 @@ const companies = [
 const CompanyPage = () => {
   return (
     <>
-     <DefaultHeader />
 <div className="min-h-screen p-6">
   <div className="max-w-4xl mx-auto mb-8">
     <div className="mb-6">
@@ -145,9 +144,7 @@ const CompanyPage = () => {
   </div>
 </div>
 
-
 </div>
-<Footer />
 
     </>
   );

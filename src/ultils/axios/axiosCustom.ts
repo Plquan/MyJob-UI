@@ -1,29 +1,26 @@
 import axios from "axios";
-import { getAccessToken } from "../functions/accessToken";
 import env from "../../constant/env";
+import ROUTE_PATH from "../../routes/routePath";
+
 const baseURL = String(env.API_URL);
+
 const http = axios.create({
   baseURL,
   headers: {
     "Content-Type": "application/json",
   },
-  withCredentials: true,
+  withCredentials: true, 
 });
-http.interceptors.request.use((config:any) => {
-  if (getAccessToken() !== undefined) {
-    config.headers.Authorization = "Bearer " + String(getAccessToken());
-  }
-  return config;
-});
+
 http.interceptors.response.use(
-  (response:any) => {
-    return response.data;
-  },
-  async (error:any) => {
+  (response) => response.data,
+  async (error) => {
     if (error.response?.status === 401) {
-      // window.location.href = "/login";
+       window.location.href = `${ROUTE_PATH.CANDIDATE_LOGIN}`;
+      console.log(error.response.data)
     }
-    return await Promise.reject(error);
+    return Promise.reject(error);
   }
 );
+
 export default http;

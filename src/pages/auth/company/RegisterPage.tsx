@@ -16,7 +16,7 @@ const [mounted, setMounted] = useState(false);
       background: 'linear-gradient(120deg,rgb(255, 255, 255) 0%,rgb(255, 255, 255) 100%)' 
     }}>
       <LeftSide mounted={mounted} />
-      <RegisterForm mounted={mounted} />
+      <RegisterForm/>
     </div>
   );
 };

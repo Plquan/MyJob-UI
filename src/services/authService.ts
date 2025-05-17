@@ -1,18 +1,45 @@
 import http from "../ultils/axios/axiosCustom";
-import type { ApiResponse } from "../types/AppType";
-import type { LoginRequestData, LoginResponseData } from "../types/auth/LoginType";
+import type { IApiResponse } from "../types/AppType";
+import type { ILoginRequestData, ICandidateRegisterRequestData, ICompanyRegisterRequestData, ILoginResponseData } from "../types/auth/AuthType";
 
 
-const login = async (data: LoginRequestData): Promise<ApiResponse<LoginRequestData>> => {
+const candidateLogin = async (data: ILoginRequestData): Promise<IApiResponse<ILoginResponseData>> => {
    try {
-    const response:  ApiResponse<LoginRequestData> = await http.post("/auth/login", data);
+    const response:  IApiResponse<ILoginResponseData> = await http.post("/auth/login/candidate", data);
     return response;
    } catch (error:any) {
     throw error.response.data;
    }
 }
+const companyLogin = async (data: ILoginRequestData): Promise<IApiResponse<ILoginResponseData>> => {
+    try {
+     const response:  IApiResponse<ILoginResponseData> = await http.post("/auth/login/company", data);
+     return response;
+    } catch (error:any) {
+     throw error.response.data;
+    }
+ }
+const candidateRegister = async (data: ICandidateRegisterRequestData): Promise<IApiResponse<any>> => {
+    try {
+        const response: IApiResponse<any> = await http.post("/auth/register/candidate", data);
+        return response;
+    } catch (error: any) {
+        throw error.response.data;
+    }
+}
+const companyRegister = async (data: ICompanyRegisterRequestData): Promise<IApiResponse<any>> => {
+    try {
+        const response: IApiResponse<any> = await http.post("/auth/register/company", data);
+        return response;
+    } catch (error: any) {
+        throw error.response.data;
+    }
+}
 
 const authService = {
-    login,
+    candidateLogin,
+    companyLogin,
+    candidateRegister,
+    companyRegister
   };
-  export default authService;
+export default authService;

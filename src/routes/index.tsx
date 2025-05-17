@@ -1,7 +1,7 @@
 import CandidateLoginPage from "../pages/auth/candidate/LoginPage";
 import CandidateRegisterPage from "../pages/auth/candidate/RegisterPage";
-import EmployerLoginPage from "../pages/auth/employer/LoginPage";
-import EmployerRegisterPage from "../pages/auth/employer/RegisterPage";
+import CompanyLoginPage from "../pages/auth/company/LoginPage";
+import CompanyRegisterPage from "../pages/auth/company/RegisterPage";
 import HomePage from "../pages/home/HomePage";
 import JobsPage from "../pages/jobs/JobPage";
 import CompanyPage from "../pages/company/CompanyPage";
@@ -9,19 +9,33 @@ import CandidateProfilePage from "../pages/candidate-profile/CandidateProfilePag
 
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import ROUTE_PATH from "./routePath";
+import DefaultLayout from "../layouts/DefaultLayout";
+import CandidateLayout from "../layouts/CandidateLayout";
+import ProtectRoute from "./ProtectedRoute";
 
 const AppRoutes = () => {
     return (
        <BrowserRouter>
         <Routes>
-            <Route path={ROUTE_PATH.HOME} element={<HomePage />} />
             <Route path={ROUTE_PATH.CANDIDATE_LOGIN} element={<CandidateLoginPage />} />
             <Route path={ROUTE_PATH.CANDIDATE_REGISTER} element={<CandidateRegisterPage />} />
-            <Route path={ROUTE_PATH.EMPLOYER_LOGIN} element={<EmployerLoginPage />} />
-            <Route path={ROUTE_PATH.EMPLOYER_REGISTER} element={<EmployerRegisterPage />} />
+            <Route path={ROUTE_PATH.COMPANY_LOGIN} element={<CompanyLoginPage />} />
+            <Route path={ROUTE_PATH.COMPANY_REGISTER} element={<CompanyRegisterPage />} />
+
+
+            <Route element={<ProtectRoute/>}>
+            <Route element={<CandidateLayout/>}>
+            <Route path={ROUTE_PATH.CANDIDATE_PROFILE} element={<CandidateProfilePage />} />
+            </Route>
+            </Route>
+    
+            <Route element={<DefaultLayout/>}>
+            <Route path={ROUTE_PATH.HOME} element={<HomePage />} />
             <Route path={ROUTE_PATH.JOBS} element={<JobsPage />} />
             <Route path={ROUTE_PATH.COMPANIES} element={<CompanyPage />} />
-            <Route path={ROUTE_PATH.CANDIDATE_PROFILE} element={<CandidateProfilePage />} />
+            </Route>
+
+
         </Routes>
        </BrowserRouter>
     )

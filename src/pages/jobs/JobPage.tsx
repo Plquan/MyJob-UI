@@ -1,8 +1,6 @@
 import { Select, Typography, Card, Breadcrumb, Empty } from 'antd';
-import DefaultHeader from '../../layouts/components/headers/DefaultHeader';
 import AdvancedFilter from './components/AdvancedFilter';
 import HeartOutlined from '@ant-design/icons/lib/icons/HeartOutlined';
-import Footer from '../../layouts/components/footer/DefaultFooter';
 
 const { Title } = Typography;
 
@@ -34,11 +32,7 @@ const JobPage  = () => {
 
   return (
     <>
-      <DefaultHeader />
-
       <AdvancedFilter />
-
-
       <div className="max-w-7xl mx-auto p-5 pt-10 flex gap-6">
         {/* Main content */}
         <div className="flex-1">
@@ -130,8 +124,6 @@ const JobPage  = () => {
               </div>
 
       </div>
-
-      <Footer/>
     </>
   );
 };

@@ -1,6 +1,6 @@
 const ExperienceCard = () => {
   return (
-    <div className="bg-white border border-gray-200 shadow-sm rounded-md mb-6">
+    <div className="bg-white border border-gray-200 rounded-md mb-6">
     <div className="flex justify-between items-center px-6 h-12 border-b border-gray-200">
     <span className="text-sm font-medium font-roboto">Kinh Nghiệm Làm Việc</span>
       <a className="text-xs text-[#1976d2] hover:underline cursor-pointer flex items-center">
