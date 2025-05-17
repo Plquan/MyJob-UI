@@ -12,6 +12,7 @@ import ROUTE_PATH from "./routePath";
 import DefaultLayout from "../layouts/DefaultLayout";
 import CandidateLayout from "../layouts/CandidateLayout";
 import ProtectRoute from "./ProtectedRoute";
+import OverviewDashboard from "../pages/candidate-profile/overview";
 
 const AppRoutes = () => {
     return (
@@ -26,6 +27,7 @@ const AppRoutes = () => {
             <Route element={<ProtectRoute/>}>
             <Route element={<CandidateLayout/>}>
             <Route path={ROUTE_PATH.CANDIDATE_PROFILE} element={<CandidateProfilePage />} />
+            <Route path={ROUTE_PATH.CANDIDATE_OVERVIEW} element={<OverviewDashboard />} />
             </Route>
             </Route>
     

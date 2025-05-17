@@ -40,7 +40,7 @@ const CandidateProfilePage = () => {
   return (
     <>
 
-        <div className="flex-1 p-4 md:p-5 min-w-0">
+
           <div className="bg-white rounded-md border border-gray-200 p-8 mb-6 relative">
             <div className="flex justify-between items-center mb-4">
               <h2 className="text-2xl font-bold">Phạm Lê Quân</h2>
@@ -82,7 +82,6 @@ const CandidateProfilePage = () => {
           <AdvancedSkillCard />
 
 
-        </div>
       <ProfileEditModal
         open={openEdit}
         onCancel={() => setOpenEdit(false)}
