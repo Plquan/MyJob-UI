@@ -15,6 +15,10 @@ const ROUTE_PATH = {
     CANDIDATE_PROFILE: '/candidate/profile',
     CANDIDATE_MY_COMPANIES: '/candidate/my-companies',
 
+
+    //employer
+    EMPLOYER_DASHBOARD: '/employer/dashboard',
+
   }
 
 export default ROUTE_PATH;
