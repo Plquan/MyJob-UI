@@ -1,90 +1,21 @@
-import { Form, Input, Button, Checkbox } from 'antd';
-import { EyeInvisibleOutlined, EyeTwoTone } from '@ant-design/icons';
 import ROUTE_PATH from '../../../routes/routePath';
+import RegisterForm from './components/RegisterForm';
+
 const RegisterPage = () => {
-  const [form] = Form.useForm();
   
   return (
-    <div className="flex h-screen w-full items-center justify-center" style={{
-      background: 'linear-gradient(120deg, rgb(0,0,0) 0%, rgb(123,104,238) 100%)'
-    }}>
-      <div className="w-full max-w-[500px] bg-white px-8 py-4 rounded-lg shadow-lg" style={{ minHeight: 0 }}>
-        <h2 className="text-center text-l font-bold mb-5 pt-5">Đăng ký tài khoản</h2>
+    <div className="flex h-screen w-full items-center justify-center bg-gradient-to-r from-[rgb(0,0,0)] to-[rgb(123,104,238)]">
+      <div className="w-full max-w-[500px] bg-white px-8 py-4 rounded-lg shadow-lg">
+      <h2 className="text-center text-xl font-semibold! mb-8 pt-3">Đăng ký tài khoản</h2>
         
-            <Form
-            form={form}
-            layout="vertical"
-            name="register"
-            scrollToFirstError
-            >
-            <Form.Item
-            name="fullName"
-            label={<span>Họ và tên</span>}
-            style={{ marginBottom: 12 }}
-            >
-            <Input placeholder="Nhập họ tên" className="rounded-md h-8 text-sm" />
-            </Form.Item>
+        <RegisterForm />
+      
+        <div className="text-center mt-2 text-sm mb-3">
+            Đã có tài khoản? <a href={ROUTE_PATH.CANDIDATE_LOGIN} className="text-blue-500 hover:underline"> Đăng nhập ngay</a>
+        </div>
 
-            <Form.Item
-            name="phone"
-            label={<span>Số điện thoại</span>}
-            style={{ marginBottom: 12 }}
-            >
-            <Input placeholder="Nhập số điện thoại" className="rounded-md h-8 text-sm" />
-            </Form.Item>
-
-            <Form.Item
-            name="email"
-            label={<span>Email</span>}
-            style={{ marginBottom: 12 }}
-            >
-            <Input placeholder="Nhập email" className="rounded-md h-8 text-sm" />
-            </Form.Item>
-
-            <Form.Item
-            name="password"
-            label={<span>Mật khẩu</span>}
-            style={{ marginBottom: 12 }}
-            >
-            <Input.Password
-                placeholder="Nhập mật khẩu"
-                className="rounded-md h-8 text-sm"
-                iconRender={visible => (visible ? <EyeTwoTone size={16} /> : <EyeInvisibleOutlined size={16} />)}
-            />
-            </Form.Item>
-
-            <Form.Item
-            name="confirm"
-            label={<span>Nhập lại mật khẩu</span>}
-            style={{ marginBottom: 12 }}
-            >
-            <Input.Password
-                placeholder="Nhập lại mật khẩu"
-                className="rounded-md h-8 text-sm"
-                iconRender={visible => (visible ? <EyeTwoTone size={16} /> : <EyeInvisibleOutlined size={16} />)}
-            />
-            </Form.Item>
-
-            <Form.Item
-            name="agreement"
-            valuePropName="checked"
-            style={{ marginBottom: 12,marginTop:25 }}
-            >
-            <Checkbox className="text-sm">
-                Tôi đồng ý với <a href="#" className="text-blue-500 hover:underline">điều khoản sử dụng</a><span className="text-red-500 ml-1">*</span>
-            </Checkbox>
-            </Form.Item>
-
-
-          <Form.Item className="mb-1">
-            <Button type="primary" htmlType="submit" className="w-full h-10 rounded-md bg-[#5ea3f7] hover:bg-[#388be0] border-none text-base font-medium" style={{ background: '#5ea3f7', border: 'none' }}>
-              Đăng ký
-            </Button>
-          </Form.Item>
-        </Form>
-        
-        <div className="text-center mt-2 text-sm mb-5">
-            Đã có tài khoản? <a href={ROUTE_PATH.CANDIDATE_LOGIN} className="text-blue-500 hover:underline">Đăng nhập ngay</a>
+        <div className="text-center mt-2 text-sm mb-3">
+            <a href={ROUTE_PATH.HOME} className="text-blue-500 hover:underline">&larr; Trở về trang chủ</a>
         </div>
 
       </div>

@@ -91,7 +91,7 @@ const FormLogin = ({ mounted }: { mounted: boolean }) => {
               <a href="#" className="text-gray-500 hover:underline">Quên mật khẩu?</a>
             </div>
             <div className="text-center text-sm">
-              Chưa có tài khoản? <a href={ROUTE_PATH.COMPANY_REGISTER} className="text-[#7B68EE] font-semibold hover:underline">Đăng ký ngay</a>
+              Chưa có tài khoản? <a href={ROUTE_PATH.EMPLOYER_REGISTER} className="text-[#7B68EE] font-semibold hover:underline">Đăng ký ngay</a>
             </div>
           </div>
         </div>

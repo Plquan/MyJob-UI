@@ -125,7 +125,7 @@ const DefaultHeader = () => {
       {/* Luôn hiện nút Nhà tuyển dụng */}
       <Button
         type="default"
-        onClick={() => navigate(ROUTE_PATH.COMPANY_LOGIN)}
+        onClick={() => navigate(ROUTE_PATH.EMPLOYER_LOGIN)}
         className="flex items-center"
       >
         <BankOutlined className="mr-2" />

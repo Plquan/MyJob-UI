@@ -33,7 +33,7 @@ const RegisterForm = () => {
       const response = await authService.companyRegister(data);
        if(response.success){
         toast.success('Đăng ký thành công!');
-        navigate(ROUTE_PATH.COMPANY_LOGIN);
+        navigate(ROUTE_PATH.EMPLOYER_LOGIN);
        }
 
     } catch (error:any) {
@@ -233,7 +233,7 @@ const RegisterForm = () => {
 
         <div className="text-center text-sm mt-7 mb-2">
           Bạn đã có tài khoản?{' '}
-          <a href={ROUTE_PATH.COMPANY_LOGIN} className="text-blue-600 hover:underline">
+          <a href={ROUTE_PATH.EMPLOYER_LOGIN} className="text-blue-600 hover:underline">
             Đăng nhập
           </a>
         </div>

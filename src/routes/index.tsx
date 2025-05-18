@@ -1,7 +1,7 @@
 import CandidateLoginPage from "../pages/auth/candidate/LoginPage";
 import CandidateRegisterPage from "../pages/auth/candidate/RegisterPage";
-import CompanyLoginPage from "../pages/auth/company/LoginPage";
-import CompanyRegisterPage from "../pages/auth/company/RegisterPage";
+import CompanyLoginPage from "../pages/auth/employer/LoginPage";
+import CompanyRegisterPage from "../pages/auth/employer/RegisterPage";
 import HomePage from "../pages/home/HomePage";
 import JobsPage from "../pages/jobs/JobPage";
 import CompanyPage from "../pages/company/CompanyPage";
@@ -23,8 +23,8 @@ const AppRoutes = () => {
         <Routes>
             <Route path={ROUTE_PATH.CANDIDATE_LOGIN} element={<CandidateLoginPage />} />
             <Route path={ROUTE_PATH.CANDIDATE_REGISTER} element={<CandidateRegisterPage />} />
-            <Route path={ROUTE_PATH.COMPANY_LOGIN} element={<CompanyLoginPage />} />
-            <Route path={ROUTE_PATH.COMPANY_REGISTER} element={<CompanyRegisterPage />} />
+            <Route path={ROUTE_PATH.EMPLOYER_LOGIN} element={<CompanyLoginPage />} />
+            <Route path={ROUTE_PATH.EMPLOYER_REGISTER} element={<CompanyRegisterPage />} />
 
 
             <Route element={<ProtectRoute/>}>
