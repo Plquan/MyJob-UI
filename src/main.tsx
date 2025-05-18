@@ -11,7 +11,9 @@ import GetCurrentUserProvider from './provider/GetCurrentUser/index.tsx';
 createRoot(document.getElementById('root')!).render(
   // <StrictMode>
      <Provider store={store}> 
+     <GetCurrentUserProvider>
      <App/>
+     </GetCurrentUserProvider>
       </Provider>
      
   // </StrictMode>,

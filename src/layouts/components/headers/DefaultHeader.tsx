@@ -57,7 +57,7 @@ const DefaultHeader = () => {
     {
       key: 'profile',
       label: <span>Hồ sơ của tôi</span>,
-      onClick: () => navigate(ROUTE_PATH.CANDIDATE_PROFILE),
+      onClick: () => navigate(ROUTE_PATH.CANDIDATE_OVERVIEW),
     },
     {
       key: 'logout',

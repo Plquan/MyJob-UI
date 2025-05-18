@@ -13,6 +13,7 @@ const ROUTE_PATH = {
     //candidate
     CANDIDATE_OVERVIEW: '/candidate/overview',
     CANDIDATE_PROFILE: '/candidate/profile',
+    CANDIDATE_MY_COMPANIES: '/candidate/my-companies',
 
   }
 

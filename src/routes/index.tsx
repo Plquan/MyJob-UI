@@ -5,14 +5,15 @@ import CompanyRegisterPage from "../pages/auth/company/RegisterPage";
 import HomePage from "../pages/home/HomePage";
 import JobsPage from "../pages/jobs/JobPage";
 import CompanyPage from "../pages/company/CompanyPage";
-import CandidateProfilePage from "../pages/candidate-profile/CandidateProfilePage";
 
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import ROUTE_PATH from "./routePath";
 import DefaultLayout from "../layouts/DefaultLayout";
 import CandidateLayout from "../layouts/CandidateLayout";
-import ProtectRoute from "./ProtectedRoute";
-import OverviewDashboard from "../pages/candidate-profile/overview";
+import ProtectRoute from "./ProtectRoute";
+import OverviewDashboard from "../pages/candidate/overview";
+import MyCompanyTab from "../pages/candidate/my-companies";
+import CandidateProfilePage from "../pages/candidate/manage-profile";
 
 const AppRoutes = () => {
     return (
@@ -28,6 +29,7 @@ const AppRoutes = () => {
             <Route element={<CandidateLayout/>}>
             <Route path={ROUTE_PATH.CANDIDATE_PROFILE} element={<CandidateProfilePage />} />
             <Route path={ROUTE_PATH.CANDIDATE_OVERVIEW} element={<OverviewDashboard />} />
+            <Route path={ROUTE_PATH.CANDIDATE_MY_COMPANIES} element={<MyCompanyTab />} />
             </Route>
             </Route>
     
@@ -36,7 +38,6 @@ const AppRoutes = () => {
             <Route path={ROUTE_PATH.JOBS} element={<JobsPage />} />
             <Route path={ROUTE_PATH.COMPANIES} element={<CompanyPage />} />
             </Route>
-
 
         </Routes>
        </BrowserRouter>
