@@ -1,6 +1,6 @@
-import { Card, Tag, Pagination } from 'antd';
-import { EnvironmentOutlined, CalendarOutlined } from '@ant-design/icons';
-import React, { useState } from 'react';
+import { Tag, Pagination } from 'antd';
+import { ClockCircleOutlined, EnvironmentOutlined, CalendarOutlined } from '@ant-design/icons';
+import  { useState } from 'react';
 
 const jobs = [
   {
@@ -12,7 +12,7 @@ const jobs = [
     deadline: '01/05/2024',
     urgent: true,
     hot: true,
-    logo: '/assets/job-logo-1.png',
+    logo: '/assets/vinhuni.png',
   },
   {
     id: 2,
@@ -23,7 +23,7 @@ const jobs = [
     deadline: '05/05/2024',
     urgent: true,
     hot: true,
-    logo: '/assets/job-logo-2.png',
+    logo: '/assets/vinhuni.png',
   },
   {
     id: 3,
@@ -34,7 +34,7 @@ const jobs = [
     deadline: '31/07/2024',
     urgent: true,
     hot: true,
-    logo: '/assets/job-logo-3.png',
+    logo: '/assets/vinhuni.png',
   },
   {
     id: 4,
@@ -45,7 +45,7 @@ const jobs = [
     deadline: '21/09/2024',
     urgent: true,
     hot: false,
-    logo: '/assets/job-logo-4.png',
+    logo: '/assets/vinhuni.png',
   },
   {
     id: 5,
@@ -56,7 +56,7 @@ const jobs = [
     deadline: '07/06/2024',
     urgent: true,
     hot: true,
-    logo: '/assets/job-logo-5.png',
+    logo: '/assets/vinhuni.png',
   },
   {
     id: 6,
@@ -67,7 +67,7 @@ const jobs = [
     deadline: '22/11/2024',
     urgent: true,
     hot: true,
-    logo: '/assets/job-logo-6.png',
+     logo: '/assets/vinhuni.png',
   },
 ];
 
@@ -78,43 +78,62 @@ const FeaturedJobsSection = () => {
   const pagedJobs = jobs.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
 
   return (
-
-    <section className="bg-white py-8 px-2 mb-10 rounded-xl shadow-md mt-10 max-w-6xl mx-auto border border-gray-200">
-      <div className="flex items-center justify-between bg-[#6A5ACD] font-bold text-xl text-white mb-6 px-2">
-        <h2 className="text-2xl md:text-3xl font-bold text-gray-800">Việc làm tuyển gấp</h2>
+    <div className="max-w-6xl mx-auto mt-10 mb-10">
+      <div className="bg-gradient-to-r from-[rgb(0,0,0)] to-[rgb(123,104,238)] rounded-t-xl flex items-center gap-3 px-6 py-3">
+        <span className="bg-white/80 rounded-full p-1 flex items-center justify-center">
+          <ClockCircleOutlined className="text-[#bfa94a] text-lg" />
+        </span>
+        <h2 className="text-lg md:text-xl font-bold text-white">Việc làm tuyển gấp</h2>
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {pagedJobs.map(job => (
-          <Card key={job.id} className="relative border border-gray-100 shadow hover:shadow-lg transition-all">
-            <div className="flex gap-3 items-start">
-              <img src={job.logo} alt={job.company} className="w-14 h-14 object-contain rounded-md border" />
-              <div className="flex-1">
-                <div className="flex gap-2 items-center mb-1">
-                  {job.hot && <Tag color="red" className="font-bold">HOT</Tag>}
-                  {job.urgent && <Tag color="gold" className="font-bold">Tuyển gấp</Tag>}
+      <section className="bg-white py-4 px-2 rounded-b-xl shadow-md border border-gray-200">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 p-4">
+          {pagedJobs.map(job => (
+            <div
+              key={job.id}
+              className="bg-white border border-gray-200 rounded-lg px-3 py-2 flex flex-col min-h-[80px]"
+            >
+              <div className="flex flex-row items-start w-full min-w-0">
+                <div className="w-10 h-10 border-2 border-gray-300 bg-white flex items-center justify-center rounded-none mr-2 shrink-0">
+                  <img
+                    src={job.logo}
+                    alt={job.company}
+                    className="max-w-[80%] max-h-[80%] object-contain"
+                  />
                 </div>
-                <div className="font-semibold text-base text-gray-900 mb-1 truncate" title={job.title}>{job.title}</div>
-                <div className="text-sm text-gray-500 mb-1 truncate" title={job.company}>{job.company}</div>
-                <div className="flex flex-wrap gap-2 text-xs text-gray-600 mb-1">
-                  <span className="font-bold text-[#6A5ACD]">{job.salary}</span>
-                  <span className="flex items-center gap-1"><EnvironmentOutlined /> {job.location}</span>
-                  <span className="flex items-center gap-1"><CalendarOutlined /> {job.deadline}</span>
+                <div className="flex-1 min-w-0 flex flex-col">
+                  <div className="flex flex-row items-center min-w-0">
+                    <span className="font-semibold text-[15px] text-gray-900 truncate max-w-[110px]">{job.title}</span>
+                    <div className="flex gap-1 ml-2">
+                      {job.hot && (
+                        <Tag color="red" className="font-bold uppercase px-1 py-0 text-[10px] ml-2">HOT</Tag>
+                      )}
+                      {job.urgent && (
+                        <Tag color="gold" className="font-bold uppercase px-1 py-0 text-[10px] ml-1">Tuyển gấp</Tag>
+                      )}
+                    </div>
+                  </div>
+                  <span className="text-xs text-gray-600 truncate max-w-[180px] mt-0.5">{job.company}</span>
                 </div>
               </div>
+              <div className="flex flex-wrap gap-2 text-xs text-gray-700 items-center mt-2 ">
+                <span className="font-bold text-[#6A5ACD]">{job.salary}</span>
+                <span className="flex items-center gap-1"><EnvironmentOutlined className="text-[13px]" /> {job.location}</span>
+                <span className="flex items-center gap-1"><CalendarOutlined className="text-[13px]" /> {job.deadline}</span>
+              </div>
             </div>
-          </Card>
-        ))}
-      </div>
-      <div className="flex justify-center mt-8">
-        <Pagination
-          current={page}
-          pageSize={PAGE_SIZE}
-          total={jobs.length}
-          onChange={setPage}
-          showSizeChanger={false}
-        />
-      </div>
-    </section>
+          ))}
+        </div>
+        <div className="flex justify-center mt-8">
+          <Pagination
+            current={page}
+            pageSize={PAGE_SIZE}
+            total={jobs.length}
+            onChange={setPage}
+            showSizeChanger={false}
+          />
+        </div>
+      </section>
+    </div>
   );
 };
 

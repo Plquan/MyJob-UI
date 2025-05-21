@@ -4,7 +4,7 @@ import CompanyLoginPage from "../pages/auth/employer/LoginPage";
 import CompanyRegisterPage from "../pages/auth/employer/RegisterPage";
 import HomePage from "../pages/home/HomePage";
 import JobsPage from "../pages/jobs/JobPage";
-import CompanyPage from "../pages/company/CompanyPage";
+import CompanyPage from "../pages/companies";
 
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import ROUTE_PATH from "./routePath";
@@ -16,7 +16,7 @@ import MyCompanyTab from "../pages/candidate/my-companies";
 import CandidateProfilePage from "../pages/candidate/manage-profile";
 import CompanyLayout from "../layouts/CompanyLayout";
 import EmployerDashboard from "../pages/employer/dashboard";
-
+import CompanyDetail from "../pages/companies/company-detail";
 const AppRoutes = () => {
     return (
        <BrowserRouter>
@@ -39,6 +39,7 @@ const AppRoutes = () => {
             <Route path={ROUTE_PATH.HOME} element={<HomePage />} />
             <Route path={ROUTE_PATH.JOBS} element={<JobsPage />} />
             <Route path={ROUTE_PATH.COMPANIES} element={<CompanyPage />} />
+            <Route path={ROUTE_PATH.COMPANY_DETAIL} element={<CompanyDetail />} />
             </Route>
 
             <Route element={<CompanyLayout/>}>

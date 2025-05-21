@@ -1,8 +1,7 @@
 import { Input, Select, Button, Card, Avatar } from "antd";
 import { CarryOutOutlined, EnvironmentOutlined, FlagOutlined, SearchOutlined, TeamOutlined, UsergroupAddOutlined, UserOutlined } from "@ant-design/icons";
-import Footer from "../../layouts/components/footer/DefaultFooter";
-import DefaultHeader from "../../layouts/components/headers/DefaultHeader";
-import CompanyForm from "./components/CompanyForm";
+import { useNavigate } from "react-router-dom";
+import ROUTE_PATH from "../../routes/routePath";
 const { Option } = Select;
 
 const companies = [
@@ -54,6 +53,7 @@ const companies = [
   
 
 const CompanyPage = () => {
+  const navigate = useNavigate();
   return (
     <>
 <div className="min-h-screen p-6">
@@ -88,6 +88,7 @@ const CompanyPage = () => {
     key={company.id}
     hoverable
     className="rounded-lg shadow-sm border"
+    onClick={() => navigate(ROUTE_PATH.COMPANY_DETAIL)}
   >
     {/* Banner + Avatar + Follow */}
     <div className="relative">

@@ -32,7 +32,7 @@ const items = [
 
 const DefaultHeader = () => {
   const navigate = useNavigate();
-  const {currentUser,loading} = useSelector((state: RootState) => state.authStore);
+  const {currentUser} = useSelector((state: RootState) => state.authStore);
   const handleMenuClick = ({ key }: { key: string }) => {
     if (key === 'login') navigate(ROUTE_PATH.CANDIDATE_LOGIN);
     if (key === 'register') navigate(ROUTE_PATH.CANDIDATE_REGISTER);
@@ -88,8 +88,6 @@ const DefaultHeader = () => {
       style={{ fontSize: 14, marginLeft: 'auto',width: '50%', marginRight: 24, height: '100%', display: 'flex', alignItems: 'center' }}
     />
 
-
-
     <div className="flex items-center space-x-6">
       {currentUser ? (
         <Dropdown
@@ -104,19 +102,19 @@ const DefaultHeader = () => {
         </Dropdown>
       ) : (
         // Nếu chưa login
-<Dropdown
-  menu={{
-    items: DropdownItems,
-    onClick: handleMenuClick,
-  }}
-  placement="bottomRight"
-  arrow
->
-  <div className="flex items-center max-w-[150px] sm:max-w-none text-[13.5px] text-[#6A5ACD] cursor-pointer truncate whitespace-nowrap">
-    <UserOutlined className="mr-2 text-[16px]" />
-    <span className="truncate">Đăng ký / Đăng nhập</span>
-  </div>
-</Dropdown>
+    <Dropdown
+      menu={{
+        items: DropdownItems,
+        onClick: handleMenuClick,
+      }}
+      placement="bottomRight"
+      arrow
+    >
+      <div className="flex items-center max-w-[150px] sm:max-w-none text-[13.5px] text-[#6A5ACD] cursor-pointer truncate whitespace-nowrap">
+        <UserOutlined className="mr-2 text-[16px]" />
+        <span className="truncate">Đăng ký / Đăng nhập</span>
+      </div>
+    </Dropdown>
       )}
 
       {/* Luôn hiện nút Nhà tuyển dụng */}

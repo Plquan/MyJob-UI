@@ -1,6 +1,7 @@
-
+import { useNavigate } from 'react-router-dom';
 import { Button, Carousel } from 'antd';
 import { LeftOutlined, RightOutlined } from '@ant-design/icons'; // Mũi tên từ Ant Design Icons
+import ROUTE_PATH from '../../../routes/routePath';
 
 export default function FeaturedCompanySection() {
   const companies = [
@@ -45,6 +46,7 @@ export default function FeaturedCompanySection() {
     </div>
   );
   
+  const navigate = useNavigate();
 
   return (
     <section className="bg-white py-16 relative">
@@ -77,7 +79,7 @@ export default function FeaturedCompanySection() {
         </Carousel>
 
         <div className="flex justify-center">
-          <Button className="bg-[#6A5ACD]! text-white!  hover:opacity-90 transition">
+          <Button className="bg-[#6A5ACD]! text-white!  hover:opacity-90 transition" onClick={() => navigate(ROUTE_PATH.COMPANIES) }>
             Xem thêm
           </Button>
         </div>

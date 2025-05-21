@@ -15,6 +15,9 @@ const ROUTE_PATH = {
     CANDIDATE_PROFILE: '/candidate/profile',
     CANDIDATE_MY_COMPANIES: '/candidate/my-companies',
 
+    //company
+    COMPANY_DETAIL: '/company-detail',
+
 
     //employer
     EMPLOYER_DASHBOARD: '/employer/dashboard',
