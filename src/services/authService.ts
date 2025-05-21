@@ -3,17 +3,17 @@ import type { IApiResponse } from "../types/AppType";
 import type { ILoginRequestData, ICandidateRegisterRequestData, ICompanyRegisterRequestData, ILoginResponseData } from "../types/auth/AuthType";
 
 
-const candidateLogin = async (data: ILoginRequestData): Promise<IApiResponse<ILoginResponseData>> => {
+const candidateLogin = async (data: ILoginRequestData): Promise<IApiResponse<any>> => {
    try {
-    const response:  IApiResponse<ILoginResponseData> = await http.post("/auth/login/candidate", data);
+    const response:  IApiResponse<any> = await http.post("/auth/login/candidate", data);
     return response;
    } catch (error:any) {
     throw error.response.data;
    }
 }
-const companyLogin = async (data: ILoginRequestData): Promise<IApiResponse<ILoginResponseData>> => {
+const companyLogin = async (data: ILoginRequestData): Promise<IApiResponse<any>> => {
     try {
-     const response:  IApiResponse<ILoginResponseData> = await http.post("/auth/login/company", data);
+     const response:  IApiResponse<any> = await http.post("/auth/login/company", data);
      return response;
     } catch (error:any) {
      throw error.response.data;

@@ -1,13 +1,18 @@
 import { Navigate, Outlet } from "react-router-dom";
 import type { JSX } from "react";
-import { getCookie } from "../ultils/cookies";
 import ROUTE_PATH from "./routePath";
+import { useSelector } from "react-redux";
+import type { RootState } from "../stores";
+import toast from "react-hot-toast";
+const ProtectRoute = (): JSX.Element | null=> {
+  const {isAuthenticated, hasCheckedAuth } = useSelector((state: RootState) => state.authStore);
 
-const ProtectRoute = (): JSX.Element => {
-    const accessToken = getCookie('accessToken');
-    if(!accessToken) {
-        return <Navigate to={ROUTE_PATH.CANDIDATE_LOGIN} />
-    }
+  if (hasCheckedAuth && !isAuthenticated) {
+    toast.error("Bạn chưa xác thực");
+    return <Navigate to={ROUTE_PATH.CANDIDATE_LOGIN} />;
+  }
+
   return <Outlet />;
 };
+
 export default ProtectRoute;

@@ -26,6 +26,19 @@ const jobs:any[] = [
   },
 ];
 
+const breadcrumbItems = [
+  {
+    title: (
+      <a href="/" className="text-[#6A5ACD]! underline! font-bold">
+        Trang chủ
+      </a>
+    ),
+  },
+  {
+    title: "Tuyển dụng",
+  },
+];
+
 const JobPage  = () => {
   const featuredCompanies = [];
   const newPosts = [];
@@ -39,14 +52,7 @@ const JobPage  = () => {
           
         <div className='rounded-lg bg-white border-2 border-gray-100 p-3'>
           {/* Breadcrumb nằm trên */}
-          <Breadcrumb className="mb-2! text-purple-800">
-            <Breadcrumb.Item>
-              <a href="/" className="text-[#6A5ACD]! underline! font-bold">Trang chủ</a>
-            </Breadcrumb.Item>
-            <Breadcrumb.Item>
-              Tuyển dụng
-            </Breadcrumb.Item>
-          </Breadcrumb>
+          <Breadcrumb className="mb-2! text-purple-800" items={breadcrumbItems} />
 
           {/* Title bên dưới */}
           <Title level={2} className=' font-bold!'>

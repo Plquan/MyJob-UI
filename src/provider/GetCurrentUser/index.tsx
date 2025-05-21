@@ -1,16 +1,19 @@
 import { authActions } from "../../stores/authStore/authReducer";
 import React, { type JSX } from "react";
-import { useDispatch } from "react-redux";
-import { getCookie } from "../../ultils/cookies";
+import { useDispatch, useSelector } from "react-redux";
+import type { RootState } from "../../stores";
 
 const GetCurrentUserProvider = ({ children }: { children: JSX.Element }) => {
+  const hasCheckedAuth = useSelector((state: RootState) => state.authStore.hasCheckedAuth);
   const dispatch = useDispatch();
-  const accessToken = getCookie('accessToken');
 
   React.useEffect(() => {
-    if(!accessToken) return
-    dispatch<any>(authActions.getCurrentUser());
-  }, [accessToken,dispatch]);
+      dispatch<any>(authActions.getCurrentUser());
+    
+  }, [dispatch]);
+  if(!hasCheckedAuth){
+    return null;
+  }
   return children;
 };
 

@@ -8,7 +8,6 @@ import { useSelector } from 'react-redux';
 import type { RootState } from '../../../../stores';
 import { toast } from 'react-hot-toast';
 import {useNavigate } from 'react-router-dom';
-import LoadingSpinner from '../../../../components/LoadingSpinner';
 const { Option } = Select;
 
 const RegisterForm = () => {
@@ -46,7 +45,6 @@ const RegisterForm = () => {
 
   return (
     <div className={"flex flex-1 items-center justify-center "}>
-      {isLoading && <LoadingSpinner />}
       <div className="w-full max-w-[540px] bg-white">
         <h2 className="text-center text-3xl font-bold mb-8 mt-6" style={{ color: '#222' }}>
           Đăng ký

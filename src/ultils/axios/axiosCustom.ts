@@ -2,21 +2,34 @@ import axios from "axios";
 import env from "../../constant/env";
 
 const baseURL = String(env.API_URL);
-
 const http = axios.create({
   baseURL,
   headers: {
     "Content-Type": "application/json",
   },
-  withCredentials: true, 
+  withCredentials: true,
 });
 
 http.interceptors.response.use(
-  (response) => response.data,
+  (response) => {
+    return response.data;
+  },
   async (error) => {
-    if (error.response?.status === 401) {
-      console.log(error.response.data)
+    const originalRequest = error.config;
+
+    if (error.response?.status === 401 && !originalRequest._retry) {
+      originalRequest._retry = true;
+
+      try {
+        await axios.post(`${baseURL}/auth/refresh-token`, {}, { withCredentials: true });
+
+        return http(originalRequest);
+      } catch (error:any) {
+
+        return Promise.reject(error);
+      }
     }
+
     return Promise.reject(error);
   }
 );

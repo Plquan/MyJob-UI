@@ -21,6 +21,7 @@ const FormLogin = ({ mounted }: { mounted: boolean }) => {
             const response = await authService.companyLogin(values);
             if (response.success) {
                 toast.success('Đăng nhập thành công');
+                localStorage.setItem("accessToken", response.data);
                 dispatch(authActions.getCurrentUser());
                 navigate(ROUTE_PATH.HOME);
             }
