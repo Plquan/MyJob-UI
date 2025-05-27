@@ -1,6 +1,6 @@
 import { Outlet } from "react-router-dom";
-import CompanyHeader from "../components/headers/CompanyHeader";
-import CompanySidebar from "../components/Sidebar/CompanySidebar";
+import CompanyHeader from "../components/headers/EmployerHeader";
+import CompanySidebar from "../components/Sidebar/EmployerSidebar";
 
 
 export default function CompanyLayout() {

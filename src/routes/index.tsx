@@ -14,9 +14,13 @@ import ProtectRoute from "./ProtectRoute";
 import OverviewDashboard from "../pages/candidate/overview";
 import MyCompanyTab from "../pages/candidate/my-companies";
 import CandidateProfilePage from "../pages/candidate/manage-profile";
-import CompanyLayout from "../layouts/CompanyLayout";
+import CompanyLayout from "../layouts/EmployerLayout";
 import EmployerDashboard from "../pages/employer/dashboard";
 import CompanyDetail from "../pages/companies/company-detail";
+import JobDetail from "../pages/jobs/job-detail";
+import ManageRolePage from "../pages/admin/manage-role";
+import AdminLayout from "../layouts/AdminLayout";
+import ManageUserPage from "../pages/admin/manage-user";
 const AppRoutes = () => {
     return (
        <BrowserRouter>
@@ -25,7 +29,6 @@ const AppRoutes = () => {
             <Route path={ROUTE_PATH.CANDIDATE_REGISTER} element={<CandidateRegisterPage />} />
             <Route path={ROUTE_PATH.EMPLOYER_LOGIN} element={<CompanyLoginPage />} />
             <Route path={ROUTE_PATH.EMPLOYER_REGISTER} element={<CompanyRegisterPage />} />
-
 
             <Route element={<ProtectRoute/>}>
             <Route element={<CandidateLayout/>}>
@@ -40,10 +43,17 @@ const AppRoutes = () => {
             <Route path={ROUTE_PATH.JOBS} element={<JobsPage />} />
             <Route path={ROUTE_PATH.COMPANIES} element={<CompanyPage />} />
             <Route path={ROUTE_PATH.COMPANY_DETAIL} element={<CompanyDetail />} />
+            <Route path={ROUTE_PATH.JOB_DETAIL} element={<JobDetail />} />
             </Route>
 
             <Route element={<CompanyLayout/>}>
             <Route path={ROUTE_PATH.EMPLOYER_DASHBOARD} element={<EmployerDashboard />} />
+            </Route>
+
+            <Route element={<AdminLayout/>}>
+            <Route path={ROUTE_PATH.ADMIN_MANAGE_ROLE} element={<ManageRolePage />} />
+            <Route path={ROUTE_PATH.ADMIN_MANAGE_USER} element={<ManageUserPage />} />
+            
             </Route>
 
         </Routes>

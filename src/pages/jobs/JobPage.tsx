@@ -1,7 +1,8 @@
 import { Select, Typography, Card, Breadcrumb, Empty } from 'antd';
 import AdvancedFilter from './components/AdvancedFilter';
 import HeartOutlined from '@ant-design/icons/lib/icons/HeartOutlined';
-
+import { useNavigate } from 'react-router-dom';
+import ROUTE_PATH from '../../routes/routePath';
 const { Title } = Typography;
 
 
@@ -42,6 +43,7 @@ const breadcrumbItems = [
 const JobPage  = () => {
   const featuredCompanies = [];
   const newPosts = [];
+  const navigate = useNavigate();
 
   return (
     <>
@@ -74,7 +76,7 @@ const JobPage  = () => {
             </div>
           ) : (
             jobs.map((job) => (
-              <Card key={job.id} className="mb-3! shadow-sm hover:shadow-md transition-all duration-300">
+              <Card key={job.id} className="mb-3! cursor-pointer shadow-sm hover:shadow-md transition-all duration-300" onClick={() => navigate(ROUTE_PATH.JOB_DETAIL)}>
                 <div className="flex justify-between items-start">
                   <div className="flex gap-3">
                     <img src={job.logo} alt={job.company} className="w-16 h-12 object-contain" />

@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { IProvince } from "../../types/province/ProvinceType";
-import provinceThunks from "./provinceThunks";
+import provinceThunks from "./provinceThunk";
 
 interface ProvinceState{
     provinces?: IProvince[],

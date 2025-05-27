@@ -18,9 +18,18 @@ const ROUTE_PATH = {
     //company
     COMPANY_DETAIL: '/company-detail',
 
+    //job
+    JOB_DETAIL: '/job-detail',
+
 
     //employer
     EMPLOYER_DASHBOARD: '/employer/dashboard',
+
+    //admin
+    ADMIN_DASHBOARD: '/admin/dashboard',
+    ADMIN_MANAGE_ROLE: '/admin/manage-role',
+    ADMIN_MANAGE_PACKAGE: '/admin/manage-package',
+    ADMIN_MANAGE_USER: '/admin/manage-user'
 
   }
 

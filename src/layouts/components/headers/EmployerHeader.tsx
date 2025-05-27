@@ -1,9 +1,9 @@
 import { BellOutlined, UserOutlined } from '@ant-design/icons';
 import { Header } from 'antd/es/layout/layout';
 
-export default function CompanyHeader() {
+export default function EmployerHeader() {
   return (
-<Header className="h-14 bg-[#11224d] flex items-center justify-between px-6 text-white">
+<Header className="h-14 bg-gradient-to-r! from-[rgb(0,0,0)]! to-[rgb(123,104,238)]! flex items-center justify-between px-6 text-white">
   <div className="flex items-center gap-6 ml-auto text-white!">
     <div className="flex items-center gap-2">
       <BellOutlined className="text-xl" />
@@ -15,7 +15,5 @@ export default function CompanyHeader() {
     </div>
   </div>
 </Header>
-
-
   );
 } 

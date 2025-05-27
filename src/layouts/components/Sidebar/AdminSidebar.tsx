@@ -3,8 +3,6 @@ import {
   HomeOutlined,
   ApartmentOutlined,
   FileTextOutlined,
-  UserOutlined,
-  BarChartOutlined,
   GiftOutlined,
 } from '@ant-design/icons';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -30,22 +28,18 @@ const items: MenuProps['items'] = [
       {
         key: '/dashboard/jobs',
         label: 'Quản lý tin tuyển dụng',
-        icon: <FileTextOutlined />,
       },
       {
         key: '/dashboard/cv',
         label: 'Quản lý CV',
-        icon: <FileTextOutlined />,
       },
       {
         key: '/dashboard/candidates',
         label: 'Quản lý ứng viên',
-        icon: <UserOutlined />,
       },
       {
         key: '/dashboard/report',
         label: 'Báo cáo & Thống kê',
-        icon: <BarChartOutlined />,
       },
     ],
   },
@@ -61,15 +55,15 @@ export default function CompanySidebar() {
   const navigate = useNavigate();
 
   return (
-    <aside
+    <div
     className="min-h-screen flex flex-col"
-    style={{ width: 256, backgroundColor: '#0a1931' }} // 256px = mặc định của Ant Design Menu
+    style={{ backgroundColor: 'black' }}
   >
     <div
-    className="h-16 flex items-center justify-center border-b border-[#11224d]"
+    className="h-16 flex items-center ml-5 border-b"
     >
     <img
-        src="assets/vinhuni.png"
+        src="/assets/vinhuni.png"
         className="h-10 object-contain"
     />
     </div>
@@ -83,14 +77,14 @@ export default function CompanySidebar() {
       onClick={({ key }) => navigate(key)}
       items={items}
       style={{
-        backgroundColor: '#0a1931',
+        backgroundColor: 'black',
         color: 'white',
         borderRight: 'none',
         flex: 1,
-        width: 256, // cố định chiều ngang
+        width: 256, 
       }}
     />
-  </aside>
+  </div>
   
   );
 }
