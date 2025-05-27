@@ -29,7 +29,8 @@ const ROUTE_PATH = {
     ADMIN_DASHBOARD: '/admin/dashboard',
     ADMIN_MANAGE_ROLE: '/admin/manage-role',
     ADMIN_MANAGE_PACKAGE: '/admin/manage-package',
-    ADMIN_MANAGE_USER: '/admin/manage-user'
+    ADMIN_MANAGE_USER: '/admin/manage-user',
+    ADMIN_USER: '/admin/user'
 
   }
 

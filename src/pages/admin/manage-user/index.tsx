@@ -142,7 +142,7 @@ const ManageUserPage = () => {
         <Select defaultValue="all-status" className="w-40">
           <Select.Option value="all-status">Tất cả</Select.Option>
         </Select>
-      </div>
+       </div>
 
       <Table columns={columns} dataSource={data} pagination={{ pageSize: 10 }} scroll={{ x: 900 }} />
     </>

@@ -21,6 +21,7 @@ import JobDetail from "../pages/jobs/job-detail";
 import ManageRolePage from "../pages/admin/manage-role";
 import AdminLayout from "../layouts/AdminLayout";
 import ManageUserPage from "../pages/admin/manage-user";
+import UserInfoPage from "../pages/admin/manage-user/user-info";
 const AppRoutes = () => {
     return (
        <BrowserRouter>
@@ -53,6 +54,7 @@ const AppRoutes = () => {
             <Route element={<AdminLayout/>}>
             <Route path={ROUTE_PATH.ADMIN_MANAGE_ROLE} element={<ManageRolePage />} />
             <Route path={ROUTE_PATH.ADMIN_MANAGE_USER} element={<ManageUserPage />} />
+            <Route path={ROUTE_PATH.ADMIN_USER} element={<UserInfoPage />} />
             
             </Route>
 
