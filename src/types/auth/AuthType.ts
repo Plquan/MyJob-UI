@@ -24,9 +24,10 @@ export interface ICandidateRegisterRequestData {
 
 export interface ICurrentUser {
     id: number;
-    groupRoleId: number;
-    avatarId?: number;
+    avatar?: string | null;
     email: string;
     fullName: string;
+    roleName:string,
+    isStaff:boolean,
     isActive: boolean;
 }

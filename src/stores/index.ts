@@ -1,16 +1,42 @@
-import { configureStore } from "@reduxjs/toolkit";
+import { configureStore, combineReducers } from "@reduxjs/toolkit";
+import storage from "redux-persist/lib/storage"; // localStorage
+import { persistReducer, persistStore } from "redux-persist";
+
 import { provinceSlice } from "./provinceStore/provinceReducer";
 import { authSlice } from "./authStore/authReducer";
-import roleReducer from "./roleStore/roleReducer";
+import { roleSlice } from "./roleStore/roleReducer";
+import { userSlice } from "./userStore/userReducer";
 
+// Cấu hình redux-persist
+const persistConfig = {
+  key: "root",
+  storage,
+  whitelist: ["authStore"], // ✅ Chỉ lưu userStore
+};
+
+// Gộp các reducer lại
+const rootReducer = combineReducers({
+  provinceStore: provinceSlice.reducer,
+  authStore: authSlice.reducer,
+  roleStore: roleSlice.reducer,
+  userStore: userSlice.reducer,
+});
+
+// Tạo reducer có tích hợp persist
+const persistedReducer = persistReducer(persistConfig, rootReducer);
+
+// Tạo store
 export const store = configureStore({
-    reducer: {
-        provinceStore: provinceSlice.reducer,
-        authStore: authSlice.reducer,
-        roleStore: roleReducer,
-    },
-})
+  reducer: persistedReducer,
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: false,
+    }),
+});
 
+// Export persistor để bọc app
+export const persistor = persistStore(store);
+
+// Kiểu state và dispatch
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;
-

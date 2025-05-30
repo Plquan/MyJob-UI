@@ -4,16 +4,19 @@ import './index.css'
 import 'antd/dist/reset.css';
 import App from './App.tsx';
 import { Provider } from 'react-redux';
-import { store } from './stores';
+import { persistor, store } from './stores';
 import GetCurrentUserProvider from './provider/GetCurrentUser/index.tsx';
+import { PersistGate } from 'redux-persist/integration/react';
 
 
 createRoot(document.getElementById('root')!).render(
   // <StrictMode>
      <Provider store={store}> 
+       <PersistGate loading={null} persistor={persistor}>
      <GetCurrentUserProvider>
      <App/>
      </GetCurrentUserProvider>
+     </PersistGate>
       </Provider>
      
   // </StrictMode>,
