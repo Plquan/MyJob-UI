@@ -24,7 +24,7 @@ export interface ICandidateRegisterRequestData {
 
 export interface ICurrentUser {
     id: number;
-    avatar?: string | null;
+    avatar?: string;
     email: string;
     fullName: string;
     roleName:string,

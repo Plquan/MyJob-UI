@@ -8,14 +8,8 @@ export interface IUserData {
     roleName: string;
     createdAt: string;      
     updatedAt: string;      
-    avatarId?: number;
     avatar?: string | null; 
-    groupRoles: string[]; 
+    groupRoles?: number[]; 
     isSuperUser: boolean;
     isStaff: boolean;
-}
-
-export interface IUpdateUserData extends IUserData {
-    password:string,
-    avatar: any
 }

@@ -1,5 +1,5 @@
 import { Button, Carousel, Modal } from "antd";
-import { ZoomInOutlined, LeftOutlined, RightOutlined } from "@ant-design/icons";
+import { ZoomInOutlined, LeftOutlined, RightOutlined, ExpandOutlined } from "@ant-design/icons";
 import React from "react";
 
 interface CompanyImagesProps {
@@ -58,11 +58,11 @@ export default function CompanyImages({ images }: CompanyImagesProps) {
           ))}
         </Carousel>
         <Button
-          type="primary"
-          icon={<ZoomInOutlined />}
-          className="!absolute !bottom-2 !right-2 z-10 bg-black! border-none hover:bg-white/90"
-          onClick={showModal}
-        />
+        type="primary"
+        icon={<ExpandOutlined />}
+        className="!absolute !bottom-2 !right-2 z-10 bg-transparent! border-none hover:bg-white/90 text-black!"
+        onClick={showModal}
+      />
       </div>
 
       <Modal

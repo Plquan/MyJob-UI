@@ -6,12 +6,28 @@ import {
   BellOutlined,
 } from "@ant-design/icons";
 import { useNavigate, useLocation } from "react-router-dom";
-import ROUTE_PATH from "../../../routes/routePath";
+import ROUTE_PATH from "../../../../routes/routePath";
 import type { MenuProps } from "antd";
+import { useState } from "react";
+import type { RcFile } from "antd/es/upload/interface";
+import Avatar from "./components/avatar";
 
 export default function CandidateSidebar() {
   const navigate = useNavigate();
   const location = useLocation();
+  const [imageUrl, setImageUrl] = useState("/api/placeholder/80/80");
+
+  const handleImageChange = (file: RcFile) => {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      setImageUrl(e.target?.result as string);
+    };
+    reader.readAsDataURL(file);
+  };
+
+  const handleDeleteImage = () => {
+    setImageUrl("/api/placeholder/80/80");
+  };
 
   const menuItems: MenuProps["items"] = [
     {
@@ -48,17 +64,14 @@ export default function CandidateSidebar() {
 
   return (
     <div className="mt-5 top-14 left-0 w-64 bg-white border-r border-gray-200 p-4 h-[calc(100vh-56px)] flex flex-col z-50">
-      {/* Avatar + Info */}
-      <div className="flex flex-col items-center mb-6 p-4 flex-shrink-0">
-        <div className="w-20 h-20 rounded-full bg-red-200 mb-2 overflow-hidden">
-          <img
-            src="/api/placeholder/80/80"
-            alt="Profile avatar"
-            className="w-full h-full object-cover"
-          />
-        </div>
+      <div className="flex flex-col items-center p-4 flex-shrink-0">
+        <Avatar
+          imageUrl={imageUrl}
+          onImageChange={handleImageChange}
+          onDeleteImage={handleDeleteImage}
+        />
         <h3 className="font-medium text-center">Phạm lê quân</h3>
-        <p className="text-xs text-gray-500">nvhhoang286@gmail.com</p>
+      <p className="text-xs text-gray-500">nvhhoang286@gmail.com</p>
         <p className="text-xs text-gray-500">0369683675</p>
       </div>
 

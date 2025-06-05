@@ -21,7 +21,7 @@ import JobDetail from "../pages/jobs/job-detail";
 import ManageRolePage from "../pages/admin/manage-role";
 import AdminLayout from "../layouts/AdminLayout";
 import ManageUserPage from "../pages/admin/manage-user/list-user";
-import UserInfoPage from "../pages/admin/manage-user/user-info";
+import UserInfoPage from "../pages/admin/manage-user/user-detail";
 const AppRoutes = () => {
     return (
        <BrowserRouter>

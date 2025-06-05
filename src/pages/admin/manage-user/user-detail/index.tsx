@@ -8,55 +8,116 @@ import {
   Upload,
   Row,
   Col,
-  Card
+  Card,
+  Empty
 } from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
 import ImgCrop from 'antd-img-crop';
 import { useNavigate } from 'react-router-dom';
 import ROUTE_PATH from '../../../../routes/routePath';
-import { useSelector } from 'react-redux';
-import type { RootState } from '../../../../stores';
+import { useSelector, useDispatch } from 'react-redux';
+import type { AppDispatch, RootState } from '../../../../stores';
+import { roleActions } from '../../../../stores/roleStore/roleReducer';
+
 
 const UserInfoPage = () => {
   const navigate = useNavigate();
   const [form] = Form.useForm();
   const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
+  const [fileList, setFileList] = useState<any[]>([]);
   const selectedUser = useSelector((state: RootState) => state.userStore.selectedUser);
+  const roles = useSelector((state:RootState) => state.roleStore.roles)
+  const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {
+    if (!roles || roles.length === 0) {
+      dispatch(roleActions.getAllRoles());
+    }
+
     if (selectedUser) {
       form.setFieldsValue({
         fullName: selectedUser.fullName,
         email: selectedUser.email,
         active: selectedUser.isActive,
         isVerifyEmail: selectedUser.isVerifyEmail,
-        avatar: selectedUser.avatar ? [{ url: selectedUser.avatar }] : [],
         groups: selectedUser.groupRoles,
         isSuperUser: selectedUser.isSuperUser,
         isStaff: selectedUser.isStaff
       });
       setAvatarUrl(selectedUser.avatar || null);
+      if (selectedUser.avatar) {
+        setFileList([{
+          uid: '-1',
+          name: 'avatar.png',
+          status: 'done',
+          url: selectedUser.avatar,
+        }]);
+      }
     }
     else{
-       navigate(ROUTE_PATH.ADMIN_MANAGE_USER)
+      navigate(ROUTE_PATH.ADMIN_MANAGE_USER)
     }
   }, [selectedUser, form]);
 
+  const handleAvatarChange = (info: any) => {
+    console.log('Upload change info:', info);
+    const newFileList = info.fileList;
+    setFileList(newFileList);
+    
+    if (newFileList.length > 0) {
+      const file = newFileList[0];
+      if (file.originFileObj) {
+        // Read the new file for preview
+        const reader = new FileReader();
+        reader.onload = e => {
+          setAvatarUrl(e.target?.result as string);
+        };
+        reader.readAsDataURL(file.originFileObj);
+      } else if (file.url) {
+        // Use existing file URL for preview
+        setAvatarUrl(file.url);
+      }
+    } else {
+      if (selectedUser?.avatar) {
+        setAvatarUrl(selectedUser.avatar);
+      } else {
+        setAvatarUrl(null);
+      }
+    }
+  };
+
   const onFinish = (values: any) => {
-    console.log('Success:', values);
+    const data: any = {
+      fullName: values.fullName,
+      email: values.email,
+      active: values.active,
+      isVerifyEmail: values.isVerifyEmail,
+      isSuperUser: values.isSuperUser,
+      isStaff: values.isStaff,
+      groups: values.groups,
+      password: values.passwordEdit,
+    };
+
+    // Handle avatar
+    if (fileList.length > 0) {
+      const file = fileList[0];
+      if (file.originFileObj) {
+        data.avatar = file.originFileObj;
+      } else if (file.url) {
+        data.avatar = file.url;
+      }
+    } else if (selectedUser?.avatar) {
+      data.avatar = selectedUser.avatar;
+    }
+
+    console.log('data:', data);
+    
+    // Here you can send the data to your API
+    // Example: await axios.post('/api/update-user', data);
   };
 
   const onFinishFailed = (errorInfo: any) => {
     console.log('Failed:', errorInfo);
-  };
-
-  const handleAvatarChange = (info: any) => {
-    const file = info.file;
-    const reader = new FileReader();
-    reader.onload = e => {
-      setAvatarUrl(e.target?.result as string);
-    };
-    reader.readAsDataURL(file);
   };
 
   return (
@@ -90,13 +151,28 @@ const UserInfoPage = () => {
               {avatarUrl ? (
                 <img src={avatarUrl} alt="Avatar Preview" className="w-full h-auto rounded mb-4" />
               ) : (
-                <div className="w-full h-47 bg-gray-100 flex items-center justify-center rounded mb-4">
-                  <span className="text-gray-400">No avatar</span>
+                <div className="w-full h-47 bg-gray-50 flex items-center justify-center rounded mb-4">
+                  <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
                 </div>
               )}
-              <Form.Item name="avatar" valuePropName="fileList" getValueFromEvent={e => e && e.fileList}>
+              <Form.Item 
+                name="avatar" 
+                valuePropName="fileList"
+                getValueFromEvent={(e) => {
+                  if (Array.isArray(e)) {
+                    return e;
+                  }
+                  return e?.fileList;
+                }}
+              >
                 <ImgCrop rotationSlider>
-                  <Upload beforeUpload={() => false} onChange={handleAvatarChange} maxCount={1}>
+                  <Upload 
+                    beforeUpload={() => false}
+                    onChange={handleAvatarChange} 
+                    maxCount={1}
+                    listType="picture"
+                    fileList={fileList}
+                  >
                     <Button icon={<UploadOutlined />}>Chọn ảnh</Button>
                   </Upload>
                 </ImgCrop>
@@ -141,7 +217,18 @@ const UserInfoPage = () => {
             <Card title="Quyền hạn" className="mt-4">
               <h1>Role name: {selectedUser?.roleName}</h1>
               <Form.Item label="Groups" name="groups">
-                <Select mode="multiple" placeholder="Chọn nhóm quyền" />
+                <Select 
+                  mode="multiple" 
+                  placeholder="Chọn nhóm quyền"
+                  options={roles?.map(role => ({
+                    label: role.name,
+                    value: role.id
+                  })) || []}
+                  value={selectedUser?.groupRoles?.map(id => {
+                    const role = roles?.find(r => r.id === id);
+                    return role ? role.id : null;
+                  }).filter(Boolean)}
+                />
               </Form.Item>
 
               <Form.Item name="isSuperUser" valuePropName="checked">

@@ -6,8 +6,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useEffect, useState } from 'react';
 import { userActions } from '../../../../../stores/userStore/userReducer';
 import type { AppDispatch, RootState } from '../../../../../stores';
-import { useNavigate } from 'react-router-dom';
+import { replace, useNavigate } from 'react-router-dom';
 import ROUTE_PATH from '../../../../../routes/routePath';
+import { formatRoute } from '../../../../../ultils/functions/formatRoute';
 
 interface DataType extends IUserData {
   key: React.Key;
@@ -105,7 +106,7 @@ const TableUser = () => {
 
     const handleRowClick = (record: IUserData) => {
         dispatch(userActions.setSelectedUser(record));
-        navigate(ROUTE_PATH.ADMIN_USER);
+        navigate( ROUTE_PATH.ADMIN_USER.replace(":slug", record.fullName));
     };
 
     return (
@@ -116,7 +117,7 @@ const TableUser = () => {
             scroll={{ x: 900 }} 
             loading={loading}
             onRow={(record) => ({
-                onClick: () => handleRowClick(record),
+                onClick: () =>  handleRowClick(record),
                 style: { cursor: 'pointer' }
             })}
         />

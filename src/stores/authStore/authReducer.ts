@@ -38,6 +38,22 @@ export const authSlice = createSlice({
             state.hasCheckedAuth = true;
             state.error = action.error as string;
         });
+        //update avatar
+        builder.addCase(authThunks.updateAvatar.pending, (state) => {
+            state.loading = true;
+        });
+        builder.addCase(authThunks.updateAvatar.fulfilled, (state, action) => {
+            if (state.currentUser) {
+                state.currentUser.avatar = action.payload.data;
+            }
+            state.loading = false;
+            toast.success("Cập nhật ảnh đại diện thành công")
+
+        });
+        builder.addCase(authThunks.updateAvatar.rejected, (state, action) => {
+            state.loading = false;
+            state.error = action.error as string;
+        });
     }
 })
 

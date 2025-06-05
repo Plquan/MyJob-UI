@@ -19,11 +19,12 @@ export const userSlice = createSlice({
     name: "user",
     initialState,
     reducers: {
-        setSelectedUser: (state, action: PayloadAction<IUserData | undefined>) => {
-            state.selectedUser = action.payload;
-          },
+    setSelectedUser: (state, action: PayloadAction<IUserData | undefined>) => {
+        state.selectedUser = action.payload;
+    },
     },
     extraReducers: (builder) => {
+        // get list
         builder.addCase(userThunks.getAllUsers.pending, (state) => {
             state.loading = true;
         });
@@ -35,6 +36,8 @@ export const userSlice = createSlice({
             state.loading = false;
             state.error = action.error as string;
         });
+
+
     }
 })
 

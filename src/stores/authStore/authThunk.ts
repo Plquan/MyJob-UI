@@ -15,8 +15,21 @@ const getCurrentUser = createAsyncThunk(
     }
 )
 
+const updateAvatar = createAsyncThunk (
+    "account/updateAvatar",
+    async (file: FormData, {rejectWithValue}): Promise<IApiResponse<any>> => {
+        try {
+            const response: IApiResponse<any> = await http.post("/account/update-avatar",file);
+            return response;
+        } catch (error: any) {
+            return rejectWithValue(error.response.data) as any;
+        }
+    }
+)
+
 
 const authThunks = {
     getCurrentUser,
+    updateAvatar,
 }
 export default authThunks;

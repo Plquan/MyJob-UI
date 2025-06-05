@@ -15,7 +15,20 @@ const getAllUsers = createAsyncThunk (
     }
 )
 
+const getUserById = createAsyncThunk (
+    "user/getUserById",
+    async (userId: number, {rejectWithValue}): Promise<IApiResponse<IUserData>> => {
+        try {
+            const response: IApiResponse<IUserData> = await http.get(`/user/get-user/${userId}`);
+            return response;
+        } catch (error: any) {
+            return rejectWithValue(error.response.data) as any;
+        }
+    }
+)
+
 const userThunks = {
     getAllUsers,
+    getUserById
 }
 export default userThunks;

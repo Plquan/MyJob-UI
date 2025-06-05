@@ -4,9 +4,6 @@ import env from "../../constant/env";
 const baseURL = String(env.API_URL);
 const http = axios.create({
   baseURL,
-  headers: {
-    "Content-Type": "application/json",
-  },
   withCredentials: true,
 });
 
