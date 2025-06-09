@@ -8,6 +8,7 @@ import type { AppDispatch, RootState } from '../../../../stores';
 import type { IUserData, IUserFilter } from '../../../../types/user/UserType';
 import { userActions } from '../../../../stores/userStore/userReducer';
 import FilterUser from './FilterUser';
+import { mapRole } from '../../../../ultils/functions/mapper';
 
 
 interface DataType extends IUserData {
@@ -19,8 +20,8 @@ const DEFAULT_AVATAR = 'https://joeschmoe.io/api/v1/random';
 const columns: ColumnsType<DataType> = [
   {
     title: '#',
-    dataIndex: 'id',
-    key: 'id',
+    dataIndex: 'key',
+    key: 'key',
     width: 60,
   },
   {
@@ -74,7 +75,7 @@ const columns: ColumnsType<DataType> = [
     dataIndex: 'roleName',
     key: 'roleName',
     render: (roleName: string) => {
-      return <span>{roleName}</span>;
+      return <span>{mapRole(roleName)}</span>;
     },
   },
 ];
@@ -122,9 +123,9 @@ const TableUser: React.FC<TableUserProps> = ({ handleSelectUser }) => {
   useEffect(() => {
     if (users) {
       setData(
-        users.map((item) => ({
+        users.map((item, index) => ({
           ...item,
-          key: item.id,
+          key: index + 1,
         }))
       );
     }
@@ -147,6 +148,7 @@ const TableUser: React.FC<TableUserProps> = ({ handleSelectUser }) => {
         rowKey="id"
         columns={columns}
         dataSource={data}
+        bordered
         pagination={{
           current: filters.page,
           pageSize: filters.limit,

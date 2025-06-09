@@ -5,22 +5,21 @@ import CreateUserPage from './components/CreateUser';
 import UserInfoPage from './components/UserDetail';
 import { useDispatch, useSelector } from 'react-redux';
 import type { AppDispatch, RootState } from '../../../stores';
-import { useState } from 'react';
 import type { IUserData } from '../../../types/user/UserType';
 import { userActions } from '../../../stores/userStore/userReducer';
 const ManageUserPage = () => {
   const dispatch = useDispatch<AppDispatch>()
-  const {selectedUser} = useSelector((state: RootState) => state.userStore);
-  const [activeKey, setActiveKey] = useState('1');
+  const {selectedUser,currentTab} = useSelector((state: RootState) => state.userStore);
+
 
 
   const handleTabChange = (key: string) => {
-    setActiveKey(key);
+    dispatch(userActions.setCurrentTab(key))
   };
 
   const handleSelectUser = (user:IUserData) => {
     dispatch(userActions.setSelectedUser(user));
-    setActiveKey('3');
+    dispatch(userActions.setCurrentTab('3'))
   };
 
 
@@ -28,7 +27,7 @@ const ManageUserPage = () => {
     
     <Card title={"Quản lí người dùng"}>
       <Tabs 
-        activeKey={activeKey} 
+        activeKey={currentTab} 
         onChange={handleTabChange}
         items={[
           {

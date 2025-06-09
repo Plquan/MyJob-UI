@@ -48,6 +48,7 @@ const CreateUserPage = () => {
     }
     const result = await dispatch(userActions.createUser(data)).unwrap();
     if (result.success) {
+      dispatch(userActions.getAllUsers())
       form.resetFields();
     }
   }

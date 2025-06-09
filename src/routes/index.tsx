@@ -22,6 +22,7 @@ import ManageRolePage from "../pages/admin/manage-role";
 import AdminLayout from "../layouts/AdminLayout";
 import ManageUserPage from "../pages/admin/manage-user";
 import UserInfoPage from "../pages/admin/manage-user/components/UserDetail";
+import RoleManagement from "../pages/admin/manage-package";
 const AppRoutes = () => {
     return (
        <BrowserRouter>
@@ -54,6 +55,7 @@ const AppRoutes = () => {
             <Route element={<AdminLayout/>}>
             <Route path={ROUTE_PATH.ADMIN_MANAGE_ROLE} element={<ManageRolePage />} />
             <Route path={ROUTE_PATH.ADMIN_MANAGE_USER} element={<ManageUserPage />} />
+            <Route path={ROUTE_PATH.ADMIN_MANAGE_PACKAGE} element={<RoleManagement />} />
             
             </Route>
 

@@ -8,6 +8,7 @@ interface UserState {
     selectedUser?: IUserData;
     loading: boolean,
     error: string | null;
+    currentTab: string;
 
     page?: number;
     limit?: number;
@@ -19,6 +20,8 @@ const initialState: UserState = {
     users: [],
     loading: false,
     error:null,
+    currentTab: '1',
+    selectedUser:undefined,
     
     page:1,
     limit:10,
@@ -33,6 +36,9 @@ export const userSlice = createSlice({
     setSelectedUser: (state, action: PayloadAction<IUserData | undefined>) => {
         state.selectedUser = action.payload;
     },
+    setCurrentTab: (state, action: PayloadAction<string>) => {
+        state.currentTab = action.payload;
+    }
     },
     extraReducers: (builder) => {
         // get list
@@ -86,6 +92,22 @@ export const userSlice = createSlice({
             toast.error((action.payload as any)?.message || "Đã xảy ra lỗi");
         });
 
+        // delete user
+        builder.addCase(userThunks.deleteUser.pending, (state) => {
+            state.loading = true;
+        });
+        builder.addCase(userThunks.deleteUser.fulfilled, (state, action) => {
+            state.users = state.users.filter(user => user.id !== action.payload.data);
+            state.selectedUser = undefined;
+            state.currentTab = '1';
+            toast.success(action.payload.message ?? "Xóa người dùng thành công");
+            state.loading = false;
+        });
+        builder.addCase(userThunks.deleteUser.rejected, (state, action) => {
+            state.loading = false;
+            state.error = action.error as string;
+            toast.error((action.payload as any)?.message || "Đã xảy ra lỗi");
+        });
 
     }
 })
