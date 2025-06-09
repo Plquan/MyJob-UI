@@ -1,6 +1,7 @@
 import { Outlet } from "react-router-dom";
 import AdminSidebar from "../components/Sidebar/AdminSidebar";
 import AdminHeader from "../components/headers/AdminHeader";
+import { Card } from "antd";
 
 
 export default function AdminLayout() {
@@ -10,9 +11,7 @@ export default function AdminLayout() {
       <div className="flex-1 flex flex-col bg-[#f7f7fb]">
         <AdminHeader />
         <main className="p-6">
-          <div className="bg-white rounded-lg p-6 shadow mb-6 min-h-[600px]">
             <Outlet />
-          </div>
         </main>
       </div>
     </div>

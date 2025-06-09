@@ -1,18 +1,30 @@
-import React from 'react';
-import './styles.css';
+import React, { useEffect, useState } from 'react';
+import { Spin } from 'antd';
 
 interface LoadingLayoutProps {
-  show: boolean;
+  loading: boolean;
 }
 
-const LoadingLayout: React.FC<LoadingLayoutProps> = ({ show }) => {
-  return (
-    <div className={`loading ${show ? 'show' : 'hide'}`}>
-      <div className="loading-box">
-        Loading
-      </div>
-    </div>
-  );
+const LoadingLayout: React.FC<LoadingLayoutProps> = ({ loading }) => {
+  const [percent, setPercent] = useState(0);
+
+  useEffect(() => {
+    if (loading) {
+      let ptg = -10;
+      const interval = setInterval(() => {
+        ptg += 5;
+        setPercent(ptg);
+        if (ptg > 120) {
+          clearInterval(interval);
+        }
+      }, 100);
+      return () => clearInterval(interval);
+    } else {
+      setPercent(0);
+    }
+  }, [loading]);
+
+  return <Spin spinning={loading} percent={percent} fullscreen />;
 };
 
 export default LoadingLayout;

@@ -30,7 +30,6 @@ const ROUTE_PATH = {
     ADMIN_MANAGE_ROLE: '/admin/manage-role',
     ADMIN_MANAGE_PACKAGE: '/admin/manage-package',
     ADMIN_MANAGE_USER: '/admin/manage-user',
-    ADMIN_USER: '/admin/user/:slug?'
 
   }
 

@@ -231,9 +231,9 @@ const RegisterForm = () => {
 
         <div className="text-center text-sm mt-7 mb-2">
           Bạn đã có tài khoản?{' '}
-          <a href={ROUTE_PATH.EMPLOYER_LOGIN} className="text-blue-600 hover:underline">
+          <span onClick ={() => navigate(ROUTE_PATH.EMPLOYER_LOGIN)} className="text-blue-600 hover:underline">
             Đăng nhập
-          </a>
+          </span>
         </div>
       </div>
     </div>
