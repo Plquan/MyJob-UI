@@ -70,7 +70,6 @@ export const roleSlice = createSlice({
             state.isSubmitting = true;
         });
         builder.addCase(roleThunks.updateRole.fulfilled, (state, action) => {
-            console.log('cc',action.payload.data.id)
             state.roles = state.roles?.map((role) => (role.id === action.payload.data.id ? action.payload.data : role));
             state.isSubmitting = false;
             toast.success(action.payload.message)

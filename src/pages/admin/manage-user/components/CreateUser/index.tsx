@@ -10,15 +10,13 @@ import {
   Card,
 } from 'antd';
 
-import { useNavigate } from 'react-router-dom';
-
 import { useSelector, useDispatch } from 'react-redux';
 import type { AppDispatch, RootState } from '../../../../../stores';
 import { roleActions } from '../../../../../stores/roleStore/roleReducer';
 import type { ICreateUser } from '../../../../../types/user/UserType';
 import { userActions } from '../../../../../stores/userStore/userReducer';
 import LoadingLayout from '../../../../../components/LoadingLayout';
-import RoleSelect from '../../../../../components/RoleSelect';
+import RoleSelect from '../UserDetail/components/RoleSelect';
 
 
 
@@ -49,7 +47,6 @@ const CreateUserPage = () => {
     }
     const result = await dispatch(userActions.createUser(data)).unwrap();
     if (result.success) {
-      dispatch(userActions.getAllUsers())
       form.resetFields();
     }
   }

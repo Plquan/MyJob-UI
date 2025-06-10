@@ -1,5 +1,5 @@
 import  {  } from 'react';
-import { Tabs, Select, Input, Card } from 'antd';
+import { Tabs, Card } from 'antd';
 import TableUser from './components/TableUser';
 import CreateUserPage from './components/CreateUser';
 import UserInfoPage from './components/UserDetail';
@@ -20,8 +20,7 @@ const ManageUserPage = () => {
   const handleSelectUser = (user:IUserData) => {
     dispatch(userActions.setSelectedUser(user));
     dispatch(userActions.setCurrentTab('3'))
-  };
-
+  }
 
   return (
     

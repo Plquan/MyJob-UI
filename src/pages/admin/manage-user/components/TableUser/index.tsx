@@ -9,13 +9,13 @@ import type { IUserData, IUserFilter } from '../../../../../types/user/UserType'
 import { userActions } from '../../../../../stores/userStore/userReducer';
 import FilterUser from '../FilterUser';
 import { mapRole } from '../../../../../ultils/functions/mapper';
-
+import env from '../../../../../constant/env';
 
 interface DataType extends IUserData {
   key: React.Key;
 }
 
-const DEFAULT_AVATAR = 'https://joeschmoe.io/api/v1/random';
+const DEFAULT_AVATAR = env.DEFAULT_AVATAR;
 
 const columns: ColumnsType<DataType> = [
   {

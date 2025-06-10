@@ -3,7 +3,6 @@ import {
   Form,
   Input,
   Button,
-  Select,
   Checkbox,
   Row,
   Col,
@@ -15,7 +14,8 @@ import { roleActions } from '../../../../../stores/roleStore/roleReducer';
 import type { RootState, AppDispatch } from '../../../../../stores';
 import { userActions } from '../../../../../stores/userStore/userReducer';
 import type { IUpdateUser } from '../../../../../types/user/UserType';
-import RoleSelect from '../../../../../components/RoleSelect';
+import RoleSelect from './components/RoleSelect';
+import { mapRole } from '../../../../../ultils/functions/mapper';
 
 
 
@@ -132,7 +132,11 @@ const UserDetailPage = () => {
 
             {/* Permissions */}
             <Card title="Quyền hạn" className="mb-3!">
-              <h1>Role name: {selectedUser?.roleName}</h1>
+
+              <Form.Item>
+              <span className="text-medium pb-4 font-medium text-gray-600 mr-2">Vai trò: {mapRole(selectedUser!.roleName)}</span>
+              </Form.Item>
+
               <Form.Item label="Nhóm quyền" name="groupRoles">
                 <RoleSelect 
                   mode="multiple" 

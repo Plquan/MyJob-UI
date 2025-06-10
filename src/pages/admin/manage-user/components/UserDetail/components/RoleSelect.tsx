@@ -1,8 +1,8 @@
 import React, { useEffect } from 'react';
 import { Select } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
-import type { AppDispatch, RootState } from '../stores';
-import { roleActions } from '../stores/roleStore/roleReducer';
+import type { AppDispatch, RootState } from '../../../../../../stores';
+import { roleActions } from '../../../../../../stores/roleStore/roleReducer';
 
 interface RoleSelectProps {
   value?: number[];
@@ -16,7 +16,7 @@ const RoleSelect: React.FC<RoleSelectProps> = ({
   value,
   onChange,
   mode = 'multiple',
-  placeholder = 'Chọn vai trò',
+  placeholder = 'Chọn nhóm quyền',
   disabled = false,
 }) => {
   const dispatch = useDispatch<AppDispatch>();
@@ -24,19 +24,19 @@ const RoleSelect: React.FC<RoleSelectProps> = ({
 
   useEffect(() => {
     if (!roles || roles.length === 0) {
-      dispatch(roleActions.getAllRoles());
+      dispatch(roleActions.getAllRoles())
     }
-  }, [dispatch, roles]);
+  }, [dispatch, roles])
 
   return (
     <Select
       mode={mode}
       placeholder={placeholder}
-      value={value}
+      value={value?.filter(v => v != null) || []}
       onChange={onChange}
       loading={loading}
       disabled={disabled}
-      options={roles?.map((role) => ({
+      options={roles?.filter(role => role.id != null).map((role) => ({
         label: role.name,
         value: role.id,
       }))}

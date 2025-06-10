@@ -71,7 +71,7 @@ export const userSlice = createSlice({
                 state.selectedUser = updatedUser;
             }
             state.loading = false;
-            toast.success(action.payload.message??"Cập nhật người dùng thành công")
+            toast.success(action.payload.message)
         });
         builder.addCase(userThunks.updateUser.rejected, (state, action) => {
             state.loading = false;
@@ -85,7 +85,7 @@ export const userSlice = createSlice({
         builder.addCase(userThunks.createUser.fulfilled, (state, action) => {
             state.users?.unshift(action.payload.data);
             state.loading = false;
-            toast.success(action.payload.message??"Thêm người dùng thành công")
+            toast.success(action.payload.message)
         });
         builder.addCase(userThunks.createUser.rejected, (state, action) => {
             state.loading = false;
@@ -101,7 +101,7 @@ export const userSlice = createSlice({
             state.users = state.users.filter(user => user.id !== action.payload.data);
             state.selectedUser = undefined;
             state.currentTab = '1';
-            toast.success(action.payload.message ?? "Xóa người dùng thành công");
+            toast.success(action.payload.message);
             state.loading = false;
         });
         builder.addCase(userThunks.deleteUser.rejected, (state, action) => {
