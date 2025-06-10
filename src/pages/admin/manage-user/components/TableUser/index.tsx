@@ -4,23 +4,24 @@ import type { ColumnsType } from 'antd/es/table';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect, useState } from 'react';
-import type { AppDispatch, RootState } from '../../../../stores';
-import type { IUserData, IUserFilter } from '../../../../types/user/UserType';
-import { userActions } from '../../../../stores/userStore/userReducer';
-import FilterUser from './FilterUser';
-
+import type { AppDispatch, RootState } from '../../../../../stores';
+import type { IUserData, IUserFilter } from '../../../../../types/user/UserType';
+import { userActions } from '../../../../../stores/userStore/userReducer';
+import FilterUser from '../FilterUser';
+import { mapRole } from '../../../../../ultils/functions/mapper';
+import env from '../../../../../constant/env';
 
 interface DataType extends IUserData {
   key: React.Key;
 }
 
-const DEFAULT_AVATAR = 'https://joeschmoe.io/api/v1/random';
+const DEFAULT_AVATAR = env.DEFAULT_AVATAR;
 
 const columns: ColumnsType<DataType> = [
   {
     title: '#',
-    dataIndex: 'id',
-    key: 'id',
+    dataIndex: 'key',
+    key: 'key',
     width: 60,
   },
   {
@@ -74,7 +75,7 @@ const columns: ColumnsType<DataType> = [
     dataIndex: 'roleName',
     key: 'roleName',
     render: (roleName: string) => {
-      return <span>{roleName}</span>;
+      return <span>{mapRole(roleName)}</span>;
     },
   },
 ];
@@ -122,18 +123,18 @@ const TableUser: React.FC<TableUserProps> = ({ handleSelectUser }) => {
   useEffect(() => {
     if (users) {
       setData(
-        users.map((item) => ({
+        users.map((item, index) => ({
           ...item,
-          key: item.id,
+          key: index + 1,
         }))
       );
     }
   }, [users]);
 
   const handleRowClick = (record: IUserData) => {
-    dispatch(userActions.setSelectedUser(record));
-    handleSelectUser(record);
-  };
+    dispatch(userActions.setSelectedUser(record))
+    handleSelectUser(record)
+  }
 
   return (
     <>
@@ -147,6 +148,7 @@ const TableUser: React.FC<TableUserProps> = ({ handleSelectUser }) => {
         rowKey="id"
         columns={columns}
         dataSource={data}
+        bordered
         pagination={{
           current: filters.page,
           pageSize: filters.limit,
@@ -154,7 +156,7 @@ const TableUser: React.FC<TableUserProps> = ({ handleSelectUser }) => {
           showSizeChanger: true,
           pageSizeOptions: ['5', '10', '15', '20','25'],
           onChange: (page, pageSize) => {
-            updateFilter({ page: page, limit: pageSize });
+            updateFilter({ page: page, limit: pageSize })
           },
         }}
         scroll={{ x: 900 }}

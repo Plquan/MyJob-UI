@@ -10,14 +10,13 @@ import {
   Card,
 } from 'antd';
 
-import { useNavigate } from 'react-router-dom';
-
 import { useSelector, useDispatch } from 'react-redux';
-import type { AppDispatch, RootState } from '../../../../stores';
-import { roleActions } from '../../../../stores/roleStore/roleReducer';
-import type { ICreateUser } from '../../../../types/user/UserType';
-import { userActions } from '../../../../stores/userStore/userReducer';
-import LoadingLayout from '../../../../components/LoadingLayout';
+import type { AppDispatch, RootState } from '../../../../../stores';
+import { roleActions } from '../../../../../stores/roleStore/roleReducer';
+import type { ICreateUser } from '../../../../../types/user/UserType';
+import { userActions } from '../../../../../stores/userStore/userReducer';
+import LoadingLayout from '../../../../../components/LoadingLayout';
+import RoleSelect from '../UserDetail/components/RoleSelect';
 
 
 
@@ -93,24 +92,16 @@ const CreateUserPage = () => {
 
             {/* Permissions */}
             <Card title="Quyền hạn" className="mb-3!">
-
-            <Form.Item label="Vai trò" name="roleName" rules={[{ required: true,  message: 'Vai trò không được để trống' }]}>
-              <Select placeholder="Chọn vai trò" className='w-50!'>
-                <Select.Option value="CANDIDATE">Ứng viên</Select.Option>
-                <Select.Option value="EMPLOYER">Nhà tuyển dụng</Select.Option>
-                <Select.Option value="ADMIN">Quản trị viên</Select.Option>
-              </Select>
-            </Form.Item>
+              <Form.Item label="Vai trò" name="roleName" rules={[{ required: true,  message: 'Vai trò không được để trống' }]}>
+                <Select placeholder="Chọn vai trò" className='w-50!'>
+                  <Select.Option value="CANDIDATE">Ứng viên</Select.Option>
+                  <Select.Option value="EMPLOYER">Nhà tuyển dụng</Select.Option>
+                  <Select.Option value="ADMIN">Quản trị viên</Select.Option>
+                </Select>
+              </Form.Item>
 
               <Form.Item label="Nhóm quyền" name="groupRoles">
-                <Select 
-                  mode="multiple" 
-                  placeholder="Chọn nhóm quyền"
-                  options={roles?.map(role => ({
-                    label: role.name,
-                    value: role.id
-                  })) || []}
-                />
+                <RoleSelect mode="multiple" placeholder="Chọn nhóm quyền" />
               </Form.Item>
 
               <Form.Item name="isSuperUser" valuePropName="checked">

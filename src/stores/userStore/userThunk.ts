@@ -5,7 +5,7 @@ import type { ICreateUser, IPagingResponse, IUpdateUser, IUserData, IUserFilter 
 
 const getAllUsers = createAsyncThunk (
     "user/getAllUsers",
-    async (data: IUserFilter, {rejectWithValue}): Promise<IApiResponse<IPagingResponse>> => {
+    async (data: IUserFilter | undefined, {rejectWithValue}): Promise<IApiResponse<IPagingResponse>> => {
         try {
             const response: IApiResponse<IPagingResponse> = await http.post("/user/get-all-users",data);
             return response;
@@ -31,7 +31,7 @@ const updateUser = createAsyncThunk (
     "user/updateUser",
     async (data: IUpdateUser, {rejectWithValue}): Promise<IApiResponse<IUserData>> => {
         try {
-            const response: IApiResponse<IUserData> = await http.post("/user/update-user",data);
+            const response: IApiResponse<IUserData> = await http.put("/user/update-user",data);
             return response;
         } catch (error: any) {
             return rejectWithValue(error.response.data) as any;
@@ -51,10 +51,23 @@ const createUser = createAsyncThunk (
     }
 )
 
+const deleteUser = createAsyncThunk(
+    "user/deleteUser",
+    async (userId: number, {rejectWithValue}): Promise<IApiResponse<any>> => {
+        try {
+            const response: IApiResponse<any> = await http.delete(`/user/delete-user/${userId}`);
+            return response;
+        } catch (error: any) {
+            return rejectWithValue(error.response.data) as any;
+        }
+    }
+)
+
 const userThunks = {
     getAllUsers,
     updateUser,
     getUserById,
-    createUser
+    createUser,
+    deleteUser
 }
 export default userThunks;

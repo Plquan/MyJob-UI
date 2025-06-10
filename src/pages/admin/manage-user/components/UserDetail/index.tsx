@@ -3,28 +3,26 @@ import {
   Form,
   Input,
   Button,
-  Select,
   Checkbox,
   Row,
   Col,
   Card,
-  
+  Modal,
 } from 'antd';
-import { useNavigate } from 'react-router-dom';
-
 import { useSelector, useDispatch } from 'react-redux';
-import { roleActions } from '../../../../stores/roleStore/roleReducer';
-import ROUTE_PATH from '../../../../routes/routePath';
-import type { RootState, AppDispatch } from '../../../../stores';
-import { userActions } from '../../../../stores/userStore/userReducer';
-import type { IUpdateUser } from '../../../../types/user/UserType';
+import { roleActions } from '../../../../../stores/roleStore/roleReducer';
+import type { RootState, AppDispatch } from '../../../../../stores';
+import { userActions } from '../../../../../stores/userStore/userReducer';
+import type { IUpdateUser } from '../../../../../types/user/UserType';
+import RoleSelect from './components/RoleSelect';
+import { mapRole } from '../../../../../ultils/functions/mapper';
 
 
 
 const UserDetailPage = () => {
-  const navigate = useNavigate();
   const [form] = Form.useForm();
   const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const selectedUser = useSelector((state: RootState) => state.userStore.selectedUser);
   const roles = useSelector((state:RootState) => state.roleStore.roles)
   const dispatch = useDispatch<AppDispatch>();
@@ -47,7 +45,7 @@ const UserDetailPage = () => {
       setAvatarUrl(selectedUser.avatar || null);   
     }
     else{
-      navigate(ROUTE_PATH.ADMIN_MANAGE_USER)
+      dispatch(userActions.setCurrentTab('1'))
     }
   }, [selectedUser, form]);
 
@@ -67,17 +65,20 @@ const UserDetailPage = () => {
     dispatch(userActions.updateUser(data))
   };
 
-  const onFinishFailed = (errorInfo: any) => {
-    console.log('Failed:', errorInfo);
+
+  const handleDelete = () => {
+    if (selectedUser) {
+      dispatch(userActions.deleteUser(selectedUser.id));
+      setIsDeleteModalOpen(false);
+    }
   };
 
   return (
-
+    <>
       <Form
         form={form}
         layout="vertical"
         onFinish={onFinish}
-        onFinishFailed={onFinishFailed}
       >
         <Row gutter={24}>
           <Col span={24}>
@@ -131,19 +132,16 @@ const UserDetailPage = () => {
 
             {/* Permissions */}
             <Card title="Quyền hạn" className="mb-3!">
-              <h1>Role name: {selectedUser?.roleName}</h1>
+
+              <Form.Item>
+              <span className="text-medium pb-4 font-medium text-gray-600 mr-2">Vai trò: {mapRole(selectedUser!.roleName)}</span>
+              </Form.Item>
+
               <Form.Item label="Nhóm quyền" name="groupRoles">
-                <Select 
+                <RoleSelect 
                   mode="multiple" 
                   placeholder="Chọn nhóm quyền"
-                  options={roles?.map(role => ({
-                    label: role.name,
-                    value: role.id
-                  })) || []}
-                  value={selectedUser?.groupRoles?.map(id => {
-                    const role = roles?.find(r => r.id === id);
-                    return role ? role.id : null;
-                  }).filter(Boolean)}
+                  value={selectedUser?.groupRoles}
                 />
               </Form.Item>
 
@@ -163,17 +161,37 @@ const UserDetailPage = () => {
                 <Checkbox>Is verify email</Checkbox>
               </Form.Item>           
             </Card>
-            <div className="flex items-center gap-2 justify-end mt-4">
-
-            <Button type="primary" htmlType="submit">
-              Lưu thông tin
-            </Button>
-          </div>
+            <div className="flex items-center justify-between mt-4">
+              <Button 
+                type="primary" 
+                danger
+                onClick={() => setIsDeleteModalOpen(true)}
+              >
+                Xóa
+              </Button>
+              <Button type="primary" htmlType="submit">
+                Cập nhật
+              </Button>
+            </div>
 
           
           </Col>
         </Row>
       </Form>
+
+      <Modal
+        title="Xác nhận xóa"
+        centered
+        open={isDeleteModalOpen}
+        onOk={handleDelete}
+        onCancel={() => setIsDeleteModalOpen(false)}
+        okText="Xóa"
+        cancelText="Hủy"
+        okButtonProps={{ danger: true }}
+      >
+        <p>Bạn có chắc chắn muốn xóa người dùng này không?</p>
+      </Modal>
+    </>
   )
 }
 
