@@ -1,5 +1,5 @@
 import { Input, Select } from 'antd';
-import type { IUserFilter } from '../../../../types/user/UserType';
+import type { IUserFilter } from '../../../../../types/user/UserType';
 
 interface FilterUserProps {
   filters: IUserFilter;

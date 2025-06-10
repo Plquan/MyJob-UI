@@ -1,6 +1,6 @@
 export interface IApiResponse<T> {
     status: number;
-    message?: string;
+    message: string;
     data: T;
     error?: {
       message: string;

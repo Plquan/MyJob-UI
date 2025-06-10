@@ -1,7 +1,8 @@
 import { Tabs, Card } from 'antd'
 
-import UpdateGroupTab from './components/UpdateGroupTab'
+
 import ListGroupTab from './components/ListGroupTab'
+import PermissionGroupTab from './components/PermissionGroupTab'
 
 
 const ManageRolePage = () => {
@@ -18,7 +19,7 @@ const ManageRolePage = () => {
       key: '2',
       label: 'Cập nhật quyền',
       children: (
-       <UpdateGroupTab/>
+       <PermissionGroupTab/>
       )
     }
   ]

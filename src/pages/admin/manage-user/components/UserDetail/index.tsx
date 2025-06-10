@@ -11,10 +11,11 @@ import {
   Modal,
 } from 'antd';
 import { useSelector, useDispatch } from 'react-redux';
-import { roleActions } from '../../../../stores/roleStore/roleReducer';
-import type { RootState, AppDispatch } from '../../../../stores';
-import { userActions } from '../../../../stores/userStore/userReducer';
-import type { IUpdateUser } from '../../../../types/user/UserType';
+import { roleActions } from '../../../../../stores/roleStore/roleReducer';
+import type { RootState, AppDispatch } from '../../../../../stores';
+import { userActions } from '../../../../../stores/userStore/userReducer';
+import type { IUpdateUser } from '../../../../../types/user/UserType';
+import RoleSelect from '../../../../../components/RoleSelect';
 
 
 
@@ -133,17 +134,10 @@ const UserDetailPage = () => {
             <Card title="Quyền hạn" className="mb-3!">
               <h1>Role name: {selectedUser?.roleName}</h1>
               <Form.Item label="Nhóm quyền" name="groupRoles">
-                <Select 
+                <RoleSelect 
                   mode="multiple" 
                   placeholder="Chọn nhóm quyền"
-                  options={roles?.map(role => ({
-                    label: role.name,
-                    value: role.id
-                  })) || []}
-                  value={selectedUser?.groupRoles?.map(id => {
-                    const role = roles?.find(r => r.id === id);
-                    return role ? role.id : null;
-                  }).filter(Boolean)}
+                  value={selectedUser?.groupRoles}
                 />
               </Form.Item>
 

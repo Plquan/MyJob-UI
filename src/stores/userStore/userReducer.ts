@@ -83,6 +83,7 @@ export const userSlice = createSlice({
             state.loading = true;
         });
         builder.addCase(userThunks.createUser.fulfilled, (state, action) => {
+            state.users?.unshift(action.payload.data);
             state.loading = false;
             toast.success(action.payload.message??"Thêm người dùng thành công")
         });

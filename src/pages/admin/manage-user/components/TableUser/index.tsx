@@ -4,11 +4,11 @@ import type { ColumnsType } from 'antd/es/table';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect, useState } from 'react';
-import type { AppDispatch, RootState } from '../../../../stores';
-import type { IUserData, IUserFilter } from '../../../../types/user/UserType';
-import { userActions } from '../../../../stores/userStore/userReducer';
-import FilterUser from './FilterUser';
-import { mapRole } from '../../../../ultils/functions/mapper';
+import type { AppDispatch, RootState } from '../../../../../stores';
+import type { IUserData, IUserFilter } from '../../../../../types/user/UserType';
+import { userActions } from '../../../../../stores/userStore/userReducer';
+import FilterUser from '../FilterUser';
+import { mapRole } from '../../../../../ultils/functions/mapper';
 
 
 interface DataType extends IUserData {
@@ -132,9 +132,9 @@ const TableUser: React.FC<TableUserProps> = ({ handleSelectUser }) => {
   }, [users]);
 
   const handleRowClick = (record: IUserData) => {
-    dispatch(userActions.setSelectedUser(record));
-    handleSelectUser(record);
-  };
+    dispatch(userActions.setSelectedUser(record))
+    handleSelectUser(record)
+  }
 
   return (
     <>
@@ -156,7 +156,7 @@ const TableUser: React.FC<TableUserProps> = ({ handleSelectUser }) => {
           showSizeChanger: true,
           pageSizeOptions: ['5', '10', '15', '20','25'],
           onChange: (page, pageSize) => {
-            updateFilter({ page: page, limit: pageSize });
+            updateFilter({ page: page, limit: pageSize })
           },
         }}
         scroll={{ x: 900 }}
