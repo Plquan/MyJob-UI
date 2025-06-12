@@ -6,12 +6,13 @@ import { provinceSlice } from "./provinceStore/provinceReducer";
 import { authSlice } from "./authStore/authReducer";
 import { roleSlice } from "./roleStore/roleReducer";
 import { userSlice } from "./userStore/userReducer";
+import { candidateSlice } from "./candidateStore/candidateReducer";
 
 // Cấu hình redux-persist
 const persistConfig = {
   key: "root",
   storage,
-  whitelist: ["authStore"], // ✅ Chỉ lưu userStore
+  whitelist: ["authStore"], //  Chỉ lưu userStore
 };
 
 // Gộp các reducer lại
@@ -20,6 +21,7 @@ const rootReducer = combineReducers({
   authStore: authSlice.reducer,
   roleStore: roleSlice.reducer,
   userStore: userSlice.reducer,
+  candidateStore: candidateSlice.reducer,
 });
 
 // Tạo reducer có tích hợp persist

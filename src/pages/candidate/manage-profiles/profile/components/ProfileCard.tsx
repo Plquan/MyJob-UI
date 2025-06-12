@@ -1,6 +1,8 @@
 import {
     Button,
+    Card,
     Switch,
+    Tooltip
   } from "antd";
   import {
     EditOutlined,
@@ -9,11 +11,41 @@ import {
     DollarOutlined,
     CalendarOutlined,
     ExclamationCircleOutlined,
+    QuestionCircleOutlined,
   } from "@ant-design/icons";
+import { useDispatch, useSelector } from "react-redux";
+import type { AppDispatch, RootState } from "../../../../../stores";
+import { useEffect } from "react";
+import { candidateActions } from "../../../../../stores/candidateStore/candidateReducer";
 
  const ProfileCard = ({ onEdit }: { onEdit: () => void }) => {
+  const dispatch = useDispatch<AppDispatch>()
+  const {onLineResume} = useSelector((state: RootState) => state.candidateStore)
+
+  useEffect(() => {
+    dispatch(candidateActions.getCandidateOnlineResume())
+  },[dispatch])
     return (
-        <div className="flex-1 bg-white rounded-xl p-6 shadow-sm">
+     <Card 
+        title={"Hồ sơ của tôi"} 
+        className="w-200!"
+        extra={
+          <div className="flex items-center gap-2">
+            <Switch size="small" defaultChecked />
+            <span className="text-xs text-gray-500">
+              Cho phép tìm kiếm
+            </span>
+            <Tooltip title={"Bật \"Cho phép tìm kiếm\" sẽ giúp nhà tuyển dụng tìm thấy hồ sơ của bạn và họ có thể liên hệ với bạn về công việc mới. Chỉ có duy nhất một hồ được bật trạng thái \"cho phép tìm kiếm\" trong tất cả hồ sơ của bạn."}>
+              <QuestionCircleOutlined className="text-gray-400 cursor-pointer"/>
+            </Tooltip>
+            <Button
+              className="bg-orange-100 text-orange-700 border-none ml-2"
+            >
+              Tải xuống
+            </Button>
+          </div>
+        }
+     >
         <div className="flex items-center gap-4 mb-2">
           <div>
             <div className="font-bold text-lg">PHẠM LÊ QUÂN</div>
@@ -48,19 +80,6 @@ import {
           </div>
         </div>
 
-        <div className="flex items-center gap-2 mb-2">
-          <Switch size="small" defaultChecked />
-          <span className="text-xs text-gray-500">
-            Cho phép tìm kiếm
-          </span>
-          <Button
-            size="small"
-            className="bg-orange-100 text-orange-700 border-none ml-2"
-          >
-            Tải xuống
-          </Button>
-        </div>
-
         <div className="flex items-center text-xs text-gray-500 mb-2">
           <ExclamationCircleOutlined className="mr-1 text-lg text-gray-400" />
           <span>
@@ -77,8 +96,7 @@ import {
         >
           Chỉnh Sửa Hồ Sơ
         </Button>
-      </div>
-
+     </Card>
     )
 }
 

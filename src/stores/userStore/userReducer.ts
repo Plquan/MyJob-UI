@@ -99,8 +99,8 @@ export const userSlice = createSlice({
         });
         builder.addCase(userThunks.deleteUser.fulfilled, (state, action) => {
             state.users = state.users.filter(user => user.id !== action.payload.data);
-            state.selectedUser = undefined;
             state.currentTab = '1';
+            // state.selectedUser = undefined;
             toast.success(action.payload.message);
             state.loading = false;
         });
