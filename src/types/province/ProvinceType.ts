@@ -5,3 +5,9 @@ export interface IProvince {
 }
 
 
+export interface IDistrict {
+    id: number;
+    provinceId: number;
+    name: string;
+  }
+  

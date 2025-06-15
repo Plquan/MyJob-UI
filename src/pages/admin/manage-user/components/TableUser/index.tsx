@@ -78,7 +78,7 @@ const columns: ColumnsType<DataType> = [
       return <span>{mapRole(roleName)}</span>;
     },
   },
-];
+]
 
 
 interface TableUserProps {

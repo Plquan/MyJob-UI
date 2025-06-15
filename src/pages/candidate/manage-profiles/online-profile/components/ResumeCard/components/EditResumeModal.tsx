@@ -1,8 +1,15 @@
 import { Modal, Form, Input, Select, Button } from "antd";
+import { useSelector } from "react-redux";
+import type { RootState } from "../../../../../../../stores";
+import { ACADEMICLEVEL_OPTIONS, EXPERIENCE_OPTIONS, JOBTYPE_OPTIONS, POSITION_OPTIONS, WORKPLACE_OPTIONS } from "../../../../../../../constant/selectOptions";
 
 const { Option } = Select;
 
 const ProfileEditModal = ({ open, onCancel, form, initialValues, onFinish }: any) => {
+  const { careers } = useSelector((state: RootState) => state.careerStore)
+  const { provinces } = useSelector((state: RootState) => state.provinceStore)
+
+
   return (
     <Modal
       open={open}
@@ -32,9 +39,11 @@ const ProfileEditModal = ({ open, onCancel, form, initialValues, onFinish }: any
             rules={[{ required: true, message: "Vui lòng chọn cấp bậc" }]}
           >
             <Select placeholder="Chọn cấp bậc">
-              <Option value="Nhân viên">Nhân viên</Option>
-              <Option value="Trưởng nhóm">Trưởng nhóm</Option>
-              <Option value="Quản lý">Quản lý</Option>
+            {POSITION_OPTIONS.map(opt => (
+              <Option key={opt.value} value={opt.value}>
+                {opt.label}
+              </Option>
+            ))}
             </Select>
           </Form.Item>
           <Form.Item
@@ -43,9 +52,11 @@ const ProfileEditModal = ({ open, onCancel, form, initialValues, onFinish }: any
             rules={[{ required: true, message: "Vui lòng chọn trình độ học vấn" }]}
           >
             <Select placeholder="Chọn trình độ học vấn">
-              <Option value="Đại học">Đại học</Option>
-              <Option value="Cao đẳng">Cao đẳng</Option>
-              <Option value="Trung cấp">Trung cấp</Option>
+            {ACADEMICLEVEL_OPTIONS.map(opt => (
+              <Option key={opt.value} value={opt.value}>
+                {opt.label}
+              </Option>
+            ))}
             </Select>
           </Form.Item>
           <Form.Item
@@ -54,10 +65,11 @@ const ProfileEditModal = ({ open, onCancel, form, initialValues, onFinish }: any
             rules={[{ required: true, message: "Vui lòng chọn kinh nghiệm" }]}
           >
             <Select placeholder="Chọn kinh nghiệm">
-              <Option value="Chưa có kinh nghiệm">Chưa có kinh nghiệm</Option>
-              <Option value="1 năm kinh nghiệm">1 năm kinh nghiệm</Option>
-              <Option value="2 năm kinh nghiệm">2 năm kinh nghiệm</Option>
-              <Option value="3+ năm kinh nghiệm">3+ năm kinh nghiệm</Option>
+            {EXPERIENCE_OPTIONS.map(opt => (
+              <Option key={opt.value} value={opt.value}>
+                {opt.label}
+              </Option>
+            ))}
             </Select>
           </Form.Item>
           <Form.Item
@@ -66,9 +78,9 @@ const ProfileEditModal = ({ open, onCancel, form, initialValues, onFinish }: any
             rules={[{ required: true, message: "Vui lòng chọn nghề nghiệp" }]}
           >
             <Select placeholder="Chọn nghề nghiệp">
-              <Option value="IT Phần mềm">IT Phần mềm</Option>
-              <Option value="Thiết kế">Thiết kế</Option>
-              <Option value="Kinh doanh">Kinh doanh</Option>
+              {careers?.map((career) => (
+                <Option key={career.id} value={career.name}>{career.icon} {career.name}</Option>
+              ))}
             </Select>
           </Form.Item>
           <Form.Item
@@ -77,9 +89,9 @@ const ProfileEditModal = ({ open, onCancel, form, initialValues, onFinish }: any
             rules={[{ required: true, message: "Vui lòng chọn tỉnh/thành phố" }]}
           >
             <Select placeholder="Chọn tỉnh/thành phố">
-              <Option value="TP.HCM">TP.HCM</Option>
-              <Option value="Hà Nội">Hà Nội</Option>
-              <Option value="Đà Nẵng">Đà Nẵng</Option>
+            {provinces?.map((province) => (
+                <Option key={province.id} value={province.name}>{province.name}</Option>
+              ))}
             </Select>
           </Form.Item>
           <Form.Item
@@ -92,7 +104,18 @@ const ProfileEditModal = ({ open, onCancel, form, initialValues, onFinish }: any
           <Form.Item
             name="maxSalary"
             label={<span>Mức lương mong muốn tối đa</span>}
-            rules={[{ required: true, message: "Vui lòng nhập mức lương tối đa" }]}
+            dependencies={['minSalary']}
+            rules={[
+              { required: true, message: "Vui lòng nhập mức lương tối đa" },
+              ({ getFieldValue }) => ({
+                validator(_, value) {
+                  if (!value || !getFieldValue('minSalary') || Number(value) > Number(getFieldValue('minSalary'))) {
+                    return Promise.resolve();
+                  }
+                  return Promise.reject(new Error('Mức lương tối đa phải lớn hơn mức lương tối thiểu'));
+                },
+              }),
+            ]}
           >
             <Input addonBefore="VND" placeholder="Nhập mức lương mong muốn tối đa" type="number" />
           </Form.Item>
@@ -102,9 +125,11 @@ const ProfileEditModal = ({ open, onCancel, form, initialValues, onFinish }: any
             rules={[{ required: true, message: "Vui lòng chọn nơi làm việc" }]}
           >
             <Select placeholder="Chọn nơi làm việc">
-              <Option value="TP.HCM">TP.HCM</Option>
-              <Option value="Hà Nội">Hà Nội</Option>
-              <Option value="Đà Nẵng">Đà Nẵng</Option>
+            {WORKPLACE_OPTIONS.map(opt => (
+              <Option key={opt.value} value={opt.value}>
+                {opt.label}
+              </Option>
+            ))}
             </Select>
           </Form.Item>
           <Form.Item
@@ -113,16 +138,17 @@ const ProfileEditModal = ({ open, onCancel, form, initialValues, onFinish }: any
             rules={[{ required: true, message: "Vui lòng chọn hình thức làm việc" }]}
           >
             <Select placeholder="Chọn hình thức làm việc">
-              <Option value="Toàn thời gian">Toàn thời gian</Option>
-              <Option value="Bán thời gian">Bán thời gian</Option>
-              <Option value="Remote">Remote</Option>
+            {JOBTYPE_OPTIONS.map(opt => (
+              <Option key={opt.value} value={opt.value}>
+                {opt.label}
+              </Option>
+            ))}
             </Select>
           </Form.Item>
         </div>
         <Form.Item
           name="goal"
           label={<span>Mục tiêu nghề nghiệp</span>}
-          rules={[{ required: true, message: "Vui lòng nhập mục tiêu nghề nghiệp" }]}
         >
           <Input.TextArea rows={3} placeholder="Nhập nội dung tại đây" />
         </Form.Item>

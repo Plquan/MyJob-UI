@@ -4,15 +4,17 @@ import { useState } from 'react';
 import ROUTE_PATH from '../../../../routes/routePath';
 import authService from '../../../../services/authService';
 import type { ICompanyRegisterRequestData } from '../../../../types/auth/AuthType';
-import { useSelector } from 'react-redux';
-import type { RootState } from '../../../../stores';
+import { useDispatch, useSelector } from 'react-redux';
+import type { AppDispatch, RootState } from '../../../../stores';
 import { toast } from 'react-hot-toast';
 import {useNavigate } from 'react-router-dom';
+import { provinceActions } from '../../../../stores/provinceStore/provinceReducer';
 const { Option } = Select;
 
 const RegisterForm = () => {
+  const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
-  const { provinces } = useSelector((state: RootState) => state.provinceStore);
+  const { provinces,districts,loading } = useSelector((state: RootState) => state.provinceStore);
   const [form] = Form.useForm<ICompanyRegisterRequestData>();
   const [step, setStep] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
@@ -42,6 +44,17 @@ const RegisterForm = () => {
       setIsLoading(false);
     }
   };
+
+  const onProvinceChange = (provinceId: number) => {
+    form.setFieldsValue({
+      companyInfo: {
+        ...form.getFieldValue("companyInfo"),
+        provinceId,
+        districtId: undefined,
+      },
+    });
+    dispatch(provinceActions.getDistrictsByProvince(provinceId));
+  }
 
   return (
     <div className={"flex flex-1 items-center justify-center "}>
@@ -199,19 +212,33 @@ const RegisterForm = () => {
             </Row>
 
             <Form.Item label="Địa chỉ công ty" required>
-              <Form.Item
-                name= {["companyInfo", "provinceId"]}
-                noStyle
-                rules={[{ required: true, message: 'Chọn tỉnh/thành phố!' }]}
-              >
-                <Select placeholder="Tỉnh/Thành phố" style={{ width: '35%' }}>
-                {provinces?.map((province) => (
-                  <Option key={province.id} value={province.id}>
-                    {province.name}
-                  </Option>
-                ))}
-                </Select>
-              </Form.Item>
+              <div className="flex gap-4">
+                <Form.Item
+                  name= {["companyInfo", "provinceId"]}
+                  noStyle
+                  rules={[{ required: true, message: 'Chọn tỉnh/thành phố!' }]}
+                >
+                  <Select loading={loading} onChange={onProvinceChange}  placeholder="Tỉnh/Thành phố" style={{ width: '100%' }}>
+                    {provinces?.map((province) => (
+                      <Option key={province.id} value={province.id}>
+                        {province.name}
+                      </Option>
+                    ))}
+                  </Select>
+                </Form.Item>
+
+                <Form.Item
+                  name={["companyInfo", "districtId"]}
+                  noStyle
+                  rules={[{ required: true, message: 'Chọn quận/huyện!' }]}
+                >
+                  <Select loading={loading} placeholder="Chọn quận/huyện" style={{ width: '100%' }}>
+                    {districts?.map((d) => (
+                      <Option key={d.id} value={d.id}>{d.name}</Option>
+                    ))}
+                  </Select>
+                </Form.Item>
+              </div>
               
               <Form.Item
                 name= {["companyInfo", "address"]}

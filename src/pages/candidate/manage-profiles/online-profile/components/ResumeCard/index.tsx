@@ -1,29 +1,23 @@
 import { Button, Card, Col, Form, Row, Typography } from "antd"
 import { EditOutlined, } from "@ant-design/icons";
-import ProfileEditModal from "./components/ProfileEditModal";
+import ProfileEditModal from "./components/EditResumeModal";
 import { useState } from "react";
+import { useSelector } from "react-redux";
+import type { RootState } from "../../../../../../stores";
+import { ACADEMICLEVEL_OPTIONS, EXPERIENCE_OPTIONS, JOBTYPE_OPTIONS, POSITION_OPTIONS, WORKPLACE_OPTIONS } from "../../../../../../constant/selectOptions";
+import { getLabelFromValue } from "../../../../../../ultils/functions/getLabelFromValue";
 const { Text } = Typography;
-const GeneralInfoCard = () => {
 
-    const [openEdit, setOpenEdit] = useState(false);
+const NOT_UPDATE =  <span className="text-gray-400 text-xs italic">Chưa cập nhật</span>
+const ResumeCard = () => {
+
+    const [openEdit, setOpenEdit] = useState(false)
+    const { resume } = useSelector((state: RootState) => state.candidateStore)
+    const { careers } = useSelector((state: RootState) => state.careerStore)
     const [form] = Form.useForm();
-    const initialProfile = {
-      position: "Software Engineer",
-      level: "Nhân viên",
-      education: "Đại học",
-      experience: "1 năm kinh nghiệm",
-      career: "IT Phần mềm",
-      city: "TP.HCM",
-      minSalary: "",
-      maxSalary: "",
-      workplace: "",
-      workType: "",
-      goal: "",
-    };
-    const [profile, setProfile] = useState(initialProfile);
+
   
     const handleEditFinish = (values: any) => {
-      setProfile(values);
       setOpenEdit(false);
     };
     return (
@@ -36,7 +30,7 @@ const GeneralInfoCard = () => {
          <div className="mb-10">
             <Text strong>Mục tiêu nghề nghiệp</Text>
             <br />
-            <Text>Chưa cập nhật</Text>
+            {resume?.description??NOT_UPDATE}
  
           </div>
           <hr className="my-4 border-gray-100" />
@@ -45,27 +39,27 @@ const GeneralInfoCard = () => {
           <div className="mb-4">
             <Text strong>Vị trí mong muốn</Text>
             <br />
-            <Text>Chưa cập nhật</Text>
+            {resume?.title??NOT_UPDATE}
           </div>
           <div className="mb-4">
             <Text strong>Cấp bậc mong muốn</Text>
             <br />
-            <Text>0888425000</Text>
+            {getLabelFromValue(POSITION_OPTIONS,resume?.position)??NOT_UPDATE}
           </div>
           <div className="mb-4">
             <Text strong>Trình độ học vấn</Text>
             <br />
-            <Text>Nam</Text>
+            {getLabelFromValue(ACADEMICLEVEL_OPTIONS,resume?.academicLevel)??NOT_UPDATE}
           </div>
           <div className="mb-4">
             <Text strong>Kinh nghiệm</Text>
             <br />
-            <Text>26/02/2001</Text>
+            {getLabelFromValue(EXPERIENCE_OPTIONS,resume?.academicLevel)??NOT_UPDATE}
           </div>
           <div className="mb-4">
             <Text strong>Nghề nghiệp</Text>
             <br />
-            <Text>26/02/2001</Text>
+            {careers?.find(c => c.id === resume?.careerId)?.name ?? NOT_UPDATE}
           </div>
 
         </Col>
@@ -73,22 +67,22 @@ const GeneralInfoCard = () => {
           <div className="mb-4">
             <Text strong>Địa điểm làm việc</Text>
             <br />
-            <Text>Độc thân</Text>
+            {getLabelFromValue(WORKPLACE_OPTIONS,resume?.academicLevel)??NOT_UPDATE}
           </div>
           <div className="mb-4">
             <Text strong>Mức lương mong muốn</Text>
             <br />
-            <Text>...</Text>
+            {resume?.salary_min??NOT_UPDATE}
           </div>
           <div className="mb-4">
             <Text strong>Nơi làm việc</Text>
             <br />
-            <Text>Bình Tân</Text>
+            {resume?.typeOfWorkPlace??NOT_UPDATE}
           </div>
           <div className="mb-0">
             <Text strong>Hình thức làm việc</Text>
             <br />
-            <Text>1242 QL1A, Tân Tạo A, Bình Tân, TP. HCM</Text>
+            {getLabelFromValue(JOBTYPE_OPTIONS,resume?.academicLevel)??NOT_UPDATE}
           </div>
         </Col>
       </Row>
@@ -98,11 +92,11 @@ const GeneralInfoCard = () => {
         open={openEdit}
         onCancel={() => setOpenEdit(false)}
         form={form}
-        initialValues={profile}
+        initialValues={resume}
         onFinish={handleEditFinish}
       />
         </>
     )
 }
 
-export default GeneralInfoCard
+export default ResumeCard

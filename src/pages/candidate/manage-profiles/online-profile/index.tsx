@@ -3,13 +3,14 @@ import AdvancedSkillCard from "./components/AdvancedSkillCard";
 import LanguageCard from "./components/LanguageCard";
 import CertificateSkillCard from "./components/CertificateSkillCard";
 import ProfileCard from "./components/ProfileCard";
-import GeneralInfoCard from "./components/GeneralInfoCard";
+import ResumeCard from "./components/ResumeCard";
+
 
 const OnelineProfilePage = () => {
   return (
     <div className="flex flex-col gap-4">
       <ProfileCard/>
-      <GeneralInfoCard/>
+      <ResumeCard/>
       <ExperienceCard />
       <LanguageCard/>
       <CertificateSkillCard/>

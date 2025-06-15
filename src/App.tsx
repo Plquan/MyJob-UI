@@ -4,12 +4,15 @@ import { provinceActions } from "./stores/provinceStore/provinceReducer";
 import { useEffect } from "react";
 import AppRoutes from "./routes";
 import { Toaster } from 'react-hot-toast';
+import { careerActions } from "./stores/careerStore/careerReducer";
 
 export default function App() {
   const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {
     dispatch(provinceActions.getAllProvinces());
+    dispatch(careerActions.getAllCareers())
+
   }, [dispatch]);
 
   return (

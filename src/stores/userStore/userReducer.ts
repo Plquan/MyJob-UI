@@ -107,7 +107,7 @@ export const userSlice = createSlice({
         builder.addCase(userThunks.deleteUser.rejected, (state, action) => {
             state.loading = false;
             state.error = action.error as string;
-            toast.error((action.payload as any)?.message || "Đã xảy ra lỗi");
+            toast.error((action.payload as any)?.message);
         });
 
     }

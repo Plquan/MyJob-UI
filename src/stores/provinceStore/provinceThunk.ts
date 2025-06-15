@@ -1,7 +1,7 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import http from "../../ultils/axios/axiosCustom";
 import type { IApiResponse } from "../../types/AppType";
-import type { IProvince } from "../../types/province/ProvinceType";
+import type { IDistrict, IProvince } from "../../types/province/ProvinceType";
 
 const getAllProvinces = createAsyncThunk (
     "province/getAllProvinces",
@@ -15,8 +15,21 @@ const getAllProvinces = createAsyncThunk (
     }
 )
 
+const getDistrictsByProvince = createAsyncThunk (
+    "province/getDistrictsByProvince",
+    async (provinceId: number, {rejectWithValue}): Promise<IApiResponse<IDistrict[]>> => {
+        try {
+            const response: IApiResponse<IDistrict[]> = await http.get(`/province/get-districts/${provinceId}`);
+            return response;
+        } catch (error: any) {
+            return rejectWithValue(error.response.data) as any;
+        }
+    }
+)
+
 const provinceThunks = {
     getAllProvinces,
+    getDistrictsByProvince
 }
 export default provinceThunks;
 

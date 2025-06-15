@@ -7,6 +7,7 @@ import { authSlice } from "./authStore/authReducer";
 import { roleSlice } from "./roleStore/roleReducer";
 import { userSlice } from "./userStore/userReducer";
 import { candidateSlice } from "./candidateStore/candidateReducer";
+import { careerSlice } from "./careerStore/careerReducer";
 
 // Cấu hình redux-persist
 const persistConfig = {
@@ -22,6 +23,7 @@ const rootReducer = combineReducers({
   roleStore: roleSlice.reducer,
   userStore: userSlice.reducer,
   candidateStore: candidateSlice.reducer,
+  careerStore: careerSlice.reducer
 });
 
 // Tạo reducer có tích hợp persist
