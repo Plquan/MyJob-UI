@@ -96,7 +96,7 @@ const ResumeCard = () => {
           <div className="mb-0">
             <Text strong>Hình thức làm việc</Text>
             <br />
-            {renderField(getLabelFromValue(JOBTYPE_OPTIONS,resume?.academicLevel))}
+            {renderField(getLabelFromValue(JOBTYPE_OPTIONS,resume?.jobType))}
           </div>
 
         </Col>
