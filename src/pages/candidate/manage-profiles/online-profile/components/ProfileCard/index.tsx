@@ -2,23 +2,29 @@ import React, { useState } from 'react';
 import { Card, Typography, Row, Col, Button } from 'antd';
 import { EditOutlined } from '@ant-design/icons';
 import EditProfileModal from './components/EditProfileModal';
-import { useSelector } from 'react-redux';
-import type { RootState } from '../../../../../../stores';
+import { useDispatch, useSelector } from 'react-redux';
+import type { AppDispatch, RootState } from '../../../../../../stores';
 import { mapGender, mapMaritalStatus } from '../../../../../../ultils/functions/mapper';
+import type { ICandidateData } from '../../../../../../types/candidate/ResumeType';
+import { candidateActions } from '../../../../../../stores/candidateStore/candidateReducer';
 
 const { Text } = Typography;
 
 const ProfileCard: React.FC = () => {
+  const dispatch = useDispatch<AppDispatch>();
   const { candidate } = useSelector((state: RootState) => state.candidateStore);
   const [isModalOpen, setIsModalOpen] = useState(false)
 
   const handleEdit = () => setIsModalOpen(true);
   const handleCancel = () => setIsModalOpen(false);
-  const handleFinish = (values: any) => {
+  const handleFinish = (values: ICandidateData) => {
+
+    dispatch(candidateActions.updateProfile(values))
     setIsModalOpen(false);
-  };
+  }
 
   const NOT_UPDATE =  <span className="text-gray-400 text-xs italic">Chưa cập nhật</span>
+  const renderField = (value: any) => !!value ? value : NOT_UPDATE
 
   return (
     <>

@@ -3,7 +3,6 @@ import { Modal, Form, Input, Select, Button, Row, Col, DatePicker } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import type { AppDispatch, RootState } from '../../../../../../../stores';
 import { provinceActions } from '../../../../../../../stores/provinceStore/provinceReducer';
-import { candidateActions } from '../../../../../../../stores/candidateStore/candidateReducer';
 import type { ICandidateData } from '../../../../../../../types/candidate/ResumeType';
 import dayjs from 'dayjs';
 
@@ -16,7 +15,7 @@ interface EditProfileModalProps {
   initialValues?: ICandidateData;
 }
 
-const EditProfileModal: React.FC<EditProfileModalProps> = ({ open, onCancel, initialValues }) => {
+const EditProfileModal: React.FC<EditProfileModalProps> = ({ open, onCancel,onFinish, initialValues }) => {
   const dispatch = useDispatch<AppDispatch>();
   const { provinces, districts, loading, isSubmiting } = useSelector(
     (state: RootState) => state.provinceStore
@@ -34,12 +33,7 @@ const EditProfileModal: React.FC<EditProfileModalProps> = ({ open, onCancel, ini
       districtId: undefined
     });
     dispatch(provinceActions.getDistrictsByProvince(provinceId));
-  };
-
-  const handleFinish = async (values: ICandidateData) => {
-    dispatch(candidateActions.updateProfile(values));
-    onCancel();
-  };
+  }
 
   return (
     <Modal
@@ -54,7 +48,7 @@ const EditProfileModal: React.FC<EditProfileModalProps> = ({ open, onCancel, ini
       <Form 
         form={form} 
         layout="vertical" 
-        onFinish={handleFinish}
+        onFinish={onFinish}
         initialValues={initialValues ? {
           ...initialValues,
           gender: String(initialValues.gender),

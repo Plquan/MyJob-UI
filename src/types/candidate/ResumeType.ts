@@ -70,13 +70,14 @@ export interface ICandidateData {
   
   export interface IResumeData {
     id: number
+    provinceId:number
     careerId:number
     candidateId: number
     myJobFileId?: number
     title?: string;
     description?: string
-    salary_min?: number
-    salary_max?: number
+    salaryMin?: number
+    salaryMax?: number
     position?: number
     typeOfWorkPlace?: number
     experience?: number

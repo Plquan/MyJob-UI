@@ -2,14 +2,21 @@ import { Modal, Form, Input, Select, Button } from "antd";
 import { useSelector } from "react-redux";
 import type { RootState } from "../../../../../../../stores";
 import { ACADEMICLEVEL_OPTIONS, EXPERIENCE_OPTIONS, JOBTYPE_OPTIONS, POSITION_OPTIONS, WORKPLACE_OPTIONS } from "../../../../../../../constant/selectOptions";
+import type { IResumeData } from "../../../../../../../types/candidate/ResumeType";
 
 const { Option } = Select;
 
-const ProfileEditModal = ({ open, onCancel, form, initialValues, onFinish }: any) => {
+interface EditResumeModalProps {
+  open: boolean;
+  onCancel: () => void;
+  onFinish: (values: any) => void;
+  initialValues?: IResumeData;
+}
+const ProfileEditModal: React.FC<EditResumeModalProps> = ({ open, onCancel, initialValues, onFinish }) => {
   const { careers } = useSelector((state: RootState) => state.careerStore)
   const { provinces } = useSelector((state: RootState) => state.provinceStore)
-
-
+  const [form] = Form.useForm<IResumeData>()
+  
   return (
     <Modal
       open={open}
@@ -27,14 +34,14 @@ const ProfileEditModal = ({ open, onCancel, form, initialValues, onFinish }: any
       >
         <div className="grid grid-cols-1 md:grid-cols-2 gap-x-5">
           <Form.Item
-            name="position"
+            name="title"
             label={<span>Vị trí mong muốn</span>}
             rules={[{ required: true, message: "Vui lòng nhập vị trí mong muốn" }]}
           >
             <Input placeholder="Nhập vị trí mong muốn" />
           </Form.Item>
           <Form.Item
-            name="level"
+            name="position"
             label={<span>Cấp bậc mong muốn</span>}
             rules={[{ required: true, message: "Vui lòng chọn cấp bậc" }]}
           >
@@ -47,7 +54,7 @@ const ProfileEditModal = ({ open, onCancel, form, initialValues, onFinish }: any
             </Select>
           </Form.Item>
           <Form.Item
-            name="education"
+            name="academicLevel"
             label={<span>Trình độ học vấn</span>}
             rules={[{ required: true, message: "Vui lòng chọn trình độ học vấn" }]}
           >
@@ -73,43 +80,43 @@ const ProfileEditModal = ({ open, onCancel, form, initialValues, onFinish }: any
             </Select>
           </Form.Item>
           <Form.Item
-            name="career"
+            name="careerId"
             label={<span>Nghề nghiệp</span>}
             rules={[{ required: true, message: "Vui lòng chọn nghề nghiệp" }]}
           >
             <Select placeholder="Chọn nghề nghiệp">
               {careers?.map((career) => (
-                <Option key={career.id} value={career.name}>{career.icon} {career.name}</Option>
+                <Option key={career.id} value={career.id}>{career.icon} {career.name}</Option>
               ))}
             </Select>
           </Form.Item>
           <Form.Item
-            name="city"
+            name="provinceId"
             label={<span>Tỉnh/Thành phố</span>}
             rules={[{ required: true, message: "Vui lòng chọn tỉnh/thành phố" }]}
           >
             <Select placeholder="Chọn tỉnh/thành phố">
             {provinces?.map((province) => (
-                <Option key={province.id} value={province.name}>{province.name}</Option>
+                <Option key={province.id} value={province.id}>{province.name}</Option>
               ))}
             </Select>
           </Form.Item>
           <Form.Item
-            name="minSalary"
+            name="salaryMin"
             label={<span>Mức lương mong muốn tối thiểu</span>}
             rules={[{ required: true, message: "Vui lòng nhập mức lương tối thiểu" }]}
           >
             <Input addonBefore="VND" placeholder="Nhập mức lương mong muốn tối thiểu" type="number" />
           </Form.Item>
           <Form.Item
-            name="maxSalary"
+            name="salaryMax"
             label={<span>Mức lương mong muốn tối đa</span>}
-            dependencies={['minSalary']}
+            dependencies={['salaryMin']}
             rules={[
               { required: true, message: "Vui lòng nhập mức lương tối đa" },
               ({ getFieldValue }) => ({
                 validator(_, value) {
-                  if (!value || !getFieldValue('minSalary') || Number(value) > Number(getFieldValue('minSalary'))) {
+                  if (!value || !getFieldValue('salaryMin') || Number(value) > Number(getFieldValue('salaryMin'))) {
                     return Promise.resolve();
                   }
                   return Promise.reject(new Error('Mức lương tối đa phải lớn hơn mức lương tối thiểu'));
@@ -120,7 +127,7 @@ const ProfileEditModal = ({ open, onCancel, form, initialValues, onFinish }: any
             <Input addonBefore="VND" placeholder="Nhập mức lương mong muốn tối đa" type="number" />
           </Form.Item>
           <Form.Item
-            name="workplace"
+            name="typeOfWorkPlace"
             label={<span>Nơi làm việc</span>}
             rules={[{ required: true, message: "Vui lòng chọn nơi làm việc" }]}
           >
@@ -133,7 +140,7 @@ const ProfileEditModal = ({ open, onCancel, form, initialValues, onFinish }: any
             </Select>
           </Form.Item>
           <Form.Item
-            name="workType"
+            name="jobType"
             label={<span>Hình thức làm việc</span>}
             rules={[{ required: true, message: "Vui lòng chọn hình thức làm việc" }]}
           >
@@ -147,17 +154,15 @@ const ProfileEditModal = ({ open, onCancel, form, initialValues, onFinish }: any
           </Form.Item>
         </div>
         <Form.Item
-          name="goal"
+          name="description"
           label={<span>Mục tiêu nghề nghiệp</span>}
         >
           <Input.TextArea rows={3} placeholder="Nhập nội dung tại đây" />
         </Form.Item>
         <div className="flex justify-end mt-6 space-x-2 gap-2">
-        <Button className="">Hủy</Button>
+        <Button onClick={onCancel}>Hủy</Button>
         <Button type="primary" htmlType="submit">Lưu</Button>
       </div>
-
-
       </Form>
     </Modal>
   );
