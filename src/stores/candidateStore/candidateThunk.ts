@@ -1,20 +1,8 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import type { IApiResponse } from "../../types/AppType";
 import http from "../../ultils/axios/axiosCustom";
-import type { ICandidateData, IResumeData, IResumeResponseData } from "../../types/candidate/ResumeType";
+import type { ICandidateData } from "../../types/resume/ResumeType";
 
-
-const getCandidateOnlineResume = createAsyncThunk (
-    "candidate/getCandidateOnlineResume",
-    async (_, {rejectWithValue}): Promise<IApiResponse<IResumeResponseData>> => {
-        try {
-            const response: IApiResponse<IResumeResponseData> = await http.get("/candidate/get-candidate-online-resume");
-            return response;
-        } catch (error: any) {
-            return rejectWithValue(error.response.data) as any;
-        }
-    }
-)
 
 const updateProfile = createAsyncThunk (
     "candidate/updateProfile",
@@ -28,11 +16,11 @@ const updateProfile = createAsyncThunk (
     }
 )
 
-const updateOnlineResume = createAsyncThunk (
-    "candidate/updateOnlineResume",
-    async (data: IResumeData, {rejectWithValue}): Promise<IApiResponse<IResumeData>> => {
+const getProfile = createAsyncThunk (
+    "candidate/getProfile",
+    async (_, {rejectWithValue}): Promise<IApiResponse<ICandidateData>> => {
         try {
-            const response: IApiResponse<IResumeData> = await http.put("/candidate/update-online-resume",data);
+            const response: IApiResponse<ICandidateData> = await http.get("/candidate/get-profile");
             return response;
         } catch (error: any) {
             return rejectWithValue(error.response.data) as any;
@@ -40,9 +28,9 @@ const updateOnlineResume = createAsyncThunk (
     }
 )
 
+
 const candidateThunks = {
-    getCandidateOnlineResume,
     updateProfile,
-    updateOnlineResume
+    getProfile
 }
 export default candidateThunks;

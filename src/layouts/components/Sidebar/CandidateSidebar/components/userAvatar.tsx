@@ -6,11 +6,7 @@ import type { AppDispatch, RootState } from "../../../../../stores";
 import { authActions } from "../../../../../stores/authStore/authReducer";
 import { useState } from "react";
 
-interface AvatarProps {
-  onDeleteImage: () => void;
-}
-
-export default function Avatar({ onDeleteImage }: AvatarProps) {
+ const UserAvatar = () =>  {
   const dispatch = useDispatch<AppDispatch>();
   const { currentUser, loading } = useSelector((state: RootState) => state.authStore);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -21,6 +17,10 @@ export default function Avatar({ onDeleteImage }: AvatarProps) {
     formData.append('file', file);
     dispatch(authActions.updateAvatar(formData));
   };
+
+  const onDeleteImage = () => {
+
+  }
 
   return (
     <>
@@ -82,3 +82,5 @@ export default function Avatar({ onDeleteImage }: AvatarProps) {
     </>
   );
 }
+
+export default UserAvatar

@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Card, Typography, Row, Col, Button } from 'antd';
 import { EditOutlined } from '@ant-design/icons';
 import EditProfileModal from './components/EditProfileModal';
 import { useDispatch, useSelector } from 'react-redux';
 import type { AppDispatch, RootState } from '../../../../../../stores';
 import { mapGender, mapMaritalStatus } from '../../../../../../ultils/functions/mapper';
-import type { ICandidateData } from '../../../../../../types/candidate/ResumeType';
+import type { ICandidateData } from '../../../../../../types/resume/ResumeType';
 import { candidateActions } from '../../../../../../stores/candidateStore/candidateReducer';
 
 const { Text } = Typography;
@@ -14,6 +14,10 @@ const ProfileCard: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
   const { candidate } = useSelector((state: RootState) => state.candidateStore);
   const [isModalOpen, setIsModalOpen] = useState(false)
+
+  useEffect(() => {
+    dispatch(candidateActions.getProfile())
+  },[dispatch])
 
   const handleEdit = () => setIsModalOpen(true);
   const handleCancel = () => setIsModalOpen(false);

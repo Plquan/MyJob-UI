@@ -85,6 +85,8 @@ export interface ICandidateData {
     jobType?: number
     type?: string
     isActive: boolean
+    createdAt:Date
+    updatedAt:Date
   }
   
   export interface IResumeResponseData {

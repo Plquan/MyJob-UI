@@ -2,7 +2,7 @@ import { Modal, Form, Input, Select, Button } from "antd";
 import { useSelector } from "react-redux";
 import type { RootState } from "../../../../../../../stores";
 import { ACADEMICLEVEL_OPTIONS, EXPERIENCE_OPTIONS, JOBTYPE_OPTIONS, POSITION_OPTIONS, WORKPLACE_OPTIONS } from "../../../../../../../constant/selectOptions";
-import type { IResumeData } from "../../../../../../../types/candidate/ResumeType";
+import type { IResumeData } from "../../../../../../../types/resume/ResumeType";
 
 const { Option } = Select;
 

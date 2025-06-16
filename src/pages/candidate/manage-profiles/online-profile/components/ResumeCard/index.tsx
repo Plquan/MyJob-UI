@@ -1,14 +1,14 @@
 import { Button, Card, Col, Row, Typography } from "antd"
 import { EditOutlined, } from "@ant-design/icons"
 import ProfileEditModal from "./components/EditResumeModal"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import type { AppDispatch, RootState } from "../../../../../../stores"
 import { ACADEMICLEVEL_OPTIONS, EXPERIENCE_OPTIONS, JOBTYPE_OPTIONS, POSITION_OPTIONS, WORKPLACE_OPTIONS } from "../../../../../../constant/selectOptions";
 import { getLabelFromValue } from "../../../../../../ultils/functions/getLabelFromValue"
-import type { IResumeData } from "../../../../../../types/candidate/ResumeType"
-import { candidateActions } from "../../../../../../stores/candidateStore/candidateReducer"
+import type { IResumeData } from "../../../../../../types/resume/ResumeType"
 import { formatVND } from "../../../../../../ultils/functions/formatVND"
+import { resumeActions } from "../../../../../../stores/resumeStore/resumeReducer"
 const { Text } = Typography
 
 const NOT_UPDATE =  <span className="text-gray-400 text-xs italic">Chưa cập nhật</span>
@@ -16,13 +16,16 @@ const renderField = (value: any) => !!value ? value : NOT_UPDATE;
 const ResumeCard = () => {
     const dispatch  = useDispatch<AppDispatch>()
     const [openEdit, setOpenEdit] = useState(false)
-    const { resume } = useSelector((state: RootState) => state.candidateStore)
+    const { resume } = useSelector((state: RootState) => state.resumeStore)
     const { careers } = useSelector((state: RootState) => state.careerStore)
     const { provinces } = useSelector((state: RootState) => state.provinceStore)
     
+    useEffect(() => {
+      dispatch(resumeActions.getOnlineResume())
+    },[dispatch])
   
     const handleFinish = (values: IResumeData) => {
-      dispatch(candidateActions.updateOnlineResume(values))
+      dispatch(resumeActions.updateOnlineResume(values))
       setOpenEdit(false)
     }
     return (

@@ -3,7 +3,7 @@ import { Modal, Form, Input, Select, Button, Row, Col, DatePicker } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import type { AppDispatch, RootState } from '../../../../../../../stores';
 import { provinceActions } from '../../../../../../../stores/provinceStore/provinceReducer';
-import type { ICandidateData } from '../../../../../../../types/candidate/ResumeType';
+import type { ICandidateData } from '../../../../../../../types/resume/ResumeType';
 import dayjs from 'dayjs';
 
 const { Option } = Select;
