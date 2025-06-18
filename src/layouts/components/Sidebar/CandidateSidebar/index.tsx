@@ -10,7 +10,7 @@ import ROUTE_PATH from "../../../../routes/routePath";
 import type { MenuProps } from "antd"
 import { useSelector } from "react-redux"
 import type { RootState } from "../../../../stores"
-import UserAvatar from "./components/avatar"
+import UserAvatar from "./components/userAvatar"
 
 export default function CandidateSidebar() {
   const navigate = useNavigate();

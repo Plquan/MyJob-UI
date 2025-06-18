@@ -12,7 +12,7 @@ const { Text } = Typography;
 
 const ProfileCard: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
-  const { candidate } = useSelector((state: RootState) => state.candidateStore);
+  const { candidate,loading } = useSelector((state: RootState) => state.candidateStore);
   const [isModalOpen, setIsModalOpen] = useState(false)
 
   useEffect(() => {
@@ -39,6 +39,7 @@ const ProfileCard: React.FC = () => {
             Chỉnh sửa
           </Button>
         }
+        loading={loading}
       >
         <Row gutter={[32, 16]}>
           <Col xs={24} md={12}>

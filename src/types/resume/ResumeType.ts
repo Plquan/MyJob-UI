@@ -40,14 +40,12 @@ export interface ICandidateData {
   }
   
   export interface ICertificateData {
-    id: number
-    resumeId: number
+    id?: number
+    resumeId?: number
     name: string
     trainingPlace: string
-    startDate: Date | string
+    startDate: Date
     expirationDate?: Date 
-    createdAt: Date 
-    updatedAt: Date 
   }
   
   export interface ILanguageData {

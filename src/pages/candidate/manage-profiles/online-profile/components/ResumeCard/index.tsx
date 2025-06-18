@@ -16,12 +16,14 @@ const renderField = (value: any) => !!value ? value : NOT_UPDATE;
 const ResumeCard = () => {
     const dispatch  = useDispatch<AppDispatch>()
     const [openEdit, setOpenEdit] = useState(false)
-    const { resume } = useSelector((state: RootState) => state.resumeStore)
+    const { resume,loading } = useSelector((state: RootState) => state.resumeStore)
     const { careers } = useSelector((state: RootState) => state.careerStore)
     const { provinces } = useSelector((state: RootState) => state.provinceStore)
     
     useEffect(() => {
-      dispatch(resumeActions.getOnlineResume())
+      if(!resume?.id){
+        dispatch(resumeActions.getOnlineResume())
+      }
     },[dispatch])
   
     const handleFinish = (values: IResumeData) => {
@@ -34,7 +36,9 @@ const ResumeCard = () => {
           <Button type="default" className="border border-gray-300 flex items-center" onClick={() => setOpenEdit(true)}>
           <EditOutlined className="mr-1" />
           Chỉnh sửa
-        </Button> }>
+        </Button>} 
+         loading={loading}
+        >
          <div className="mb-10">
             <Text strong>Mục tiêu nghề nghiệp</Text>
             <br />

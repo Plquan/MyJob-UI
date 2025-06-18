@@ -7,7 +7,7 @@ import OnelineProfilePage from "./online-profile";
 import { ProfilePage } from "./profile";
   
   export default function CandidateProfilePage() {
-    const [editMode, setEditMode] = useState(true); // Toggle để test
+    const [editMode, setEditMode] = useState(true)
   
     return (
       <>
