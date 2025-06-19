@@ -1,13 +1,12 @@
 import React, { useEffect } from "react"
 import { Modal, Button, Form, Input, DatePicker, Row, Col } from "antd"
-import dayjs from "dayjs"
 import type { ICertificate } from "../../../../../../../types/resume/CertificateType"
 import { normalizeDate } from "../../../../../../../ultils/functions/normalizeDate"
 
   interface CertificateModalProps {
     open: boolean
     onCancel: () => void
-    onFinish: (values: ICertificate) => void
+    onSubmit: (values: ICertificate) => void
     initialValues?: ICertificate | null
     form: any
   }
@@ -15,7 +14,7 @@ import { normalizeDate } from "../../../../../../../ultils/functions/normalizeDa
   const CertificateModal: React.FC<CertificateModalProps> = ({ 
     open, 
     onCancel, 
-    onFinish, 
+    onSubmit, 
     initialValues,
     form
   }) => {
@@ -32,11 +31,11 @@ import { normalizeDate } from "../../../../../../../ultils/functions/normalizeDa
         form.resetFields()
       }
     }
-  }, [open,initialValues?.id, form])
+  }, [open,initialValues, form])
 
   return (
     <Modal
-      title={<span className="text-lg font-semibold">{initialValues?.id ? 'Cập nhật chứng chỉ' : 'Thêm chứng chỉ'}</span>}
+      title="Chứng chỉ"
       open={open}
       onCancel={onCancel}
       footer={null}
@@ -46,8 +45,12 @@ import { normalizeDate } from "../../../../../../../ultils/functions/normalizeDa
       <Form
         form={form}
         layout="vertical"
-        onFinish={onFinish}
+        onFinish={onSubmit}
       >
+        <Form.Item name="id" noStyle>
+          <Input hidden />
+        </Form.Item>
+
         <Form.Item
           name="name"
           label={<span>Tên chứng chỉ <span className="text-red-500">*</span></span>}

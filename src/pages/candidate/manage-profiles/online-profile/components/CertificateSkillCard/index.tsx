@@ -1,41 +1,41 @@
-import { Form } from "antd"
+import { Button, Card, Empty, Form } from "antd"
 import { useEffect, useState } from "react"
 import CertificateModal from "./components/CertificateModal"
-import CertificateCard from "./components/CertificateCard"
+import { EditOutlined, DeleteOutlined } from "@ant-design/icons"
 import { useDispatch, useSelector } from "react-redux"
 import type { AppDispatch, RootState } from "../../../../../../stores"
 import { certificateActions } from "../../../../../../stores/certificateStore/certificateReducer"
 import type { ICertificate} from "../../../../../../types/resume/CertificateType"
+import { normalizeDate } from "../../../../../../ultils/functions/normalizeDate"
 
 const CertificateSkillCard = () => {
   const dispatch = useDispatch<AppDispatch>()
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [editingCertificate, setEditingCertificate] = useState<ICertificate | null>(null)
-  const { certificates, isSubmitting, loading } = useSelector((state: RootState) => state.certificateStore);
   const [form] = Form.useForm<ICertificate>()
+  const { certificates, isSubmitting, loading } = useSelector((state: RootState) => state.certificateStore);
 
   useEffect(() => {
     dispatch(certificateActions.getAllCertificates())
   },[dispatch])
-  
+
   const handleCancel = () => {
     setIsModalOpen(false)
     form.resetFields()
   }
 
-  const handleFinish = (data: ICertificate) => {
-    console.log(data)
-    if(!editingCertificate){
-      dispatch(certificateActions.createCertificate(data))
-    }
-    else{  
-      dispatch(certificateActions.updateCertificate({
-        ...data,
-        id: editingCertificate?.id,
-      }))
-    }
+  const handleSubmit = (data: ICertificate) => {
+    const isEditing = Boolean(data.id);
+
+    const action = isEditing
+      ? certificateActions.updateCertificate(data)
+      : certificateActions.createCertificate(data)
+  
+    dispatch(action)
     setIsModalOpen(false)
+    form.resetFields()
   }
+  
 
   const showModal = () => {
     setEditingCertificate(null)
@@ -53,22 +53,62 @@ const CertificateSkillCard = () => {
 
   return (
     <>
-      <CertificateCard
-        certificates={certificates}
-        loading={loading}
-        isSubmitting={isSubmitting}
-        onCreate={showModal}
-        onEdit={handleEdit}
-        onDelete={handleDelete}
-      />
+    <Card 
+      title={"Chứng chỉ"}
+      loading={loading}
+      extra={
+        <a
+          className="text-xs text-[#1976d2] hover:underline cursor-pointer flex items-center"
+          onClick={showModal}
+        >
+          <span className="text-lg mr-1 leading-none"></span> + Thêm chứng chỉ
+        </a>
+      }
+    >  
+      {certificates && certificates.length > 0 ? (
+        certificates.map((item) => (
+          <div key={item.id} className="mb-2">
+            <div className="flex items-start gap-2 mb-1">
+              <span className="mt-1 w-2 h-2 rounded-full bg-orange-300 inline-block"></span>
+              <span className="text-medium">{normalizeDate(item.startDate)?.format("DD/MM/YYYY")}</span>
+            </div>
+            <div className="ml-1 border-l-2 border-gray-300 pl-4">
+              <div className="font-semibold mb-1">{item.name}</div>
+              <div className="text-medium mb-1">{item.trainingPlace}</div>
+              <div className="flex gap-2">
+                <Button
+                  icon={<EditOutlined />}
+                  type="text"
+                  loading={isSubmitting}
+                  size="small"
+                  onClick={() => handleEdit(item)}
+                  className="text-yellow-500! border-yellow-500 hover:!text-yellow-600 hover:!border-yellow-600"
+                />
+                <Button
+                  icon={<DeleteOutlined />}
+                  loading={isSubmitting}
+                  type="text"
+                  size="small"
+                  danger
+                  onClick={() => handleDelete(item.id)}
+                />
+              </div>
+            </div>
+          </div>
+        ))
+      ) : (
+        <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description={"Hiện chưa có chứng chỉ."} />
+      )}
+    </Card>
 
       <CertificateModal
         open={isModalOpen}
         onCancel={handleCancel}
-        onFinish={handleFinish}
+        onSubmit={handleSubmit}
         initialValues={editingCertificate}
         form={form}
       />
+
     </>
   )
 }

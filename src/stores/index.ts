@@ -10,6 +10,7 @@ import { candidateSlice } from "./candidateStore/candidateReducer";
 import { careerSlice } from "./careerStore/careerReducer";
 import { resumeSlice } from "./resumeStore/resumeReducer";
 import { certificateSlice } from "./certificateStore/certificateReducer";
+import { experienceSlice } from "./experienceStore/experienceReducer";
 
 // Cấu hình redux-persist
 const persistConfig = {
@@ -28,6 +29,7 @@ const rootReducer = combineReducers({
   careerStore: careerSlice.reducer,
   resumeStore: resumeSlice.reducer,
   certificateStore: certificateSlice.reducer,
+  experienceStore: experienceSlice.reducer
 });
 
 // Tạo reducer có tích hợp persist

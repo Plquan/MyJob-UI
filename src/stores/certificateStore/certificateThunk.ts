@@ -1,8 +1,7 @@
-import { createAsyncThunk } from "@reduxjs/toolkit";
-import type { IApiResponse } from "../../types/AppType";
-import http from "../../ultils/axios/axiosCustom";
-import type { ICertificateData } from "../../types/resume/ResumeType";
-import type { ICertificate } from "../../types/resume/CertificateType";
+import { createAsyncThunk } from "@reduxjs/toolkit"
+import type { IApiResponse } from "../../types/AppType"
+import http from "../../ultils/axios/axiosCustom"
+import type { ICertificate } from "../../types/resume/CertificateType"
 
 
 const getAllCertificates = createAsyncThunk (
