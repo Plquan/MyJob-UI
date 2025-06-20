@@ -1,37 +1,53 @@
-import React, { useEffect } from 'react';
-import { Modal, Form, Input, Select, Button, Row, Col, DatePicker } from 'antd';
-import { useDispatch, useSelector } from 'react-redux';
-import type { AppDispatch, RootState } from '../../../../../../../stores';
-import { provinceActions } from '../../../../../../../stores/provinceStore/provinceReducer';
-import type { ICandidateData } from '../../../../../../../types/resume/ResumeType';
-import dayjs from 'dayjs';
+import React, { useEffect } from 'react'
+import { Modal, Form, Input, Select, Button, Row, Col, DatePicker } from 'antd'
+import { useDispatch, useSelector } from 'react-redux'
+import type { AppDispatch, RootState } from '../../../../../../../stores'
+import { provinceActions } from '../../../../../../../stores/provinceStore/provinceReducer'
+import type { ICandidateData } from '../../../../../../../types/candidate/CandidateType'
+import { GENDER_OPTIONS, MARTIALSTATUS_OPTIONS } from '../../../../../../../constant/selectOptions'
+import { normalizeDate } from '../../../../../../../ultils/functions/normalizeDate'
 
-const { Option } = Select;
+const { Option } = Select
 
 interface EditProfileModalProps {
-  open: boolean;
-  onCancel: () => void;
-  onFinish: (values: any) => void;
-  initialValues?: ICandidateData;
+  open: boolean
+  onCancel: () => void
+  onFinish: (values: any) => void
+  initialValues?: ICandidateData
+  form:any
 }
 
-const EditProfileModal: React.FC<EditProfileModalProps> = ({ open, onCancel,onFinish, initialValues }) => {
+const EditProfileModal: React.FC<EditProfileModalProps> = ({ open, onCancel,onFinish, initialValues,form }) => {
   const dispatch = useDispatch<AppDispatch>();
   const { provinces, districts, loading, isSubmiting } = useSelector(
     (state: RootState) => state.provinceStore
-  );
-  const [form] = Form.useForm<ICandidateData>();
+  )
 
   useEffect(() => {
     if (initialValues?.provinceId) {
       dispatch(provinceActions.getDistrictsByProvince(initialValues.provinceId));
     }
-  }, [initialValues]);
+  }, [initialValues])
+
+  useEffect(() => {
+    if(open){
+      if (initialValues?.id) {
+        form.setFieldsValue({
+          ...initialValues,
+          provinceId: initialValues.province?.id,
+          districtId: initialValues.district?.id,
+          birthday: normalizeDate(initialValues.birthday)
+        })
+      } else {
+        form.resetFields()
+      }
+    }
+  }, [open,initialValues, form])
 
   const onProvinceChange = (provinceId: number) => {
     form.setFieldsValue({
       districtId: undefined
-    });
+    })
     dispatch(provinceActions.getDistrictsByProvince(provinceId));
   }
 
@@ -49,14 +65,6 @@ const EditProfileModal: React.FC<EditProfileModalProps> = ({ open, onCancel,onFi
         form={form} 
         layout="vertical" 
         onFinish={onFinish}
-        initialValues={initialValues ? {
-          ...initialValues,
-          gender: String(initialValues.gender),
-          maritalStatus: String(initialValues.maritalStatus),
-          provinceId: initialValues.province?.id,
-          districtId: initialValues.district?.id,
-          birthday: initialValues.birthday ? dayjs(initialValues.birthday) : undefined
-        } : undefined}
       >
         <Row gutter={[16, 0]}>
           <Col xs={24} md={12}>
@@ -74,9 +82,11 @@ const EditProfileModal: React.FC<EditProfileModalProps> = ({ open, onCancel,onFi
               rules={[{ required: true, message: 'Vui lòng chọn giới tính' }]}
             >
               <Select>
-                <Option value="1">Nam</Option>
-                <Option value="2">Nữ</Option>
-                <Option value="3">Khác</Option>
+              {GENDER_OPTIONS.map(opt => (
+                  <Option key={opt.value} value={opt.value}>
+                  {opt.label}
+                  </Option>
+              ))}
               </Select>
             </Form.Item>
 
@@ -110,8 +120,11 @@ const EditProfileModal: React.FC<EditProfileModalProps> = ({ open, onCancel,onFi
               rules={[{ required: true, message: 'Vui lòng chọn tình trạng hôn nhân' }]}
             >
               <Select>
-                <Option value="1">Độc thân</Option>
-                <Option value="2">Đã kết hôn</Option>
+              {MARTIALSTATUS_OPTIONS.map(opt => (
+                <Option key={opt.value} value={opt.value}>
+                {opt.label}
+                </Option>
+               ))}
               </Select>
             </Form.Item>
 

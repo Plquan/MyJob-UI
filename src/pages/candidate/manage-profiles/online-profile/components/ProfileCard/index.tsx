@@ -1,12 +1,13 @@
-import React, { useEffect, useState } from 'react';
-import { Card, Typography, Row, Col, Button } from 'antd';
-import { EditOutlined } from '@ant-design/icons';
-import EditProfileModal from './components/EditProfileModal';
-import { useDispatch, useSelector } from 'react-redux';
-import type { AppDispatch, RootState } from '../../../../../../stores';
-import { mapGender, mapMaritalStatus } from '../../../../../../ultils/functions/mapper';
-import { candidateActions } from '../../../../../../stores/candidateStore/candidateReducer';
-import type { ICandidateData } from '../../../../../../types/candidate/CandidateType';
+import React, { useEffect, useState } from 'react'
+import { Card, Typography, Row, Col, Button, Form } from 'antd'
+import { EditOutlined } from '@ant-design/icons'
+import EditProfileModal from './components/EditProfileModal'
+import { useDispatch, useSelector } from 'react-redux'
+import type { AppDispatch, RootState } from '../../../../../../stores'
+import { candidateActions } from '../../../../../../stores/candidateStore/candidateReducer'
+import type { ICandidateData } from '../../../../../../types/candidate/CandidateType'
+import { getLabelFromValue } from '../../../../../../ultils/functions/getLabelFromValue'
+import { GENDER_OPTIONS, MARTIALSTATUS_OPTIONS } from '../../../../../../constant/selectOptions'
 
 const { Text } = Typography;
 
@@ -14,7 +15,8 @@ const ProfileCard: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
   const { candidate,loading } = useSelector((state: RootState) => state.candidateStore);
   const [isModalOpen, setIsModalOpen] = useState(false)
-
+  const [form] = Form.useForm()
+  
   useEffect(() => {
     if(!candidate){
       dispatch(candidateActions.getProfile())
@@ -53,34 +55,34 @@ const ProfileCard: React.FC = () => {
             <div className="mb-4">
               <Text strong>Giới tính</Text>
               <br />
-              {mapGender(candidate?.gender)??NOT_UPDATE}
+              {renderField(getLabelFromValue(GENDER_OPTIONS,candidate?.gender))}
             </div>
             <div className="mb-4">
               <Text strong>Ngày sinh</Text>
               <br />
-              {candidate?.birthday?.toString()??NOT_UPDATE}
+              {renderField(candidate?.birthday?.toString())}
             </div>
             <div className="mb-0">
               <Text strong>Địa chỉ</Text>
               <br />
-              {candidate?.address??NOT_UPDATE}
+              {renderField(candidate?.address)}
             </div>
           </Col>
           <Col xs={24} md={12}>
             <div className="mb-4">
               <Text strong>Tình trạng hôn nhân</Text>
               <br />
-              {mapMaritalStatus(candidate?.maritalStatus)??NOT_UPDATE}
+              {renderField(getLabelFromValue(MARTIALSTATUS_OPTIONS,candidate?.maritalStatus))}
             </div>
             <div className="mb-4">
               <Text strong>Tỉnh/Thành phố</Text>
               <br />
-              {candidate?.province?.name??NOT_UPDATE}
+              {renderField(candidate?.province?.name)}
             </div>
             <div className="mb-4">
               <Text strong>Quận/Huyện</Text>
               <br />
-              {candidate?.district?.name??NOT_UPDATE}
+              {renderField(candidate?.district?.name)}
             </div>
  
           </Col>
@@ -91,6 +93,7 @@ const ProfileCard: React.FC = () => {
         initialValues={candidate}
         onCancel={handleCancel}
         onFinish={handleFinish}
+        form={form}
       />
     </>
   );

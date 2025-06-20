@@ -35,6 +35,16 @@ export const POSITION_OPTIONS = [
     { value: 1, label: "Nhật" },
     { value: 2, label: "Tây ba nha" },
     { value: 3, label: "Trung quốc" }
-]
-  
+ ]
+ 
+  export const MARTIALSTATUS_OPTIONS = [
+    {value: 0, label: "Độc thân"},
+    {value: 1, label: "Đã kết hôn"}
+  ]
+
+  export const GENDER_OPTIONS = [
+    {value: 0, label: "Nam"},
+    {value: 1, label: "Nữ"},
+    {value: 2, label: "Khác"}
+  ]
   

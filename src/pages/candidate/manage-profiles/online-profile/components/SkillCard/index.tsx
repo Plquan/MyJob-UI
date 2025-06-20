@@ -3,7 +3,6 @@ import { EditOutlined, DeleteOutlined, StarFilled } from "@ant-design/icons";
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from "react-redux";
 import type { AppDispatch, RootState } from "../../../../../../stores";
-import { languageActions } from "../../../../../../stores/languageStore/languageReducer";
 import SkillModal from "./components/SkillModal";
 import type { ISkillData } from "../../../../../../types/resume/SkillType";
 import { skillActions } from "../../../../../../stores/skillStore/skillReducer";
@@ -74,7 +73,7 @@ const SkillCard = () => {
 
   useEffect(() => {
     if(!skills || skills.length === 0){
-      dispatch(languageActions.getAllLanguages())
+      dispatch(skillActions.getAllSkills())
     }
   },[dispatch])
   
@@ -116,7 +115,7 @@ const SkillCard = () => {
             className="text-xs text-[#1976d2] hover:underline cursor-pointer flex items-center"
             onClick={showModal}
           >
-            <span className="text-lg mr-1 leading-none"></span> + Thêm kĩ năng chuyên môn
+            <span className="text-lg mr-1 leading-none"></span> + Thêm kĩ năng
           </span>
         }
         loading={loading}

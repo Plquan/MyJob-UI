@@ -6,5 +6,6 @@ import dayjs from "dayjs";
  * @returns dayjs object hoặc undefined
  */
 export const normalizeDate = (value?: string | Date | null) => {
-  return value ? dayjs(value) : undefined;
+  const parsed = value ? dayjs(value) : undefined;
+  return parsed && parsed.isValid() ? parsed : undefined;
 };
