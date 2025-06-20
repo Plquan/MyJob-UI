@@ -1,23 +1,25 @@
-import { configureStore, combineReducers } from "@reduxjs/toolkit";
-import storage from "redux-persist/lib/storage"; // localStorage
-import { persistReducer, persistStore } from "redux-persist";
+import { configureStore, combineReducers } from "@reduxjs/toolkit"
+import storage from "redux-persist/lib/storage"
+import { persistReducer, persistStore } from "redux-persist"
 
-import { provinceSlice } from "./provinceStore/provinceReducer";
-import { authSlice } from "./authStore/authReducer";
-import { roleSlice } from "./roleStore/roleReducer";
-import { userSlice } from "./userStore/userReducer";
-import { candidateSlice } from "./candidateStore/candidateReducer";
-import { careerSlice } from "./careerStore/careerReducer";
-import { resumeSlice } from "./resumeStore/resumeReducer";
-import { certificateSlice } from "./certificateStore/certificateReducer";
-import { experienceSlice } from "./experienceStore/experienceReducer";
-import { educationSlice } from "./educationStore/educationReducer";
+import { provinceSlice } from "./provinceStore/provinceReducer"
+import { authSlice } from "./authStore/authReducer"
+import { roleSlice } from "./roleStore/roleReducer"
+import { userSlice } from "./userStore/userReducer"
+import { candidateSlice } from "./candidateStore/candidateReducer"
+import { careerSlice } from "./careerStore/careerReducer"
+import { resumeSlice } from "./resumeStore/resumeReducer"
+import { certificateSlice } from "./certificateStore/certificateReducer"
+import { experienceSlice } from "./experienceStore/experienceReducer"
+import { educationSlice } from "./educationStore/educationReducer"
+import { languageSlice } from "./languageStore/languageReducer"
+import { skillSlice } from "./skillStore/skillReducer"
 
 // Cấu hình redux-persist
 const persistConfig = {
   key: "root",
   storage,
-  whitelist: ["authStore"], //  Chỉ lưu userStore
+  whitelist: ["authStore"],
 };
 
 // Gộp các reducer lại
@@ -32,6 +34,8 @@ const rootReducer = combineReducers({
   certificateStore: certificateSlice.reducer,
   experienceStore: experienceSlice.reducer,
   educationStore: educationSlice.reducer,
+  languageStore: languageSlice.reducer,
+  skillStore: skillSlice.reducer,
 });
 
 // Tạo reducer có tích hợp persist

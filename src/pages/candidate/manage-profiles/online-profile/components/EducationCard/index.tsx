@@ -2,24 +2,25 @@ import { Button, Card, Empty, Form } from "antd";
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import type { AppDispatch, RootState } from "../../../../../../stores";
-import type { ICertificateData } from "../../../../../../types/resume/ResumeType";
 import EducationModal from "./components/EducationModal";
-import type { IEducation } from "../../../../../../types/resume/EducationType";
+import type { IEducationData } from "../../../../../../types/resume/EducationType";
 import { educationActions } from "../../../../../../stores/educationStore/educationReducer";
 import  { normalizeDate } from "../../../../../../ultils/functions/normalizeDate";
 import { EditOutlined, DeleteOutlined, CaretDownOutlined } from "@ant-design/icons";
 
 const EducationCard = () => {
-  const [form] = Form.useForm<ICertificateData>()
+  const [form] = Form.useForm()
   const dispatch = useDispatch<AppDispatch>()
 
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [openDescriptionId, setOpenDescriptionId] = useState<number | null>(null)
-  const [selectedEducation, setSelectedEducation] = useState<IEducation | null>(null)
+  const [selectedEducation, setSelectedEducation] = useState<IEducationData | null>(null)
   const { educations, isSubmitting, loading } = useSelector((state: RootState) => state.educationStore)
 
   useEffect(() => {
-    dispatch(educationActions.getAllEducations())
+    if(!educations || educations.length === 0){
+      dispatch(educationActions.getAllEducations())
+    }
   },[dispatch])
   
   const showModal = () => {
@@ -27,7 +28,7 @@ const EducationCard = () => {
     setIsModalOpen(true);
   }
 
-  const handleSubmit = (data: IEducation) => {
+  const handleSubmit = (data: IEducationData) => {
     const isEditing = Boolean(data.id);
 
     const action = isEditing
@@ -43,7 +44,7 @@ const EducationCard = () => {
     setIsModalOpen(false);
   }
  
-  const handleEdit = (data: IEducation) => {
+  const handleEdit = (data: IEducationData) => {
     setSelectedEducation(data)
     setIsModalOpen(true)
   }

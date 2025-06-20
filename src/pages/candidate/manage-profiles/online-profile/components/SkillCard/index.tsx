@@ -1,26 +1,24 @@
 import { Card, Table, Tooltip, Button, Empty, Form } from "antd";
 import { EditOutlined, DeleteOutlined, StarFilled } from "@ant-design/icons";
-import LanguageModal from './components/LanguageModal';
 import { useEffect, useState } from 'react';
-import type { ILanguageData } from "../../../../../../types/resume/LanguageType";
 import { useDispatch, useSelector } from "react-redux";
 import type { AppDispatch, RootState } from "../../../../../../stores";
 import { languageActions } from "../../../../../../stores/languageStore/languageReducer";
-import { LANGUAGE_OPTIONS } from "../../../../../../constant/selectOptions";
-import { getLabelFromValue } from "../../../../../../ultils/functions/getLabelFromValue";
+import SkillModal from "./components/SkillModal";
+import type { ISkillData } from "../../../../../../types/resume/SkillType";
+import { skillActions } from "../../../../../../stores/skillStore/skillReducer";
 
 
 const columns = (
-  onEdit: (record: ILanguageData) => void,
+  onEdit: (record: ISkillData) => void,
   onDelete: (id: number) => void,
   isSubmitting:boolean
 ) => [
   {
-    title: "Ngoại ngữ",
-    dataIndex: "language",
-    key: "language",
+    title: "Kĩ năng",
+    dataIndex: "name",
+    key: "name",
     align: "left" as const,
-    render: (value: string) => getLabelFromValue(LANGUAGE_OPTIONS, value),
   },
   {
     title: "Trình độ",
@@ -39,7 +37,7 @@ const columns = (
     title: "Hành động",
     key: "action",
     align: "center" as const,
-    render: (_: any, record: ILanguageData) => (
+    render: (_: any, record: ISkillData) => (
       <span>
         <Tooltip title="Sửa">
         <Button
@@ -66,31 +64,31 @@ const columns = (
   },
 ]
 
-const LanguageCard = () => {
-  const [form] = Form.useForm<ILanguageData>()
+const SkillCard = () => {
+  const [form] = Form.useForm<ISkillData>()
   const dispatch = useDispatch<AppDispatch>()
 
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedLanguage, setSelectedLanguage] = useState<ILanguageData | null>(null)
-  const { languages, isSubmitting, loading } = useSelector((state: RootState) => state.languageStore)
+  const [selectedSkill, setSelectedSkill] = useState<ISkillData | null>(null)
+  const { skills, isSubmitting, loading } = useSelector((state: RootState) => state.skillStore)
 
   useEffect(() => {
-    if(!languages || languages.length === 0){
+    if(!skills || skills.length === 0){
       dispatch(languageActions.getAllLanguages())
     }
   },[dispatch])
   
   const showModal = () => {
-    setSelectedLanguage(null)
+    setSelectedSkill(null)
     setIsModalOpen(true);
   }
 
-  const handleSubmit = (data: ILanguageData) => {
+  const handleSubmit = (data: ISkillData) => {
     const isEditing = Boolean(data.id);
 
     const action = isEditing
-      ? languageActions.updateLanguage(data)
-      : languageActions.createLanguage(data);
+      ? skillActions.updateSkill(data)
+      : skillActions.createSkill(data);
   
     dispatch(action)
     setIsModalOpen(false)
@@ -101,32 +99,32 @@ const LanguageCard = () => {
     setIsModalOpen(false);
   }
  
-  const handleEdit = (data: ILanguageData) => {
-    setSelectedLanguage(data)
+  const handleEdit = (data: ISkillData) => {
+    setSelectedSkill(data)
     setIsModalOpen(true)
   }
 
-  const handleDelete = (experienceId: number) => {
-    dispatch(languageActions.deleteLanguage(experienceId))
+  const handleDelete = (skillId: number) => {
+    dispatch(skillActions.deleteSkill(skillId))
   }
 
   return (
     <>
-      <Card title={"Ngôn ngữ"}
+      <Card title={"Kỹ năng chuyên môn"}
         extra={
           <span
             className="text-xs text-[#1976d2] hover:underline cursor-pointer flex items-center"
             onClick={showModal}
           >
-            <span className="text-lg mr-1 leading-none"></span> + Thêm Ngôn ngữ
+            <span className="text-lg mr-1 leading-none"></span> + Thêm kĩ năng chuyên môn
           </span>
         }
         loading={loading}
       >
-        {languages.length > 0 ? (
+        {skills.length > 0 ? (
           <Table
             columns={columns(handleEdit, handleDelete,isSubmitting)}
-            dataSource={languages}
+            dataSource={skills}
             rowKey="id"
             pagination={false}
             size="middle"
@@ -135,15 +133,15 @@ const LanguageCard = () => {
           <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description="Chưa có kỹ năng ngôn ngữ nào." />
         )}
       </Card>
-      <LanguageModal
+      <SkillModal
          form={form}
          open={isModalOpen}
          onSubmit={handleSubmit}
          onCancel={handleCancel}
-         initialValues={selectedLanguage}
+         initialValues={selectedSkill}
       />
     </>
   )
 }
 
-export default LanguageCard;
+export default SkillCard

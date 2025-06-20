@@ -1,14 +1,14 @@
 import { Modal, Form, Input, DatePicker, Button } from 'antd'
 import { CloseOutlined } from "@ant-design/icons"
-import type { IExperience } from '../../../../../../../types/resume/ExperienceType'
+import type { IExperienceData } from '../../../../../../../types/resume/ExperienceType'
 import { useEffect } from 'react'
 import { normalizeDate } from '../../../../../../../ultils/functions/normalizeDate'
 
 interface ExperienceModalProps {
   open: boolean
-  onSubmit: (value: IExperience) => void
+  onSubmit: (value: IExperienceData) => void
   onCancel: () => void
-  initialValues?: IExperience | null
+  initialValues?: IExperienceData | null
   form: any
 }
 
@@ -89,7 +89,7 @@ const ExperienceModal = ({ open, onSubmit, onCancel,form,initialValues }: Experi
           <Input.TextArea rows={4} placeholder="Nhập nội dung mô tả tại đây" />
         </Form.Item>
 
-        <div className="flex justify-end mt-6 space-x-2 gap-2">
+        <div className="flex justify-end space-x-2 gap-2">
           <Button onClick={onCancel}>Hủy</Button>
           <Button type="primary" htmlType="submit">
             Lưu

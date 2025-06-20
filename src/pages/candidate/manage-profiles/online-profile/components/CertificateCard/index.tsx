@@ -5,18 +5,20 @@ import { EditOutlined, DeleteOutlined } from "@ant-design/icons"
 import { useDispatch, useSelector } from "react-redux"
 import type { AppDispatch, RootState } from "../../../../../../stores"
 import { certificateActions } from "../../../../../../stores/certificateStore/certificateReducer"
-import type { ICertificate} from "../../../../../../types/resume/CertificateType"
+import type { ICertificateData} from "../../../../../../types/resume/CertificateType"
 import { normalizeDate } from "../../../../../../ultils/functions/normalizeDate"
 
-const CertificateSkillCard = () => {
+const CertificateCard = () => {
   const dispatch = useDispatch<AppDispatch>()
   const [isModalOpen, setIsModalOpen] = useState(false)
-  const [editingCertificate, setEditingCertificate] = useState<ICertificate | null>(null)
-  const [form] = Form.useForm<ICertificate>()
+  const [editingCertificate, setEditingCertificate] = useState<ICertificateData | null>(null)
+  const [form] = Form.useForm<ICertificateData>()
   const { certificates, isSubmitting, loading } = useSelector((state: RootState) => state.certificateStore);
 
   useEffect(() => {
-    dispatch(certificateActions.getAllCertificates())
+    if(!certificates || certificates.length === 0){
+      dispatch(certificateActions.getAllCertificates())
+    }
   },[dispatch])
 
   const handleCancel = () => {
@@ -24,7 +26,7 @@ const CertificateSkillCard = () => {
     form.resetFields()
   }
 
-  const handleSubmit = (data: ICertificate) => {
+  const handleSubmit = (data: ICertificateData) => {
     const isEditing = Boolean(data.id);
 
     const action = isEditing
@@ -42,7 +44,7 @@ const CertificateSkillCard = () => {
     setIsModalOpen(true)
   }
   
-  const handleEdit = (certificate: ICertificate) => {
+  const handleEdit = (certificate: ICertificateData) => {
     setEditingCertificate(certificate)
     setIsModalOpen(true)
   }
@@ -123,4 +125,4 @@ const CertificateSkillCard = () => {
   )
 }
 
-export default CertificateSkillCard
+export default CertificateCard

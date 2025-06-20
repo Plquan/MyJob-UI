@@ -1,8 +1,7 @@
 import { Button, Card, Empty, Form } from "antd";
 import { useEffect, useState } from 'react';
 import ExperienceModal from "./components/ExperienceModal";
-import type { ICertificateData } from "../../../../../../types/resume/ResumeType";
-import type { IExperience } from "../../../../../../types/resume/ExperienceType";
+import type { IExperienceData } from "../../../../../../types/resume/ExperienceType";
 import { EditOutlined, DeleteOutlined, CaretDownOutlined } from "@ant-design/icons";
 import { useDispatch, useSelector } from "react-redux";
 import type { AppDispatch, RootState } from "../../../../../../stores";
@@ -10,16 +9,18 @@ import { experienceActions } from "../../../../../../stores/experienceStore/expe
 import { normalizeDate } from "../../../../../../ultils/functions/normalizeDate";
 
 const ExperienceCard = () => {
-  const [form] = Form.useForm<ICertificateData>()
+  const [form] = Form.useForm()
   const dispatch = useDispatch<AppDispatch>()
 
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedExperience, setSelectedExperience] = useState<IExperience | null>(null)
+  const [selectedExperience, setSelectedExperience] = useState<IExperienceData | null>(null)
   const [openDescriptionId, setOpenDescriptionId] = useState<number | null>(null)
   const { experiences, isSubmitting, loading } = useSelector((state: RootState) => state.experienceStore)
 
   useEffect(() => {
-    dispatch(experienceActions.getAllExperiences())
+    if(!experiences || experiences.length === 0){
+      dispatch(experienceActions.getAllExperiences())
+    }
   },[dispatch])
   
   const showModal = () => {
@@ -27,7 +28,7 @@ const ExperienceCard = () => {
     setIsModalOpen(true);
   }
 
-  const handleSubmit = (data: IExperience) => {
+  const handleSubmit = (data: IExperienceData) => {
     const isEditing = Boolean(data.id);
 
     const action = isEditing
@@ -43,7 +44,7 @@ const ExperienceCard = () => {
     setIsModalOpen(false);
   }
  
-  const handleEdit = (data: IExperience) => {
+  const handleEdit = (data: IExperienceData) => {
     setSelectedExperience(data)
     setIsModalOpen(true)
   }

@@ -1,4 +1,4 @@
-export interface IExperience {
+export interface IExperienceData {
     id: number
     jobName: string
     companyName: string

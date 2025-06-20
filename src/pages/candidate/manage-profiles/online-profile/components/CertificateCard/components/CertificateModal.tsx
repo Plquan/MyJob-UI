@@ -1,13 +1,13 @@
 import React, { useEffect } from "react"
 import { Modal, Button, Form, Input, DatePicker, Row, Col } from "antd"
-import type { ICertificate } from "../../../../../../../types/resume/CertificateType"
+import type { ICertificateData } from "../../../../../../../types/resume/CertificateType"
 import { normalizeDate } from "../../../../../../../ultils/functions/normalizeDate"
 
   interface CertificateModalProps {
     open: boolean
     onCancel: () => void
-    onSubmit: (values: ICertificate) => void
-    initialValues?: ICertificate | null
+    onSubmit: (values: ICertificateData) => void
+    initialValues?: ICertificateData | null
     form: any
   }
 
@@ -53,14 +53,14 @@ import { normalizeDate } from "../../../../../../../ultils/functions/normalizeDa
 
         <Form.Item
           name="name"
-          label={<span>Tên chứng chỉ <span className="text-red-500">*</span></span>}
+          label="Tên chứng chỉ"
           rules={[{ required: true, message: "Vui lòng nhập tên chứng chỉ" }]}
         >
           <Input placeholder="Chứng Chỉ A" />
         </Form.Item>
         <Form.Item
           name="trainingPlace"
-          label={<span>Trường/Trung tâm đào tạo <span className="text-red-500">*</span></span>}
+          label="Trường / Trung tâm đào tạo"
           rules={[{ required: true, message: "Vui lòng nhập trường/trung tâm đào tạo" }]}
         >
           <Input placeholder="Trung tâm Đào tạo ABC" />
@@ -69,7 +69,7 @@ import { normalizeDate } from "../../../../../../../ultils/functions/normalizeDa
           <Col xs={24} md={12}>
             <Form.Item
               name="startDate"
-              label={<span>Ngày bắt đầu <span className="text-red-500">*</span></span>}
+              label="Ngày bắt đầu"
               rules={[{ required: true, message: "Vui lòng chọn ngày bắt đầu" }]}
             >
               <DatePicker style={{ width: '100%' }} placeholder="01-03-2019" format="DD-MM-YYYY" />
@@ -84,7 +84,7 @@ import { normalizeDate } from "../../../../../../../ultils/functions/normalizeDa
             </Form.Item>
           </Col>
         </Row>
-        <div className="flex justify-end mt-6 space-x-2 gap-2">
+        <div className="flex justify-end space-x-2 gap-2">
           <Button onClick={onCancel}>Hủy</Button>
           <Button type="primary" htmlType="submit">
             Lưu

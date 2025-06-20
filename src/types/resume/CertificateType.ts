@@ -1,4 +1,4 @@
-export interface ICertificate {
+export interface ICertificateData {
     id: number
     resumeId: number
     name: string

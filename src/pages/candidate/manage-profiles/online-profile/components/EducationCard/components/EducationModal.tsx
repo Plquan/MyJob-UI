@@ -2,13 +2,13 @@ import { Modal, Form, Input, DatePicker, Button, Row, Col } from 'antd'
 import { CloseOutlined } from "@ant-design/icons"
 import { useEffect } from 'react'
 import { normalizeDate } from '../../../../../../../ultils/functions/normalizeDate'
-import type { IEducation } from '../../../../../../../types/resume/EducationType'
+import type { IEducationData } from '../../../../../../../types/resume/EducationType'
 
 interface EducationModalProps {
   open: boolean
-  onSubmit: (value: IEducation) => void
+  onSubmit: (value: IEducationData) => void
   onCancel: () => void
-  initialValues?: IEducation | null
+  initialValues?: IEducationData | null
   form: any
 }
 
@@ -30,7 +30,7 @@ const EducationModal = ({ open, onSubmit, onCancel,form,initialValues }: Educati
 
   return (
     <Modal
-      title="Học vấn"
+      title="Thông tin học vấn"
       open={open}
       onCancel={onCancel}
       closeIcon={<CloseOutlined />}
@@ -59,7 +59,7 @@ const EducationModal = ({ open, onSubmit, onCancel,form,initialValues }: Educati
           <Input placeholder="Nhập chuyên ngành đào tạo" />
         </Form.Item>
         <Form.Item
-          label="Trường/Trung tâm đào tạo"
+          label="Trường / Trung tâm đào tạo"
           name="trainingPlace"
           rules={[{ required: true, message: 'Vui lòng nhập trường/trung tâm đào tạo!' }]}
         >
@@ -102,7 +102,7 @@ const EducationModal = ({ open, onSubmit, onCancel,form,initialValues }: Educati
           <Input.TextArea rows={4} placeholder="Nhập nội dung mô tả tại đây" />
         </Form.Item>
 
-        <div className="flex justify-end mt-6 space-x-2 gap-2">
+        <div className="flex justify-end space-x-2 gap-2">
           <Button onClick={onCancel}>Hủy</Button>
           <Button type="primary" htmlType="submit">
             Lưu
