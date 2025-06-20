@@ -35,6 +35,7 @@ const ExperienceModal = ({ open, onSubmit, onCancel,form,initialValues }: Experi
       onCancel={onCancel}
       closeIcon={<CloseOutlined />}
       footer={null}
+      centered
     >
       <Form layout="vertical" onFinish={onSubmit} form={form}>
 
@@ -96,7 +97,7 @@ const ExperienceModal = ({ open, onSubmit, onCancel,form,initialValues }: Experi
         </div>
       </Form>
     </Modal>
-  );
-};
+  )
+}
 
 export default ExperienceModal; 

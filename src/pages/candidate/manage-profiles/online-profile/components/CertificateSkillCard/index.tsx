@@ -70,7 +70,17 @@ const CertificateSkillCard = () => {
           <div key={item.id} className="mb-2">
             <div className="flex items-start gap-2 mb-1">
               <span className="mt-1 w-2 h-2 rounded-full bg-orange-300 inline-block"></span>
-              <span className="text-medium">{normalizeDate(item.startDate)?.format("DD/MM/YYYY")}</span>
+              <span className="text-medium">
+              {item?.expirationDate ? (
+                <>
+                  {normalizeDate(item?.startDate)?.format("DD/MM/YYYY") ?? "?"}
+                  &nbsp;–&nbsp;
+                  {normalizeDate(item.expirationDate)?.format("DD/MM/YYYY")}
+                </>
+                ) : (
+                  "Không thời hạn"
+                )}
+              </span>
             </div>
             <div className="ml-1 border-l-2 border-gray-300 pl-4">
               <div className="font-semibold mb-1">{item.name}</div>

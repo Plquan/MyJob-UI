@@ -69,7 +69,7 @@ export const experienceSlice = createSlice({
             state.isSubmitting = true;
         })
         builder.addCase(experienceThunks.deleteExperience.fulfilled, (state, action) => {
-            state.experiences = state.experiences.filter(cert => cert.id !== action.payload.data);
+            state.experiences = state.experiences.filter(cert => cert.id !== action.meta.arg);
             state.isSubmitting = false;
         })
         builder.addCase(experienceThunks.deleteExperience.rejected, (state, action) => {

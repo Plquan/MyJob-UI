@@ -7,6 +7,4 @@ export interface IEducation {
     startDate: Date 
     completedDate?: Date 
     description?: string
-    createdAt: Date 
-    updatedAt: Date 
 }

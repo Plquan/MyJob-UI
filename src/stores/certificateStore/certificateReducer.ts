@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit"
+import { createSlice, type PayloadAction } from "@reduxjs/toolkit"
 import toast from "react-hot-toast";
 import certificateThunks from "./certificateThunk";
 import type { ICertificate } from "../../types/resume/CertificateType";
@@ -14,7 +14,6 @@ const initialState: CertificateState = {
     loading: false,
     error: undefined,
     isSubmitting:false,
-
     certificates: []
 
 }
@@ -33,8 +32,9 @@ export const certificateSlice = createSlice({
             state.certificates = action.payload.data
             state.loading = false;
         })
-        builder.addCase(certificateThunks.getAllCertificates.rejected, (state, action) => {
+        builder.addCase(certificateThunks.getAllCertificates.rejected, (state, action:PayloadAction<any>) => {
             state.loading = false
+            toast.error(action.payload.errorMessage)
         })
 
         //create certificate
@@ -44,9 +44,11 @@ export const certificateSlice = createSlice({
         builder.addCase(certificateThunks.createCertificate.fulfilled, (state, action) => {
             state.certificates.push(action.payload.data)
             state.loading = false
+            toast.success("Thêm chứng chỉ thành công")
         })
-        builder.addCase(certificateThunks.createCertificate.rejected, (state, action) => {
+        builder.addCase(certificateThunks.createCertificate.rejected, (state, action:PayloadAction<any>) => {
             state.loading = false
+            toast.error(action.payload.errorMessage)
         })
 
         //update certificate
@@ -58,9 +60,11 @@ export const certificateSlice = createSlice({
                 (cert) => (cert.id === action.payload.data.id ? action.payload.data : cert)
             )
             state.loading = false;
+            toast.success("Cập nhật chứng chỉ thành công")
         })
-        builder.addCase(certificateThunks.updateCertificate.rejected, (state, action) => {
+        builder.addCase(certificateThunks.updateCertificate.rejected, (state, action:PayloadAction<any>) => {
             state.loading = false;
+            toast.error(action.payload.errorMessage)
         })
 
          //delete
@@ -68,11 +72,13 @@ export const certificateSlice = createSlice({
             state.isSubmitting = true;
         })
         builder.addCase(certificateThunks.deleteCertificate.fulfilled, (state, action) => {
-            state.certificates = state.certificates.filter(cert => cert.id !== action.payload.data);
+            state.certificates = state.certificates.filter(cert => cert.id !== action.meta.arg)
             state.isSubmitting = false;
+            toast.success("Xóa chứng chỉ thành công")
         })
-        builder.addCase(certificateThunks.deleteCertificate.rejected, (state, action) => {
+        builder.addCase(certificateThunks.deleteCertificate.rejected, (state, action:PayloadAction<any>) => {
             state.isSubmitting = false;
+            toast.error(action.payload.errorMessage)
         })
 
 

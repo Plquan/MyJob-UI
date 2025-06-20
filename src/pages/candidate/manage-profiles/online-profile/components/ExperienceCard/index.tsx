@@ -7,7 +7,6 @@ import { EditOutlined, DeleteOutlined, CaretDownOutlined } from "@ant-design/ico
 import { useDispatch, useSelector } from "react-redux";
 import type { AppDispatch, RootState } from "../../../../../../stores";
 import { experienceActions } from "../../../../../../stores/experienceStore/experienceReducer";
-import { formatVND } from "../../../../../../ultils/functions/formatVND";
 import { normalizeDate } from "../../../../../../ultils/functions/normalizeDate";
 
 const ExperienceCard = () => {
@@ -66,7 +65,11 @@ const ExperienceCard = () => {
               <div className="flex items-start gap-2 mb-1">
                 <span className="mt-1 w-2 h-2 rounded-full bg-orange-300 inline-block"></span>
                 <span className="text-medium ">
-                  {normalizeDate(item.startDate)?.format("DD/MM/YYYY")} - {normalizeDate(item.startDate)?.format("DD/MM/YYYY")} 
+                {normalizeDate(item?.startDate)?.format("DD/MM/YYYY") ?? "?"}
+                &nbsp;–&nbsp;
+                {item?.endDate
+                  ? normalizeDate(item.endDate)?.format("DD/MM/YYYY")
+                  : "?"}
                 </span>
                 </div>
                 <div className="ml-1 border-l-2 border-gray-300 pl-4">
@@ -90,7 +93,7 @@ const ExperienceCard = () => {
                         onClick={() => handleDelete(item.id)}
                       />
                     </div>
-                  <hr className="my-2 mb-2 text-gray-300 mt-4" />
+                  <hr className="my-2 mb-2 text-gray-300" />
                   <div className="flex items-center  justify-between mb-1">
                     <div className="font-sm text-gray-500">Mô tả chi tiết</div>
                     <span className="cursor-pointer" onClick={() => setOpenDescriptionId(openDescriptionId === item.id ? null : item.id)}>

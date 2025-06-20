@@ -39,6 +39,7 @@ const updateCertificate = createAsyncThunk (
         }
     }
 )
+
 const deleteCertificate = createAsyncThunk (
     "certificate/deleteCertificate",
     async (id: number, {rejectWithValue}): Promise<IApiResponse<any>> => {
