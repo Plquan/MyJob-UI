@@ -1,10 +1,10 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit"
 import toast from "react-hot-toast";
-import type { IEducationData } from "../../types/resume/EducationType";
+import type { IEducation } from "../../types/resume/EducationType";
 import educationThunks from "./educationThunk";
 
 interface EducationState{
-    educations: IEducationData[];
+    educations: IEducation[];
     loading: boolean,
     error?: string,
     isSubmitting: boolean

@@ -1,22 +1,22 @@
-import { Modal, Form, Input, Select, Button } from "antd";
+import { Modal, Form, Input, Select, Button, Upload, type UploadFile } from "antd";
 import { useSelector } from "react-redux";
 import type { RootState } from "../../../../../../../stores";
 import { ACADEMICLEVEL_OPTIONS, EXPERIENCE_OPTIONS, JOBTYPE_OPTIONS, POSITION_OPTIONS, WORKPLACE_OPTIONS } from "../../../../../../../constant/selectOptions";
 import type { IResume } from "../../../../../../../types/resume/ResumeType";
-
+import { UploadOutlined } from "@ant-design/icons";
 const { Option } = Select;
 
-interface EditResumeModalProps {
+interface AttachedResumeModalProps {
   open: boolean;
   onCancel: () => void;
   onFinish: (values: any) => void;
   initialValues?: IResume;
+  form:any
 }
-const ProfileEditModal: React.FC<EditResumeModalProps> = ({ open, onCancel, initialValues, onFinish }) => {
+const AttachedResumeModal: React.FC<AttachedResumeModalProps> = ({ open, onCancel, initialValues, onFinish,form }) => {
   const { careers } = useSelector((state: RootState) => state.careerStore)
   const { provinces } = useSelector((state: RootState) => state.provinceStore)
-  const [form] = Form.useForm<IResume>()
-  
+
   return (
     <Modal
       open={open}
@@ -31,7 +31,27 @@ const ProfileEditModal: React.FC<EditResumeModalProps> = ({ open, onCancel, init
         layout="vertical"
         initialValues={initialValues}
         onFinish={onFinish}
+        className="max-h-[80vh] overflow-y-scroll pr-3!"
       >
+      <Form.Item
+        name="file"
+        label={<span>Chọn tệp CV của bạn (Hỗ trợ *.doc, *.docx, *.pdf, và &lt; 5MB)</span>}
+        valuePropName="fileList"
+        getValueFromEvent={(e) => (Array.isArray(e) ? e : e?.fileList)}
+        rules={[{ required: true, message: "Vui lòng tải lên tệp CV" }]}
+      >
+        <Upload
+          beforeUpload={() => false}
+          accept=".pdf,.doc,.docx"
+          maxCount={1}
+        >
+          <Button icon={<UploadOutlined />} type="primary">
+            Tải file
+          </Button>
+        </Upload>
+      </Form.Item>
+
+
         <div className="grid grid-cols-1 md:grid-cols-2 gap-x-5">
           <Form.Item
             name="title"
@@ -159,7 +179,7 @@ const ProfileEditModal: React.FC<EditResumeModalProps> = ({ open, onCancel, init
         >
           <Input.TextArea rows={3} placeholder="Nhập nội dung tại đây" />
         </Form.Item>
-        <div className="flex justify-end mt-6 space-x-2 gap-2">
+        <div className="flex justify-end space-x-2 gap-2 mb-5 ">
         <Button onClick={onCancel}>Hủy</Button>
         <Button type="primary" htmlType="submit">Lưu</Button>
       </div>
@@ -168,4 +188,4 @@ const ProfileEditModal: React.FC<EditResumeModalProps> = ({ open, onCancel, init
   );
 };
 
-export default ProfileEditModal; 
+export default AttachedResumeModal; 

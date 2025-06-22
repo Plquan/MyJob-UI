@@ -1,4 +1,4 @@
-export interface IEducationData {
+export interface IEducation {
     id: number
     resumeId: number
     degreeName: string

@@ -1,11 +1,11 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit"
 import toast from "react-hot-toast";
-import type { ILanguageData } from "../../types/resume/LanguageType";
+import type { ILanguage } from "../../types/resume/LanguageType";
 import languageThunks from "./languageThunk";
 
 
 interface LanguageState{
-    languages: ILanguageData[];
+    languages: ILanguage[];
     loading: boolean,
     error?: string,
     isSubmitting: boolean

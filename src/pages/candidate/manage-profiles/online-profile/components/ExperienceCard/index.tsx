@@ -1,7 +1,7 @@
 import { Button, Card, Empty, Form } from "antd";
 import { useEffect, useState } from 'react';
 import ExperienceModal from "./components/ExperienceModal";
-import type { IExperienceData } from "../../../../../../types/resume/ExperienceType";
+import type { IExperience } from "../../../../../../types/resume/ExperienceType";
 import { EditOutlined, DeleteOutlined, CaretDownOutlined } from "@ant-design/icons";
 import { useDispatch, useSelector } from "react-redux";
 import type { AppDispatch, RootState } from "../../../../../../stores";
@@ -13,7 +13,7 @@ const ExperienceCard = () => {
   const dispatch = useDispatch<AppDispatch>()
 
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedExperience, setSelectedExperience] = useState<IExperienceData | null>(null)
+  const [selectedExperience, setSelectedExperience] = useState<IExperience | null>(null)
   const [openDescriptionId, setOpenDescriptionId] = useState<number | null>(null)
   const { experiences, isSubmitting, loading } = useSelector((state: RootState) => state.experienceStore)
 
@@ -28,7 +28,7 @@ const ExperienceCard = () => {
     setIsModalOpen(true);
   }
 
-  const handleSubmit = (data: IExperienceData) => {
+  const handleSubmit = (data: IExperience) => {
     const isEditing = Boolean(data.id);
 
     const action = isEditing
@@ -44,7 +44,7 @@ const ExperienceCard = () => {
     setIsModalOpen(false);
   }
  
-  const handleEdit = (data: IExperienceData) => {
+  const handleEdit = (data: IExperience) => {
     setSelectedExperience(data)
     setIsModalOpen(true)
   }

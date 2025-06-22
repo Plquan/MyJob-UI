@@ -1,14 +1,14 @@
 import { createAsyncThunk } from "@reduxjs/toolkit"
 import type { IApiResponse } from "../../types/AppType"
 import http from "../../ultils/axios/axiosCustom"
-import type { IEducationData } from "../../types/resume/EducationType"
+import type { IEducation } from "../../types/resume/EducationType"
 
 
 const getAllEducations = createAsyncThunk (
     "education/getAllEducations",
-    async (_, {rejectWithValue}): Promise<IApiResponse<IEducationData[]>> => {
+    async (_, {rejectWithValue}): Promise<IApiResponse<IEducation[]>> => {
         try {
-            const response: IApiResponse<IEducationData[]> = await http.get("/education/get-educations");
+            const response: IApiResponse<IEducation[]> = await http.get("/education/get-educations");
             return response
         } catch (error: any) {
             return rejectWithValue(error.response.data) as any;
@@ -18,9 +18,9 @@ const getAllEducations = createAsyncThunk (
 
 const createEducation = createAsyncThunk (
     "education/createEducation",
-    async (data: IEducationData, {rejectWithValue}): Promise<IApiResponse<IEducationData>> => {
+    async (data: IEducation, {rejectWithValue}): Promise<IApiResponse<IEducation>> => {
         try {
-            const response: IApiResponse<IEducationData> = await http.post("/education/create-education",data);
+            const response: IApiResponse<IEducation> = await http.post("/education/create-education",data);
             return response
         } catch (error: any) {
             return rejectWithValue(error.response.data) as any;
@@ -30,9 +30,9 @@ const createEducation = createAsyncThunk (
 
 const updateEducation = createAsyncThunk (
     "education/updateEducation",
-    async (data: IEducationData, {rejectWithValue}): Promise<IApiResponse<IEducationData>> => {
+    async (data: IEducation, {rejectWithValue}): Promise<IApiResponse<IEducation>> => {
         try {
-            const response: IApiResponse<IEducationData> = await http.put("/education/update-education",data);
+            const response: IApiResponse<IEducation> = await http.put("/education/update-education",data);
             return response
         } catch (error: any) {
             return rejectWithValue(error.response.data) as any;

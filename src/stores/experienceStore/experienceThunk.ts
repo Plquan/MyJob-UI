@@ -1,14 +1,14 @@
 import { createAsyncThunk } from "@reduxjs/toolkit"
 import type { IApiResponse } from "../../types/AppType"
 import http from "../../ultils/axios/axiosCustom"
-import type { IExperienceData } from "../../types/resume/ExperienceType";
+import type { IExperience } from "../../types/resume/ExperienceType";
 
 
 const getAllExperiences = createAsyncThunk (
     "experience/getAllExperiences",
-    async (_, {rejectWithValue}): Promise<IApiResponse<IExperienceData[]>> => {
+    async (_, {rejectWithValue}): Promise<IApiResponse<IExperience[]>> => {
         try {
-            const response: IApiResponse<IExperienceData[]> = await http.get("/experience/get-experiences");
+            const response: IApiResponse<IExperience[]> = await http.get("/experience/get-experiences");
             return response;
         } catch (error: any) {
             return rejectWithValue(error.response.data) as any;
@@ -18,9 +18,9 @@ const getAllExperiences = createAsyncThunk (
 
 const createExperience = createAsyncThunk (
     "experience/createExperience",
-    async (data: IExperienceData, {rejectWithValue}): Promise<IApiResponse<IExperienceData>> => {
+    async (data: IExperience, {rejectWithValue}): Promise<IApiResponse<IExperience>> => {
         try {
-            const response: IApiResponse<IExperienceData> = await http.post("/experience/create-experience",data);
+            const response: IApiResponse<IExperience> = await http.post("/experience/create-experience",data);
             return response;
         } catch (error: any) {
             return rejectWithValue(error.response.data) as any;
@@ -30,9 +30,9 @@ const createExperience = createAsyncThunk (
 
 const updateExperience = createAsyncThunk (
     "experience/updateExperience",
-    async (data: IExperienceData, {rejectWithValue}): Promise<IApiResponse<IExperienceData>> => {
+    async (data: IExperience, {rejectWithValue}): Promise<IApiResponse<IExperience>> => {
         try {
-            const response: IApiResponse<IExperienceData> = await http.put("/experience/update-experience",data);
+            const response: IApiResponse<IExperience> = await http.put("/experience/update-experience",data);
             return response;
         } catch (error: any) {
             return rejectWithValue(error.response.data) as any;

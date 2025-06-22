@@ -1,13 +1,13 @@
 import { Modal, Form, Rate, Button, Select, Input } from 'antd';
-import type { ILanguageData } from '../../../../../../../types/resume/LanguageType';
+import type { ILanguage } from '../../../../../../../types/resume/LanguageType';
 import { useEffect } from 'react';
 import { LANGUAGE_OPTIONS } from '../../../../../../../constant/selectOptions';
 const { Option } = Select;
 interface LanguageModalProps {
     open: boolean
-    onSubmit: (value: ILanguageData) => void
+    onSubmit: (value: ILanguage) => void
     onCancel: () => void
-    initialValues?: ILanguageData | null
+    initialValues?: ILanguage | null
     form: any
 }
 

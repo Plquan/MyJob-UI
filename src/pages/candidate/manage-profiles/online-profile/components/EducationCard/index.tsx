@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import type { AppDispatch, RootState } from "../../../../../../stores";
 import EducationModal from "./components/EducationModal";
-import type { IEducationData } from "../../../../../../types/resume/EducationType";
+import type { IEducation } from "../../../../../../types/resume/EducationType";
 import { educationActions } from "../../../../../../stores/educationStore/educationReducer";
 import  { normalizeDate } from "../../../../../../ultils/functions/normalizeDate";
 import { EditOutlined, DeleteOutlined, CaretDownOutlined } from "@ant-design/icons";
@@ -14,7 +14,7 @@ const EducationCard = () => {
 
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [openDescriptionId, setOpenDescriptionId] = useState<number | null>(null)
-  const [selectedEducation, setSelectedEducation] = useState<IEducationData | null>(null)
+  const [selectedEducation, setSelectedEducation] = useState<IEducation | null>(null)
   const { educations, isSubmitting, loading } = useSelector((state: RootState) => state.educationStore)
 
   useEffect(() => {
@@ -28,7 +28,7 @@ const EducationCard = () => {
     setIsModalOpen(true);
   }
 
-  const handleSubmit = (data: IEducationData) => {
+  const handleSubmit = (data: IEducation) => {
     const isEditing = Boolean(data.id);
 
     const action = isEditing
@@ -44,7 +44,7 @@ const EducationCard = () => {
     setIsModalOpen(false);
   }
  
-  const handleEdit = (data: IEducationData) => {
+  const handleEdit = (data: IEducation) => {
     setSelectedEducation(data)
     setIsModalOpen(true)
   }

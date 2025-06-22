@@ -5,14 +5,14 @@ import { EditOutlined, DeleteOutlined } from "@ant-design/icons"
 import { useDispatch, useSelector } from "react-redux"
 import type { AppDispatch, RootState } from "../../../../../../stores"
 import { certificateActions } from "../../../../../../stores/certificateStore/certificateReducer"
-import type { ICertificateData} from "../../../../../../types/resume/CertificateType"
+import type { ICertificate} from "../../../../../../types/resume/CertificateType"
 import { normalizeDate } from "../../../../../../ultils/functions/normalizeDate"
 
 const CertificateCard = () => {
   const dispatch = useDispatch<AppDispatch>()
   const [isModalOpen, setIsModalOpen] = useState(false)
-  const [editingCertificate, setEditingCertificate] = useState<ICertificateData | null>(null)
-  const [form] = Form.useForm<ICertificateData>()
+  const [editingCertificate, setEditingCertificate] = useState<ICertificate | null>(null)
+  const [form] = Form.useForm<ICertificate>()
   const { certificates, isSubmitting, loading } = useSelector((state: RootState) => state.certificateStore);
 
   useEffect(() => {
@@ -26,7 +26,7 @@ const CertificateCard = () => {
     form.resetFields()
   }
 
-  const handleSubmit = (data: ICertificateData) => {
+  const handleSubmit = (data: ICertificate) => {
     const isEditing = Boolean(data.id);
 
     const action = isEditing
@@ -44,7 +44,7 @@ const CertificateCard = () => {
     setIsModalOpen(true)
   }
   
-  const handleEdit = (certificate: ICertificateData) => {
+  const handleEdit = (certificate: ICertificate) => {
     setEditingCertificate(certificate)
     setIsModalOpen(true)
   }

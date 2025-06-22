@@ -2,7 +2,7 @@ import { Card, Table, Tooltip, Button, Empty, Form } from "antd";
 import { EditOutlined, DeleteOutlined, StarFilled } from "@ant-design/icons";
 import LanguageModal from './components/LanguageModal';
 import { useEffect, useState } from 'react';
-import type { ILanguageData } from "../../../../../../types/resume/LanguageType";
+import type { ILanguage } from "../../../../../../types/resume/LanguageType";
 import { useDispatch, useSelector } from "react-redux";
 import type { AppDispatch, RootState } from "../../../../../../stores";
 import { languageActions } from "../../../../../../stores/languageStore/languageReducer";
@@ -11,7 +11,7 @@ import { getLabelFromValue } from "../../../../../../ultils/functions/getLabelFr
 
 
 const columns = (
-  onEdit: (record: ILanguageData) => void,
+  onEdit: (record: ILanguage) => void,
   onDelete: (id: number) => void,
   isSubmitting:boolean
 ) => [
@@ -39,7 +39,7 @@ const columns = (
     title: "Hành động",
     key: "action",
     align: "center" as const,
-    render: (_: any, record: ILanguageData) => (
+    render: (_: any, record: ILanguage) => (
       <span>
         <Tooltip title="Sửa">
         <Button
@@ -67,11 +67,11 @@ const columns = (
 ]
 
 const LanguageCard = () => {
-  const [form] = Form.useForm<ILanguageData>()
+  const [form] = Form.useForm<ILanguage>()
   const dispatch = useDispatch<AppDispatch>()
 
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedLanguage, setSelectedLanguage] = useState<ILanguageData | null>(null)
+  const [selectedLanguage, setSelectedLanguage] = useState<ILanguage | null>(null)
   const { languages, isSubmitting, loading } = useSelector((state: RootState) => state.languageStore)
 
   useEffect(() => {
@@ -85,7 +85,7 @@ const LanguageCard = () => {
     setIsModalOpen(true);
   }
 
-  const handleSubmit = (data: ILanguageData) => {
+  const handleSubmit = (data: ILanguage) => {
     const isEditing = Boolean(data.id);
 
     const action = isEditing
@@ -101,7 +101,7 @@ const LanguageCard = () => {
     setIsModalOpen(false);
   }
  
-  const handleEdit = (data: ILanguageData) => {
+  const handleEdit = (data: ILanguage) => {
     setSelectedLanguage(data)
     setIsModalOpen(true)
   }

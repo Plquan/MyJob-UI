@@ -1,13 +1,13 @@
 import React, { useEffect } from "react"
 import { Modal, Button, Form, Input, DatePicker, Row, Col } from "antd"
-import type { ICertificateData } from "../../../../../../../types/resume/CertificateType"
+import type { ICertificate } from "../../../../../../../types/resume/CertificateType"
 import { normalizeDate } from "../../../../../../../ultils/functions/normalizeDate"
 
   interface CertificateModalProps {
     open: boolean
     onCancel: () => void
-    onSubmit: (values: ICertificateData) => void
-    initialValues?: ICertificateData | null
+    onSubmit: (values: ICertificate) => void
+    initialValues?: ICertificate | null
     form: any
   }
 

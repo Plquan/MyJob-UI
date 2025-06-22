@@ -14,20 +14,20 @@ import {
     QuestionCircleOutlined,
   } from "@ant-design/icons";
 import { useDispatch, useSelector } from "react-redux";
-import type { AppDispatch, RootState } from "../../../../../stores";
 import { useEffect } from "react";
-import { resumeActions } from "../../../../../stores/resumeStore/resumeReducer"
-import { POSITION_OPTIONS } from "../../../../../constant/selectOptions";
-import { getLabelFromValue } from "../../../../../ultils/functions/getLabelFromValue";
-import { formatVND } from "../../../../../ultils/functions/formatVND";
 import dayjs from 'dayjs';
+import { POSITION_OPTIONS } from "../../../../../../constant/selectOptions";
+import type { AppDispatch, RootState } from "../../../../../../stores";
+import  { formatVND } from "../../../../../../ultils/functions/formatVND";
+import { getLabelFromValue } from "../../../../../../ultils/functions/getLabelFromValue";
+import { resumeActions } from "../../../../../../stores/resumeStore/resumeReducer";
 
 const NOT_UPDATE =  <span className="text-gray-400 text-xs italic">Chưa cập nhật</span>
 const renderField = (value: any) => !!value ? value : NOT_UPDATE
 
 const ProfileCard = ({ onEdit }: { onEdit: () => void }) => {
   const dispatch = useDispatch<AppDispatch>()
-  const {resume} = useSelector((state: RootState) => state.resumeStore)
+  const {onlineResume} = useSelector((state: RootState) => state.resumeStore)
   const {currentUser} = useSelector((state: RootState) => state.authStore)
 
   useEffect(() => {
@@ -41,7 +41,7 @@ const ProfileCard = ({ onEdit }: { onEdit: () => void }) => {
         className="w-200!"
         extra={
           <div className="flex items-center gap-2">
-            <Switch size="small" checked={resume?.isActive}/>
+            <Switch size="small" checked={onlineResume?.isActive}/>
             <span className="text-xs text-gray-500">
               Cho phép tìm kiếm
             </span>
@@ -68,21 +68,21 @@ const ProfileCard = ({ onEdit }: { onEdit: () => void }) => {
         <div className="text-sm text-gray-700 space-y-1 mb-2">
           <div className="flex items-center gap-2">
             <FileTextOutlined />
-            Kinh nghiệm: {renderField(resume?.experience)}
+            Kinh nghiệm: {renderField(onlineResume?.experience)}
           </div>
           <div className="flex items-center gap-2">
             <UserOutlined />
             Cấp bậc: 
-            {renderField(getLabelFromValue(POSITION_OPTIONS,resume?.position))}    
+            {renderField(getLabelFromValue(POSITION_OPTIONS,onlineResume?.position))}    
           </div>
           <div className="flex items-center gap-2">
             <DollarOutlined />
             Mức lương mong muốn:
-            {renderField(formatVND(resume?.salaryMin))} - {renderField(formatVND(resume?.salaryMax))}         
+            {renderField(formatVND(onlineResume?.salaryMin))} - {renderField(formatVND(onlineResume?.salaryMax))}         
           </div>
           <div className="flex items-center gap-2">
             <CalendarOutlined />
-            Ngày cập nhật: {resume?.updatedAt ? dayjs(resume?.updatedAt).format('DD/MM/YYYY') : undefined}
+            Ngày cập nhật: {onlineResume?.updatedAt ? dayjs(onlineResume?.updatedAt).format('DD/MM/YYYY') : undefined}
           </div>
         </div>
 

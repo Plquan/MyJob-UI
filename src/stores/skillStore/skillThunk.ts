@@ -1,13 +1,13 @@
 import { createAsyncThunk } from "@reduxjs/toolkit"
 import type { IApiResponse } from "../../types/AppType"
 import http from "../../ultils/axios/axiosCustom"
-import type { ISkillData } from "../../types/resume/SkillType"
+import type { ISkill } from "../../types/resume/SkillType"
 
 const getAllSkills = createAsyncThunk (
     "skill/getAllSkills",
-    async (_, {rejectWithValue}): Promise<IApiResponse<ISkillData[]>> => {
+    async (_, {rejectWithValue}): Promise<IApiResponse<ISkill[]>> => {
         try {
-            const response: IApiResponse<ISkillData[]> = await http.get("/skill/get-skills");
+            const response: IApiResponse<ISkill[]> = await http.get("/skill/get-skills");
             return response;
         } catch (error: any) {
             return rejectWithValue(error.response.data) as any;
@@ -17,9 +17,9 @@ const getAllSkills = createAsyncThunk (
 
 const createSkill = createAsyncThunk (
     "skill/createSkill",
-    async (data: ISkillData, {rejectWithValue}): Promise<IApiResponse<ISkillData>> => {
+    async (data: ISkill, {rejectWithValue}): Promise<IApiResponse<ISkill>> => {
         try {
-            const response: IApiResponse<ISkillData> = await http.post("/skill/create-skill",data);
+            const response: IApiResponse<ISkill> = await http.post("/skill/create-skill",data);
             return response;
         } catch (error: any) {
             return rejectWithValue(error.response.data) as any;
@@ -29,9 +29,9 @@ const createSkill = createAsyncThunk (
 
 const updateSkill = createAsyncThunk (
     "skill/updateSkill",
-    async (data: ISkillData, {rejectWithValue}): Promise<IApiResponse<ISkillData>> => {
+    async (data: ISkill, {rejectWithValue}): Promise<IApiResponse<ISkill>> => {
         try {
-            const response: IApiResponse<ISkillData> = await http.put("/skill/update-skill",data);
+            const response: IApiResponse<ISkill> = await http.put("/skill/update-skill",data);
             return response;
         } catch (error: any) {
             return rejectWithValue(error.response.data) as any;

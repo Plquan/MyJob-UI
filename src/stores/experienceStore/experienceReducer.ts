@@ -1,11 +1,11 @@
 import { createSlice } from "@reduxjs/toolkit"
 import toast from "react-hot-toast";
 import experienceThunks from "./experienceThunk";
-import type { IExperienceData } from "../../types/resume/ExperienceType";
+import type { IExperience } from "../../types/resume/ExperienceType";
 
 
 interface ExperienceState{
-    experiences: IExperienceData[];
+    experiences: IExperience[];
     loading: boolean,
     error?: string,
     isSubmitting: boolean

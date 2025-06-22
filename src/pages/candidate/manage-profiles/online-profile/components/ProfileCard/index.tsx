@@ -26,7 +26,6 @@ const ProfileCard: React.FC = () => {
   const handleEdit = () => setIsModalOpen(true);
   const handleCancel = () => setIsModalOpen(false);
   const handleFinish = (values: ICandidateData) => {
-
     dispatch(candidateActions.updateProfile(values))
     setIsModalOpen(false);
   }

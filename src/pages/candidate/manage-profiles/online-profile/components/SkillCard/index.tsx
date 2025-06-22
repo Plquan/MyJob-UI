@@ -4,12 +4,12 @@ import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from "react-redux";
 import type { AppDispatch, RootState } from "../../../../../../stores";
 import SkillModal from "./components/SkillModal";
-import type { ISkillData } from "../../../../../../types/resume/SkillType";
+import type { ISkill } from "../../../../../../types/resume/SkillType";
 import { skillActions } from "../../../../../../stores/skillStore/skillReducer";
 
 
 const columns = (
-  onEdit: (record: ISkillData) => void,
+  onEdit: (record: ISkill) => void,
   onDelete: (id: number) => void,
   isSubmitting:boolean
 ) => [
@@ -36,7 +36,7 @@ const columns = (
     title: "Hành động",
     key: "action",
     align: "center" as const,
-    render: (_: any, record: ISkillData) => (
+    render: (_: any, record: ISkill) => (
       <span>
         <Tooltip title="Sửa">
         <Button
@@ -64,11 +64,11 @@ const columns = (
 ]
 
 const SkillCard = () => {
-  const [form] = Form.useForm<ISkillData>()
+  const [form] = Form.useForm<ISkill>()
   const dispatch = useDispatch<AppDispatch>()
 
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedSkill, setSelectedSkill] = useState<ISkillData | null>(null)
+  const [selectedSkill, setSelectedSkill] = useState<ISkill | null>(null)
   const { skills, isSubmitting, loading } = useSelector((state: RootState) => state.skillStore)
 
   useEffect(() => {
@@ -82,7 +82,7 @@ const SkillCard = () => {
     setIsModalOpen(true);
   }
 
-  const handleSubmit = (data: ISkillData) => {
+  const handleSubmit = (data: ISkill) => {
     const isEditing = Boolean(data.id);
 
     const action = isEditing
@@ -98,7 +98,7 @@ const SkillCard = () => {
     setIsModalOpen(false);
   }
  
-  const handleEdit = (data: ISkillData) => {
+  const handleEdit = (data: ISkill) => {
     setSelectedSkill(data)
     setIsModalOpen(true)
   }

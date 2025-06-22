@@ -1,4 +1,4 @@
-export interface ILanguageData {
+export interface ILanguage {
     id: number
     resumeId: number
     language: number

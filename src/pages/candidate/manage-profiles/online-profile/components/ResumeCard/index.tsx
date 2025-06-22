@@ -6,13 +6,14 @@ import { useDispatch, useSelector } from "react-redux"
 import type { AppDispatch, RootState } from "../../../../../../stores"
 import { ACADEMICLEVEL_OPTIONS, EXPERIENCE_OPTIONS, JOBTYPE_OPTIONS, POSITION_OPTIONS, WORKPLACE_OPTIONS } from "../../../../../../constant/selectOptions";
 import { getLabelFromValue } from "../../../../../../ultils/functions/getLabelFromValue"
-import type { IResumeData } from "../../../../../../types/resume/ResumeType"
+import type { IResume } from "../../../../../../types/resume/ResumeType"
 import { formatVND } from "../../../../../../ultils/functions/formatVND"
 import { resumeActions } from "../../../../../../stores/resumeStore/resumeReducer"
 const { Text } = Typography
 
 const NOT_UPDATE =  <span className="text-gray-400 text-xs italic">Chưa cập nhật</span>
-const renderField = (value: any) => !!value ? value : NOT_UPDATE;
+const renderField = (value: any) => !!value ? value : NOT_UPDATE
+
 const ResumeCard = () => {
     const dispatch  = useDispatch<AppDispatch>()
     const [openEdit, setOpenEdit] = useState(false)
@@ -26,7 +27,7 @@ const ResumeCard = () => {
       }
     },[dispatch])
   
-    const handleFinish = (values: IResumeData) => {
+    const handleFinish = (values: IResume) => {
       dispatch(resumeActions.updateOnlineResume(values))
       setOpenEdit(false)
     }

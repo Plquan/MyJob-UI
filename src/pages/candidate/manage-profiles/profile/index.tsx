@@ -1,6 +1,7 @@
-import ProfileCard from "./components/ProfileCard";
+
 import ViewedCard from "./components/ViewedCard";
-import AttchedFileCard from "./components/AttchedFileCard";
+import AttchedFileCard from "./components/AttachedResumeCard";
+import ProfileCard from "./components/ProfileCard";
 
 export const ProfilePage = ({ onEdit }: { onEdit: () => void }) => {
     return (

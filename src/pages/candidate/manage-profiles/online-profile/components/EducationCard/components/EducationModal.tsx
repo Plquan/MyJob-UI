@@ -2,13 +2,13 @@ import { Modal, Form, Input, DatePicker, Button, Row, Col } from 'antd'
 import { CloseOutlined } from "@ant-design/icons"
 import { useEffect } from 'react'
 import { normalizeDate } from '../../../../../../../ultils/functions/normalizeDate'
-import type { IEducationData } from '../../../../../../../types/resume/EducationType'
+import type { IEducation } from '../../../../../../../types/resume/EducationType'
 
 interface EducationModalProps {
   open: boolean
-  onSubmit: (value: IEducationData) => void
+  onSubmit: (value: IEducation) => void
   onCancel: () => void
-  initialValues?: IEducationData | null
+  initialValues?: IEducation | null
   form: any
 }
 

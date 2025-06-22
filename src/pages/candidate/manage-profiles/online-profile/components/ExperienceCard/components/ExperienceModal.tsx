@@ -1,14 +1,14 @@
 import { Modal, Form, Input, DatePicker, Button } from 'antd'
 import { CloseOutlined } from "@ant-design/icons"
-import type { IExperienceData } from '../../../../../../../types/resume/ExperienceType'
+import type { IExperience } from '../../../../../../../types/resume/ExperienceType'
 import { useEffect } from 'react'
 import { normalizeDate } from '../../../../../../../ultils/functions/normalizeDate'
 
 interface ExperienceModalProps {
   open: boolean
-  onSubmit: (value: IExperienceData) => void
+  onSubmit: (value: IExperience) => void
   onCancel: () => void
-  initialValues?: IExperienceData | null
+  initialValues?: IExperience | null
   form: any
 }
 

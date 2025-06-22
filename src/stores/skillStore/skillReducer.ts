@@ -1,10 +1,10 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit"
 import toast from "react-hot-toast";
 import skillThunks from "./skillThunk";
-import type { ISkillData } from "../../types/resume/SkillType";
+import type { ISkill } from "../../types/resume/SkillType";
 
 interface SkillState{
-    skills: ISkillData[];
+    skills: ISkill[];
     loading: boolean,
     error?: string,
     isSubmitting: boolean

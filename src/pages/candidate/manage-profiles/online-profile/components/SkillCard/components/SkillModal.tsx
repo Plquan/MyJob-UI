@@ -1,12 +1,12 @@
 import { Modal, Form, Rate, Button, Input } from 'antd'
 import { useEffect } from 'react'
-import type { ISkillData } from '../../../../../../../types/resume/SkillType'
+import type { ISkill } from '../../../../../../../types/resume/SkillType'
 
 interface SkillModalProps {
     open: boolean
-    onSubmit: (value: ISkillData) => void
+    onSubmit: (value: ISkill) => void
     onCancel: () => void
-    initialValues?: ISkillData | null
+    initialValues?: ISkill | null
     form: any
 }
 
