@@ -55,6 +55,7 @@ export const resumeSlice = createSlice({
             state.loading = true;
         })
         builder.addCase(resumeThunks.uploadAttachedResume.fulfilled, (state, action) => {
+            console.log(action.payload.data)
             state.attachedResumes.push(action.payload.data)
             state.loading = false;
             toast.success("Thêm hồ sơ đính kèm thành công")

@@ -1,14 +1,80 @@
-import { Card, Empty, Form, Button, Tooltip } from "antd"
+import { Card, Empty, Form, Button, Tooltip, Table } from "antd"
 import AttachedResumeModal from "./components/AttachedResumeModal"
 import { useEffect, useState } from "react"
 import type { IUploadAttachedResume } from "../../../../../../types/resume/ResumeType"
 import { useDispatch, useSelector } from "react-redux"
 import type { AppDispatch, RootState } from "../../../../../../stores"
 import { resumeActions } from "../../../../../../stores/resumeStore/resumeReducer"
-import { DeleteOutlined, EditOutlined, DownloadOutlined, FilePdfOutlined, FileWordOutlined } from "@ant-design/icons"
+import { DeleteOutlined, EditOutlined, DownloadOutlined, EyeOutlined } from "@ant-design/icons"
 import downloadPdf from "../../../../../../ultils/functions/dowloadFile"
 
+interface GetColumnsProps {
+  isSubmitting: boolean;
+  downloadPdf: (url: string) => void;
+  showModal: () => void;
+  handleDelete: (id: number) => void;
+}
 
+const getColumns = ({ isSubmitting, downloadPdf, showModal, handleDelete }: GetColumnsProps) => [
+  {
+    title: 'STT',
+    key: 'stt',
+    align: 'center' as const,
+    render: (_: any, __: any, index: number) => index + 1,
+  },
+  {
+    title: 'Tiêu đề',
+    dataIndex: 'title',
+    key: 'title',
+    render: (text: string) => <span className="font-medium">{text}</span>,
+  },
+  {
+    title: 'Cập nhật lần cuối',
+    dataIndex: 'updatedAt',
+    key: 'updatedAt',
+    render: (date: string) => date ? new Date(date).toLocaleString() : '',
+  },
+  {
+    title: 'Chức năng',
+    key: 'actions',
+    align: 'center' as const,
+    render: (_: any, record: any) => (
+      <div className="flex gap-2 justify-center">
+        <Tooltip title="Xem">
+          <Button
+            size="small"
+            icon={<EyeOutlined style={{ color: '#1976d2' }} />}
+            onClick={() => window.open(record.myJobFile.url, '_blank')}
+          />
+        </Tooltip>
+        <Tooltip title="Tải xuống">
+          <Button
+            loading={isSubmitting}
+            size="small"
+            icon={<DownloadOutlined style={{ color: '#43a047' }} />}
+            onClick={() => downloadPdf(record.myJobFile.url)}
+          />
+        </Tooltip>
+        <Tooltip title="Chỉnh sửa">
+          <Button
+            size="small"
+            icon={<EditOutlined style={{ color: '#ffa000' }} />}
+            onClick={showModal}
+          />
+        </Tooltip>
+        <Tooltip title="Xóa">
+          <Button
+            loading={isSubmitting}
+            size="small"
+            danger
+            icon={<DeleteOutlined style={{ color: '#e53935' }} />}
+            onClick={() => handleDelete(record.id)}
+          />
+        </Tooltip>
+      </div>
+    )
+  }
+]
 
 const AttchedResumeCard = () => {
   const dispatch = useDispatch<AppDispatch>()
@@ -30,22 +96,25 @@ const AttchedResumeCard = () => {
     const formData = new FormData();
     Object.entries(values).forEach(([key, value]) => {
       if (key === "file") {
-        const fileList = value as any[];
+        const fileList = value as any[]
         if (Array.isArray(fileList) && fileList.length > 0 && fileList[0].originFileObj) {
-          formData.append("file", fileList[0].originFileObj);
+          formData.append("file", fileList[0].originFileObj)
         }
       } else {
         const stringValue = typeof value === "object" ? JSON.stringify(value) : String(value);
-        formData.append(key, stringValue);
+        formData.append(key, stringValue)
       }
     })
       dispatch(resumeActions.uploadAttachedResume(formData))
-      setIsModalOpen(false)
-      form.resetFields()
+
   }
 
   const handleDelete = (attachedResumeId: number) => {
     dispatch(resumeActions.deleteAttachedResume(attachedResumeId))
+  }
+
+  const handleEdit = () => {
+
   }
 
     return (
@@ -59,47 +128,19 @@ const AttchedResumeCard = () => {
           </span>}
           loading={loading}
         >
-        <div className="flex flex-col items-center justify-center py-8 w-120">
+
           {attachedResumes.length === 0 ? (
             <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description={"Hiện không có hồ sơ đính kèm."}/>
           ) : (
-            <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-6">
-              {attachedResumes.map((resume) => (
-                <div key={resume.id} className="relative bg-white rounded-xl shadow-md overflow-hidden group">
-                  <div className="absolute top-3 left-3 z-10">
-                    <span className="bg-[#e0f2fe] text-[#1976d2] text-xs px-3 py-1 rounded-full shadow">
-                      Cho phép tìm kiếm
-                    </span>
-                  </div>
-                  <div className="h-48 w-full bg-gradient-to-b from-[#b6c7d6] to-[#6a8ca4] flex items-center justify-center relative">
-                    <FilePdfOutlined style={{ fontSize: 64, color: '#fff', opacity: 0.7 }} />
-                  </div>
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent flex flex-col justify-end p-4">
-                    <div className="flex items-center justify-between">
-                      <div className="text-white text-base font-semibold truncate">
-                        {resume.position}
-                      </div>
-                      <Tooltip title="Chỉnh sửa">
-                        <EditOutlined className="ml-2 cursor-pointer hover:text-yellow-400" />
-                      </Tooltip>
-                    </div>
-                    <div className="text-white text-xs mt-1">
-                      Cập nhật lần cuối: {resume.updatedAt ? new Date(resume.updatedAt).toLocaleString() : ""}
-                    </div>
-                    <div className="flex items-center gap-2 mt-3">
-                      <Button loading={isSubmitting} type="primary" size="small" onClick={() => downloadPdf(resume.myJobFile.url)} icon={<DownloadOutlined />}>
-                        Tải xuống
-                      </Button>
-                      <Tooltip title="Xóa">
-                        <Button onClick={() => handleDelete(resume.id)} loading={isSubmitting} type="text" danger size="small" icon={<DeleteOutlined />} />
-                      </Tooltip>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
+            <Table
+              className="w-full"
+              dataSource={attachedResumes}
+              rowKey="id"
+              pagination={false}
+              bordered
+              columns={getColumns({ isSubmitting, downloadPdf, showModal, handleDelete })}
+            />
           )}
-        </div>
       </Card>
 
       <AttachedResumeModal

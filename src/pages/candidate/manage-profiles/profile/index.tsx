@@ -2,15 +2,23 @@
 import ViewedCard from "./components/ViewedCard";
 import AttchedFileCard from "./components/AttachedResumeCard";
 import ProfileCard from "./components/ProfileCard";
+import { Row, Col } from "antd";
 
 export const ProfilePage = ({ onEdit }: { onEdit: () => void }) => {
     return (
-        <div className="max-w-6xl mx-auto">
-        <div className="flex flex-col md:flex-row gap-6 mb-6">
-          <ProfileCard onEdit={onEdit} />
+        <>
+       <Row gutter={[24, 24]} className="mb-6">
+        <Col xs={24} md={16}>
+          <div className="flex flex-col gap-6">
+            <ProfileCard onEdit={onEdit} />
+            <AttchedFileCard />
+          </div>
+        </Col>
+        <Col xs={24} md={8}>
           <ViewedCard />
-        </div>
-        <AttchedFileCard />
-      </div>
+        </Col>
+      </Row>
+
+      </>
     )
 }

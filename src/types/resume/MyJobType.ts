@@ -4,4 +4,6 @@ export interface IMyJobFile {
     publicId: string
     url: string
     fileType: string
+    resourceType: string
+    format: string
 }
