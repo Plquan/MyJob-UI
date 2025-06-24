@@ -32,21 +32,22 @@ const UserDetailPage = () => {
       dispatch(roleActions.getAllRoles());
     }
 
-    if (selectedUser) {
-      form.setFieldsValue({
-        fullName: selectedUser.fullName,
-        email: selectedUser.email,
-        isActive: selectedUser.isActive,
-        isVerifyEmail: selectedUser.isVerifyEmail,
-        groupRoles: selectedUser.groupRoles,
-        isSuperUser: selectedUser.isSuperUser,
-        isStaff: selectedUser.isStaff
-      });
-      setAvatarUrl(selectedUser.avatar || null);   
+    if (!selectedUser) {
+      dispatch(userActions.setCurrentTab('1'));
+      return; // sớm return không gọi form.setFieldsValue
     }
-    else{
-      dispatch(userActions.setCurrentTab('1'))
-    }
+  
+    form.setFieldsValue({
+      fullName: selectedUser.fullName,
+      email: selectedUser.email,
+      isActive: selectedUser.isActive,
+      isVerifyEmail: selectedUser.isVerifyEmail,
+      groupRoles: selectedUser.groupRoles,
+      isSuperUser: selectedUser.isSuperUser,
+      isStaff: selectedUser.isStaff
+    });
+    setAvatarUrl(selectedUser.avatar || null);   
+  
   }, [selectedUser, form]);
 
 

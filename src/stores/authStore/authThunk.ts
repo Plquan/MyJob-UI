@@ -28,6 +28,7 @@ const updateAvatar = createAsyncThunk (
 )
 
 
+
 const authThunks = {
     getCurrentUser,
     updateAvatar,

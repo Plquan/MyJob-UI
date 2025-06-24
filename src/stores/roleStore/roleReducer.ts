@@ -7,7 +7,7 @@ interface RoleState {
     functions?: IFunctionData[],
     roles?:IRoleData[],
     loading: boolean,
-    isSubmitting?: boolean;
+    isSubmiting?: boolean;
     error?: string,
 }
 
@@ -16,7 +16,7 @@ const initialState: RoleState = {
     roles:[],
     loading: false,
     error: undefined,
-    isSubmitting: false,
+    isSubmiting: false,
 }
 
 export const roleSlice = createSlice({
@@ -53,44 +53,44 @@ export const roleSlice = createSlice({
 
         // create role
         builder.addCase(roleThunks.createRole.pending, (state) => {
-            state.isSubmitting = true;
+            state.isSubmiting = true;
         })
         builder.addCase(roleThunks.createRole.fulfilled, (state, action) => {
             state.roles?.unshift(action.payload.data)
-            state.isSubmitting = false
+            state.isSubmiting = false
             toast.success(action.payload.message)
         })
         builder.addCase(roleThunks.createRole.rejected, (state, action) => {
-            state.isSubmitting = false;
+            state.isSubmiting = false;
             toast.error((action.payload as { errorMessage: string }).errorMessage);
         })
 
         //update role 
         builder.addCase(roleThunks.updateRole.pending, (state) => {
-            state.isSubmitting = true;
+            state.isSubmiting = true;
         });
         builder.addCase(roleThunks.updateRole.fulfilled, (state, action) => {
             state.roles = state.roles?.map((role) => (role.id === action.payload.data.id ? action.payload.data : role));
-            state.isSubmitting = false;
+            state.isSubmiting = false;
             toast.success(action.payload.message)
         });
         builder.addCase(roleThunks.updateRole.rejected, (state, action) => {
-            state.isSubmitting = false
+            state.isSubmiting = false
             toast.error((action.payload as { errorMessage: string }).errorMessage)
         });
 
         //delete role
         builder.addCase(roleThunks.deleteRole.pending, (state) => {
-            state.isSubmitting = true
+            state.isSubmiting = true
         })
         builder.addCase(roleThunks.deleteRole.fulfilled, (state, action) => {   
             state.roles = state.roles?.filter((role) => role.id !== action.meta.arg);   
-            state.isSubmitting = false;
+            state.isSubmiting = false;
             toast.success(action.payload.message)
 
         });
         builder.addCase(roleThunks.deleteRole.rejected, (state, action) => {
-            state.isSubmitting = false;
+            state.isSubmiting = false;
             toast.error((action.payload as { errorMessage: string }).errorMessage);
         })
 

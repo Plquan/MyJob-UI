@@ -13,7 +13,7 @@ import CandidateLayout from "../layouts/CandidateLayout";
 import ProtectRoute from "./ProtectRoute";
 import OverviewDashboard from "../pages/candidate/overview";
 import MyCompanyTab from "../pages/candidate/my-companies";
-import CandidateProfilePage from "../pages/candidate/manage-profile";
+import CandidateProfilePage from "../pages/candidate/manage-profiles";
 import CompanyLayout from "../layouts/EmployerLayout";
 import EmployerDashboard from "../pages/employer/dashboard";
 import CompanyDetail from "../pages/companies/company-detail";
@@ -21,7 +21,6 @@ import JobDetail from "../pages/jobs/job-detail";
 import ManageRolePage from "../pages/admin/manage-role";
 import AdminLayout from "../layouts/AdminLayout";
 import ManageUserPage from "../pages/admin/manage-user";
-import UserInfoPage from "../pages/admin/manage-user/components/UserDetail";
 import RoleManagement from "../pages/admin/manage-package";
 const AppRoutes = () => {
     return (

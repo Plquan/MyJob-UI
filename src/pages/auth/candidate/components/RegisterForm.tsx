@@ -1,15 +1,43 @@
 import { Checkbox, Form, Input, Button } from "antd";
 import { EyeInvisibleOutlined, EyeTwoTone } from '@ant-design/icons';
+import authService from "../../../../services/authService";
+import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
+import ROUTE_PATH from "../../../../routes/routePath";
+import LoadingLayout from "../../../../components/LoadingLayout";
+import { useState } from "react";
 
 const RegisterForm = () => {
+  const navigate = useNavigate()
+  const [loading,setLoading] = useState(false)
   const [form] = Form.useForm();
 
+  const onFinish = async (values: any) => {
+    try {
+      setLoading(true)
+      const result = await authService.candidateRegister(values)
+       if(!result.success){
+          toast.error(result.message)
+       }
+       toast.success(result.message)
+       navigate(ROUTE_PATH.CANDIDATE_LOGIN)
+    } catch (error:any) {
+      toast.error(error.message)
+    }
+    finally {
+      setLoading(false)
+    }
+  }
+
   return (
-    <Form
+    <>
+    <LoadingLayout loading={loading}/>
+        <Form
       form={form}
       layout="vertical"
       name="register"
       scrollToFirstError
+      onFinish={onFinish}
     >
       <Form.Item
         name="fullName"
@@ -20,17 +48,6 @@ const RegisterForm = () => {
         <Input placeholder="Nhập họ tên" className="rounded-md h-8 text-sm" />
       </Form.Item>
 
-      <Form.Item
-        name="phone"
-        label="Số điện thoại"
-        style={{ marginBottom: 12 }}
-        rules={[
-          { required: true, message: 'Vui lòng nhập số điện thoại' },
-          { pattern: /^[0-9]{9,11}$/, message: 'Số điện thoại không hợp lệ' }
-        ]}
-      >
-        <Input placeholder="Nhập số điện thoại" className="rounded-md h-8 text-sm" />
-      </Form.Item>
 
       <Form.Item
         name="email"
@@ -107,6 +124,8 @@ const RegisterForm = () => {
         </Button>
       </Form.Item>
     </Form>
+    </>
+
   );
 };
 

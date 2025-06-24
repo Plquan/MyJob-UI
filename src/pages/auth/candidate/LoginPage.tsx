@@ -2,6 +2,7 @@ import { Button, Divider } from 'antd';
 import {  GoogleOutlined, GithubOutlined } from '@ant-design/icons';
 import ROUTE_PATH from '../../../routes/routePath';
 import LoginForm from './components/LoginForm';
+import { Link } from 'react-router-dom';
 
 const LoginPage = () => {
 
@@ -28,10 +29,12 @@ const LoginPage = () => {
           <a href="#" className="text-blue-500 hover:underline">Quên mật khẩu?</a>
         </div>
         <div className="text-center text-sm mb-3">
-          Chưa có tài khoản? <a href={ROUTE_PATH.CANDIDATE_REGISTER} className="text-blue-500 hover:underline">Đăng ký ngay</a>
+          Chưa có tài khoản? <Link to={ROUTE_PATH.CANDIDATE_REGISTER} className="text-blue-500 hover:underline">
+       Đăng ký ngay
+      </Link>
         </div>
         <div className="text-center text-sm mb-2">
-          <a href={ROUTE_PATH.HOME} className="text-blue-500 hover:underline">&larr; Trở về trang chủ</a>
+          <Link to={ROUTE_PATH.HOME} className="text-blue-500 hover:underline">&larr; Trở về trang chủ</Link>
         </div>
       </div>
     </div>
