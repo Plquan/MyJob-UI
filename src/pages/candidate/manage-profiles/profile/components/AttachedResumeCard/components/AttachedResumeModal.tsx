@@ -1,21 +1,47 @@
-import { Modal, Form, Input, Select, Button, Upload, type UploadFile } from "antd";
+import { Modal, Form, Input, Select, Button, Upload } from "antd";
 import { useSelector } from "react-redux";
 import type { RootState } from "../../../../../../../stores";
 import { ACADEMICLEVEL_OPTIONS, EXPERIENCE_OPTIONS, JOBTYPE_OPTIONS, POSITION_OPTIONS, WORKPLACE_OPTIONS } from "../../../../../../../constant/selectOptions";
 import type { IResume } from "../../../../../../../types/resume/ResumeType";
 import { UploadOutlined } from "@ant-design/icons";
+import { useEffect } from "react";
 const { Option } = Select;
 
 interface AttachedResumeModalProps {
   open: boolean;
   onCancel: () => void;
   onFinish: (values: any) => void;
-  initialValues?: IResume;
+  initialValues?: IResume | null
   form:any
 }
 const AttachedResumeModal: React.FC<AttachedResumeModalProps> = ({ open, onCancel, initialValues, onFinish,form }) => {
   const { careers } = useSelector((state: RootState) => state.careerStore)
   const { provinces } = useSelector((state: RootState) => state.provinceStore)
+
+  useEffect(() => {
+    if (open) {
+      if (initialValues?.id) {
+        const { myJobFile, ...rest } = initialValues;
+        const fileList = myJobFile?.url
+          ? [
+              {
+                uid: '-1',
+                name: myJobFile.url.split('/').pop() || 'CV.pdf',
+                status: 'done',
+                url: myJobFile.url,
+              },
+            ]
+          : []
+        form.setFieldsValue({
+          ...rest,
+          file: fileList,
+        });
+      } else {
+        form.resetFields();
+      }
+    }
+  }, [open, initialValues, form])
+  
 
   return (
     <Modal
@@ -29,10 +55,13 @@ const AttachedResumeModal: React.FC<AttachedResumeModalProps> = ({ open, onCance
       <Form
         form={form}
         layout="vertical"
-        initialValues={initialValues}
         onFinish={onFinish}
         className="max-h-[80vh] overflow-y-scroll pr-3!"
       >
+        <Form.Item name="id" noStyle>
+          <Input hidden />
+        </Form.Item>
+        
       <Form.Item
         name="file"
         label={<span>Chọn tệp CV của bạn (Hỗ trợ *.doc, *.docx, *.pdf, và &lt; 5MB)</span>}
@@ -40,11 +69,14 @@ const AttachedResumeModal: React.FC<AttachedResumeModalProps> = ({ open, onCance
         getValueFromEvent={(e) => (Array.isArray(e) ? e : e?.fileList)}
         rules={[{ required: true, message: "Vui lòng tải lên tệp CV" }]}
       >
-        <Upload
-          beforeUpload={() => false}
-          accept=".pdf,.doc,.docx"
-          maxCount={1}
-        >
+       <Upload
+        beforeUpload={() => false}
+        accept=".pdf,.doc,.docx"
+        maxCount={1}
+        listType="text"
+        showUploadList={{ showDownloadIcon: true }}
+      >
+
           <Button icon={<UploadOutlined />} type="primary">
             Tải file
           </Button>

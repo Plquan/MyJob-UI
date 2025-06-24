@@ -8,7 +8,7 @@ const APP_NAME = env.APP_NAME;
  * @param url - Đường dẫn file
  * @param fileName - Tên hiển thị (không cần đuôi)
  */
-const downloadFile = async (url: string, fileName?: string): Promise<void> => {
+const downloadFile = async (url: string, fileName: string): Promise<void> => {
   try {
     const fileDownloadName = `${APP_NAME}_CV-${slugify(fileName || 'mytitle')}`;
 

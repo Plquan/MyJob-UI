@@ -28,6 +28,18 @@ const updateOnlineResume = createAsyncThunk (
     }
 )
 
+const updateAttachedResume = createAsyncThunk (
+    "resume/updateAttachedResume",
+    async (data: FormData, {rejectWithValue}): Promise<IApiResponse<IResume>> => {
+        try {
+            const response: IApiResponse<IResume> = await http.put("/resume/update-attached-resume",data);
+            return response;
+        } catch (error: any) {
+            return rejectWithValue(error.response.data) as any;
+        }
+    }
+)
+
 const uploadAttachedResume = createAsyncThunk (
     "resume/uploadAttachedResume",
     async (data: FormData, {rejectWithValue}): Promise<IApiResponse<IResume>> => {
@@ -39,6 +51,7 @@ const uploadAttachedResume = createAsyncThunk (
         }
     }
 )
+
 
 const getAllAttachedResumes = createAsyncThunk (
     "resume/getAllAttachedResumes",
@@ -69,6 +82,7 @@ const resumeThunks = {
     updateOnlineResume,
     uploadAttachedResume,
     getAllAttachedResumes,
-    deleteAttachedResume
+    deleteAttachedResume,
+    updateAttachedResume
 }
 export default resumeThunks;

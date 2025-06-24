@@ -1,120 +1,62 @@
-import { Card, Empty, Form, Button, Tooltip, Table } from "antd"
+import { Card, Empty, Form, Table } from "antd"
 import AttachedResumeModal from "./components/AttachedResumeModal"
 import { useEffect, useState } from "react"
-import type { IUploadAttachedResume } from "../../../../../../types/resume/ResumeType"
+import type { IResume, IUpdateAttachedResume } from "../../../../../../types/resume/ResumeType"
 import { useDispatch, useSelector } from "react-redux"
 import type { AppDispatch, RootState } from "../../../../../../stores"
 import { resumeActions } from "../../../../../../stores/resumeStore/resumeReducer"
-import { DeleteOutlined, EditOutlined, DownloadOutlined, EyeOutlined } from "@ant-design/icons"
-import downloadPdf from "../../../../../../ultils/functions/dowloadFile"
+import AttachedResumeColumns from "./components/AttachedResumeColumns"
 
-interface GetColumnsProps {
-  isSubmitting: boolean;
-  downloadPdf: (url: string) => void;
-  showModal: () => void;
-  handleDelete: (id: number) => void;
-}
-
-const getColumns = ({ isSubmitting, downloadPdf, showModal, handleDelete }: GetColumnsProps) => [
-  {
-    title: 'STT',
-    key: 'stt',
-    align: 'center' as const,
-    render: (_: any, __: any, index: number) => index + 1,
-  },
-  {
-    title: 'Tiêu đề',
-    dataIndex: 'title',
-    key: 'title',
-    render: (text: string) => <span className="font-medium">{text}</span>,
-  },
-  {
-    title: 'Cập nhật lần cuối',
-    dataIndex: 'updatedAt',
-    key: 'updatedAt',
-    render: (date: string) => date ? new Date(date).toLocaleString() : '',
-  },
-  {
-    title: 'Chức năng',
-    key: 'actions',
-    align: 'center' as const,
-    render: (_: any, record: any) => (
-      <div className="flex gap-2 justify-center">
-        <Tooltip title="Xem">
-          <Button
-            size="small"
-            icon={<EyeOutlined style={{ color: '#1976d2' }} />}
-            onClick={() => window.open(record.myJobFile.url, '_blank')}
-          />
-        </Tooltip>
-        <Tooltip title="Tải xuống">
-          <Button
-            loading={isSubmitting}
-            size="small"
-            icon={<DownloadOutlined style={{ color: '#43a047' }} />}
-            onClick={() => downloadPdf(record.myJobFile.url)}
-          />
-        </Tooltip>
-        <Tooltip title="Chỉnh sửa">
-          <Button
-            size="small"
-            icon={<EditOutlined style={{ color: '#ffa000' }} />}
-            onClick={showModal}
-          />
-        </Tooltip>
-        <Tooltip title="Xóa">
-          <Button
-            loading={isSubmitting}
-            size="small"
-            danger
-            icon={<DeleteOutlined style={{ color: '#e53935' }} />}
-            onClick={() => handleDelete(record.id)}
-          />
-        </Tooltip>
-      </div>
-    )
-  }
-]
 
 const AttchedResumeCard = () => {
   const dispatch = useDispatch<AppDispatch>()
   const [isModalOpen, setIsModalOpen] = useState(false)
   const {attachedResumes, loading,isSubmitting } = useSelector((state: RootState) => state.resumeStore)
+  const [selectedResume, setSelectedResume] = useState<IResume | null>(null)
   const [form] = Form.useForm()
 
   useEffect (() => {
     dispatch(resumeActions.getAllAttachedResumes())
   },[dispatch])
   const showModal = () => {
+    setSelectedResume(null)
     setIsModalOpen(true)
   }
   const handleCancel = () => {
+    form.resetFields()
     setIsModalOpen(false)
   }
 
-  const handleFinish = (values: IUploadAttachedResume) => {
+  const handleFinish = (values: IUpdateAttachedResume) => {
     const formData = new FormData();
-    Object.entries(values).forEach(([key, value]) => {
-      if (key === "file") {
-        const fileList = value as any[]
-        if (Array.isArray(fileList) && fileList.length > 0 && fileList[0].originFileObj) {
-          formData.append("file", fileList[0].originFileObj)
-        }
-      } else {
-        const stringValue = typeof value === "object" ? JSON.stringify(value) : String(value);
-        formData.append(key, stringValue)
-      }
-    })
-      dispatch(resumeActions.uploadAttachedResume(formData))
+    const fileList = values.file as unknown as any[] | undefined
+    const hasFile = Array.isArray(fileList) && fileList.length > 0 && fileList[0].originFileObj
+    if (hasFile) {
+      formData.append("file", fileList[0].originFileObj);
+    }
 
+    const resumeData = {
+      ...values,
+      salaryMin: +values.salaryMin,
+      salaryMax: +values.salaryMax,
+    }
+
+    formData.append("data", JSON.stringify(resumeData));
+    if (values.id) {
+      dispatch(resumeActions.updateAttachedResume(formData));
+    } else {
+      dispatch(resumeActions.uploadAttachedResume(formData));
+    }
+    setIsModalOpen(false)
   }
 
   const handleDelete = (attachedResumeId: number) => {
     dispatch(resumeActions.deleteAttachedResume(attachedResumeId))
   }
 
-  const handleEdit = () => {
-
+  const handleEdit = (data: IResume) => {
+     setSelectedResume(data)
+     setIsModalOpen(true)
   }
 
     return (
@@ -138,7 +80,7 @@ const AttchedResumeCard = () => {
               rowKey="id"
               pagination={false}
               bordered
-              columns={getColumns({ isSubmitting, downloadPdf, showModal, handleDelete })}
+              columns={AttachedResumeColumns({ isSubmitting, handleDelete, handleEdit})}
             />
           )}
       </Card>
@@ -147,9 +89,11 @@ const AttchedResumeCard = () => {
         open={isModalOpen}
         onCancel={handleCancel}
         onFinish={handleFinish}
+        initialValues={selectedResume}
         form={form}
       />
-   </>
+
+    </>
     
     )
 }
