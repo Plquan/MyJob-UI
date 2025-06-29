@@ -61,7 +61,11 @@ const AttchedResumeCard = () => {
 
     return (
       <>
-        <Card title={`Hồ sơ đính kèm (${attachedResumes.length})`} 
+        <Card title={<>
+          Hồ sơ đính kèm (
+          <span style={{ color: 'red' }}>{attachedResumes.length}</span>
+          )
+        </>} 
         extra={
           <span
           onClick={showModal}

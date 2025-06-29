@@ -1,28 +1,31 @@
-import React from 'react';
-import { Tabs } from 'antd';
+import { Card, Tabs } from 'antd';
 import type { TabsProps } from 'antd';
-import Setting from './components/SettingTab';
-import ListRoleTab from './components/ListRoleTab';
+import ListRoleTab from './components/TablePackage';
+import Setting from './components/SettingPackage';
 
 
 const items: TabsProps['items'] = [
   {
-    key: 'role-management',
+    key: '1',
     label: 'Danh sách',
     children: <ListRoleTab />,
   },
   {
-    key: 'other',
+    key: '2',
+    label: 'Thanh toán',
+    children: "",
+  },
+  {
+    key: '3',
     label: 'Cài đặt',
     children: <Setting />,
   },
-];
+]
 
 const RoleManagement = () => (
-  <div className="p-6">
-    <h1 className="text-2xl font-bold mb-4">Quản lý truy cập</h1>
+  <Card title={"Quản lí gói dịch vụ"}>
     <Tabs defaultActiveKey="role-management" items={items} />
-  </div>
+  </Card>
 )
 
 export default RoleManagement;
