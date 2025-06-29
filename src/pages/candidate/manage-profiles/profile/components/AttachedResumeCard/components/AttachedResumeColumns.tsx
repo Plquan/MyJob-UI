@@ -47,20 +47,20 @@ interface ColumnsProps {
             onClick={() => window.open(record.myJobFile.url, '_blank')}
           />
         </Tooltip>
-        <Tooltip title="Tải xuống">
-          <Button
-            loading={isSubmitting}
-            size="small"
-            icon={<DownloadOutlined style={{ color: '#43a047' }} />}
-            onClick={() => downloadFile(record.myJobFile.url,record.title)}
-          />
-        </Tooltip>
         <Tooltip title="Chỉnh sửa">
           <Button
             size="small"
             loading={isSubmitting}
             icon={<EditOutlined style={{ color: '#ffa000' }} />}
             onClick={() => handleEdit(record)}
+          />
+        </Tooltip>
+        <Tooltip title="Tải xuống">
+          <Button
+            loading={isSubmitting}
+            size="small"
+            icon={<DownloadOutlined style={{ color: '#43a047' }} />}
+            onClick={() => downloadFile(record.myJobFile.url,record.title)}
           />
         </Tooltip>
         <Tooltip title="Xóa">

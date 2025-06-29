@@ -26,7 +26,7 @@ const RoleSelect: React.FC<RoleSelectProps> = ({
     if (!roles || roles.length === 0) {
       dispatch(roleActions.getAllRoles())
     }
-  }, [dispatch, roles])
+  }, [dispatch])
 
   return (
     <Select

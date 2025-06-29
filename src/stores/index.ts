@@ -14,6 +14,7 @@ import { experienceSlice } from "./experienceStore/experienceReducer"
 import { educationSlice } from "./educationStore/educationReducer"
 import { languageSlice } from "./languageStore/languageReducer"
 import { skillSlice } from "./skillStore/skillReducer"
+import { packageSlice } from "./packageStore/packageReducer"
 
 // Cấu hình redux-persist
 const persistConfig = {
@@ -36,6 +37,7 @@ const rootReducer = combineReducers({
   educationStore: educationSlice.reducer,
   languageStore: languageSlice.reducer,
   skillStore: skillSlice.reducer,
+  packageStore: packageSlice.reducer,
 });
 
 // Tạo reducer có tích hợp persist
