@@ -1,6 +1,6 @@
 import { Card, Tabs } from 'antd';
 import type { TabsProps } from 'antd';
-import ListRoleTab from './components/TablePackage';
+import TablePackage from './components/TablePackage';
 import Setting from './components/SettingPackage';
 
 
@@ -8,7 +8,7 @@ const items: TabsProps['items'] = [
   {
     key: '1',
     label: 'Danh sách',
-    children: <ListRoleTab />,
+    children: <TablePackage />,
   },
   {
     key: '2',

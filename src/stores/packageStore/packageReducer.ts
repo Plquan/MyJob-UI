@@ -42,18 +42,6 @@ export const packageSlice = createSlice({
             state.loading = false;
         });
 
-         // get features
-         builder.addCase(packageThunks.getAllFeatures.pending, (state) => {
-            state.loading = true;
-        });
-        builder.addCase(packageThunks.getAllFeatures.fulfilled, (state, action) => {
-            state.features = action.payload.data;
-            state.loading = false;
-        });
-        builder.addCase(packageThunks.getAllFeatures.rejected, (state, action) => {
-            state.loading = false;
-        });
-
         // get package types
         builder.addCase(packageThunks.getAllPackageTypes.pending, (state) => {
             state.loading = true;
@@ -72,9 +60,39 @@ export const packageSlice = createSlice({
         });
         builder.addCase(packageThunks.createPackage.fulfilled, (state, action) => {
             state.packages?.push(action.payload.data)
+            message.success("Thêm gói dịch vụ thành công")
             state.isSubmiting = false;
         });
         builder.addCase(packageThunks.createPackage.rejected, (state, action) => {
+            state.isSubmiting = false;
+        });
+
+        // update package
+        builder.addCase(packageThunks.updatePackage.pending, (state) => {
+            state.isSubmiting = true;
+        });
+        builder.addCase(packageThunks.updatePackage.fulfilled, (state, action) => {
+            state.packages = state.packages?.map(
+                (pkg) => (pkg.id === action.payload.data.id ? action.payload.data : pkg)
+            )
+            message.success("Cập nhật gói dịch vụ thành công")
+            state.isSubmiting = false;
+        });
+        builder.addCase(packageThunks.updatePackage.rejected, (state, action) => {
+            state.isSubmiting = false;
+        });
+
+        
+        // delete package
+        builder.addCase(packageThunks.deletePackage.pending, (state) => {
+            state.isSubmiting = true;
+        });
+        builder.addCase(packageThunks.deletePackage.fulfilled, (state, action) => {
+            state.packages = state.packages.filter(pkg => pkg.id !== action.meta.arg);
+            message.success("Xóa gói dịch vụ thành công")
+            state.isSubmiting = false;
+        });
+        builder.addCase(packageThunks.deletePackage.rejected, (state, action) => {
             state.isSubmiting = false;
         });
 
@@ -92,14 +110,14 @@ export const packageSlice = createSlice({
 
         // update package features
         builder.addCase(packageThunks.updatePackageFeatures.pending, (state) => {
-            state.isSubmiting = true;
+            state.loading = true;
         });
         builder.addCase(packageThunks.updatePackageFeatures.fulfilled, (state, action) => {
-            message.success("Cập nhật thành công")
-            state.isSubmiting = false;
+            message.success("Cập nhật gói tính năng thành công")
+            state.loading = false;
         });
         builder.addCase(packageThunks.updatePackageFeatures.rejected, (state, action) => {
-            state.isSubmiting = false;
+            state.loading = false;
         });
     },
 });

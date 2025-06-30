@@ -19,8 +19,9 @@ export interface IPackage {
     name: string
     description?: string
     packageTypeId: number
-    packageType?: IPackageType
-    packageFeatures?: IPackageFeature[]
+    price: number;
+    durationInDays?: number;
+    isActive?: boolean;
 }
 
 export interface IFeature {
@@ -39,13 +40,4 @@ export interface IFeatureOfPackage {
   open: boolean;
   limit?: number;
   description?: string;
-}
-
-  
-
-export interface IUpdatePackage {
-    id?: number
-    name: string
-    description?: string
-    packageTypeId: number
 }

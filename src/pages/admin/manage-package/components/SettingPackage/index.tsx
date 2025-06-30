@@ -65,14 +65,16 @@ const Setting: React.FC = () => {
             options={packages.map(pkg => ({ label: pkg.name, value: pkg.id }))}
             onChange={handleSelectPackage}
             allowClear
+            loading={loading}
           />
           <Button
             onClick={() => setFeatures(featuresOfPackage)}
             title="Tải lại dữ liệu ban đầu"
             icon={<ReloadOutlined />}
+            loading={loading}
           >
           </Button>
-          <Button type="primary" onClick={handleSave}>Cập nhật</Button>
+          <Button type="primary" loading={loading} onClick={handleSave}>Cập nhật</Button>
         </Space>
       }
     >

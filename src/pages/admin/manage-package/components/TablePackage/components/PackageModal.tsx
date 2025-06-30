@@ -1,9 +1,9 @@
 import React, { useEffect } from 'react';
-import { Modal, Form, Input, Select, Button, message } from 'antd';
+import { Modal, Form, Input, Select, Button, InputNumber, Switch } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import type { RootState, AppDispatch } from '../../../../../../stores';
 import { packageActions } from '../../../../../../stores/packageStore/packageReducer';
-import type { IUpdatePackage } from '../../../../../../types/package/PackageType';
+import type { IPackage } from '../../../../../../types/package/PackageType';
 
 const { TextArea } = Input;
 const { Option } = Select;
@@ -11,16 +11,17 @@ const { Option } = Select;
 interface AddPackageModalProps {
   open: boolean;
   onCancel: () => void
-  onFinish: (data: IUpdatePackage) => void
+  onFinish: (data: IPackage) => void
   form: any
+  isEdit?: boolean
 }
 
-const AddPackageModal: React.FC<AddPackageModalProps> = ({
+const PackageModal: React.FC<AddPackageModalProps> = ({
   open,
   onCancel,
   onFinish,
-  form
-  ,
+  form,
+  isEdit = false
 }) => {
 
   const dispatch = useDispatch<AppDispatch>();
@@ -36,10 +37,11 @@ const AddPackageModal: React.FC<AddPackageModalProps> = ({
 
   return (
     <Modal
-      title="Thêm gói mới"
+      title={isEdit ? "Chỉnh sửa gói" : "Thêm gói mới"}
       open={open}
       onCancel={onCancel}
       footer={null}
+      centered
       width={600}
     >
       <Form
@@ -48,6 +50,10 @@ const AddPackageModal: React.FC<AddPackageModalProps> = ({
         onFinish={onFinish}
         autoComplete="off"
       >
+        <Form.Item name="id" noStyle>
+          <Input hidden />
+        </Form.Item>
+
         <Form.Item
           label="Tên gói"
           name="name"
@@ -66,13 +72,50 @@ const AddPackageModal: React.FC<AddPackageModalProps> = ({
             { required: true, message: 'Vui lòng chọn loại gói!' }
           ]}
         >
-          <Select placeholder="Chọn loại gói...">
+          <Select placeholder="Chọn loại gói..." disabled={isEdit}>
             {packageTypes?.map((type) => (
               <Option key={type.id} value={type.id}>
                 {type.name}
               </Option>
             ))}
           </Select>
+        </Form.Item>
+
+        <Form.Item
+          label="Giá (VND)"
+          name="price"
+          rules={[
+            { required: true, message: 'Vui lòng nhập giá gói!' },
+          ]}
+        >
+          <InputNumber 
+            placeholder="Nhập giá gói..." 
+            style={{ width: '100%' }}
+            min={0}
+          />
+        </Form.Item>
+
+        <Form.Item
+          label="Thời hạn (ngày)"
+          name="durationInDays"
+          rules={[
+            { type: 'number', min: 1, message: 'Thời hạn phải lớn hơn 0!' }
+          ]}
+        >
+          <InputNumber 
+            placeholder="Nhập thời hạn (để trống nếu không giới hạn)..." 
+            style={{ width: '100%' }}
+            min={1}
+          />
+        </Form.Item>
+
+        <Form.Item
+          label="Trạng thái"
+          name="isActive"
+          valuePropName="checked"
+          initialValue={true}
+        >
+          <Switch/>
         </Form.Item>
 
         <Form.Item
@@ -85,7 +128,6 @@ const AddPackageModal: React.FC<AddPackageModalProps> = ({
           />
         </Form.Item>
 
-        <Form.Item className="mb-0">
           <div className="flex justify-end gap-2">
             <Button onClick={onCancel}>
               Hủy
@@ -95,13 +137,12 @@ const AddPackageModal: React.FC<AddPackageModalProps> = ({
               htmlType="submit"
               loading={isSubmiting}
             >
-              Thêm gói
+              {isEdit ? "Cập nhật" : "Thêm gói"}
             </Button>
           </div>
-        </Form.Item>
       </Form>
     </Modal>
   );
 };
 
-export default AddPackageModal; 
+export default PackageModal; 

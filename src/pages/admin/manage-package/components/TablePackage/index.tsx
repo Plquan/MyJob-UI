@@ -1,78 +1,56 @@
-import { Button, Form, Space, Table } from "antd";
-import { EditOutlined, DeleteOutlined, PlusOutlined } from '@ant-design/icons'
+import { Button, Form, Table } from "antd";
+import { PlusOutlined } from '@ant-design/icons'
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import type { AppDispatch, RootState } from "../../../../../stores";
-import AddPackageModal from "./components/PackageModal";
 import { packageActions } from "../../../../../stores/packageStore/packageReducer";
-import type { IUpdatePackage } from "../../../../../types/package/PackageType";
+import PackageModal from "./components/PackageModal";
+import { PackageColumns } from "./components/PackageColumns";
+import type { IPackage } from "../../../../../types/package/PackageType";
 
-const columns = [
-  {
-    title: '#',
-    key: 'key',
-    render: (_: any, __: any, index: number) => index + 1,
-  },
-  {
-    title: 'Tên gói',
-    dataIndex: 'name',
-    key: 'name',
-  },
-  {
-    title: 'Loại gói',
-    dataIndex: ['packageType', 'name'],
-    key: 'packageTypeName',
-  },
-  {
-    title: 'Mô tả',
-    dataIndex: 'description',
-    key: 'description',
-    render: (text: string) => (
-      <div style={{ whiteSpace: 'pre-line', wordBreak: 'break-word', maxWidth: 300 }}>
-        {text}
-      </div>
-    ),
-  },
-  {
-    title: 'Thao tác',
-    key: 'action',
-    render: (_: any, record: any) => (
-      <Space size="middle">
-        <Button 
-          type="primary" 
-          icon={<EditOutlined />}
-        >
-        </Button>
-        <Button 
-          danger 
-          icon={<DeleteOutlined />}
-        >
-        </Button>
-      </Space>
-    ),
-  },
-];
-
-const ListRoleTab = () => {
+const TablePackage = () => {
   const dispatch = useDispatch<AppDispatch>();
   const [form] = Form.useForm();
-  const { packages, loading, features} = useSelector((state: RootState) => state.packageStore)
+  const { packages, loading} = useSelector((state: RootState) => state.packageStore)
   const [isModalOpen, setIsModalOpen] = useState(false)
-
-
+  const [editingPackage, setEditingPackage] = useState<IPackage | null>(null);
 
   useEffect(() => {
     dispatch(packageActions.getAllPackages())
   }, [dispatch])
 
-  const handleFinish = async (values: IUpdatePackage) => {
-    dispatch(packageActions.createPackage(values))
+  const handleAdd = () => {
+    setEditingPackage(null)
+    setIsModalOpen(true)
+  }
+
+  const handleEdit = (record: IPackage) => {
+    setEditingPackage(record)
+    console.log(record)
+    form.setFieldsValue({
+      ...record
+    })
+    setIsModalOpen(true)
+  }
+
+  const handleFinish = async (data: IPackage) => {
+    console.log(data)
+    if (editingPackage) {
+      dispatch(packageActions.updatePackage(data))
+    } else {
+      dispatch(packageActions.createPackage(data))
+    }
     setIsModalOpen(false)
   }
 
   const handleCancel = () => {
     setIsModalOpen(false)
     form.resetFields()
+  }
+
+  const handleDelete = (packageId: number) => {
+    if (!packageId) return;
+    dispatch(packageActions.deletePackage(packageId))
   }
 
   return (
@@ -82,28 +60,29 @@ const ListRoleTab = () => {
           type="primary" 
           className="mb-4!"
           icon={<PlusOutlined />}
-          onClick={() => setIsModalOpen(true)}
+          onClick={handleAdd}
         >
-          Thêm gói mới
+          Thêm gói
         </Button>
 
 
       <Table 
-        columns={columns} 
+        columns={PackageColumns(handleEdit, handleDelete)} 
         dataSource={packages}
         loading={loading}
         pagination={false} 
         bordered 
       />
 
-      <AddPackageModal
+      <PackageModal
         open={isModalOpen}
         onCancel={handleCancel}
         onFinish={handleFinish}
         form={form}
+        isEdit={!!editingPackage}
       />
     </div>
   )
 }
 
-export default ListRoleTab; 
+export default TablePackage; 
