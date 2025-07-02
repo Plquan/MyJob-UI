@@ -34,9 +34,9 @@ export default function CandidateSidebar() {
       label: "Công Ty Của Tôi",
     },
     {
-      key: "/my-jobs",
+      key: ROUTE_PATH.CANDIDATE_ONLINE_RESUME,
       icon: <FileTextOutlined />,
-      label: "Việc Làm Của Tôi",
+      label: "Hồ sơ MyJob",
     },
     {
       key: "/notifications",
@@ -51,7 +51,7 @@ export default function CandidateSidebar() {
   ];
 
   return (
-    <div className="mt-5 top-14 left-0 w-64 bg-white border-r border-gray-200 p-4 h-[calc(100vh-56px)] flex flex-col z-50">
+    <div className="fixed mt-5 top-14 left-0 w-64 bg-white border-r border-gray-200 p-4 h-[calc(100vh-56px)] flex flex-col z-50">
       <div className="flex flex-col items-center p-4 flex-shrink-0">
         <UserAvatar/>
         <h3 className="font-medium text-center">{currentUser?.fullName}</h3>

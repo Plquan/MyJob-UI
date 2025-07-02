@@ -1,14 +1,19 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import type { IApiResponse } from "../../types/AppType";
 import http from "../../ultils/axios/axiosCustom";
-import type { IResume } from "../../types/resume/ResumeType";
+import type { IOnlineResume, IResume } from "../../types/resume/ResumeType";
+import type { ICertificate } from "../../types/resume/CertificateType";
+import type { IEducation } from "../../types/resume/EducationType";
+import type { IExperience } from "../../types/resume/ExperienceType";
+import type { ILanguage } from "../../types/resume/LanguageType";
+import type { ISkill } from "../../types/resume/SkillType";
 
 
 const getOnlineResume = createAsyncThunk (
     "resume/getOnlineResume",
-    async (_, {rejectWithValue}): Promise<IApiResponse<IResume>> => {
+    async (_, {rejectWithValue}): Promise<IApiResponse<IOnlineResume>> => {
         try {
-            const response: IApiResponse<IResume> = await http.get("/resume/get-online-resume");
+            const response: IApiResponse<IOnlineResume> = await http.get("/resume/get-online-resume");
             return response;
         } catch (error: any) {
             return rejectWithValue(error.response.data) as any;
@@ -28,11 +33,12 @@ const updateOnlineResume = createAsyncThunk (
     }
 )
 
-const updateAttachedResume = createAsyncThunk (
-    "resume/updateAttachedResume",
-    async (data: FormData, {rejectWithValue}): Promise<IApiResponse<IResume>> => {
+//certificate 
+const createCertificate = createAsyncThunk (
+    "certificate/createCertificate",
+    async (data: ICertificate, {rejectWithValue}): Promise<IApiResponse<ICertificate>> => {
         try {
-            const response: IApiResponse<IResume> = await http.put("/resume/update-attached-resume",data);
+            const response: IApiResponse<ICertificate> = await http.post("/certificate/create-certificate",data);
             return response;
         } catch (error: any) {
             return rejectWithValue(error.response.data) as any;
@@ -40,11 +46,11 @@ const updateAttachedResume = createAsyncThunk (
     }
 )
 
-const uploadAttachedResume = createAsyncThunk (
-    "resume/uploadAttachedResume",
-    async (data: FormData, {rejectWithValue}): Promise<IApiResponse<IResume>> => {
+const updateCertificate = createAsyncThunk (
+    "certificate/updateCertificate",
+    async (data: ICertificate, {rejectWithValue}): Promise<IApiResponse<ICertificate>> => {
         try {
-            const response: IApiResponse<IResume> = await http.post("/resume/upload-attached-resume",data);
+            const response: IApiResponse<ICertificate> = await http.put("/certificate/update-certificate",data);
             return response;
         } catch (error: any) {
             return rejectWithValue(error.response.data) as any;
@@ -52,12 +58,11 @@ const uploadAttachedResume = createAsyncThunk (
     }
 )
 
-
-const getAllAttachedResumes = createAsyncThunk (
-    "resume/getAllAttachedResumes",
-    async (_, {rejectWithValue}): Promise<IApiResponse<IResume[]>> => {
+const deleteCertificate = createAsyncThunk (
+    "certificate/deleteCertificate",
+    async (id: number, {rejectWithValue}): Promise<IApiResponse<any>> => {
         try {
-            const response: IApiResponse<IResume[]> = await http.get("/resume/get-attached-resumes");
+            const response: IApiResponse<any> = await http.delete(`/certificate/delete-certificate/${id}`);
             return response;
         } catch (error: any) {
             return rejectWithValue(error.response.data) as any;
@@ -65,11 +70,71 @@ const getAllAttachedResumes = createAsyncThunk (
     }
 )
 
-const deleteAttachedResume = createAsyncThunk (
-    "resume/deleteAttachedResume",
-    async (attachedresumeId: number, {rejectWithValue}): Promise<IApiResponse<IResume[]>> => {
+//education
+const createEducation = createAsyncThunk (
+    "education/createEducation",
+    async (data: IEducation, {rejectWithValue}): Promise<IApiResponse<IEducation>> => {
         try {
-            const response: IApiResponse<IResume[]> = await http.delete(`/resume/delete-attached-resume/${attachedresumeId}`);
+            const response: IApiResponse<IEducation> = await http.post("/education/create-education",data);
+            return response
+        } catch (error: any) {
+            return rejectWithValue(error.response.data) as any;
+        }
+    }
+)
+
+const updateEducation = createAsyncThunk (
+    "education/updateEducation",
+    async (data: IEducation, {rejectWithValue}): Promise<IApiResponse<IEducation>> => {
+        try {
+            const response: IApiResponse<IEducation> = await http.put("/education/update-education",data);
+            return response
+        } catch (error: any) {
+            return rejectWithValue(error.response.data) as any;
+        }
+    }
+)
+
+const deleteEducation = createAsyncThunk (
+    "education/deleteEducation",
+    async (id: number, {rejectWithValue}): Promise<IApiResponse<any>> => {
+        try {
+            const response: IApiResponse<any> = await http.delete(`/education/delete-education/${id}`);
+            return response
+        } catch (error: any) {
+            return rejectWithValue(error.response.data) as any;
+        }
+    }
+)
+
+// experience
+const createExperience = createAsyncThunk (
+    "experience/createExperience",
+    async (data: IExperience, {rejectWithValue}): Promise<IApiResponse<IExperience>> => {
+        try {
+            const response: IApiResponse<IExperience> = await http.post("/experience/create-experience",data);
+            return response;
+        } catch (error: any) {
+            return rejectWithValue(error.response.data) as any;
+        }
+    }
+)
+const updateExperience = createAsyncThunk (
+    "experience/updateExperience",
+    async (data: IExperience, {rejectWithValue}): Promise<IApiResponse<IExperience>> => {
+        try {
+            const response: IApiResponse<IExperience> = await http.put("/experience/update-experience",data);
+            return response;
+        } catch (error: any) {
+            return rejectWithValue(error.response.data) as any;
+        }
+    }
+)
+const deleteExperience = createAsyncThunk (
+    "experience/deleteExperience",
+    async (id: number, {rejectWithValue}): Promise<IApiResponse<any>> => {
+        try {
+            const response: IApiResponse<any> = await http.delete(`/experience/delete-experience/${id}`);
             return response;
         } catch (error: any) {
             return rejectWithValue(error.response.data) as any;
@@ -77,12 +142,98 @@ const deleteAttachedResume = createAsyncThunk (
     }
 )
 
-const resumeThunks = {
+// language
+const createLanguage = createAsyncThunk (
+    "language/createLanguage",
+    async (data: ILanguage, {rejectWithValue}): Promise<IApiResponse<ILanguage>> => {
+        try {
+            const response: IApiResponse<ILanguage> = await http.post("/language/create-language",data);
+            return response;
+        } catch (error: any) {
+            return rejectWithValue(error.response.data) as any;
+        }
+    }
+)
+const updateLanguage = createAsyncThunk (
+    "language/updateLanguage",
+    async (data: ILanguage, {rejectWithValue}): Promise<IApiResponse<ILanguage>> => {
+        try {
+            const response: IApiResponse<ILanguage> = await http.put("/language/update-language",data);
+            return response;
+        } catch (error: any) {
+            return rejectWithValue(error.response.data) as any;
+        }
+    }
+)
+const deleteLanguage = createAsyncThunk (
+    "language/deleteLanguage",
+    async (id: number, {rejectWithValue}): Promise<IApiResponse<any>> => {
+        try {
+            const response: IApiResponse<any> = await http.delete(`/language/delete-language/${id}`);
+            return response;
+        } catch (error: any) {
+            return rejectWithValue(error.response.data) as any;
+        }
+    }
+)
+
+// skill
+const createSkill = createAsyncThunk (
+    "skill/createSkill",
+    async (data: ISkill, {rejectWithValue}): Promise<IApiResponse<ISkill>> => {
+        try {
+            const response: IApiResponse<ISkill> = await http.post("/skill/create-skill",data);
+            return response;
+        } catch (error: any) {
+            return rejectWithValue(error.response.data) as any;
+        }
+    }
+)
+const updateSkill = createAsyncThunk (
+    "skill/updateSkill",
+    async (data: ISkill, {rejectWithValue}): Promise<IApiResponse<ISkill>> => {
+        try {
+            const response: IApiResponse<ISkill> = await http.put("/skill/update-skill",data);
+            return response;
+        } catch (error: any) {
+            return rejectWithValue(error.response.data) as any;
+        }
+    }
+)
+const deleteSkill = createAsyncThunk (
+    "skill/deleteSkill",
+    async (skillId: number, {rejectWithValue}): Promise<IApiResponse<any>> => {
+        try {
+            const response: IApiResponse<any> = await http.delete(`/skill/delete-skill/${skillId}`);
+            return response;
+        } catch (error: any) {
+            return rejectWithValue(error.response.data) as any;
+        }
+    }
+)
+
+const onlineResumeThunks = {
     getOnlineResume,
     updateOnlineResume,
-    uploadAttachedResume,
-    getAllAttachedResumes,
-    deleteAttachedResume,
-    updateAttachedResume
+
+    createCertificate,
+    updateCertificate,
+    deleteCertificate,
+
+    createEducation,
+    updateEducation,
+    deleteEducation,
+
+    createExperience,
+    updateExperience,
+    deleteExperience,
+
+    createLanguage,
+    updateLanguage,
+    deleteLanguage,
+
+    createSkill,
+    updateSkill,
+    deleteSkill,
 }
-export default resumeThunks;
+export default onlineResumeThunks;

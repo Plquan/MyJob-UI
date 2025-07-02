@@ -1,6 +1,6 @@
 import type { IDistrict, IProvince } from "../province/ProvinceType"
 
-export interface ICandidateData {
+export interface ICandidate {
   id: number
   userId: number
   provinceId?: number 

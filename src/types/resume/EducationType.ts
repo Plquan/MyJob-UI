@@ -5,6 +5,6 @@ export interface IEducation {
     major: string
     trainingPlace: string
     startDate: Date 
-    completedDate?: Date 
+    completedDate: Date 
     description?: string
 }

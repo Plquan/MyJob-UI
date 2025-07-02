@@ -5,9 +5,9 @@ import { useSelector } from "react-redux";
 import type { RootState } from "../stores";
 import toast from "react-hot-toast";
 const ProtectRoute = (): JSX.Element | null=> {
-  const {isAuthenticated, hasCheckedAuth } = useSelector((state: RootState) => state.authStore);
+  const {isAuthenticated, hasCheckedAuth,currentUser } = useSelector((state: RootState) => state.authStore);
 
-  if (hasCheckedAuth && !isAuthenticated) {
+  if (hasCheckedAuth && !isAuthenticated && currentUser?.roleName != "CANDIDATE") {
     toast.error("Bạn chưa xác thực");
     return <Navigate to={ROUTE_PATH.CANDIDATE_LOGIN} />;
   }

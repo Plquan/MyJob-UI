@@ -3,15 +3,13 @@ import {
   } from "antd";
 
   import { useState } from "react";
-import OnelineProfilePage from "./online-profile";
-import { ProfilePage } from "./profile";
-  
+
   export default function CandidateProfilePage() {
     const [editMode, setEditMode] = useState(true)
   
     return (
       <>
-        {editMode ? (
+        {/* {editMode ? (
          <ProfilePage onEdit={() => setEditMode(false)} />
         ) : (          
             <div className="">
@@ -24,7 +22,7 @@ import { ProfilePage } from "./profile";
             </Button>
             <OnelineProfilePage />
           </div>
-        )}
+        )} */}
       </>
     );
   }

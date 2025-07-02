@@ -1,10 +1,12 @@
-import VerifiedUserIcon from '@mui/icons-material/VerifiedUser';
-import RocketIcon from '@mui/icons-material/Rocket';
-import GroupIcon from '@mui/icons-material/Group';
 import SakuraParticles from '../../../../components/SakuraParticles';
 import { Button } from 'antd';
 import ROUTE_PATH from '../../../../routes/routePath';
 import { useNavigate } from 'react-router-dom';
+import {
+      UsergroupAddOutlined,
+      RocketOutlined,
+      SafetyOutlined,
+} from "@ant-design/icons";
 const LeftSide = ({ mounted }: { mounted: boolean }) => {
     const navigate = useNavigate();
     const slideWelcome = mounted ? 'translate-x-0 opacity-100 transition-all duration-1000 ease-out' : '-translate-x-full opacity-0';
@@ -61,20 +63,20 @@ const LeftSide = ({ mounted }: { mounted: boolean }) => {
 
             <div className="bg-[rgba(120,120,130,0.18)] rounded-md py-6 px-6 mb-1 flex flex-col items-center transition-transform duration-600 hover:scale-108 hover:shadow-xl">
               <span className="text-3xl mb-2">
-                <GroupIcon fontSize="large" sx={{ color: 'white' }} />
+                <UsergroupAddOutlined style={{ color: 'white' }} />
               </span>
               <div className="text-2xl font-semibold text-gray-100 mb-1 text-center">Quản lý tuyển dụng hiệu quả</div>
               <div className="text-gray-200 text-base text-center opacity-90">Tiếp cận ứng viên phù hợp nhanh chóng</div>
             </div>
   
             <div className="bg-[rgba(120,120,130,0.18)] rounded-md py-6 px-6 mb-1 flex flex-col items-center transition-transform duration-600 hover:scale-108 hover:shadow-xl">
-              <span className="text-3xl mb-2"><RocketIcon fontSize="large" sx={{ color: 'white' }} /></span>
+              <span className="text-3xl mb-2"><RocketOutlined style={{ color: 'white' }} /></span>
               <div className="text-2xl font-semibold text-gray-100 mb-1 text-center">Đăng tin dễ dàng</div>
               <div className="text-gray-200 text-base text-center opacity-90">Đăng tin tuyển dụng chỉ với vài bước</div>
             </div>
   
             <div className="bg-[rgba(120,120,130,0.18)] rounded-md mb-5 py-6 px-6 flex flex-col items-center transition-transform duration-600 hover:scale-108 hover:shadow-xl">
-              <span className="text-3xl mb-2"><VerifiedUserIcon fontSize="large" sx={{ color: 'white' }} /></span>
+              <span className="text-3xl mb-2"><SafetyOutlined style={{ color: 'white' }}  /></span>
               <div className="text-2xl font-semibold text-gray-100 mb-1 text-center">Bảo mật thông tin</div>
               <div className="text-gray-200 text-base text-center opacity-90">Thông tin của bạn luôn được bảo vệ</div>
             </div>          

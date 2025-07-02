@@ -22,6 +22,7 @@ import ManageRolePage from "../pages/admin/manage-role";
 import AdminLayout from "../layouts/AdminLayout";
 import ManageUserPage from "../pages/admin/manage-user";
 import RoleManagement from "../pages/admin/manage-package";
+import OnelineResumePage from "../pages/candidate/manage-online-resume";
 const AppRoutes = () => {
     return (
        <BrowserRouter>
@@ -36,6 +37,7 @@ const AppRoutes = () => {
             <Route path={ROUTE_PATH.CANDIDATE_PROFILE} element={<CandidateProfilePage />} />
             <Route path={ROUTE_PATH.CANDIDATE_OVERVIEW} element={<OverviewDashboard />} />
             <Route path={ROUTE_PATH.CANDIDATE_MY_COMPANIES} element={<MyCompanyTab />} />
+            <Route path={ROUTE_PATH.CANDIDATE_ONLINE_RESUME} element={<OnelineResumePage />} />
             </Route>
             </Route>
     

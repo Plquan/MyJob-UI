@@ -14,6 +14,7 @@ const ROUTE_PATH = {
     CANDIDATE_OVERVIEW: '/ung-vien/tong-quan',
     CANDIDATE_PROFILE: '/ung-vien/ho-so',
     CANDIDATE_MY_COMPANIES: '/ung-vien/cong-ty-cua-toi',
+    CANDIDATE_ONLINE_RESUME: '/ung-vien/online-resume',
 
     //company
     COMPANY_DETAIL: '/company-detail',

@@ -65,9 +65,9 @@ const DefaultHeader = () => {
       onClick: () => navigate(ROUTE_PATH.CANDIDATE_LOGIN),
     },
   ];
-
+   //fixed
   return (
-    <Header className=" top-0 left-0 right-0 border border-gray-200 z-50 bg-white! shadow-sm py-3 flex items-center justify-between px-4!">
+    <Header className="fixed top-0 left-0 right-0 border border-gray-200 z-50 bg-white! shadow-sm py-3 flex items-center justify-between px-4!">
       {/* Logo bên trái */}
       <div className="flex items-center">
       <div className="flex items-center gap-3">
@@ -96,7 +96,7 @@ const DefaultHeader = () => {
           arrow
         >
           <div className="flex items-center text-[13.5px] cursor-pointer">
-            <Avatar size="small" src={currentUser.avatarId} className="mr-2!" />
+            <Avatar size="small" src={currentUser.avatar} className="mr-2!" />
             <span className="max-w-[120px] truncate">{currentUser.fullName}</span>
           </div>
         </Dropdown>
