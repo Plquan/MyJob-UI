@@ -13,7 +13,6 @@ import CandidateLayout from "../layouts/CandidateLayout";
 import ProtectRoute from "./ProtectRoute";
 import OverviewDashboard from "../pages/candidate/overview";
 import MyCompanyTab from "../pages/candidate/my-companies";
-import CandidateProfilePage from "../pages/candidate/manage-profiles";
 import CompanyLayout from "../layouts/EmployerLayout";
 import EmployerDashboard from "../pages/employer/dashboard";
 import CompanyDetail from "../pages/companies/company-detail";
@@ -23,6 +22,7 @@ import AdminLayout from "../layouts/AdminLayout";
 import ManageUserPage from "../pages/admin/manage-user";
 import RoleManagement from "../pages/admin/manage-package";
 import OnelineResumePage from "../pages/candidate/manage-online-resume";
+import CandidateProfilePage from "../pages/candidate/manage-cv";
 const AppRoutes = () => {
     return (
        <BrowserRouter>

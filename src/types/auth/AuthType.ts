@@ -28,6 +28,7 @@ export interface ICurrentUser {
     email: string;
     fullName: string;
     roleName:string,
+    allowSearch:boolean,
     isStaff:boolean,
     isActive: boolean;
 }
