@@ -13,8 +13,8 @@ import type { RootState } from "../../../../stores"
 import UserAvatar from "./components/userAvatar"
 
 export default function CandidateSidebar() {
-  const navigate = useNavigate();
-  const location = useLocation();
+  const navigate = useNavigate()
+  const location = useLocation()
   const {currentUser} = useSelector((state: RootState) => state.authStore)
 
   const menuItems: MenuProps["items"] = [
@@ -24,20 +24,21 @@ export default function CandidateSidebar() {
       label: "Tổng Quan",
     },
     {
+      key: ROUTE_PATH.CANDIDATE_ONLINE_RESUME,
+      icon: <FileTextOutlined />,
+      label: "Hồ sơ của tôi",
+    },
+    {
       key: ROUTE_PATH.CANDIDATE_PROFILE,
       icon: <FileTextOutlined />,
-      label: "Hồ Sơ Của Tôi",
+      label: "Quản lí cv",
     },
     {
       key: ROUTE_PATH.CANDIDATE_MY_COMPANIES,
       icon: <FileTextOutlined />,
       label: "Công Ty Của Tôi",
     },
-    {
-      key: ROUTE_PATH.CANDIDATE_ONLINE_RESUME,
-      icon: <FileTextOutlined />,
-      label: "Hồ sơ MyJob",
-    },
+
     {
       key: "/notifications",
       icon: <BellOutlined />,
