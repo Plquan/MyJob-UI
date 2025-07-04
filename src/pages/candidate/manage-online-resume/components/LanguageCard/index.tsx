@@ -1,13 +1,13 @@
 import { Card, Table, Tooltip, Button, Empty, Form } from "antd";
 import { EditOutlined, DeleteOutlined, StarFilled } from "@ant-design/icons";
 import LanguageModal from './components/LanguageModal';
-import { useEffect, useState } from 'react';
+import {  useState } from 'react';
 import { useDispatch, useSelector } from "react-redux";
 import { LANGUAGE_OPTIONS } from "../../../../../constant/selectOptions";
 import type { AppDispatch, RootState } from "../../../../../stores";
-import  { languageActions } from "../../../../../stores/languageStore/languageReducer";
 import type { ILanguage } from "../../../../../types/resume/LanguageType";
 import { getLabelFromValue } from "../../../../../ultils/functions/getLabelFromValue";
+import { onlineResumeActions } from "../../../../../stores/onlineResumeStore/onlineResumeReducer";
 
 
 
@@ -87,8 +87,8 @@ const LanguageCard = () => {
     const isEditing = Boolean(data.id);
 
     const action = isEditing
-      ? languageActions.updateLanguage(data)
-      : languageActions.createLanguage(data);
+      ? onlineResumeActions.updateLanguage(data)
+      : onlineResumeActions.createLanguage(data);
   
     dispatch(action)
     setIsModalOpen(false)
@@ -105,7 +105,7 @@ const LanguageCard = () => {
   }
 
   const handleDelete = (experienceId: number) => {
-    dispatch(languageActions.deleteLanguage(experienceId))
+    dispatch(onlineResumeActions.deleteLanguage(experienceId))
   }
 
   return (

@@ -1,14 +1,14 @@
 import { Button, Card, Empty, Form } from "antd";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import EducationModal from "./components/EducationModal";
 
 import { EditOutlined, DeleteOutlined, CaretDownOutlined } from "@ant-design/icons";
 import type { AppDispatch, RootState } from "../../../../../stores";
-import  { educationActions } from "../../../../../stores/educationStore/educationReducer";
 import type { IEducation } from "../../../../../types/resume/EducationType";
 import  { normalizeDate } from "../../../../../ultils/functions/normalizeDate";
+import  { onlineResumeActions } from "../../../../../stores/onlineResumeStore/onlineResumeReducer";
 
 const EducationCard = () => {
   const [form] = Form.useForm()
@@ -28,8 +28,8 @@ const EducationCard = () => {
     const isEditing = Boolean(data.id);
 
     const action = isEditing
-      ? educationActions.updateEducation(data)
-      : educationActions.createEducation(data);
+      ? onlineResumeActions.updateEducation(data)
+      : onlineResumeActions.createEducation(data);
   
     dispatch(action)
     setIsModalOpen(false)
@@ -46,7 +46,7 @@ const EducationCard = () => {
   }
 
   const handleDelete = (educationId: number) => {
-    dispatch(educationActions.deleteEducation(educationId))
+    dispatch(onlineResumeActions.deleteEducation(educationId))
   }
 
   return (

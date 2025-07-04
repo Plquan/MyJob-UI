@@ -1,13 +1,13 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { Card, Typography, Row, Col, Button, Form } from 'antd'
 import { EditOutlined } from '@ant-design/icons'
 import { useDispatch, useSelector } from 'react-redux'
 import ProfileModal from './components/ProfileModal'
 import { GENDER_OPTIONS, MARTIALSTATUS_OPTIONS } from '../../../../../constant/selectOptions'
 import type { AppDispatch, RootState } from '../../../../../stores'
-import  { candidateActions } from '../../../../../stores/candidateStore/candidateReducer'
 import type { ICandidate } from '../../../../../types/candidate/CandidateType'
 import  { getLabelFromValue } from '../../../../../ultils/functions/getLabelFromValue'
+import { onlineResumeActions } from '../../../../../stores/onlineResumeStore/onlineResumeReducer'
 
 const { Text } = Typography;
 
@@ -21,7 +21,7 @@ const ProfileCard: React.FC = () => {
   const handleEdit = () => setIsModalOpen(true);
   const handleCancel = () => setIsModalOpen(false);
   const handleFinish = (values: ICandidate) => {
-    dispatch(candidateActions.updateProfile(values))
+    dispatch(onlineResumeActions.updateProfile(values))
     setIsModalOpen(false);
   }
 

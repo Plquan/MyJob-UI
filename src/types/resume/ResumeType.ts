@@ -23,7 +23,7 @@ import type { ISkill } from "./SkillType"
     academicLevel: number
     jobType: number
     type: string
-    isActive: boolean
+    selected: boolean
     myJobFile: IMyJobFile
     createdAt:Date
     updatedAt:Date

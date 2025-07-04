@@ -1,9 +1,10 @@
-import { Menu } from "antd";
+import { Menu, Tooltip, Switch } from "antd";
 import {
   FileTextOutlined,
   UserOutlined,
   HomeOutlined,
   BellOutlined,
+  QuestionCircleOutlined,
 } from "@ant-design/icons";
 import { useNavigate, useLocation } from "react-router-dom";
 import ROUTE_PATH from "../../../../routes/routePath";
@@ -11,6 +12,7 @@ import type { MenuProps } from "antd"
 import { useSelector } from "react-redux"
 import type { RootState } from "../../../../stores"
 import UserAvatar from "./components/userAvatar"
+import AllowSearchToggle from "./components/AllowSearchToggle";
 
 export default function CandidateSidebar() {
   const navigate = useNavigate()
@@ -57,7 +59,9 @@ export default function CandidateSidebar() {
         <UserAvatar/>
         <h3 className="font-medium text-center">{currentUser?.fullName}</h3>
       <p className="text-xs text-gray-500">{currentUser?.email}</p>
-        <p className="text-xs text-gray-500">0369683675</p>
+      <div className="bg-gray-50 rounded-lg">
+          <AllowSearchToggle />
+        </div>
       </div>
 
       <hr className="border-gray-200 mb-4" />

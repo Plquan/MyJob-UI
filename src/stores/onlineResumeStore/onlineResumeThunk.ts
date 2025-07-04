@@ -7,6 +7,7 @@ import type { IEducation } from "../../types/resume/EducationType";
 import type { IExperience } from "../../types/resume/ExperienceType";
 import type { ILanguage } from "../../types/resume/LanguageType";
 import type { ISkill } from "../../types/resume/SkillType";
+import type { ICandidate } from "../../types/candidate/CandidateType";
 
 
 const getOnlineResume = createAsyncThunk (
@@ -26,6 +27,31 @@ const updateOnlineResume = createAsyncThunk (
     async (data: IResume, {rejectWithValue}): Promise<IApiResponse<IResume>> => {
         try {
             const response: IApiResponse<IResume> = await http.put("/resume/update-online-resume",data);
+            return response;
+        } catch (error: any) {
+            return rejectWithValue(error.response.data) as any;
+        }
+    }
+)
+
+//candidate
+const updateProfile = createAsyncThunk (
+    "candidate/updateProfile",
+    async (data: ICandidate, {rejectWithValue}): Promise<IApiResponse<ICandidate>> => {
+        try {
+            const response: IApiResponse<ICandidate> = await http.put("/candidate/update-profile",data);
+            return response;
+        } catch (error: any) {
+            return rejectWithValue(error.response.data) as any;
+        }
+    }
+)
+
+const getProfile = createAsyncThunk (
+    "candidate/getProfile",
+    async (_, {rejectWithValue}): Promise<IApiResponse<ICandidate>> => {
+        try {
+            const response: IApiResponse<ICandidate> = await http.get("/candidate/get-profile");
             return response;
         } catch (error: any) {
             return rejectWithValue(error.response.data) as any;
@@ -215,6 +241,9 @@ const deleteSkill = createAsyncThunk (
 const onlineResumeThunks = {
     getOnlineResume,
     updateOnlineResume,
+
+    updateProfile,
+    getProfile,
 
     createCertificate,
     updateCertificate,

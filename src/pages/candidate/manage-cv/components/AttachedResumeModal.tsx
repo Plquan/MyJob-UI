@@ -1,10 +1,14 @@
 import { Modal, Form, Input, Select, Button, Upload } from "antd";
 import { useSelector } from "react-redux";
-import type { RootState } from "../../../../../../../stores";
-import { ACADEMICLEVEL_OPTIONS, EXPERIENCE_OPTIONS, JOBTYPE_OPTIONS, POSITION_OPTIONS, WORKPLACE_OPTIONS } from "../../../../../../../constant/selectOptions";
-import type { IResume } from "../../../../../../../types/resume/ResumeType";
 import { UploadOutlined } from "@ant-design/icons";
 import { useEffect } from "react";
+import type { RootState } from "../../../../stores";
+import type { IResume } from "../../../../types/resume/ResumeType";
+import { POSITION_OPTIONS, 
+  ACADEMICLEVEL_OPTIONS, 
+  EXPERIENCE_OPTIONS, 
+  WORKPLACE_OPTIONS, 
+  JOBTYPE_OPTIONS } from "../../../../constant/selectOptions"
 const { Option } = Select;
 
 interface AttachedResumeModalProps {

@@ -1,12 +1,12 @@
 import { Button, Card, Empty, Form } from "antd"
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import CertificateModal from "./components/CertificateModal"
 import { EditOutlined, DeleteOutlined } from "@ant-design/icons"
 import { useDispatch, useSelector } from "react-redux"
 import type { AppDispatch, RootState } from "../../../../../stores"
-import  { certificateActions } from "../../../../../stores/certificateStore/certificateReducer"
 import type { ICertificate } from "../../../../../types/resume/CertificateType"
 import  { normalizeDate } from "../../../../../ultils/functions/normalizeDate"
+import { onlineResumeActions } from "../../../../../stores/onlineResumeStore/onlineResumeReducer"
 
 const CertificateCard = () => {
   const dispatch = useDispatch<AppDispatch>()
@@ -24,8 +24,8 @@ const CertificateCard = () => {
     const isEditing = Boolean(data.id);
 
     const action = isEditing
-      ? certificateActions.updateCertificate(data)
-      : certificateActions.createCertificate(data)
+      ? onlineResumeActions.updateCertificate(data)
+      : onlineResumeActions.createCertificate(data)
   
     dispatch(action)
     setIsModalOpen(false)
@@ -44,7 +44,7 @@ const CertificateCard = () => {
   }
 
   const handleDelete = (id: number) => {
-    dispatch(certificateActions.deleteCertificate(id))
+    dispatch(onlineResumeActions.deleteCertificate(id))
   }
 
   return (

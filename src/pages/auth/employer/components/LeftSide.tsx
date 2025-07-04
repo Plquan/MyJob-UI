@@ -8,7 +8,7 @@ import {
       SafetyOutlined,
 } from "@ant-design/icons";
 const LeftSide = ({ mounted }: { mounted: boolean }) => {
-    const navigate = useNavigate();
+    const navigate = useNavigate()
     const slideWelcome = mounted ? 'translate-x-0 opacity-100 transition-all duration-1000 ease-out' : '-translate-x-full opacity-0';
     
     return (

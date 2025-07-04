@@ -51,10 +51,23 @@ const deleteAttachedResume = createAsyncThunk (
     }
 )
 
+const setSelectedResume = createAsyncThunk (
+    "resume/setSelectedResume",
+    async (resumeId: number, {rejectWithValue}): Promise<IApiResponse<any>> => {
+        try {
+            const response: IApiResponse<any> = await http.put(`/resume/set-selected-resume/${resumeId}`);
+            return response;
+        } catch (error: any) {
+            return rejectWithValue(error.response.data) as any;
+        }
+    }
+)
+
 const attachedResumeThunks = {
     uploadAttachedResume,
     getAllAttachedResumes,
     deleteAttachedResume,
-    updateAttachedResume
+    updateAttachedResume,
+    setSelectedResume
 }
 export default attachedResumeThunks

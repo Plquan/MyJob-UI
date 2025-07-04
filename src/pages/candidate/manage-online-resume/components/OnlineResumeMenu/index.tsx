@@ -17,20 +17,6 @@ const menuItems = [
 ];
 
 const OnlineResumeMenu = () => {
-  const completion = 40;
-
-  const handleClick = (id: string) => {
-    const element = document.getElementById(id);
-    if (element) {
-      const elementRect = element.getBoundingClientRect();
-      const absoluteElementTop = elementRect.top + window.pageYOffset;
-      const middle = absoluteElementTop - (window.innerHeight / 2) + (elementRect.height / 2);
-      window.scrollTo({
-        top: middle,
-        behavior: "smooth"
-      })
-    }
-  }
   const { 
     educations,
     resume,
@@ -51,7 +37,31 @@ const OnlineResumeMenu = () => {
     languages,
     skills
   }
-    
+
+  // Tính completion
+  let completion = 0;
+
+  if(candidate?.phone) completion += 25
+  if(resume?.title) completion += 25
+  if(experiences.length > 0) completion += 10
+  if(educations.length > 0) completion += 10
+  if(certificates.length > 0) completion += 10
+  if(languages.length > 0) completion += 10
+  if(skills.length > 0) completion += 10
+
+  const handleClick = (id: string) => {
+    const element = document.getElementById(id);
+    if (element) {
+      const elementRect = element.getBoundingClientRect();
+      const absoluteElementTop = elementRect.top + window.pageYOffset;
+      const middle = absoluteElementTop - (window.innerHeight / 2) + (elementRect.height / 2);
+      window.scrollTo({
+        top: middle,
+        behavior: "smooth"
+      })
+    }
+  }
+
   return (
     <Card title={"Hồ sơ của bạn"} className="w-72" 
      extra = {     
@@ -61,7 +71,6 @@ const OnlineResumeMenu = () => {
       >
         {({ loading }) => (
           <Button
-          //  icon={<DownloadOutlined />}
             loading={loading}
           >
             Tải xuống

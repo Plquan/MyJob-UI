@@ -4,17 +4,18 @@ import type { ICurrentUser } from "../../types/auth/AuthType";
 import toast from "react-hot-toast";
 
 interface AuthState {
-    currentUser: ICurrentUser | null;
-    isAuthenticated: boolean;
-    loading: boolean;
-    error: string | null;
-    hasCheckedAuth: boolean;
+    currentUser?: ICurrentUser
+    isAuthenticated: boolean
+    loading: boolean
+    error: string | null
+    hasCheckedAuth: boolean
+    isSubmitting:boolean
 }
 
 const initialState: AuthState = {
-    currentUser: null,
     isAuthenticated: false,
     loading: false,
+    isSubmitting:false,
     error: null,
     hasCheckedAuth: false,
 }
@@ -52,6 +53,21 @@ export const authSlice = createSlice({
         });
         builder.addCase(authThunks.updateAvatar.rejected, (state, action) => {
             state.loading = false;
+            state.error = action.error as string;
+        });
+
+        //allow search
+        builder.addCase(authThunks.allowSearch.pending, (state) => {
+            state.isSubmitting = true
+        });
+        builder.addCase(authThunks.allowSearch.fulfilled, (state, action) => {
+            if (state.currentUser) {
+                state.currentUser.allowSearch = action.payload.data
+            }
+            state.isSubmitting = false
+        })
+        builder.addCase(authThunks.allowSearch.rejected, (state, action) => {
+            state.isSubmitting = false
             state.error = action.error as string;
         });
     }

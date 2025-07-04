@@ -1,5 +1,5 @@
 import type { IResume, IUserInfo } from "../../types/resume/ResumeType";
-import onlineResumeThunks from "./resumeThunk";
+import onlineResumeThunks from "./onlineResumeThunk";
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 import type { ICertificate } from "../../types/resume/CertificateType";
 import type { IEducation } from "../../types/resume/EducationType";
@@ -120,6 +120,31 @@ export const onlineResumeSlice = createSlice({
         builder.addCase(onlineResumeThunks.updateOnlineResume.rejected, (state, action:PayloadAction<any>) => {
             state.loading.resume = false;
             message.error(action.payload.errorMessage)
+        })
+
+         //update profile
+         builder.addCase(onlineResumeThunks.updateProfile.pending, (state) => {
+            state.loading.candidate = true;
+        })
+        builder.addCase(onlineResumeThunks.updateProfile.fulfilled, (state, action) => {
+            state.candidate = action.payload.data
+            state.loading.candidate = false;
+            message.success("Cập nhật thành công")
+        })
+        builder.addCase(onlineResumeThunks.updateProfile.rejected, (state, action) => {
+            state.loading.candidate = false;
+        })
+
+        //get profile
+        builder.addCase(onlineResumeThunks.getProfile.pending, (state) => {
+            state.loading.candidate = true;
+        })
+        builder.addCase(onlineResumeThunks.getProfile.fulfilled, (state, action) => {
+            state.candidate = action.payload.data
+            state.loading.candidate = false;
+        })
+        builder.addCase(onlineResumeThunks.getProfile.rejected, (state, action) => {
+            state.loading.candidate = false;
         })
 
          //create certificate

@@ -1,17 +1,12 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { roleSlice } from "./roleStore/roleReducer";
-import { skillSlice } from "./skillStore/skillReducer";
 import { userSlice } from "./userStore/userReducer";
-import { candidateSlice } from "./candidateStore/candidateReducer";
 import { careerSlice } from "./careerStore/careerReducer";
-import { certificateSlice } from "./certificateStore/certificateReducer";
-import { educationSlice } from "./educationStore/educationReducer";
-import { experienceSlice } from "./experienceStore/experienceReducer";
-import { languageSlice } from "./languageStore/languageReducer";
 import { packageSlice } from "./packageStore/packageReducer";
 import { provinceSlice } from "./provinceStore/provinceReducer";
 import { authSlice } from "./authStore/authReducer";
-import { onlineResumeSlice } from "./resumeStore/resumeReducer";
+import { onlineResumeSlice } from "./onlineResumeStore/onlineResumeReducer";
+import { attachedResumeSlice } from "./attachedResumeStore/attachedResumeReducer";
 
 export const store = configureStore({
   reducer: {
@@ -19,15 +14,10 @@ export const store = configureStore({
     authStore: authSlice.reducer,
     roleStore: roleSlice.reducer,
     userStore: userSlice.reducer,
-    candidateStore: candidateSlice.reducer,
     careerStore: careerSlice.reducer,
     onlineResumeStore: onlineResumeSlice.reducer,
-    certificateStore: certificateSlice.reducer,
-    experienceStore: experienceSlice.reducer,
-    educationStore: educationSlice.reducer,
-    languageStore: languageSlice.reducer,
-    skillStore: skillSlice.reducer,
-    packageStore: packageSlice.reducer, 
+    packageStore: packageSlice.reducer,
+    attachedResumeStore: attachedResumeSlice.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

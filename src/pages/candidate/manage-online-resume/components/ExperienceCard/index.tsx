@@ -1,12 +1,12 @@
 import { Button, Card, Empty, Form } from "antd";
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import ExperienceModal from "./components/ExperienceModal";
 import { EditOutlined, DeleteOutlined, CaretDownOutlined } from "@ant-design/icons";
 import { useDispatch, useSelector } from "react-redux";
 import type { AppDispatch, RootState } from "../../../../../stores";
-import  { experienceActions } from "../../../../../stores/experienceStore/experienceReducer";
 import type { IExperience } from "../../../../../types/resume/ExperienceType";
 import  { normalizeDate } from "../../../../../ultils/functions/normalizeDate";
+import { onlineResumeActions } from "../../../../../stores/onlineResumeStore/onlineResumeReducer";
 
 
 const ExperienceCard = () => {
@@ -28,8 +28,8 @@ const ExperienceCard = () => {
     const isEditing = Boolean(data.id);
 
     const action = isEditing
-      ? experienceActions.updateExperience(data)
-      : experienceActions.createExperience(data);
+      ? onlineResumeActions.updateExperience(data)
+      : onlineResumeActions.createExperience(data);
   
     dispatch(action)
     setIsModalOpen(false)
@@ -46,7 +46,7 @@ const ExperienceCard = () => {
   }
 
   const handleDelete = (experienceId: number) => {
-    dispatch(experienceActions.deleteExperience(experienceId))
+    dispatch(onlineResumeActions.deleteExperience(experienceId))
   }
   return (
      <>

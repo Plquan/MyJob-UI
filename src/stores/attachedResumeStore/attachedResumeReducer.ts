@@ -81,6 +81,24 @@ export const attachedResumeSlice = createSlice({
             toast.error(action.payload.errorMessage)
         })
 
+        //set selected Resume 
+        builder.addCase(attachedResumeThunks.setSelectedResume.pending, (state) => {
+            state.isSubmitting = true;
+        })
+        builder.addCase(attachedResumeThunks.setSelectedResume.fulfilled, (state, action) => {
+            state.attachedResumes = state.attachedResumes?.map(
+                (resume) =>
+                    resume.id === action.meta.arg
+                        ? { ...resume, selected: true }
+                        : { ...resume, selected: false }
+            );
+            state.isSubmitting = false;
+        })
+        builder.addCase(attachedResumeThunks.setSelectedResume.rejected, (state, action:PayloadAction<any>) => {
+            state.isSubmitting = false;
+            toast.error(action.payload.errorMessage)
+        })
+
     }
 });
 

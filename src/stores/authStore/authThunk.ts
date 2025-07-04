@@ -27,10 +27,22 @@ const updateAvatar = createAsyncThunk (
     }
 )
 
+const allowSearch = createAsyncThunk (
+    "candidate/allowSearch",
+    async (status: boolean, {rejectWithValue}): Promise<IApiResponse<any>> => {
+        try {
+            const response: IApiResponse<any> = await http.put("/candidate/allow-search",{ status });
+            return response;
+        } catch (error: any) {
+            return rejectWithValue(error.response.data) as any;
+        }
+    }
+)
 
 
 const authThunks = {
     getCurrentUser,
     updateAvatar,
+    allowSearch
 }
 export default authThunks;

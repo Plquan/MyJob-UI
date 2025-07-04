@@ -9,7 +9,7 @@ import GeneralInfoCard from "./components/GeneralInfoCard";
 import { useDispatch } from "react-redux";
 import type { AppDispatch } from "../../../stores";
 import { useEffect } from "react";
-import { onlineResumeActions } from "../../../stores/resumeStore/resumeReducer";
+import { onlineResumeActions } from "../../../stores/onlineResumeStore/onlineResumeReducer";
 
 const OnelineResumePage = () => {
   const dispatch = useDispatch<AppDispatch>()

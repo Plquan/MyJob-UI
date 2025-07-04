@@ -1,11 +1,11 @@
 import { Card, Table, Tooltip, Button, Empty, Form } from "antd";
 import { EditOutlined, DeleteOutlined, StarFilled } from "@ant-design/icons";
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useDispatch, useSelector } from "react-redux";
 import type { AppDispatch, RootState } from "../../../../../stores";
-import  { skillActions } from "../../../../../stores/skillStore/skillReducer";
 import type { ISkill } from "../../../../../types/resume/SkillType";
 import SkillModal from "./components/SkillModal";
+import { onlineResumeActions } from "../../../../../stores/onlineResumeStore/onlineResumeReducer";
 
 
 const columns = (
@@ -84,8 +84,8 @@ const SkillCard = () => {
     const isEditing = Boolean(data.id);
 
     const action = isEditing
-      ? skillActions.updateSkill(data)
-      : skillActions.createSkill(data);
+      ? onlineResumeActions.updateSkill(data)
+      : onlineResumeActions.createSkill(data);
   
     dispatch(action)
     setIsModalOpen(false)
@@ -102,7 +102,7 @@ const SkillCard = () => {
   }
 
   const handleDelete = (skillId: number) => {
-    dispatch(skillActions.deleteSkill(skillId))
+    dispatch(onlineResumeActions.deleteSkill(skillId))
   }
 
   return (

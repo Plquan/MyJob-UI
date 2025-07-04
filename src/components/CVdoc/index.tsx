@@ -249,235 +249,244 @@ const renderDot = (level: number) => {
 };
 
 
-const CVPdfDocument: React.FC<{ resume: IOnlineResume }> = ({ resume }) => (
-  <Document>
-    <Page size="A4" style={styles.page}>
-      {/* Header */}
-      <View style={styles.header}>
-        <Image src={resume.userInfo?.avatar?.url || DEFAULT_AVATAR} style={styles.avatar} />
-        <View style={styles.headerInfo}>
-          <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
-            <Text style={styles.name}>{resume.userInfo?.fullName}</Text>
-            <Text style={styles.emailHeader}>{resume.userInfo?.email}</Text>
-          </View>
-          <Text style={styles.position}>{resume.resume?.title}</Text>
-          <Text style={styles.updated}>Thời gian cập nhật: {formatDate(String(resume.resume?.updatedAt))}</Text>
-        </View>
-      </View>
+const CVPdfDocument: React.FC<{ resume: IOnlineResume }> = ({ resume }) => {
+  // Đảm bảo các trường là mảng, tránh lỗi undefined
+  const experiences = resume.experiences || [];
+  const educations = resume.educations || [];
+  const certificates = resume.certificates || [];
+  const languages = resume.languages || [];
+  const skills = resume.skills || [];
 
-      {/* Thông tin cá nhân */}
-      <View style={styles.section}>
-        <View style={styles.sectionHeader}>
-          <Text style={styles.sectionTitle}>Thông tin cá nhân</Text>
-        </View>
-        <View style={styles.sectionContent}>
-          <View style={styles.infoGrid}>
-            <View style={styles.infoCol}>
-              <Text style={styles.infoLabel}>Số điện thoại</Text>
-              <Text style={styles.infoValue}>{resume.candidate?.phone}</Text>
+  return (
+    <Document>
+      <Page size="A4" style={styles.page}>
+        {/* Header */}
+        <View style={styles.header}>
+          <Image src={resume.userInfo?.avatar?.url || DEFAULT_AVATAR} style={styles.avatar} />
+          <View style={styles.headerInfo}>
+            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
+              <Text style={styles.name}>{resume.userInfo?.fullName}</Text>
+              <Text style={styles.emailHeader}>{resume.userInfo?.email}</Text>
             </View>
-            <View style={styles.infoCol}>
-              <Text style={styles.infoLabel}>Giới tính</Text>
-              <Text style={styles.infoValue}>{getLabelFromValue(GENDER_OPTIONS, resume.candidate?.gender)}</Text>
-            </View>
-            <View style={styles.infoCol}>
-              <Text style={styles.infoLabel}>Ngày sinh</Text>
-              <Text style={styles.infoValue}>{formatDate(String(resume.candidate?.birthday)) }</Text>
-            </View>
-            <View style={styles.infoCol}>
-              <Text style={styles.infoLabel}>Tình trạng hôn nhân</Text>
-              <Text style={styles.infoValue}>{getLabelFromValue(MARTIALSTATUS_OPTIONS, resume.candidate?.maritalStatus)}</Text>
-            </View>
-            <View style={styles.infoCol}>
-              <Text style={styles.infoLabel}>Tỉnh/Thành phố</Text>
-              <Text style={styles.infoValue}>{resume.candidate?.province?.name}</Text>
-            </View>
-            <View style={styles.infoCol}>
-              <Text style={styles.infoLabel}>Quận/Huyện</Text>
-              <Text style={styles.infoValue}>{resume.candidate?.district?.name }</Text>
-            </View>
-            <View style={styles.infoCol}>
-              <Text style={styles.infoLabel}>Địa chỉ</Text>
-              <Text style={styles.infoValue}>{resume.candidate?.address}</Text>
-            </View>
+            <Text style={styles.position}>{resume.resume?.title}</Text>
+            <Text style={styles.updated}>Thời gian cập nhật: {formatDate(String(resume.resume?.updatedAt))}</Text>
           </View>
         </View>
-      </View>
 
-      {/* Thông tin chung */}
-      <View style={styles.section}>
-        <View style={styles.sectionHeader}>
-          <Text style={styles.sectionTitle}>Thông tin chung</Text>
-        </View>
-        <View style={styles.sectionContent}>
-          <View style={styles.infoGrid}>
-            <View style={styles.infoCol}>
-              <Text style={styles.infoLabel}>Vị trí mong muốn</Text>
-              <Text style={styles.infoValue}>{resume.resume?.title}</Text>
-            </View>
-            <View style={styles.infoCol}>
-              <Text style={styles.infoLabel}>Cấp bậc mong muốn</Text>
-              <Text style={styles.infoValue}>{getLabelFromValue(POSITION_OPTIONS, resume.resume?.position)}</Text>
-            </View>
-            <View style={styles.infoCol}>
-              <Text style={styles.infoLabel}>Trình độ học vấn</Text>
-              <Text style={styles.infoValue}>{getLabelFromValue(ACADEMICLEVEL_OPTIONS, resume.resume?.academicLevel)}</Text>
-            </View>
-            <View style={styles.infoCol}>
-              <Text style={styles.infoLabel}>Kinh nghiệm</Text>
-              <Text style={styles.infoValue}>{getLabelFromValue(EXPERIENCE_OPTIONS, resume.resume?.experience)}</Text>
-            </View>
-            <View style={styles.infoCol}>
-              <Text style={styles.infoLabel}>Nghề nghiệp</Text>
-              <Text style={styles.infoValue}>{resume.resume?.careerId}</Text>
-            </View>
-            <View style={styles.infoCol}>
-              <Text style={styles.infoLabel}>Địa điểm làm việc</Text>
-              <Text style={styles.infoValue}>{getLabelFromValue(WORKPLACE_OPTIONS, resume.resume?.typeOfWorkPlace)}</Text>
-            </View>
-            <View style={styles.infoCol}>
-              <Text style={styles.infoLabel}>Nơi làm việc</Text>
-              <Text style={styles.infoValue}>Làm việc tại văn phòng</Text>
-            </View>
-            <View style={styles.infoCol}>
-              <Text style={styles.infoLabel}>Hình thức làm việc</Text>
-              <Text style={styles.infoValue}>{getLabelFromValue(JOBTYPE_OPTIONS, resume.resume?.jobType)}</Text>
-            </View>
-            <View style={styles.infoCol}>
-              <Text style={styles.infoLabel}>Mức lương mong muốn</Text>
-              <Text style={styles.infoValue}>
-                {resume.resume?.salaryMin && resume.resume?.salaryMax 
-                  ? `${resume.resume.salaryMin} - ${resume.resume.salaryMax}` 
-                  : ''
-                }
-              </Text>
-            </View>
+        {/* Thông tin cá nhân */}
+        <View style={styles.section}>
+          <View style={styles.sectionHeader}>
+            <Text style={styles.sectionTitle}>Thông tin cá nhân</Text>
           </View>
-        </View>
-      </View>
-
-      {/* Mục tiêu nghề nghiệp */}
-      <View style={styles.section}>
-        <View style={styles.sectionHeader}>
-          <Text style={styles.sectionTitle}>Mục tiêu nghề nghiệp</Text>
-        </View>
-        <View style={styles.sectionContent}>
-          <Text style={styles.goalText}>
-            {resume.resume?.description || 'Đây là mục tiêu nghề nghiệp của tôi. Mục tiêu nghề nghiệp rõ ràng!'}
-          </Text>
-        </View>
-      </View>
-
-      {/* Section header cho Kinh nghiệm làm việc */}
-      {resume.experiences.length > 0 && (
-        <>
-          <View style={styles.section} wrap={false}>
-            <View style={styles.sectionHeader}>
-              <Text style={styles.sectionTitle}>Kinh nghiệm làm việc</Text>
-            </View>
-          </View>
-          {resume.experiences.map((exp, i) => (
-            <View key={i} style={styles.itemBlock}>
-              <View style={styles.itemContent}>
-                <Text><Text style={styles.infoLabel}>Vị trí: </Text><Text style={styles.experienceTitle}>{exp.jobName}</Text></Text>
-                <Text><Text style={styles.infoLabel}>Công ty: </Text><Text style={styles.experienceCompany}>{exp.companyName}</Text></Text>
-                <Text><Text style={styles.infoLabel}>Thời gian: </Text><Text style={styles.experienceDate}>{formatDate(exp.startDate)} - {formatDate(exp.endDate)}</Text></Text>
-                <Text><Text style={styles.infoLabel}>Mô tả: </Text><Text style={styles.experienceDesc}>{exp.description}</Text></Text>
+          <View style={styles.sectionContent}>
+            <View style={styles.infoGrid}>
+              <View style={styles.infoCol}>
+                <Text style={styles.infoLabel}>Số điện thoại</Text>
+                <Text style={styles.infoValue}>{resume.candidate?.phone}</Text>
+              </View>
+              <View style={styles.infoCol}>
+                <Text style={styles.infoLabel}>Giới tính</Text>
+                <Text style={styles.infoValue}>{getLabelFromValue(GENDER_OPTIONS, resume.candidate?.gender)}</Text>
+              </View>
+              <View style={styles.infoCol}>
+                <Text style={styles.infoLabel}>Ngày sinh</Text>
+                <Text style={styles.infoValue}>{formatDate(String(resume.candidate?.birthday)) }</Text>
+              </View>
+              <View style={styles.infoCol}>
+                <Text style={styles.infoLabel}>Tình trạng hôn nhân</Text>
+                <Text style={styles.infoValue}>{getLabelFromValue(MARTIALSTATUS_OPTIONS, resume.candidate?.maritalStatus)}</Text>
+              </View>
+              <View style={styles.infoCol}>
+                <Text style={styles.infoLabel}>Tỉnh/Thành phố</Text>
+                <Text style={styles.infoValue}>{resume.candidate?.province?.name}</Text>
+              </View>
+              <View style={styles.infoCol}>
+                <Text style={styles.infoLabel}>Quận/Huyện</Text>
+                <Text style={styles.infoValue}>{resume.candidate?.district?.name }</Text>
+              </View>
+              <View style={styles.infoCol}>
+                <Text style={styles.infoLabel}>Địa chỉ</Text>
+                <Text style={styles.infoValue}>{resume.candidate?.address}</Text>
               </View>
             </View>
-          ))}
-        </>
-      )}
-
-      {/* Section header cho Học vấn */}
-      {resume.educations.length > 0 && (
-        <>
-          <View style={styles.section} wrap={false}>
-            <View style={styles.sectionHeader}>
-              <Text style={styles.sectionTitle}>Học vấn</Text>
-            </View>
           </View>
-          {resume.educations.map((edu, i) => (
-            <View key={i} style={styles.itemBlock}>
-              <View style={styles.itemContent}>
-                <Text><Text style={styles.infoLabel}>Bằng cấp: </Text><Text style={styles.experienceTitle}>{edu.degreeName}</Text></Text>
-                <Text><Text style={styles.infoLabel}>Nơi đào tạo: </Text><Text style={styles.experienceCompany}>{edu.trainingPlace}</Text></Text>
-                <Text><Text style={styles.infoLabel}>Thời gian: </Text><Text style={styles.experienceDate}>{formatDate(edu.startDate)} - {formatDate(edu?.completedDate)}</Text></Text>
-                <Text><Text style={styles.infoLabel}>Mô tả: </Text><Text style={styles.experienceDesc}>{edu.description}</Text></Text>
+        </View>
+
+        {/* Thông tin chung */}
+        <View style={styles.section}>
+          <View style={styles.sectionHeader}>
+            <Text style={styles.sectionTitle}>Thông tin chung</Text>
+          </View>
+          <View style={styles.sectionContent}>
+            <View style={styles.infoGrid}>
+              <View style={styles.infoCol}>
+                <Text style={styles.infoLabel}>Vị trí mong muốn</Text>
+                <Text style={styles.infoValue}>{resume.resume?.title}</Text>
+              </View>
+              <View style={styles.infoCol}>
+                <Text style={styles.infoLabel}>Cấp bậc mong muốn</Text>
+                <Text style={styles.infoValue}>{getLabelFromValue(POSITION_OPTIONS, resume.resume?.position)}</Text>
+              </View>
+              <View style={styles.infoCol}>
+                <Text style={styles.infoLabel}>Trình độ học vấn</Text>
+                <Text style={styles.infoValue}>{getLabelFromValue(ACADEMICLEVEL_OPTIONS, resume.resume?.academicLevel)}</Text>
+              </View>
+              <View style={styles.infoCol}>
+                <Text style={styles.infoLabel}>Kinh nghiệm</Text>
+                <Text style={styles.infoValue}>{getLabelFromValue(EXPERIENCE_OPTIONS, resume.resume?.experience)}</Text>
+              </View>
+              <View style={styles.infoCol}>
+                <Text style={styles.infoLabel}>Nghề nghiệp</Text>
+                <Text style={styles.infoValue}>{resume.resume?.careerId}</Text>
+              </View>
+              <View style={styles.infoCol}>
+                <Text style={styles.infoLabel}>Địa điểm làm việc</Text>
+                <Text style={styles.infoValue}>{getLabelFromValue(WORKPLACE_OPTIONS, resume.resume?.typeOfWorkPlace)}</Text>
+              </View>
+              <View style={styles.infoCol}>
+                <Text style={styles.infoLabel}>Nơi làm việc</Text>
+                <Text style={styles.infoValue}>Làm việc tại văn phòng</Text>
+              </View>
+              <View style={styles.infoCol}>
+                <Text style={styles.infoLabel}>Hình thức làm việc</Text>
+                <Text style={styles.infoValue}>{getLabelFromValue(JOBTYPE_OPTIONS, resume.resume?.jobType)}</Text>
+              </View>
+              <View style={styles.infoCol}>
+                <Text style={styles.infoLabel}>Mức lương mong muốn</Text>
+                <Text style={styles.infoValue}>
+                  {resume.resume?.salaryMin && resume.resume?.salaryMax 
+                    ? `${resume.resume.salaryMin} - ${resume.resume.salaryMax}` 
+                    : ''
+                  }
+                </Text>
               </View>
             </View>
-          ))}
-        </>
-      )}
-
-      {/* Section header cho Chứng chỉ */}
-      {resume.certificates.length > 0 && (
-        <>
-          <View style={styles.section} wrap={false}>
-            <View style={styles.sectionHeader}>
-              <Text style={styles.sectionTitle}>Chứng chỉ</Text>
-            </View>
           </View>
-          {resume.certificates.map((cert, i) => (
-            <View key={i} style={styles.itemBlock}>
-              <View style={styles.itemContent}>
-                <Text><Text style={styles.infoLabel}>Tên chứng chỉ: </Text><Text style={styles.experienceTitle}>{cert.name}</Text></Text>
-                <Text><Text style={styles.infoLabel}>Nơi cấp: </Text><Text style={styles.experienceCompany}>{cert.trainingPlace}</Text></Text>
-                <Text><Text style={styles.infoLabel}>Thời gian: </Text><Text style={styles.experienceDate}>{formatDate(cert.startDate)} - {formatDate(cert.expirationDate)}</Text></Text>
+        </View>
+
+        {/* Mục tiêu nghề nghiệp */}
+        <View style={styles.section}>
+          <View style={styles.sectionHeader}>
+            <Text style={styles.sectionTitle}>Mục tiêu nghề nghiệp</Text>
+          </View>
+          <View style={styles.sectionContent}>
+            <Text style={styles.goalText}>
+              {resume.resume?.description || 'Đây là mục tiêu nghề nghiệp của tôi. Mục tiêu nghề nghiệp rõ ràng!'}
+            </Text>
+          </View>
+        </View>
+
+        {/* Section header cho Kinh nghiệm làm việc */}
+        {experiences.length > 0 && (
+          <>
+            <View style={styles.section} wrap={false}>
+              <View style={styles.sectionHeader}>
+                <Text style={styles.sectionTitle}>Kinh nghiệm làm việc</Text>
               </View>
             </View>
-          ))}
-        </>
-      )}
-
-      {/* Section header cho Ngoại ngữ */}
-      {resume.languages.length > 0 && (
-        <>
-          <View style={styles.section} wrap={false}>
-            <View style={styles.sectionHeader}>
-              <Text style={styles.sectionTitle}>Ngoại ngữ</Text>
-            </View>
-          </View>
-          {resume.languages.map((lang, i) => (
-            <View key={i} style={styles.itemBlock}>
-              <View style={styles.itemContent}>
-                <Text><Text style={styles.infoLabel}>Ngôn ngữ: </Text><Text style={styles.experienceTitle}>{getLabelFromValue(LANGUAGE_OPTIONS, lang.language)}</Text></Text>
-                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                  <Text style={styles.infoLabel}>Trình độ: </Text>
-                  {renderDot(lang.level)}
+            {experiences.map((exp, i) => (
+              <View key={i} style={styles.itemBlock}>
+                <View style={styles.itemContent}>
+                  <Text><Text style={styles.infoLabel}>Vị trí: </Text><Text style={styles.experienceTitle}>{exp.jobName}</Text></Text>
+                  <Text><Text style={styles.infoLabel}>Công ty: </Text><Text style={styles.experienceCompany}>{exp.companyName}</Text></Text>
+                  <Text><Text style={styles.infoLabel}>Thời gian: </Text><Text style={styles.experienceDate}>{formatDate(exp.startDate)} - {formatDate(exp.endDate)}</Text></Text>
+                  <Text><Text style={styles.infoLabel}>Mô tả: </Text><Text style={styles.experienceDesc}>{exp.description}</Text></Text>
                 </View>
               </View>
-            </View>
-          ))}
-        </>
-      )}
+            ))}
+          </>
+        )}
 
-      {/* Section header cho Kỹ năng */}
-      {resume.skills.length > 0 && (
-        <>
-          <View style={styles.section} wrap={false}>
-            <View style={styles.sectionHeader}>
-              <Text style={styles.sectionTitle}>Kỹ năng</Text>
-            </View>
-          </View>
-          {resume.skills.map((skill, i) => (
-            <View key={i} style={styles.itemBlock}>
-              <View style={styles.itemContent}>
-                <Text><Text style={styles.infoLabel}>Kỹ năng: </Text><Text style={styles.experienceTitle}>{skill.name}</Text></Text>
-                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                  <Text style={styles.infoLabel}>Trình độ: </Text>
-                  {renderDot(skill.level)}
-                </View>
+        {/* Section header cho Học vấn */}
+        {educations.length > 0 && (
+          <>
+            <View style={styles.section} wrap={false}>
+              <View style={styles.sectionHeader}>
+                <Text style={styles.sectionTitle}>Học vấn</Text>
               </View>
             </View>
-          ))}
-        </>
-      )}
-      <Text style={styles.pageFooter} fixed>
-        MyJob.Cv
-      </Text>
-    </Page>
-  </Document>
-);
+            {educations.map((edu, i) => (
+              <View key={i} style={styles.itemBlock}>
+                <View style={styles.itemContent}>
+                  <Text><Text style={styles.infoLabel}>Bằng cấp: </Text><Text style={styles.experienceTitle}>{edu.degreeName}</Text></Text>
+                  <Text><Text style={styles.infoLabel}>Nơi đào tạo: </Text><Text style={styles.experienceCompany}>{edu.trainingPlace}</Text></Text>
+                  <Text><Text style={styles.infoLabel}>Thời gian: </Text><Text style={styles.experienceDate}>{formatDate(edu.startDate)} - {formatDate(edu?.completedDate)}</Text></Text>
+                  <Text><Text style={styles.infoLabel}>Mô tả: </Text><Text style={styles.experienceDesc}>{edu.description}</Text></Text>
+                </View>
+              </View>
+            ))}
+          </>
+        )}
+
+        {/* Section header cho Chứng chỉ */}
+        {certificates.length > 0 && (
+          <>
+            <View style={styles.section} wrap={false}>
+              <View style={styles.sectionHeader}>
+                <Text style={styles.sectionTitle}>Chứng chỉ</Text>
+              </View>
+            </View>
+            {certificates.map((cert, i) => (
+              <View key={i} style={styles.itemBlock}>
+                <View style={styles.itemContent}>
+                  <Text><Text style={styles.infoLabel}>Tên chứng chỉ: </Text><Text style={styles.experienceTitle}>{cert.name}</Text></Text>
+                  <Text><Text style={styles.infoLabel}>Nơi cấp: </Text><Text style={styles.experienceCompany}>{cert.trainingPlace}</Text></Text>
+                  <Text><Text style={styles.infoLabel}>Thời gian: </Text><Text style={styles.experienceDate}>{formatDate(cert.startDate)} - {formatDate(cert.expirationDate)}</Text></Text>
+                </View>
+              </View>
+            ))}
+          </>
+        )}
+
+        {/* Section header cho Ngoại ngữ */}
+        {languages.length > 0 && (
+          <>
+            <View style={styles.section} wrap={false}>
+              <View style={styles.sectionHeader}>
+                <Text style={styles.sectionTitle}>Ngoại ngữ</Text>
+              </View>
+            </View>
+            {languages.map((lang, i) => (
+              <View key={i} style={styles.itemBlock}>
+                <View style={styles.itemContent}>
+                  <Text><Text style={styles.infoLabel}>Ngôn ngữ: </Text><Text style={styles.experienceTitle}>{getLabelFromValue(LANGUAGE_OPTIONS, lang.language)}</Text></Text>
+                  <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                    <Text style={styles.infoLabel}>Trình độ: </Text>
+                    {renderDot(lang.level)}
+                  </View>
+                </View>
+              </View>
+            ))}
+          </>
+        )}
+
+        {/* Section header cho Kỹ năng */}
+        {skills.length > 0 && (
+          <>
+            <View style={styles.section} wrap={false}>
+              <View style={styles.sectionHeader}>
+                <Text style={styles.sectionTitle}>Kỹ năng</Text>
+              </View>
+            </View>
+            {skills.map((skill, i) => (
+              <View key={i} style={styles.itemBlock}>
+                <View style={styles.itemContent}>
+                  <Text><Text style={styles.infoLabel}>Kỹ năng: </Text><Text style={styles.experienceTitle}>{skill.name}</Text></Text>
+                  <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                    <Text style={styles.infoLabel}>Trình độ: </Text>
+                    {renderDot(skill.level)}
+                  </View>
+                </View>
+              </View>
+            ))}
+          </>
+        )}
+        <Text style={styles.pageFooter} fixed>
+          MyJob.Cv
+        </Text>
+      </Page>
+    </Document>
+  );
+}
 
 export default CVPdfDocument;

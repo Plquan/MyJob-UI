@@ -7,7 +7,9 @@ const DefaultLayout = () => {
     return (
       <>
         <DefaultHeader />
-        <Outlet />
+        <div className="pt-16">
+          <Outlet />
+        </div>
         <DefaultFooter />
       </>
     )
