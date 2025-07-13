@@ -1,12 +1,9 @@
-import React, { useEffect } from 'react';
-import { Modal, Form, Input, Select, Button, InputNumber, Switch } from 'antd';
+import { Modal, Form, Input, Button, InputNumber, Switch } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import type { RootState, AppDispatch } from '../../../../../../stores';
-import { packageActions } from '../../../../../../stores/packageStore/packageReducer';
 import type { IPackage } from '../../../../../../types/package/PackageType';
 
-const { TextArea } = Input;
-const { Option } = Select;
+const { TextArea } = Input
 
 interface AddPackageModalProps {
   open: boolean;
@@ -24,14 +21,7 @@ const PackageModal: React.FC<AddPackageModalProps> = ({
   isEdit = false
 }) => {
 
-  const dispatch = useDispatch<AppDispatch>();
-  const { packageTypes, isSubmiting } = useSelector((state: RootState) => state.packageStore);
-
-  useEffect(() => {
-    if (open) {
-      dispatch(packageActions.getAllPackageTypes());
-    }
-  }, [open, dispatch]);
+  const { isSubmiting } = useSelector((state: RootState) => state.packageStore);
 
 
 
@@ -63,22 +53,6 @@ const PackageModal: React.FC<AddPackageModalProps> = ({
           ]}
         >
           <Input placeholder="Nhập tên gói..." />
-        </Form.Item>
-
-        <Form.Item
-          label="Loại gói"
-          name="packageTypeId"
-          rules={[
-            { required: true, message: 'Vui lòng chọn loại gói!' }
-          ]}
-        >
-          <Select placeholder="Chọn loại gói..." disabled={isEdit}>
-            {packageTypes?.map((type) => (
-              <Option key={type.id} value={type.id}>
-                {type.name}
-              </Option>
-            ))}
-          </Select>
         </Form.Item>
 
         <Form.Item

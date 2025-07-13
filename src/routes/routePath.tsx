@@ -32,6 +32,9 @@ const ROUTE_PATH = {
     ADMIN_MANAGE_PACKAGE: '/admin/manage-package',
     ADMIN_MANAGE_USER: '/admin/manage-user',
 
+    //packages
+    PACKAGES: '/packages'
+
   }
 
-export default ROUTE_PATH;
+export default ROUTE_PATH

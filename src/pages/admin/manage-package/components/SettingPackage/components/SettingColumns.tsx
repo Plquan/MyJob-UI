@@ -1,15 +1,15 @@
 import { Checkbox, Input, InputNumber, Tooltip } from 'antd';
-import type { IFeatureOfPackage } from '../../../../../../types/package/PackageType';
+import type { IPackageFeature } from '../../../../../../types/package/PackageType';
 import type { ColumnsType } from 'antd/es/table';
 
-type OnFeatureChange = (featureId: number, field: keyof IFeatureOfPackage, value: any) => void;
+type OnFeatureChange = (featureId: number, field: keyof IPackageFeature, value: any) => void;
 
-const SettingColumns = (onFeatureChange: OnFeatureChange): ColumnsType<IFeatureOfPackage> => [
+const SettingColumns = (onFeatureChange: OnFeatureChange): ColumnsType<IPackageFeature> => [
   {
     title: 'Tính năng',
     dataIndex: 'name',
     key: 'name',
-
+    width: 150,
   },
   {
     title:  (
@@ -20,6 +20,7 @@ const SettingColumns = (onFeatureChange: OnFeatureChange): ColumnsType<IFeatureO
     dataIndex: 'open',
     key: 'open',
     align: 'center' as const,
+    width: 60,
     render: (value: boolean, record) => (
       <Checkbox
         checked={value}
@@ -29,22 +30,49 @@ const SettingColumns = (onFeatureChange: OnFeatureChange): ColumnsType<IFeatureO
   },
   {
     title: (
-      <Tooltip title="Để trống nếu muốn tính năng không giới hạn">
-        Giới hạn
+      <Tooltip title="Bật/tắt tính năng không giới hạn">
+       Không giới hạn
       </Tooltip>
     ),
-    dataIndex: 'limit',
-    key: 'limit',
+    dataIndex: 'unlimited',
+    key: 'unlimited',
     align: 'center' as const,
-    width: 100,
-    render: (value: number, record) => (
-      <InputNumber
-        value={value}
-        min={0}
+    width: 90,
+    render: (value: boolean, record) => (
+      <Checkbox
+        checked={value}
         disabled={!record.open}
-        onChange={(newValue) => onFeatureChange(record.featureId, 'limit', newValue)}
+        onChange={(e) => onFeatureChange(record.featureId, 'unlimited', e.target.checked)}
       />
     ),
+  },
+  {
+    title: (
+      <Tooltip title="Hạn mức số lượng hoặc ngày hết hạn tính năng">
+        Hạn mức
+      </Tooltip>
+    ),
+    dataIndex: 'quota',
+    key: 'quota',
+    align: 'center' as const,
+    width: 80,
+    render: (value: number, record) => {
+      const showError = record.open && !record.unlimited && (value === undefined || value === null || isNaN(value) || Number(value) <= 0);
+      return (
+        <div>
+          <InputNumber
+            value={value}
+            min={1}
+            disabled={!record.open || record.unlimited}
+            status={showError ? 'error' : undefined}
+            onChange={(newValue) => onFeatureChange(record.featureId, 'quota', newValue)}
+          />
+          {showError && (
+            <div style={{ color: 'red', fontSize: 12 }}>Hạn mức phải lớn hơn 0</div>
+          )}
+        </div>
+      );
+    },
   },
   {
     title:  (
@@ -54,15 +82,25 @@ const SettingColumns = (onFeatureChange: OnFeatureChange): ColumnsType<IFeatureO
     ),
     dataIndex: 'description',
     key: 'description',
-    render: (value: string, record) => (
-      <Input.TextArea
-        value={value}
-        disabled={!record.open}
-        placeholder="Nhập mô tả..."
-        autoSize={{ minRows: 1, maxRows: 4 }}
-        onChange={(e) => onFeatureChange(record.featureId, 'description', e.target.value)}
-      />
-    ),
+    width: 250,
+    render: (value: string, record) => {
+      const showError = record.open && (!value || value.trim() === '');
+      return (
+        <div>
+          <Input.TextArea
+            value={value}
+            disabled={!record.open}
+            placeholder="Nhập mô tả..."
+            autoSize={{ minRows: 1, maxRows: 4 }}
+            status={showError ? 'error' : undefined}
+            onChange={(e) => onFeatureChange(record.featureId, 'description', e.target.value)}
+          />
+          {showError && (
+            <div style={{ color: 'red', fontSize: 12 }}>Vui lòng nhập mô tả</div>
+          )}
+        </div>
+      );
+    },
   },
 ]
 

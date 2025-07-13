@@ -1,25 +1,13 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import http from "../../ultils/axios/axiosCustom";
 import type { IApiResponse } from "../../types/AppType";
-import type { IFeatureOfPackage, IPackage, IPackageType } from "../../types/package/PackageType";
+import type { IFeatureOfPackage, IPackage } from "../../types/package/PackageType";
 
 const getAllPackages = createAsyncThunk (
     "package/getAllPackages",
     async (_, {rejectWithValue}): Promise<IApiResponse<IPackage[]>> => {
         try {
             const response: IApiResponse<IPackage[]> = await http.get("/package/get-packages");
-            return response;
-        } catch (error: any) {
-            return rejectWithValue(error.response.data) as any;
-        }
-    }
-)
-
-const getAllPackageTypes = createAsyncThunk (
-    "package/getAllPackageTypes",
-    async (_, {rejectWithValue}): Promise<IApiResponse<IPackageType[]>> => {
-        try {
-            const response: IApiResponse<IPackageType[]> = await http.get("/package/get-package-types");
             return response;
         } catch (error: any) {
             return rejectWithValue(error.response.data) as any;
@@ -63,11 +51,11 @@ const deletePackage = createAsyncThunk (
     }
 )
 
-const getFeaturesOfPackage = createAsyncThunk (
-    "package/getFeaturesOfPackage",
+const getPackageFeatures = createAsyncThunk (
+    "package/getPackageFeatures",
     async (packageId: number, {rejectWithValue}): Promise<IApiResponse<IFeatureOfPackage[]>> => {
         try {
-            const response: IApiResponse<IFeatureOfPackage[]> = await http.get(`/package/get-features-of-package/${packageId}`)
+            const response: IApiResponse<IFeatureOfPackage[]> = await http.get(`/package/get-package-features/${packageId}`)
             return response;
         } catch (error: any) {
             return rejectWithValue(error.response.data) as any
@@ -89,10 +77,9 @@ const updatePackageFeatures = createAsyncThunk (
 
 const packageThunks = {
     getAllPackages,
-    getAllPackageTypes,
     createPackage,
     updatePackage,
-    getFeaturesOfPackage,
+    getPackageFeatures,
     updatePackageFeatures,
     deletePackage
 }

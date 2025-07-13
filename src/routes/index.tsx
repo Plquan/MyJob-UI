@@ -23,6 +23,7 @@ import ManageUserPage from "../pages/admin/manage-user";
 import RoleManagement from "../pages/admin/manage-package";
 import OnelineResumePage from "../pages/candidate/manage-online-resume";
 import CandidateProfilePage from "../pages/candidate/manage-cv";
+import PackagePage from "../pages/package";
 const AppRoutes = () => {
     return (
        <BrowserRouter>
@@ -59,6 +60,10 @@ const AppRoutes = () => {
             <Route path={ROUTE_PATH.ADMIN_MANAGE_PACKAGE} element={<RoleManagement />} />
             
             </Route>
+
+            <Route path={ROUTE_PATH.PACKAGES} element={<PackagePage/>} />
+
+
 
         </Routes>
        </BrowserRouter>

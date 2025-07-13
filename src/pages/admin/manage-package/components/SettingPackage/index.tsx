@@ -4,16 +4,15 @@ import { useDispatch, useSelector } from 'react-redux';
 import type { AppDispatch, RootState } from '../../../../../stores'
 import  { packageActions } from '../../../../../stores/packageStore/packageReducer'
 import SettingColumns from './components/SettingColumns';
-import type { IFeatureOfPackage } from '../../../../../types/package/PackageType';
 import ReloadOutlined from '@ant-design/icons/lib/icons/ReloadOutlined';
-
+import type { IPackageFeature } from '../../../../../types/package/PackageType';
 
 
 const Setting: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>()
   const { featuresOfPackage, packages, loading} = useSelector((state: RootState) => state.packageStore)
   const [selectedPackageId, setSelectedPackageId] = React.useState<number | null>(null)
-  const [features, setFeatures] = React.useState<IFeatureOfPackage[]>([])
+  const [features, setFeatures] = React.useState<IPackageFeature[]>([])
 
   useEffect(() => {
     setFeatures(featuresOfPackage)
@@ -22,20 +21,24 @@ const Setting: React.FC = () => {
   const handleSelectPackage = (packageId: number | undefined) => {
     if (packageId) {
       setSelectedPackageId(packageId)
-      dispatch(packageActions.getFeaturesOfPackage(packageId))
+      dispatch(packageActions.getPackageFeatures(packageId))
     } else {
       setSelectedPackageId(null)
       setFeatures([])
     }
   }
 
-  const handleFeatureChange = (featureId: number, field: keyof IFeatureOfPackage, value: any) => {
+  const handleFeatureChange = (featureId: number, field: keyof IPackageFeature, value: any) => {
     setFeatures(prev => prev.map(feature => {
       if (feature.featureId === featureId) {
         const updatedFeature = { ...feature, [field]: value }
         if (field === 'open' && value === false) {
-          updatedFeature.limit = undefined
+          updatedFeature.quota = undefined
           updatedFeature.description = ''
+          updatedFeature.unlimited = false
+        }
+        if (field === 'unlimited' && value === true) {
+          updatedFeature.quota = undefined
         }
 
         return updatedFeature
@@ -48,6 +51,17 @@ const Setting: React.FC = () => {
     if (!selectedPackageId) {
       message.warning('Vui lòng chọn gói trước khi lưu')
       return
+    }
+    const hasError = features.some(feature => {
+      if (feature.open) {
+        if (!feature.description || feature.description.trim() === '') return true;
+        if (!feature.unlimited && (feature.quota === undefined || feature.quota === null || isNaN(feature.quota) || Number(feature.quota) <= 0)) return true;
+      }
+      return false;
+    });
+    if (hasError) {
+      message.error('Vui lòng điền đầy đủ thông tin bắt buộc!');
+      return;
     }
     const enabledFeatures = features.filter(feature => feature.open === true)
     dispatch(packageActions.updatePackageFeatures({ data: enabledFeatures, packageId: selectedPackageId }))
