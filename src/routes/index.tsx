@@ -15,6 +15,7 @@ import OverviewDashboard from "../pages/candidate/overview";
 import MyCompanyTab from "../pages/candidate/my-companies";
 import CompanyLayout from "../layouts/EmployerLayout";
 import EmployerDashboard from "../pages/employer/dashboard";
+import CompanyInfoPage from "../pages/employer/company";
 import CompanyDetail from "../pages/companies/company-detail";
 import JobDetail from "../pages/jobs/job-detail";
 import ManageRolePage from "../pages/admin/manage-role";
@@ -24,6 +25,7 @@ import RoleManagement from "../pages/admin/manage-package";
 import OnelineResumePage from "../pages/candidate/manage-online-resume";
 import CandidateProfilePage from "../pages/candidate/manage-cv";
 import PackagePage from "../pages/package";
+import EmployerCompanyPage from "../pages/employer/company";
 const AppRoutes = () => {
     return (
        <BrowserRouter>
@@ -52,6 +54,7 @@ const AppRoutes = () => {
 
             <Route element={<CompanyLayout/>}>
             <Route path={ROUTE_PATH.EMPLOYER_DASHBOARD} element={<EmployerDashboard />} />
+            <Route path={ROUTE_PATH.EMPLOYER_COMPANY} element={<EmployerCompanyPage />} />
             </Route>
 
             <Route element={<AdminLayout/>}>

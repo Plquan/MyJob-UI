@@ -30,8 +30,8 @@ const PackagePage = () => {
         <CustomDivider/>
         <PackageCard/>
         <CustomDivider/>
-        <CustomDivider/>
         <BenefitSection/>
+        <CustomDivider/>
         <RecruitmentProcess/>
         <CustomDivider/>
         <FaqSection/>

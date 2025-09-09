@@ -10,13 +10,13 @@ import type { IPackageFeature } from '../../../../../types/package/PackageType';
 
 const Setting: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>()
-  const { featuresOfPackage, packages, loading} = useSelector((state: RootState) => state.packageStore)
+  const { packageFeatures, packages, loading} = useSelector((state: RootState) => state.packageStore)
   const [selectedPackageId, setSelectedPackageId] = React.useState<number | null>(null)
   const [features, setFeatures] = React.useState<IPackageFeature[]>([])
 
   useEffect(() => {
-    setFeatures(featuresOfPackage)
-  }, [featuresOfPackage])
+    setFeatures(packageFeatures)
+  }, [packageFeatures])
 
   const handleSelectPackage = (packageId: number | undefined) => {
     if (packageId) {
@@ -82,7 +82,7 @@ const Setting: React.FC = () => {
             loading={loading}
           />
           <Button
-            onClick={() => setFeatures(featuresOfPackage)}
+            onClick={() => setFeatures(packageFeatures)}
             title="Tải lại dữ liệu ban đầu"
             icon={<ReloadOutlined />}
             loading={loading}

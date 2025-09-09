@@ -55,7 +55,6 @@ export default function EmployerDashboard() {
   return (
       <div className="max-w-7xl mx-auto">
         <h1 className="text-2xl font-bold mb-4">Tổng quan</h1>
-        {/* Stats */}
         <Row gutter={16} className="mb-4">
           {stats.map((item: any) => (
             <Col xs={24} sm={12} md={6} key={item.title}>

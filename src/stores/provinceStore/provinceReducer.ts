@@ -28,7 +28,7 @@ export const provinceSlice = createSlice({
             state.loading = true;
         });
         builder.addCase(provinceThunks.getAllProvinces.fulfilled, (state, action) => {
-            state.provinces = action.payload.data;
+            state.provinces = action.payload;
             state.loading = false;
         });
         builder.addCase(provinceThunks.getAllProvinces.rejected, (state, action) => {
@@ -39,7 +39,7 @@ export const provinceSlice = createSlice({
             state.isSubmiting = true;
         });
         builder.addCase(provinceThunks.getDistrictsByProvince.fulfilled, (state, action) => {
-            state.districts = action.payload.data;
+            state.districts = action.payload;
             state.isSubmiting = false;
         });
         builder.addCase(provinceThunks.getDistrictsByProvince.rejected, (state, action) => {

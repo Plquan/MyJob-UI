@@ -1,7 +1,7 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import http from "../../ultils/axios/axiosCustom";
 import type { IApiResponse } from "../../types/AppType";
-import type { IFeatureOfPackage, IPackage } from "../../types/package/PackageType";
+import type { IPackageFeature, IPackage, IPackagesWithFeatures } from "../../types/package/PackageType";
 
 const getAllPackages = createAsyncThunk (
     "package/getAllPackages",
@@ -53,9 +53,9 @@ const deletePackage = createAsyncThunk (
 
 const getPackageFeatures = createAsyncThunk (
     "package/getPackageFeatures",
-    async (packageId: number, {rejectWithValue}): Promise<IApiResponse<IFeatureOfPackage[]>> => {
+    async (packageId: number, {rejectWithValue}): Promise<IApiResponse<IPackageFeature[]>> => {
         try {
-            const response: IApiResponse<IFeatureOfPackage[]> = await http.get(`/package/get-package-features/${packageId}`)
+            const response: IApiResponse<IPackageFeature[]> = await http.get(`/package/get-package-features/${packageId}`)
             return response;
         } catch (error: any) {
             return rejectWithValue(error.response.data) as any
@@ -65,9 +65,21 @@ const getPackageFeatures = createAsyncThunk (
 
 const updatePackageFeatures = createAsyncThunk (
     "package/updatePackageFeatures",
-    async ({data, packageId}: {data: IFeatureOfPackage[], packageId: number}, {rejectWithValue}): Promise<IApiResponse<IFeatureOfPackage[]>> => {
+    async ({data, packageId}: {data: IPackageFeature[], packageId: number}, {rejectWithValue}): Promise<IApiResponse<IPackageFeature[]>> => {
         try {
-            const response: IApiResponse<IFeatureOfPackage[]> = await http.put(`/package/update-package-features/${packageId}`,data)
+            const response: IApiResponse<IPackageFeature[]> = await http.put(`/package/update-package-features/${packageId}`,data)
+            return response;
+        } catch (error: any) {
+            return rejectWithValue(error.response.data) as any
+        }
+    }
+)
+
+const getAllPackagesWithFeatures = createAsyncThunk (
+    "package/getAllPackagesWithFeatures",
+    async (_, {rejectWithValue}): Promise<IApiResponse<IPackagesWithFeatures[]>> => {
+        try {
+            const response: IApiResponse<IPackagesWithFeatures[]> = await http.get("/package/get-all-packages-with-features")
             return response;
         } catch (error: any) {
             return rejectWithValue(error.response.data) as any
@@ -81,7 +93,8 @@ const packageThunks = {
     updatePackage,
     getPackageFeatures,
     updatePackageFeatures,
-    deletePackage
+    deletePackage,
+    getAllPackagesWithFeatures
 }
 export default packageThunks;
 
