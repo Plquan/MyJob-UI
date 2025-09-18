@@ -1,10 +1,10 @@
 
 import type { ICandidate } from "../candidate/CandidateType"
+import type { IMyJobFile } from "../myJobFile/myJobFileType"
 import type { ICertificate } from "./CertificateType"
 import type { IEducation } from "./EducationType"
 import type { IExperience } from "./ExperienceType"
 import type { ILanguage } from "./LanguageType"
-import type { IMyJobFile } from "./MyJobType"
 import type { ISkill } from "./SkillType"
 
   export interface IResume {

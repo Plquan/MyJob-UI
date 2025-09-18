@@ -51,10 +51,11 @@ const AppRoutes = () => {
             <Route path={ROUTE_PATH.COMPANY_DETAIL} element={<CompanyDetail />} />
             <Route path={ROUTE_PATH.JOB_DETAIL} element={<JobDetail />} />
             </Route>
-
+            <Route element={<ProtectRoute/>}>
             <Route element={<CompanyLayout/>}>
             <Route path={ROUTE_PATH.EMPLOYER_DASHBOARD} element={<EmployerDashboard />} />
             <Route path={ROUTE_PATH.EMPLOYER_COMPANY} element={<EmployerCompanyPage />} />
+            </Route>
             </Route>
 
             <Route element={<AdminLayout/>}>

@@ -1,36 +1,34 @@
-import React, { useState } from 'react';
-import { Card, Tabs, type UploadFile, type UploadProps } from 'antd';
-import Logo from './components/logo';
-import Banner from './components/banner';
-import CompanyInfoForm from './components/companyInfoForm';
-const { TabPane } = Tabs;
+import React, { useEffect } from 'react';
+import { Tabs} from 'antd';
+import CompanyInfoPage from './company-info';
+import CompanyMediaPage from './company-media';
+import { useDispatch } from 'react-redux';
+import type { AppDispatch  } from '../../../stores';
+import { companyActions } from '../../../stores/companyStore/companyReducer';
 const EmployerCompanyPage: React.FC = () => {
-  const [logoFile, setLogoFile] = useState<UploadFile[]>([]);
-  const [bannerFile, setBannerFile] = useState<UploadFile[]>([]);
 
-  const handleLogoUpload: UploadProps['onChange'] = ({ fileList }) => {
-    setLogoFile(fileList);
-  };
+  const dispatch = useDispatch<AppDispatch>();
+  useEffect(() => {
+      dispatch(companyActions.getEmployerCompany());
+  }, [dispatch]);
 
-  const handleBannerUpload: UploadProps['onChange'] = ({ fileList }) => {
-    setBannerFile(fileList);
-  };
+  const items = [
+    {
+      key: '1',
+      label: 'Thông tin công ty',
+      children: <CompanyInfoPage />
+    },
+    {
+      key: '2',
+      label: 'Đa phương tiện',
+      children: <CompanyMediaPage />
+    }
+  ];
 
   return (
-    <Card>
-    <Tabs defaultActiveKey="1">
-      <Tabs.TabPane tab="Thông tin công ty" key="1">
-        <Logo logoFile={logoFile} onLogoUpload={handleLogoUpload} />
-        <Banner bannerFile={bannerFile} onBannerUpload={handleBannerUpload} />
-        <CompanyInfoForm />
-      </Tabs.TabPane>
 
-      <Tabs.TabPane tab="Đa phương tiện" key="2">
-        {/* Component quản lý media */}
-        {/* <MediaManager /> */}
-      </Tabs.TabPane>
-    </Tabs>
-  </Card>
+   <Tabs defaultActiveKey="1" items={items} />
+
   );
 };
 

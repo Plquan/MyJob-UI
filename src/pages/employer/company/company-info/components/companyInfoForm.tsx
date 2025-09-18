@@ -1,6 +1,8 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Button, Input, Select, DatePicker, Form, message } from 'antd';
 import { SaveOutlined } from '@ant-design/icons';
+import dayjs from 'dayjs';
+import type { ICompanyDetail } from '../../../../../types/company/CompanyType';
 
 const { TextArea } = Input;
 const { Option } = Select;
@@ -25,11 +27,38 @@ interface CompanyInfoFormData {
   description: string;
 }
 
-const CompanyInfoForm: React.FC = () => {
+interface CompanyInfoFormProps {
+  companyData?: ICompanyDetail;
+}
+
+const CompanyInfoForm: React.FC<CompanyInfoFormProps> = ({ companyData }) => {
   const [form] = Form.useForm();
+
+  // Cập nhật form khi có dữ liệu company
+  useEffect(() => {
+    if (companyData) {
+      form.setFieldsValue({
+        companyName: companyData.companyName,
+        taxCode: companyData.taxCode,
+        employeeCount: companyData.employeeSize?.toString(),
+        establishedDate: companyData.since ? dayjs(companyData.since) : null,
+        businessType: companyData.fieldOperation,
+        website: companyData.websiteUrl,
+        facebook: companyData.facebookUrl,
+        youtube: companyData.youtubeUrl,
+        linkedin: companyData.linkedInUrl,
+        email: companyData.companyEmail,
+        phone: companyData.companyPhone,
+        province: companyData.provinceId?.toString(),
+        address: companyData.address,
+        description: companyData.description,
+      });
+    }
+  }, [companyData, form]);
 
   const onFinish = (values: CompanyInfoFormData) => {
     console.log('Form values:', values);
+    console.log('Company data:', companyData);
     message.success('Thông tin công ty đã được cập nhật!');
   };
 
@@ -38,22 +67,7 @@ const CompanyInfoForm: React.FC = () => {
       form={form}
       layout="vertical"
       onFinish={onFinish}
-      initialValues={{
-        companyName: 'GSI GROUP LIMITED',
-        taxCode: '08888999111',
-        employeeCount: '500-1000',
-        businessType: 'Gia công phần mềm',
-        website: 'https://www.topcv.vn/cong-ty/gsi-group-limited/www.gsi-group.asia',
-        facebook: 'http://www.facebook.com/sharer/sharer.php?u=https://www.topcv.vn/cong-ty/g',
-        linkedin: 'https://www.linkedin.com/cws/share?url=https://www.topcv.vn/cong-ty/gsi-grou',
-        email: '195105002@huy@ou.edu.vn',
-        phone: '0888999111',
-        province: 'ho-chi-minh',
-        district: 'binh-thanh',
-        address: '153 Ung Văn Khiêm, Phường 25, Quận Bình Thạnh, Thành phố Hồ Chí Minh',
-        latitude: '10.806910467000023',
-        longitude: '106.71957105500007',
-      }}
+      // initialValues sẽ được set thông qua useEffect
     >
       <div className="mb-6">
         <Form.Item
