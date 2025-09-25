@@ -8,9 +8,10 @@ interface LogoProps {
   logoFile: UploadFile[];
   onLogoUpload: UploadProps['customRequest'];
   logoUrl?: IMyJobFile;
+  submitting: boolean
 }
 
-const Logo: React.FC<LogoProps> = ({ logoFile, onLogoUpload, logoUrl }) => {
+const Logo: React.FC<LogoProps> = ({ logoFile, onLogoUpload, logoUrl,submitting }) => {
   return (
     <div className="mb-6">
       <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -39,6 +40,7 @@ const Logo: React.FC<LogoProps> = ({ logoFile, onLogoUpload, logoUrl }) => {
         >
           <Button 
             type="primary" 
+            loading={submitting}
           >
             Thay logo
           </Button>

@@ -9,9 +9,10 @@ interface CoverImageProps {
   coverImageFile: UploadFile[];
   onCoverImageUpload: UploadProps['customRequest'];
   coverImageUrl?: IMyJobFile;
+  submitting: boolean
 }
 
-const CoverImage: React.FC<CoverImageProps> = ({ coverImageFile, onCoverImageUpload, coverImageUrl }) => {
+const CoverImage: React.FC<CoverImageProps> = ({ coverImageFile, onCoverImageUpload, coverImageUrl,submitting }) => {
 
   return (
     <div className="mb-8">
@@ -42,6 +43,7 @@ const CoverImage: React.FC<CoverImageProps> = ({ coverImageFile, onCoverImageUpl
           >
             <Button 
               type="primary" 
+              loading={submitting}
             >
               Thay ảnh bìa
             </Button>

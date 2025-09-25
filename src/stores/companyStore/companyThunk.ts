@@ -1,13 +1,13 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import http from "../../ultils/axios/axiosCustom";
-import type { ICompanyDetail } from "../../types/company/CompanyType";
 import type { IMyJobFile } from "../../types/myJobFile/myJobFileType";
+import type { ICompanyWithImagesData } from "../../types/company/CompanyType";
 
 const getEmployerCompany = createAsyncThunk (
     "company/getEmployerCompany",
-    async (_, {rejectWithValue}): Promise<ICompanyDetail> => {
+    async (_, {rejectWithValue}): Promise<ICompanyWithImagesData> => {
         try {
-            const response: ICompanyDetail = await http.get("/company/get-employer-company");
+            const response: ICompanyWithImagesData = await http.get("/company/get-employer-company");
             return response;
         } catch (error: any) {
             return rejectWithValue(error.response.data) as any;
@@ -50,14 +50,37 @@ const uploadCompanyImages = createAsyncThunk (
     }
 )
 
+const deleteCompanyImage = createAsyncThunk (
+    "company/deleteCompanyImage",
+    async (imageId: Number, {rejectWithValue}): Promise<IMyJobFile> => {
+        try {
+            const response: IMyJobFile = await http.delete(`/company/delete-company-image/${imageId}`);
+            return response;
+        } catch (error: any) {
+            return rejectWithValue(error.response.data) as any;
+        }
+    }
+)
 
-
+const getCompanies = createAsyncThunk (
+    "company/getCompanies",
+    async (_, {rejectWithValue}): Promise<ICompanyWithImagesData[]> => {
+        try {
+            const response: ICompanyWithImagesData[] = await http.get("/company");
+            return response;
+        } catch (error: any) {
+            return rejectWithValue(error.response.data) as any;
+        }
+    }
+)
 
 const companyThunks = {
     getEmployerCompany,
     uploadCompanyLogo,
     uploadCompanyCoverImage,
-    uploadCompanyImages
+    uploadCompanyImages,
+    deleteCompanyImage,
+    getCompanies
 }
 
 export default companyThunks

@@ -4,7 +4,7 @@ import CompanyLoginPage from "../pages/auth/employer/LoginPage";
 import CompanyRegisterPage from "../pages/auth/employer/RegisterPage";
 import HomePage from "../pages/home/HomePage";
 import JobsPage from "../pages/jobs/JobPage";
-import CompanyPage from "../pages/companies";
+import CompanyPage from "../pages/company/companies";
 
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import ROUTE_PATH from "./routePath";
@@ -13,10 +13,8 @@ import CandidateLayout from "../layouts/CandidateLayout";
 import ProtectRoute from "./ProtectRoute";
 import OverviewDashboard from "../pages/candidate/overview";
 import MyCompanyTab from "../pages/candidate/my-companies";
-import CompanyLayout from "../layouts/EmployerLayout";
 import EmployerDashboard from "../pages/employer/dashboard";
-import CompanyInfoPage from "../pages/employer/company";
-import CompanyDetail from "../pages/companies/company-detail";
+import CompanyDetail from "../pages/company/company-detail";
 import JobDetail from "../pages/jobs/job-detail";
 import ManageRolePage from "../pages/admin/manage-role";
 import AdminLayout from "../layouts/AdminLayout";
@@ -26,6 +24,8 @@ import OnelineResumePage from "../pages/candidate/manage-online-resume";
 import CandidateProfilePage from "../pages/candidate/manage-cv";
 import PackagePage from "../pages/package";
 import EmployerCompanyPage from "../pages/employer/company";
+import EmployerLayout from "../layouts/EmployerLayout";
+import ManageJobPostPage from "../pages/employer/job-post";
 const AppRoutes = () => {
     return (
        <BrowserRouter>
@@ -52,9 +52,10 @@ const AppRoutes = () => {
             <Route path={ROUTE_PATH.JOB_DETAIL} element={<JobDetail />} />
             </Route>
             <Route element={<ProtectRoute/>}>
-            <Route element={<CompanyLayout/>}>
+            <Route element={<EmployerLayout/>}>
             <Route path={ROUTE_PATH.EMPLOYER_DASHBOARD} element={<EmployerDashboard />} />
             <Route path={ROUTE_PATH.EMPLOYER_COMPANY} element={<EmployerCompanyPage />} />
+            <Route path={ROUTE_PATH.EMPLOYER_JOB_POST} element={<ManageJobPostPage />} />
             </Route>
             </Route>
 

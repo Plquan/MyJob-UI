@@ -26,6 +26,7 @@ const ROUTE_PATH = {
     //employer
     EMPLOYER_DASHBOARD: '/employer',
     EMPLOYER_COMPANY: '/employer/company',
+    EMPLOYER_JOB_POST: '/employer/job-post',
 
     //admin
     ADMIN_DASHBOARD: '/admin/dashboard',
