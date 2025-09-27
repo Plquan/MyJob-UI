@@ -3,7 +3,7 @@ import CompanyHeader from "../components/headers/EmployerHeader";
 import CompanySidebar from "../components/Sidebar/EmployerSidebar";
 
 
-export default function CompanyLayout() {
+export default function EmployerLayout() {
   return (
     <div className="flex min-h-screen">
       <CompanySidebar />

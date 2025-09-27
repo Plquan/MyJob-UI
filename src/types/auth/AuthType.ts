@@ -23,12 +23,13 @@ export interface ICandidateRegisterRequestData {
 }
 
 export interface ICurrentUser {
-    id: number;
-    avatar?: string;
-    email: string;
-    fullName: string;
-    roleName:string,
-    allowSearch:boolean,
-    isStaff:boolean,
-    isActive: boolean;
+    id: number
+    avatar: string
+    email: string
+    fullName: string
+    roleName:string
+    allowSearch:boolean
+    isStaff:boolean
+    isActive: boolean
+    companyId: number
 }

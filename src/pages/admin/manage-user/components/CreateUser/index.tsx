@@ -68,7 +68,7 @@ const CreateUserPage = () => {
                   <Form.Item
                     label="Họ tên"
                     name="fullName"
-                    rules={[{ required: true, message: 'Họ tên không được để trống!' }]}
+                    // rules={[{ required: true, message: 'Họ tên không được để trống!' }]}
                   >
                     <Input className='w-70!' />
                   </Form.Item>

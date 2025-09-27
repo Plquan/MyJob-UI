@@ -2,20 +2,18 @@
 export interface IPackage {
     id: number
     name: string
-    description?: string
     price: number;
-    durationInDays?: number;
+    durationInDays: number;
     isActive?: boolean;
 }
 
 export interface IFeature {
     id: number;
-    code: string;
     name: string;
-    description?: string;
-    allowLimit: boolean;
 }
-
+export interface IPackagesWithFeatures extends IPackage {
+   features: string[]
+}
 
 export interface IPackageFeature {
   featureId: number

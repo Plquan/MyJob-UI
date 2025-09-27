@@ -1,1 +1,23 @@
 @import "tailwindcss";
+
+/* CKEditor Styles */
+.ckeditor-wrapper .ck-editor__editable {
+  min-height: 250px;
+  border: 1px solid #d9d9d9;
+  border-radius: 6px;
+}
+
+.ckeditor-wrapper .ck-editor__editable:focus {
+  border-color: #4096ff;
+  box-shadow: 0 0 0 2px rgba(5, 145, 255, 0.1);
+}
+
+.ckeditor-wrapper .ck-toolbar {
+  border: 1px solid #d9d9d9;
+  border-bottom: none;
+  border-radius: 6px 6px 0 0;
+}
+
+.ckeditor-wrapper .ck-editor__main {
+  border-radius: 0 0 6px 6px;
+}

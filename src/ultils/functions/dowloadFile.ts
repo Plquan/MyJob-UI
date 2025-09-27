@@ -4,7 +4,7 @@ import slugify from './customSlug';
 const APP_NAME = env.APP_NAME;
 
 /**
- * Tải file bất kỳ từ URL (pdf, docx, zip...) và đặt tên tùy chỉnh
+ * 
  * @param url - Đường dẫn file
  * @param fileName - Tên hiển thị (không cần đuôi)
  */
@@ -20,9 +20,8 @@ const downloadFile = async (url: string, fileName: string): Promise<void> => {
     const blob = await response.blob();
     const urlBlob = window.URL.createObjectURL(blob);
 
-    // 🔍 Tự động lấy đuôi file từ URL
     const extensionMatch = url.match(/\.([a-zA-Z0-9]+)(\?|$)/);
-    const extension = extensionMatch ? extensionMatch[1] : 'bin'; // fallback
+    const extension = extensionMatch ? extensionMatch[1] : 'bin'; 
 
     const link = document.createElement('a');
     link.href = urlBlob;
@@ -35,5 +34,4 @@ const downloadFile = async (url: string, fileName: string): Promise<void> => {
     console.error('Download file error:', error);
   }
 };
-
 export default downloadFile;

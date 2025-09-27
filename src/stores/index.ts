@@ -7,6 +7,7 @@ import { provinceSlice } from "./provinceStore/provinceReducer";
 import { authSlice } from "./authStore/authReducer";
 import { onlineResumeSlice } from "./onlineResumeStore/onlineResumeReducer";
 import { attachedResumeSlice } from "./attachedResumeStore/attachedResumeReducer";
+import { companySlice } from "./companyStore/companyReducer";
 
 export const store = configureStore({
   reducer: {
@@ -18,6 +19,7 @@ export const store = configureStore({
     onlineResumeStore: onlineResumeSlice.reducer,
     packageStore: packageSlice.reducer,
     attachedResumeStore: attachedResumeSlice.reducer,
+    companyStore: companySlice.reducer
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
