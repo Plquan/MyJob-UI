@@ -47,4 +47,11 @@ export const POSITION_OPTIONS = [
     {value: 2, label: "Nữ"},
     {value: 3, label: "Khác"}
   ]
+
+  export const JOB_POST_STATUS_OPTIONS = [
+    { value: 1, label: "Chờ phê duyệt" },
+    { value: 2, label: "Đã phê duyệt" },
+    { value: 3, label: "Từ chối" },
+    { value: 4, label: "Đã đóng" },
+  ];
   

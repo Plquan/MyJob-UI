@@ -4,13 +4,14 @@ import companyThunks from "./companyThunk";
 import type { IMyJobFile } from "../../types/myJobFile/myJobFileType";
 import { FileType } from "../../constant/fileType";
 import { message } from "antd";
+import type { IJobPostData } from "../../types/job-post/JobPostType";
 
 interface CompanyState {
     companyInfo?: ICompanyData,
     companies: ICompanyWithImagesData[],
     logo?: IMyJobFile,
     coverImage?: IMyJobFile,
-    companyImages: IMyJobFile[]
+    companyImages: IMyJobFile[],
     loading: boolean,
     submitting: {
         logo: boolean;
@@ -31,7 +32,8 @@ const initialState: CompanyState = {
     },
     error: undefined,
     companyImages: [],
-    companies:[]
+    companies: [],
+
 }
 export const companySlice = createSlice({
     name: "Company",
@@ -54,6 +56,7 @@ export const companySlice = createSlice({
         });
         builder.addCase(companyThunks.getEmployerCompany.rejected, (state, action) => {
             state.loading = false;
+            message.error((action.payload as { message: string }).message);
         })
         // upload company logo
         builder.addCase(companyThunks.uploadCompanyLogo.pending, (state) => {
@@ -66,6 +69,7 @@ export const companySlice = createSlice({
         });
         builder.addCase(companyThunks.uploadCompanyLogo.rejected, (state, action) => {
             state.submitting.logo = false;
+            message.error((action.payload as { message: string }).message);
         })
         // upload company cover image
         builder.addCase(companyThunks.uploadCompanyCoverImage.pending, (state) => {
@@ -78,6 +82,7 @@ export const companySlice = createSlice({
         });
         builder.addCase(companyThunks.uploadCompanyCoverImage.rejected, (state, action) => {
             state.submitting.cover = false;
+            message.error((action.payload as { message: string }).message);
         })
 
         // upload company images
@@ -90,6 +95,7 @@ export const companySlice = createSlice({
         });
         builder.addCase(companyThunks.uploadCompanyImages.rejected, (state, action) => {
             state.submitting.images = false;
+            message.error((action.payload as { message: string }).message);
         })
 
         // delete company image
@@ -101,6 +107,7 @@ export const companySlice = createSlice({
         });
         builder.addCase(companyThunks.deleteCompanyImage.rejected, (state, action) => {
             state.submitting.images = false;
+            message.error((action.payload as { message: string }).message);
         })
 
         // get companies
@@ -113,7 +120,9 @@ export const companySlice = createSlice({
         });
         builder.addCase(companyThunks.getCompanies.rejected, (state, action) => {
             state.loading = false;
+            message.error((action.payload as { message: string }).message);
         })
+      
     }
 })
 

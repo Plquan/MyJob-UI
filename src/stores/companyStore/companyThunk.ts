@@ -74,13 +74,16 @@ const getCompanies = createAsyncThunk (
     }
 )
 
+
+
 const companyThunks = {
     getEmployerCompany,
     uploadCompanyLogo,
     uploadCompanyCoverImage,
     uploadCompanyImages,
     deleteCompanyImage,
-    getCompanies
+    getCompanies,
+
 }
 
 export default companyThunks

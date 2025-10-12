@@ -1,10 +1,10 @@
-import { 
-  Modal, 
-  Form, 
-  Input, 
-  Select, 
-  InputNumber, 
-  DatePicker, 
+import {
+  Modal,
+  Form,
+  Input,
+  Select,
+  InputNumber,
+  DatePicker,
   Alert,
   Row,
   Col,
@@ -15,6 +15,15 @@ import {
 } from '@ant-design/icons';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { POSITION_OPTIONS, EXPERIENCE_OPTIONS, JOBTYPE_OPTIONS, GENDER_OPTIONS, ACADEMICLEVEL_OPTIONS, WORKPLACE_OPTIONS } from '../../../../constant/selectOptions';
+import type { AppDispatch, RootState } from '../../../../stores';
+import { careerActions } from '../../../../stores/careerStore/careerReducer';
+import { provinceActions } from '../../../../stores/provinceStore/provinceReducer';
+import { jobPostActions } from '../../../../stores/jobPostStore/jobPostReducer';
+import type { ICreateJobPostReq } from '../../../../types/job-post/JobPostType';
+
 
 interface CreateJobPostModalProps {
   visible: boolean;
@@ -28,10 +37,38 @@ const CreateJobPostModal: React.FC<CreateJobPostModalProps> = ({
   onSubmit
 }) => {
   const [form] = Form.useForm();
+  const dispatch = useDispatch<AppDispatch>();
 
-  const handleSubmit = (values: any) => {
-    onSubmit(values);
-    form.resetFields();
+  const { careers, loading: careerLoading } = useSelector((state: RootState) => state.careerStore);
+  const { provinces, districts, loading: provinceLoading } = useSelector((state: RootState) => state.provinceStore);
+  const { loading: jobPostLoading } = useSelector((state: RootState) => state.jobPostStore);
+
+  useEffect(() => {
+    if (visible) {
+      dispatch(careerActions.getAllCareers());
+      dispatch(provinceActions.getAllProvinces());
+    }
+  }, [visible, dispatch]);
+
+  const handleProvinceChange = (provinceId: number) => {
+    form.setFieldsValue({ districtId: undefined });
+    if (provinceId) {
+      dispatch(provinceActions.getDistrictsByProvince(provinceId));
+    }
+  };
+
+  const handleSubmit = async (values: any) => {
+    try {
+      const jobPostData: ICreateJobPostReq = {
+        ...values,
+      };
+
+      await dispatch(jobPostActions.createJobPost(jobPostData));
+      form.resetFields();
+      onSubmit(values);
+    } catch (error) {
+      console.error('Error creating job post:', error);
+    }
   };
 
   const handleCancel = () => {
@@ -50,7 +87,12 @@ const CreateJobPostModal: React.FC<CreateJobPostModalProps> = ({
         <Button key="cancel" onClick={handleCancel}>
           Hủy
         </Button>,
-        <Button key="submit" type="primary" onClick={() => form.submit()}>
+        <Button
+          key="submit"
+          type="primary"
+          loading={jobPostLoading}
+          onClick={() => form.submit()}
+        >
           Lưu
         </Button>,
       ]}
@@ -61,7 +103,7 @@ const CreateJobPostModal: React.FC<CreateJobPostModalProps> = ({
         icon={<ExclamationCircleOutlined />}
         className="mb-4!"
       />
-      
+
       <Form
         form={form}
         layout="vertical"
@@ -72,7 +114,7 @@ const CreateJobPostModal: React.FC<CreateJobPostModalProps> = ({
           <Col span={12}>
             <Form.Item
               label="Tên công việc"
-              name="jobTitle"
+              name="jobName"
               rules={[{ required: true, message: 'Vui lòng nhập tên công việc!' }]}
             >
               <Input placeholder="Nhập tên công việc" />
@@ -81,15 +123,23 @@ const CreateJobPostModal: React.FC<CreateJobPostModalProps> = ({
           <Col span={12}>
             <Form.Item
               label="Ngành nghề"
-              name="industry"
+              name="careerId"
               rules={[{ required: true, message: 'Vui lòng chọn ngành nghề!' }]}
             >
-              <Select placeholder="Chọn ngành nghề cần tuyển">
-                <Select.Option value="IT">Công nghệ thông tin</Select.Option>
-                <Select.Option value="FINANCE">Tài chính</Select.Option>
-                <Select.Option value="MARKETING">Marketing</Select.Option>
-                <Select.Option value="SALES">Bán hàng</Select.Option>
-                <Select.Option value="HR">Nhân sự</Select.Option>
+              <Select
+                placeholder="Chọn ngành nghề cần tuyển"
+                loading={careerLoading}
+                showSearch
+                optionFilterProp="children"
+                filterOption={(input, option) =>
+                  (option?.children as unknown as string)?.toLowerCase().includes(input.toLowerCase())
+                }
+              >
+                {careers?.map((career: any) => (
+                  <Select.Option key={career.id} value={career.id}>
+                    {career.name}
+                  </Select.Option>
+                ))}
               </Select>
             </Form.Item>
           </Col>
@@ -103,10 +153,11 @@ const CreateJobPostModal: React.FC<CreateJobPostModalProps> = ({
               rules={[{ required: true, message: 'Vui lòng chọn vị trí/chức vụ!' }]}
             >
               <Select placeholder="Chọn vị trí/chức vụ">
-                <Select.Option value="DEVELOPER">Lập trình viên</Select.Option>
-                <Select.Option value="DESIGNER">Thiết kế</Select.Option>
-                <Select.Option value="MANAGER">Quản lý</Select.Option>
-                <Select.Option value="ANALYST">Phân tích</Select.Option>
+                {POSITION_OPTIONS.map((option: any) => (
+                  <Select.Option key={option.value} value={option.value}>
+                    {option.label}
+                  </Select.Option>
+                ))}
               </Select>
             </Form.Item>
           </Col>
@@ -117,10 +168,11 @@ const CreateJobPostModal: React.FC<CreateJobPostModalProps> = ({
               rules={[{ required: true, message: 'Vui lòng chọn kinh nghiệm!' }]}
             >
               <Select placeholder="Chọn kinh nghiệm yêu cầu">
-                <Select.Option value="ENTRY">Mới tốt nghiệp</Select.Option>
-                <Select.Option value="JUNIOR">Junior (1-2 năm)</Select.Option>
-                <Select.Option value="MID">Mid-level (3-5 năm)</Select.Option>
-                <Select.Option value="SENIOR">Senior (5+ năm)</Select.Option>
+                {EXPERIENCE_OPTIONS.map((option: any) => (
+                  <Select.Option key={option.value} value={option.value}>
+                    {option.label}
+                  </Select.Option>
+                ))}
               </Select>
             </Form.Item>
           </Col>
@@ -130,28 +182,30 @@ const CreateJobPostModal: React.FC<CreateJobPostModalProps> = ({
           <Col span={12}>
             <Form.Item
               label="Nơi làm việc"
-              name="workplace"
+              name="typeOfWorkPlace"
               rules={[{ required: true, message: 'Vui lòng chọn nơi làm việc!' }]}
             >
               <Select placeholder="Chọn nơi làm việc">
-                <Select.Option value="HCM">Hồ Chí Minh</Select.Option>
-                <Select.Option value="HN">Hà Nội</Select.Option>
-                <Select.Option value="DN">Đà Nẵng</Select.Option>
-                <Select.Option value="REMOTE">Làm việc từ xa</Select.Option>
+                {WORKPLACE_OPTIONS.map((option: any) => (
+                  <Select.Option key={option.value} value={option.value}>
+                    {option.label}
+                  </Select.Option>
+                ))}
               </Select>
             </Form.Item>
           </Col>
           <Col span={12}>
             <Form.Item
               label="Hình thức làm việc"
-              name="workType"
+              name="jobType"
               rules={[{ required: true, message: 'Vui lòng chọn hình thức làm việc!' }]}
             >
               <Select placeholder="Chọn hình thức làm việc">
-                <Select.Option value="FULL_TIME">Toàn thời gian</Select.Option>
-                <Select.Option value="PART_TIME">Bán thời gian</Select.Option>
-                <Select.Option value="CONTRACT">Hợp đồng</Select.Option>
-                <Select.Option value="INTERNSHIP">Thực tập</Select.Option>
+                {JOBTYPE_OPTIONS.map((option: any) => (
+                  <Select.Option key={option.value} value={option.value}>
+                    {option.label}
+                  </Select.Option>
+                ))}
               </Select>
             </Form.Item>
           </Col>
@@ -164,8 +218,8 @@ const CreateJobPostModal: React.FC<CreateJobPostModalProps> = ({
               name="quantity"
               rules={[{ required: true, message: 'Vui lòng nhập số lượng tuyển!' }]}
             >
-              <InputNumber 
-                placeholder="Nhập số lượng nhân sự cần tuyển" 
+              <InputNumber
+                placeholder="Nhập số lượng nhân sự cần tuyển"
                 min={1}
                 className="w-full"
                 style={{ width: '100%' }}
@@ -179,9 +233,11 @@ const CreateJobPostModal: React.FC<CreateJobPostModalProps> = ({
               rules={[{ required: true, message: 'Vui lòng chọn yêu cầu giới tính!' }]}
             >
               <Select placeholder="Chọn giới tính yêu cầu">
-                <Select.Option value="ANY">Không yêu cầu</Select.Option>
-                <Select.Option value="MALE">Nam</Select.Option>
-                <Select.Option value="FEMALE">Nữ</Select.Option>
+                {GENDER_OPTIONS.map((option: any) => (
+                  <Select.Option key={option.value} value={option.value}>
+                    {option.label}
+                  </Select.Option>
+                ))}
               </Select>
             </Form.Item>
           </Col>
@@ -191,11 +247,11 @@ const CreateJobPostModal: React.FC<CreateJobPostModalProps> = ({
           <Col span={12}>
             <Form.Item
               label="Mức lương tối thiểu"
-              name="minSalary"
+              name="salaryMin"
               rules={[{ required: true, message: 'Vui lòng nhập mức lương tối thiểu!' }]}
             >
-              <InputNumber 
-                placeholder="Nhập mức lương tối thiểu" 
+              <InputNumber
+                placeholder="Nhập mức lương tối thiểu"
                 min={0}
                 formatter={value => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
                 className="w-full!"
@@ -205,11 +261,11 @@ const CreateJobPostModal: React.FC<CreateJobPostModalProps> = ({
           <Col span={12}>
             <Form.Item
               label="Mức lương tối đa"
-              name="maxSalary"
+              name="salaryMax"
               rules={[{ required: true, message: 'Vui lòng nhập mức lương tối đa!' }]}
             >
-              <InputNumber 
-                placeholder="Nhập mức lương tối đa" 
+              <InputNumber
+                placeholder="Nhập mức lương tối đa"
                 min={0}
                 formatter={value => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
                 className="w-full!"
@@ -222,15 +278,15 @@ const CreateJobPostModal: React.FC<CreateJobPostModalProps> = ({
           <Col span={12}>
             <Form.Item
               label="Bằng cấp"
-              name="degree"
+              name="academicLevel"
               rules={[{ required: true, message: 'Vui lòng chọn bằng cấp!' }]}
             >
               <Select placeholder="Chọn bằng cấp">
-                <Select.Option value="HIGH_SCHOOL">Trung học phổ thông</Select.Option>
-                <Select.Option value="COLLEGE">Cao đẳng</Select.Option>
-                <Select.Option value="UNIVERSITY">Đại học</Select.Option>
-                <Select.Option value="MASTER">Thạc sĩ</Select.Option>
-                <Select.Option value="PHD">Tiến sĩ</Select.Option>
+                {ACADEMICLEVEL_OPTIONS.map((option: any) => (
+                  <Select.Option key={option.value} value={option.value}>
+                    {option.label}
+                  </Select.Option>
+                ))}
               </Select>
             </Form.Item>
           </Col>
@@ -240,8 +296,8 @@ const CreateJobPostModal: React.FC<CreateJobPostModalProps> = ({
               name="deadline"
               rules={[{ required: true, message: 'Vui lòng chọn hạn nộp hồ sơ!' }]}
             >
-              <DatePicker 
-                placeholder="DD-MM-YYYY" 
+              <DatePicker
+                placeholder="DD-MM-YYYY"
                 format="DD-MM-YYYY"
                 className="w-full"
                 style={{ height: '32px' }}
@@ -252,16 +308,16 @@ const CreateJobPostModal: React.FC<CreateJobPostModalProps> = ({
 
         <Form.Item
           label="Mô tả công việc"
-          name="description"
+          name="jobDescription"
           rules={[{ required: true, message: 'Vui lòng nhập mô tả công việc!' }]}
         >
           <div className="ckeditor-wrapper">
             <CKEditor
               editor={ClassicEditor as any}
               data=""
-              onChange={(event, editor) => {
+              onChange={(_event, editor) => {
                 const data = editor.getData();
-                form.setFieldsValue({ description: data });
+                form.setFieldsValue({ jobDescription: data });
               }}
               config={{
                 placeholder: 'Nhập mô tả chi tiết về công việc, yêu cầu, quyền lợi...',
@@ -279,16 +335,16 @@ const CreateJobPostModal: React.FC<CreateJobPostModalProps> = ({
         </Form.Item>
         <Form.Item
           label="Yêu cầu công việc"
-          name="requirements"
+          name="jobRequirement"
           rules={[{ required: true, message: 'Vui lòng nhập yêu cầu công việc!' }]}
         >
           <div className="ckeditor-wrapper">
             <CKEditor
               editor={ClassicEditor as any}
               data=""
-              onChange={(event, editor) => {
+              onChange={(_event, editor) => {
                 const data = editor.getData();
-                form.setFieldsValue({ requirements: data });
+                form.setFieldsValue({ jobRequirement: data });
               }}
               config={{
                 placeholder: 'Nhập yêu cầu công việc, kỹ năng, kinh nghiệm...',
@@ -306,16 +362,16 @@ const CreateJobPostModal: React.FC<CreateJobPostModalProps> = ({
         </Form.Item>
         <Form.Item
           label="Quyền lợi"
-          name="benefits"
+          name="benefitsEnjoyed"
           rules={[{ required: true, message: 'Vui lòng nhập quyền lợi!' }]}
         >
           <div className="ckeditor-wrapper">
             <CKEditor
               editor={ClassicEditor as any}
               data=""
-              onChange={(event, editor) => {
+              onChange={(_event, editor) => {
                 const data = editor.getData();
-                form.setFieldsValue({ benefits: data });
+                form.setFieldsValue({ benefitsEnjoyed: data });
               }}
               config={{
                 placeholder: 'Nhập quyền lợi, chế độ đãi ngộ cho ứng viên...',
@@ -336,105 +392,48 @@ const CreateJobPostModal: React.FC<CreateJobPostModalProps> = ({
           <Col span={12}>
             <Form.Item
               label="Tỉnh/Thành phố"
-              name="province"
+              name="provinceId"
               rules={[{ required: true, message: 'Vui lòng chọn tỉnh/thành phố!' }]}
             >
-              <Select placeholder="Chọn tỉnh thành phố">
-                <Select.Option value="HCM">Hồ Chí Minh</Select.Option>
-                <Select.Option value="HN">Hà Nội</Select.Option>
-                <Select.Option value="DN">Đà Nẵng</Select.Option>
-                <Select.Option value="HP">Hải Phòng</Select.Option>
-                <Select.Option value="CT">Cần Thơ</Select.Option>
-                <Select.Option value="BD">Bình Dương</Select.Option>
-                <Select.Option value="AG">An Giang</Select.Option>
-                <Select.Option value="BR">Bà Rịa - Vũng Tàu</Select.Option>
-                <Select.Option value="BL">Bạc Liêu</Select.Option>
-                <Select.Option value="BK">Bắc Kạn</Select.Option>
-                <Select.Option value="BG">Bắc Giang</Select.Option>
-                <Select.Option value="BN">Bắc Ninh</Select.Option>
-                <Select.Option value="BT">Bến Tre</Select.Option>
-                <Select.Option value="BĐ">Bình Định</Select.Option>
-                <Select.Option value="BP">Bình Phước</Select.Option>
-                <Select.Option value="BT">Bình Thuận</Select.Option>
-                <Select.Option value="CM">Cà Mau</Select.Option>
-                <Select.Option value="CB">Cao Bằng</Select.Option>
-                <Select.Option value="DL">Đắk Lắk</Select.Option>
-                <Select.Option value="DN">Đắk Nông</Select.Option>
-                <Select.Option value="DB">Điện Biên</Select.Option>
-                <Select.Option value="ĐT">Đồng Tháp</Select.Option>
-                <Select.Option value="GL">Gia Lai</Select.Option>
-                <Select.Option value="HG">Hà Giang</Select.Option>
-                <Select.Option value="HN">Hà Nam</Select.Option>
-                <Select.Option value="HT">Hà Tĩnh</Select.Option>
-                <Select.Option value="HD">Hải Dương</Select.Option>
-                <Select.Option value="HB">Hòa Bình</Select.Option>
-                <Select.Option value="HY">Hưng Yên</Select.Option>
-                <Select.Option value="KH">Khánh Hòa</Select.Option>
-                <Select.Option value="KG">Kiên Giang</Select.Option>
-                <Select.Option value="KT">Kon Tum</Select.Option>
-                <Select.Option value="LC">Lai Châu</Select.Option>
-                <Select.Option value="LD">Lâm Đồng</Select.Option>
-                <Select.Option value="LS">Lạng Sơn</Select.Option>
-                <Select.Option value="LC">Lào Cai</Select.Option>
-                <Select.Option value="LĐ">Long An</Select.Option>
-                <Select.Option value="ND">Nam Định</Select.Option>
-                <Select.Option value="NA">Nghệ An</Select.Option>
-                <Select.Option value="NB">Ninh Bình</Select.Option>
-                <Select.Option value="NT">Ninh Thuận</Select.Option>
-                <Select.Option value="PT">Phú Thọ</Select.Option>
-                <Select.Option value="PY">Phú Yên</Select.Option>
-                <Select.Option value="QB">Quảng Bình</Select.Option>
-                <Select.Option value="QN">Quảng Nam</Select.Option>
-                <Select.Option value="QG">Quảng Ngãi</Select.Option>
-                <Select.Option value="QN">Quảng Ninh</Select.Option>
-                <Select.Option value="QT">Quảng Trị</Select.Option>
-                <Select.Option value="ST">Sóc Trăng</Select.Option>
-                <Select.Option value="SL">Sơn La</Select.Option>
-                <Select.Option value="TN">Tây Ninh</Select.Option>
-                <Select.Option value="TB">Thái Bình</Select.Option>
-                <Select.Option value="TN">Thái Nguyên</Select.Option>
-                <Select.Option value="TH">Thanh Hóa</Select.Option>
-                <Select.Option value="TT">Thừa Thiên Huế</Select.Option>
-                <Select.Option value="TG">Tiền Giang</Select.Option>
-                <Select.Option value="TV">Trà Vinh</Select.Option>
-                <Select.Option value="TQ">Tuyên Quang</Select.Option>
-                <Select.Option value="VL">Vĩnh Long</Select.Option>
-                <Select.Option value="VP">Vĩnh Phúc</Select.Option>
-                <Select.Option value="YB">Yên Bái</Select.Option>
+              <Select
+                placeholder="Chọn tỉnh thành phố"
+                loading={provinceLoading}
+                onChange={handleProvinceChange}
+                showSearch
+                optionFilterProp="children"
+                filterOption={(input, option) =>
+                  (option?.children as unknown as string)?.toLowerCase().includes(input.toLowerCase())
+                }
+              >
+                {provinces?.map((province: any) => (
+                  <Select.Option key={province.id} value={province.id}>
+                    {province.name}
+                  </Select.Option>
+                ))}
               </Select>
             </Form.Item>
           </Col>
           <Col span={12}>
             <Form.Item
               label="Quận/Huyện"
-              name="district"
+              name="districtId"
               rules={[{ required: true, message: 'Vui lòng chọn quận/huyện!' }]}
             >
-              <Select placeholder="Chọn Quận/Huyện">
-                <Select.Option value="Q1">Quận 1</Select.Option>
-                <Select.Option value="Q2">Quận 2</Select.Option>
-                <Select.Option value="Q3">Quận 3</Select.Option>
-                <Select.Option value="Q4">Quận 4</Select.Option>
-                <Select.Option value="Q5">Quận 5</Select.Option>
-                <Select.Option value="Q6">Quận 6</Select.Option>
-                <Select.Option value="Q7">Quận 7</Select.Option>
-                <Select.Option value="Q8">Quận 8</Select.Option>
-                <Select.Option value="Q9">Quận 9</Select.Option>
-                <Select.Option value="Q10">Quận 10</Select.Option>
-                <Select.Option value="Q11">Quận 11</Select.Option>
-                <Select.Option value="Q12">Quận 12</Select.Option>
-                <Select.Option value="TB">Thủ Đức</Select.Option>
-                <Select.Option value="GV">Gò Vấp</Select.Option>
-                <Select.Option value="BT">Bình Thạnh</Select.Option>
-                <Select.Option value="TD">Tân Bình</Select.Option>
-                <Select.Option value="TB">Tân Phú</Select.Option>
-                <Select.Option value="PN">Phú Nhuận</Select.Option>
-                <Select.Option value="BT">Bình Tân</Select.Option>
-                <Select.Option value="HM">Hóc Môn</Select.Option>
-                <Select.Option value="CC">Củ Chi</Select.Option>
-                <Select.Option value="HB">Huyện Bình Chánh</Select.Option>
-                <Select.Option value="NC">Nhà Bè</Select.Option>
-                <Select.Option value="CB">Cần Giờ</Select.Option>
+              <Select
+                placeholder="Chọn Quận/Huyện"
+                loading={provinceLoading}
+                disabled={!districts || districts.length === 0}
+                showSearch
+                optionFilterProp="children"
+                filterOption={(input, option) =>
+                  (option?.children as unknown as string)?.toLowerCase().includes(input.toLowerCase())
+                }
+              >
+                {districts?.map((district: any) => (
+                  <Select.Option key={district.id} value={district.id}>
+                    {district.name}
+                  </Select.Option>
+                ))}
               </Select>
             </Form.Item>
           </Col>
@@ -451,7 +450,7 @@ const CreateJobPostModal: React.FC<CreateJobPostModalProps> = ({
 
         <Form.Item
           label="Tên người liên hệ"
-          name="contactName"
+          name="contactPersonName"
           rules={[{ required: true, message: 'Vui lòng nhập tên người liên hệ!' }]}
         >
           <Input placeholder="Nhập tên người liên hệ" />
@@ -459,7 +458,7 @@ const CreateJobPostModal: React.FC<CreateJobPostModalProps> = ({
 
         <Form.Item
           label="Số điện thoại người liên hệ"
-          name="contactPhone"
+          name="contactPersonPhone"
           rules={[
             { required: true, message: 'Vui lòng nhập số điện thoại!' },
             { pattern: /^[0-9+\-\s()]+$/, message: 'Số điện thoại không hợp lệ!' }
@@ -470,7 +469,7 @@ const CreateJobPostModal: React.FC<CreateJobPostModalProps> = ({
 
         <Form.Item
           label="Email người liên hệ"
-          name="contactEmail"
+          name="contactPersonEmail"
           rules={[
             { required: true, message: 'Vui lòng nhập email!' },
             { type: 'email', message: 'Email không hợp lệ!' }

@@ -1,4 +1,4 @@
-import EmployerHeader from "../../layouts/components/headers/EmployerHeader"
+import EmployerHeader from "../../layouts/EmployerLayout/components/Header"
 import { Typography, Button } from "antd"
 import CustomDivider from "../../components/Divider";
 import DefaultFooter from "../../layouts/components/footer/DefaultFooter";

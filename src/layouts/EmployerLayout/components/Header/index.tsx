@@ -1,9 +1,9 @@
 import { MessageOutlined, UserOutlined } from '@ant-design/icons';
 import { Header } from 'antd/es/layout/layout';
 import { useSelector } from 'react-redux';
-import type { RootState } from '../../../stores';
+import type { RootState } from '../../../../stores';
 import { useNavigate } from 'react-router-dom';
-import ROUTE_PATH from '../../../routes/routePath';
+import ROUTE_PATH from '../../../../routes/routePath';
 import { Button } from 'antd';
 
 const EmployerHeader = () =>  {

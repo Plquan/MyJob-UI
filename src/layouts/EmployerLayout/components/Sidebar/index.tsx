@@ -3,13 +3,12 @@ import {
   HomeOutlined,
   ApartmentOutlined,
   FileTextOutlined,
-  UserOutlined,
-  BarChartOutlined,
   GiftOutlined,
 } from '@ant-design/icons';
 import { useLocation, useNavigate } from 'react-router-dom';
 import type { MenuProps } from 'antd';
-import ROUTE_PATH from '../../../routes/routePath';
+import ROUTE_PATH from '../../../../routes/routePath';
+
 
 const items: MenuProps['items'] = [
   {
@@ -18,7 +17,7 @@ const items: MenuProps['items'] = [
     icon: <HomeOutlined />,
   },
   {
-    key: '/dashboard/company',
+    key: ROUTE_PATH.EMPLOYER_COMPANY,
     label: 'Quản lý công ty',
     icon: <ApartmentOutlined />,
   },
@@ -28,7 +27,7 @@ const items: MenuProps['items'] = [
     icon: <FileTextOutlined />,
     children: [
       {
-        key: '/dashboard/jobs',
+        key: ROUTE_PATH.EMPLOYER_JOB_POST,
         label: 'Quản lý tin tuyển dụng',
       },
       {
