@@ -17,7 +17,7 @@ const ROUTE_PATH = {
     CANDIDATE_ONLINE_RESUME: '/candidate/online-resume',
 
     //company
-    COMPANY_DETAIL: '/company-detail',
+    COMPANY_DETAIL: '/company-detail/:companyId',
 
     //job
     JOB_DETAIL: '/job-detail',

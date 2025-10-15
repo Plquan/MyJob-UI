@@ -1,5 +1,5 @@
 import { Button, Carousel, Modal } from "antd";
-import { ZoomInOutlined, LeftOutlined, RightOutlined, ExpandOutlined } from "@ant-design/icons";
+import { LeftOutlined, RightOutlined, ExpandOutlined } from "@ant-design/icons";
 import React from "react";
 
 interface CompanyImagesProps {
@@ -13,9 +13,20 @@ export default function CompanyImages({ images }: CompanyImagesProps) {
   const carouselRef = React.useRef<any>(null);
 
   const showModal = () => {
-    setCurrentImage(images[currentIndex]);
-    setIsModalOpen(true);
+    if (images.length > 0) {
+      setCurrentImage(images[currentIndex]);
+      setIsModalOpen(true);
+    }
   };
+
+  // Nếu không có hình ảnh, hiển thị placeholder
+  if (!images || images.length === 0) {
+    return (
+      <div className="border-2 border-gray-300 rounded-lg h-48 flex items-center justify-center bg-gray-100">
+        <span className="text-gray-500">Chưa có hình ảnh</span>
+      </div>
+    );
+  }
 
   const arrowStyle =
     "absolute top-1/2 -translate-y-1/2 w-8 h-8 flex items-center justify-center text-black text-lg rounded-full bg-white/80 hover:bg-white z-10 shadow border border-gray-200 cursor-pointer";

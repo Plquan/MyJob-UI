@@ -16,25 +16,27 @@ import {
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import { useEffect } from 'react';
+import dayjs from 'dayjs';
 import { useDispatch, useSelector } from 'react-redux';
 import { POSITION_OPTIONS, EXPERIENCE_OPTIONS, JOBTYPE_OPTIONS, GENDER_OPTIONS, ACADEMICLEVEL_OPTIONS, WORKPLACE_OPTIONS } from '../../../../constant/selectOptions';
 import type { AppDispatch, RootState } from '../../../../stores';
 import { careerActions } from '../../../../stores/careerStore/careerReducer';
 import { provinceActions } from '../../../../stores/provinceStore/provinceReducer';
 import { jobPostActions } from '../../../../stores/jobPostStore/jobPostReducer';
-import type { ICreateJobPostReq } from '../../../../types/job-post/JobPostType';
+import type { ICreateJobPostReq, IJobPostData } from '../../../../types/job-post/JobPostType';
 
-
-interface CreateJobPostModalProps {
+interface EditJobPostModalProps {
   visible: boolean;
   onCancel: () => void;
   onSubmit: (values: any) => void;
+  editData?: IJobPostData; 
 }
 
-const CreateJobPostModal: React.FC<CreateJobPostModalProps> = ({
+const EditJobPostModal: React.FC<EditJobPostModalProps> = ({
   visible,
   onCancel,
-  onSubmit
+  onSubmit,
+  editData
 }) => {
   const [form] = Form.useForm();
   const dispatch = useDispatch<AppDispatch>();
@@ -46,9 +48,21 @@ const CreateJobPostModal: React.FC<CreateJobPostModalProps> = ({
   useEffect(() => {
     if (visible) {
       dispatch(careerActions.getAllCareers());
-      dispatch(provinceActions.getAllProvinces());
+      dispatch(provinceActions.getAllProvinces());   
+      if (editData) {
+        form.setFieldsValue({
+          ...editData,
+          deadline: editData.deadline ? dayjs(editData.deadline) : undefined,
+        });
+        
+        if (editData.provinceId) {
+          dispatch(provinceActions.getDistrictsByProvince(editData.provinceId));
+        }
+      } else {
+        form.resetFields();
+      }
     }
-  }, [visible, dispatch]);
+  }, [visible, dispatch, editData, form]);
 
   const handleProvinceChange = (provinceId: number) => {
     form.setFieldsValue({ districtId: undefined });
@@ -58,17 +72,18 @@ const CreateJobPostModal: React.FC<CreateJobPostModalProps> = ({
   };
 
   const handleSubmit = async (values: any) => {
-    try {
-      const jobPostData: ICreateJobPostReq = {
-        ...values,
-      };
+    const jobPostData: ICreateJobPostReq = {
+      ...values,
+    };
 
+    if (editData?.id) {
+      await dispatch(jobPostActions.updateJobPost({ id: editData.id, ...jobPostData }));
+    } else {
       await dispatch(jobPostActions.createJobPost(jobPostData));
-      form.resetFields();
-      onSubmit(values);
-    } catch (error) {
-      console.error('Error creating job post:', error);
     }
+    
+    form.resetFields();
+    onSubmit(values);
   };
 
   const handleCancel = () => {
@@ -78,7 +93,7 @@ const CreateJobPostModal: React.FC<CreateJobPostModalProps> = ({
 
   return (
     <Modal
-      title="Tin tuyển dụng"
+      title={editData?.id ? "Chỉnh sửa tin tuyển dụng" : "Tạo tin tuyển dụng"}
       open={visible}
       onCancel={handleCancel}
       width={700}
@@ -93,7 +108,7 @@ const CreateJobPostModal: React.FC<CreateJobPostModalProps> = ({
           loading={jobPostLoading}
           onClick={() => form.submit()}
         >
-          Lưu
+          {editData?.id ? "Cập nhật" : "Lưu"}
         </Button>,
       ]}
     >
@@ -110,6 +125,10 @@ const CreateJobPostModal: React.FC<CreateJobPostModalProps> = ({
         onFinish={handleSubmit}
         className="max-h-[70vh] overflow-y-auto overflow-x-hidden"
       >
+        <Form.Item name="id" hidden>
+          <Input />
+        </Form.Item>
+
         <Row gutter={16} align="top">
           <Col span={12}>
             <Form.Item
@@ -229,7 +248,7 @@ const CreateJobPostModal: React.FC<CreateJobPostModalProps> = ({
           <Col span={12}>
             <Form.Item
               label="Yêu cầu giới tính"
-              name="gender"
+              name="genderRequirement"
               rules={[{ required: true, message: 'Vui lòng chọn yêu cầu giới tính!' }]}
             >
               <Select placeholder="Chọn giới tính yêu cầu">
@@ -314,7 +333,7 @@ const CreateJobPostModal: React.FC<CreateJobPostModalProps> = ({
           <div className="ckeditor-wrapper">
             <CKEditor
               editor={ClassicEditor as any}
-              data=""
+              data={editData?.jobDescription || ""}
               onChange={(_event, editor) => {
                 const data = editor.getData();
                 form.setFieldsValue({ jobDescription: data });
@@ -341,7 +360,7 @@ const CreateJobPostModal: React.FC<CreateJobPostModalProps> = ({
           <div className="ckeditor-wrapper">
             <CKEditor
               editor={ClassicEditor as any}
-              data=""
+              data={editData?.jobRequirement || ""}
               onChange={(_event, editor) => {
                 const data = editor.getData();
                 form.setFieldsValue({ jobRequirement: data });
@@ -368,7 +387,7 @@ const CreateJobPostModal: React.FC<CreateJobPostModalProps> = ({
           <div className="ckeditor-wrapper">
             <CKEditor
               editor={ClassicEditor as any}
-              data=""
+              data={editData?.benefitsEnjoyed || ""}
               onChange={(_event, editor) => {
                 const data = editor.getData();
                 form.setFieldsValue({ benefitsEnjoyed: data });
@@ -440,15 +459,6 @@ const CreateJobPostModal: React.FC<CreateJobPostModalProps> = ({
         </Row>
 
         <Form.Item
-          label="Địa chỉ"
-          name="address"
-          rules={[{ required: true, message: 'Vui lòng nhập địa chỉ!' }]}
-        >
-          <Input placeholder="Nhập địa chỉ" />
-        </Form.Item>
-
-
-        <Form.Item
           label="Tên người liên hệ"
           name="contactPersonName"
           rules={[{ required: true, message: 'Vui lòng nhập tên người liên hệ!' }]}
@@ -482,4 +492,4 @@ const CreateJobPostModal: React.FC<CreateJobPostModalProps> = ({
   );
 };
 
-export default CreateJobPostModal;
+export default EditJobPostModal;

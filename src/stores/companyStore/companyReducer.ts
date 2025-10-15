@@ -1,10 +1,9 @@
 import { createSlice } from "@reduxjs/toolkit"
-import type { ICompanyData, ICompanyWithImagesData } from "../../types/company/CompanyType";
+import type { ICompanyData, ICompanyDetail, ICompanyWithImagesData } from "../../types/company/CompanyType";
 import companyThunks from "./companyThunk";
 import type { IMyJobFile } from "../../types/myJobFile/myJobFileType";
 import { FileType } from "../../constant/fileType";
 import { message } from "antd";
-import type { IJobPostData } from "../../types/job-post/JobPostType";
 
 interface CompanyState {
     companyInfo?: ICompanyData,
@@ -12,6 +11,7 @@ interface CompanyState {
     logo?: IMyJobFile,
     coverImage?: IMyJobFile,
     companyImages: IMyJobFile[],
+    companyDetail?: ICompanyDetail
     loading: boolean,
     submitting: {
         logo: boolean;
@@ -122,7 +122,20 @@ export const companySlice = createSlice({
             state.loading = false;
             message.error((action.payload as { message: string }).message);
         })
-      
+
+        // get company detail
+        builder.addCase(companyThunks.getCompanyDetail.pending, (state) => {
+            state.loading = true;
+        });
+        builder.addCase(companyThunks.getCompanyDetail.fulfilled, (state, action) => {
+            state.companyDetail = action.payload
+            state.loading = false;
+        });
+        builder.addCase(companyThunks.getCompanyDetail.rejected, (state, action) => {
+            state.loading = false;
+            message.error((action.payload as { message: string }).message);
+        })
+
     }
 })
 

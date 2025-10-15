@@ -16,7 +16,7 @@ import {
   PlusOutlined,
 } from '@ant-design/icons';
 import type { ColumnsType } from 'antd/es/table';
-import CreateJobPostModal from './components/CreateJobPostModal';
+import EditJobPostModal from './components/EditJobPostModal';
 import { useDispatch, useSelector } from 'react-redux';
 import type { AppDispatch, RootState } from '../../../stores';
 import type { IJobPostData, IGetJobPostsReqParams } from '../../../types/job-post/JobPostType';
@@ -37,6 +37,7 @@ const ManageJobPostPage = () => {
   
   const [statusFilter, setStatusFilter] = useState<number | undefined>(undefined);
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [editData, setEditData] = useState<any>(undefined);
   const debouncedSearch = useDebounce(search, 500);
 
   const loadJobPosts = () => {
@@ -53,17 +54,21 @@ const ManageJobPostPage = () => {
     loadJobPosts();
   }, [dispatch, page, limit, jobPostStatus, debouncedSearch]);
 
-  const showModal = () => {
+  const showModal = (data?: any) => {
+    setEditData(data);
     setIsModalVisible(true);
   };
 
   const handleCancel = () => {
     setIsModalVisible(false);
+    setEditData(undefined);
   };
 
   const handleSubmit = (values: any) => {
     console.log('Form values:', values);
     setIsModalVisible(false);
+    setEditData(undefined);
+    loadJobPosts(); // Reload data after submit
   };
 
 
@@ -81,10 +86,10 @@ const ManageJobPostPage = () => {
   const columns: ColumnsType<IJobPostData> = [
     {
       title: '#',
-      dataIndex: 'id',
-      key: 'id',
+      key: 'index',
       width: 40,
       align: 'center',
+      render: (_, __, index) => (page - 1) * limit + index + 1,
     },
     {
       title: 'Tên tin đăng',
@@ -142,10 +147,15 @@ const ManageJobPostPage = () => {
       key: 'action',
       width: 100,
       align: 'center',
-        render: () => (
+        render: (_, record) => (
         <Space size="small">
           <Tooltip title="Chỉnh sửa">
-            <Button type="text" size="small" icon={<EditOutlined className="text-blue-500!" />} />
+            <Button 
+              type="text" 
+              size="small" 
+              icon={<EditOutlined className="text-blue-500!" />} 
+              onClick={() => showModal(record)}
+            />
           </Tooltip>
           <Tooltip title="Xóa">
             <Button type="text" danger icon={<DeleteOutlined />} size="small" />
@@ -219,10 +229,11 @@ const ManageJobPostPage = () => {
         />
       </div>
 
-      <CreateJobPostModal
+      <EditJobPostModal
         visible={isModalVisible}
         onCancel={handleCancel}
         onSubmit={handleSubmit}
+        editData={editData}
       />
     </Card>
   );

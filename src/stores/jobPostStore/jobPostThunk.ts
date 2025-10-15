@@ -1,5 +1,5 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import type { ICreateJobPostReq, IJobPostData, IGetJobPostsReqParams } from "../../types/job-post/JobPostType";
+import type { ICreateJobPostReq, IJobPostData, IGetJobPostsReqParams, IJobPostUpdate } from "../../types/job-post/JobPostType";
 import http from "../../ultils/axios/axiosCustom";
 import type { IPaginationResponse } from "../../types/AppType";
 
@@ -33,11 +33,24 @@ const getCompanyJobPosts = createAsyncThunk (
     }
 )
 
+const updateJobPost = createAsyncThunk (
+    "jobPost/updateJobPost",
+    async (data: IJobPostUpdate, {rejectWithValue}): Promise<IJobPostData> => {
+        try {
+            const response: IJobPostData = await http.put("/job-post",data);
+            return response;
+        } catch (error: any) {
+            return rejectWithValue(error.response.data) as any;
+        }
+    }
+)
+
 
 
 const jobPostThunks = {
     createJobPost,
-    getCompanyJobPosts
+    getCompanyJobPosts,
+    updateJobPost
 }
 
 export default  jobPostThunks

@@ -1,3 +1,4 @@
+import type { IJobPostData } from "../job-post/JobPostType";
 import type { IMyJobFile } from "../myJobFile/myJobFileType";
 
 export interface ICompanyData {
@@ -46,3 +47,8 @@ export interface IUpdateCompanyRequest {
   employeeSize?: number;
   address: string;
 }
+
+export interface ICompanyDetail extends ICompanyWithImagesData {
+  jobPosts?: IJobPostData[];
+}
+

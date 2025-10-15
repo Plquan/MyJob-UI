@@ -57,6 +57,7 @@ export interface ICreateJobPostReq {
   typeOfWorkPlace: number;
   experience: number;
   academicLevel: number;
+  genderRequirement:number;
   jobType: number;
   isHot: boolean;
   isUrgent: boolean;
@@ -65,8 +66,9 @@ export interface ICreateJobPostReq {
   contactPersonEmail: string;
   contactPersonPhone: string;
 }
+
 export interface IJobPostUpdate extends Partial<ICreateJobPostReq> {
-  id: string;
+  id: number;
 }
 
 export interface IGetJobPostsReqParams {

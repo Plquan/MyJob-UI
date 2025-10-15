@@ -58,12 +58,12 @@ export const jobPostSlice = createSlice({
             state.loading = false;
             message.success("Thêm tin tuyển dụng thành công")
         });
-        builder.addCase(jobPostThunks.createJobPost.rejected, (state,action) => {
+        builder.addCase(jobPostThunks.createJobPost.rejected, (state, action) => {
             state.loading = false;
             message.error((action.payload as { message: string }).message);
         })
 
-        // company job post
+        //get company job post
         builder.addCase(jobPostThunks.getCompanyJobPosts.pending, (state) => {
             state.loading = true;
         });
@@ -73,7 +73,27 @@ export const jobPostSlice = createSlice({
                 state.totalPages = action.payload.totalPages
             state.loading = false;
         });
-        builder.addCase(jobPostThunks.getCompanyJobPosts.rejected, (state,action) => {
+        builder.addCase(jobPostThunks.getCompanyJobPosts.rejected, (state, action) => {
+            state.loading = false;
+            message.error((action.payload as { message: string }).message);
+        })
+
+        builder.addCase(jobPostThunks.updateJobPost.pending, (state) => {
+            state.loading = true;
+        });
+        builder.addCase(jobPostThunks.updateJobPost.fulfilled, (state, action) => {
+            const updated = action.payload; 
+            const index = state.companyJobPost.findIndex(job => job.id === updated.id);
+            if (index !== -1) {
+                state.companyJobPost[index] = {
+                    ...state.companyJobPost[index],
+                    ...updated,
+                };
+            }
+            state.loading = false;
+            message.success("Cập nhật tin thành công")
+        });
+        builder.addCase(jobPostThunks.updateJobPost.rejected, (state, action) => {
             state.loading = false;
             message.error((action.payload as { message: string }).message);
         })
