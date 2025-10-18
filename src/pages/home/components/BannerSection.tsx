@@ -1,5 +1,4 @@
 import { LoginOutlined, RocketOutlined } from '@ant-design/icons';
-import { Button } from 'antd';
 
 const BannerSection = () => {
     return (

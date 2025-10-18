@@ -61,6 +61,7 @@ const ProfileModal: React.FC<ProfileModalProps> = ({ open, onCancel,onFinish, in
       width={700}
       loading={loading}
       centered
+      getContainer={false}
     >
       <Form 
         form={form} 

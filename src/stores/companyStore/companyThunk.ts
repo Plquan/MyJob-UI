@@ -77,13 +77,26 @@ const getCompanyDetail = createAsyncThunk (
     "company/getCompanyDetail",
     async (companyId: number, {rejectWithValue}): Promise<ICompanyDetail> => {
         try {
-            const response: ICompanyDetail = await http.get(`company/get-company-detail/${companyId}`);
+            const response: ICompanyDetail = await http.get(`/company/get-company-detail/${companyId}`);
             return response;
         } catch (error: any) {
             return rejectWithValue(error.response.data) as any;
         }
     }
 )
+
+const toggleFollowCompany = createAsyncThunk (
+    "company/toggleFollowCompany",
+    async (companyId: number, {rejectWithValue}): Promise<boolean> => {
+        try {
+            const response: boolean = await http.post(`company/toggle-follow-company?companyId=${companyId}`);
+            return response;
+        } catch (error: any) {
+            return rejectWithValue(error.response.data) as any;
+        }
+    }
+)
+
 
 
 const companyThunks = {
@@ -93,7 +106,8 @@ const companyThunks = {
     uploadCompanyImages,
     deleteCompanyImage,
     getCompanies,
-    getCompanyDetail
+    getCompanyDetail,
+    toggleFollowCompany
 }
 
 export default companyThunks

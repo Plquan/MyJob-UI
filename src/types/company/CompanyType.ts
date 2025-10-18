@@ -25,7 +25,8 @@ export interface ICompanyData {
 
 export interface ICompanyWithImagesData {
   company: ICompanyData
-  images?: IMyJobFile[];
+  images?: IMyJobFile[]
+  isFollowed: boolean
 }
 
 export interface IUpdateCompanyRequest {

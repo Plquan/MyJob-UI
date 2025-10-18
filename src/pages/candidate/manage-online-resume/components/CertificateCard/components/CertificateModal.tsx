@@ -40,7 +40,8 @@ import { normalizeDate } from "../../../../../../ultils/functions/normalizeDate"
       onCancel={onCancel}
       footer={null}
       width={700}
-      centered  
+      centered
+      getContainer={false}
      >
       <Form
         form={form}

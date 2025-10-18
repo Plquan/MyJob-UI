@@ -1,13 +1,11 @@
-import { Input, Select, Button, Spin } from "antd";
-import { SearchOutlined } from "@ant-design/icons";
+import { Spin } from "antd";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { companyActions } from "../../../stores/companyStore/companyReducer";
-import type { RootState, AppDispatch } from "../../../stores";
-import type { ICompanyWithImagesData } from "../../../types/company/CompanyType";
-import CompanyItem from "../../../components/CompanyItem";
-const { Option } = Select;
-
+import { companyActions } from "../../stores/companyStore/companyReducer";
+import type { RootState, AppDispatch } from "../../stores";
+import type { ICompanyWithImagesData } from "../../types/company/CompanyType";
+import CompanyItem from "../../components/CompanyItem";
+import CompanySearchBar from "./components/CompanySearchBar";
 
 const CompanyPage = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -22,20 +20,10 @@ const CompanyPage = () => {
       <div className="min-h-screen p-6">
         <div className="max-w-4xl mx-auto mb-8">
           <div className="mb-6">
-            <h1 className="text-4xl font-bold">Nhà tuyển dụng hàng đầu</h1>
+            <h1 className="text-3xl font-bold! text-gray-900">Khám Phá Văn Hóa Công ty</h1>
+            <p className="text-sm text-gray-700">Tìm hiểu văn hóa công ty và chọn cho bạn nơi làm việc phù hợp nhất</p>
           </div>
-
-          <div className="flex items-center  gap-2 rounded-lg">
-            <Input placeholder="GSI" allowClear className="w-80!" />
-            <Select defaultValue="Tất cả tỉnh thành" className="w-44">
-              <Option value="all">Tất cả tỉnh thành</Option>
-              <Option value="hcm">TP.HCM</Option>
-              <Option value="hn">Hà Nội</Option>
-            </Select>
-            <Button type="primary" icon={<SearchOutlined />} className="px-4 h-10 flex items-center">
-              Tìm Kiếm
-            </Button>
-          </div>
+          <CompanySearchBar />
         </div>
 
         <div className="bg-white p-4 rounded-xl border border-gray-200 max-w-4xl mx-auto">

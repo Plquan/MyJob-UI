@@ -31,6 +31,7 @@ const SkillModal = ({ open, onSubmit, onCancel,form, initialValues }: SkillModal
       title="Kỹ năng chuyên môn"
       footer={null}
       centered
+      getContainer={false}
     >
       <Form
         form={form}

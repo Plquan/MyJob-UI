@@ -1,9 +1,12 @@
 import { Card, Avatar, Button } from "antd";
-import { CarryOutOutlined, EnvironmentOutlined, FlagOutlined, TeamOutlined, UsergroupAddOutlined, UserOutlined } from "@ant-design/icons";
+import { CarryOutOutlined, EnvironmentOutlined, FlagOutlined, TeamOutlined, UsergroupAddOutlined, UserOutlined, HeartOutlined, HeartFilled } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 import type { ICompanyWithImagesData } from "../../types/company/CompanyType";
 import { FileType } from "../../constant/fileType";
 import ROUTE_PATH from "../../routes/routePath";
+import { companyActions } from "../../stores/companyStore/companyReducer";
+import type { RootState, AppDispatch } from "../../stores";
 
 interface CompanyItemProps {
   company: ICompanyWithImagesData;
@@ -21,6 +24,13 @@ const getCompanyCover = (company: ICompanyWithImagesData): string => {
 
 const CompanyItem = ({ company }: CompanyItemProps) => {
   const navigate = useNavigate();
+  const dispatch = useDispatch<AppDispatch>();
+  const { submitting } = useSelector((state: RootState) => state.companyStore);
+
+  const handleToggleFollow = async (e: React.MouseEvent) => {
+    e.stopPropagation();
+    await dispatch(companyActions.toggleFollowCompany(company.company.id)).unwrap();
+  };
 
   return (
     <Card
@@ -72,13 +82,16 @@ const CompanyItem = ({ company }: CompanyItemProps) => {
             <span className="ml-2">0 việc làm</span>
           </div>
         </div>
-        
+
         <div className="mt-4">
-          <Button 
+          <Button
             className="w-full"
-            onClick={(e) => e.stopPropagation()}
+            onClick={handleToggleFollow}
+            loading={submitting.followCompany}
+            icon={company.isFollowed ? <HeartFilled /> : <HeartOutlined />}
+            type={company.isFollowed ? "primary" : "default"}
           >
-            Theo dõi
+            {company.isFollowed ? "Đã theo dõi" : "Theo dõi"}
           </Button>
         </div>
       </div>

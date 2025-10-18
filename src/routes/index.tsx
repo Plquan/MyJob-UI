@@ -4,7 +4,7 @@ import CompanyLoginPage from "../pages/auth/employer/LoginPage";
 import CompanyRegisterPage from "../pages/auth/employer/RegisterPage";
 import HomePage from "../pages/home/HomePage";
 import JobsPage from "../pages/jobs/JobPage";
-import CompanyPage from "../pages/company/companies";
+import CompanyPage from "../pages/company";
 
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import ROUTE_PATH from "./routePath";
