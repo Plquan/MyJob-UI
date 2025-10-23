@@ -1,14 +1,14 @@
-import { Modal, Form, Input, Button, InputNumber, Switch } from 'antd';
-import { useDispatch, useSelector } from 'react-redux';
-import type { RootState, AppDispatch } from '../../../../../../stores';
-import type { IPackage } from '../../../../../../types/package/PackageType';
+import { Modal, Form, Input, Button, InputNumber, Row, Col, Checkbox } from 'antd';
+import { useSelector } from 'react-redux';
+import type { RootState } from '../../../../../../stores';
+import type { ICreatePackagedata, IUpdatePackageData } from '../../../../../../types/package/PackageType';
 
 const { TextArea } = Input
 
 interface AddPackageModalProps {
   open: boolean;
   onCancel: () => void
-  onFinish: (data: IPackage) => void
+  onFinish: (data: ICreatePackagedata | IUpdatePackageData) => void
   form: any
   isEdit?: boolean
 }
@@ -23,8 +23,6 @@ const PackageModal: React.FC<AddPackageModalProps> = ({
 
   const { isSubmiting } = useSelector((state: RootState) => state.packageStore);
 
-
-
   return (
     <Modal
       title={isEdit ? "Chỉnh sửa gói" : "Thêm gói mới"}
@@ -32,7 +30,7 @@ const PackageModal: React.FC<AddPackageModalProps> = ({
       onCancel={onCancel}
       footer={null}
       centered
-      width={600}
+      width={800}
     >
       <Form
         form={form}
@@ -44,76 +42,157 @@ const PackageModal: React.FC<AddPackageModalProps> = ({
           <Input hidden />
         </Form.Item>
 
-        <Form.Item
-          label="Tên gói"
-          name="name"
-          rules={[
-            { required: true, message: 'Vui lòng nhập tên gói!' },
-            { min: 2, message: 'Tên gói phải có ít nhất 2 ký tự!' }
-          ]}
-        >
-          <Input placeholder="Nhập tên gói..." />
-        </Form.Item>
+        <Row gutter={16}>
+          <Col span={12}>
+            <Form.Item
+              label="Tên gói"
+              name="name"
+              rules={[
+                { required: true, message: 'Vui lòng nhập tên gói!' },
+                { min: 2, message: 'Tên gói phải có ít nhất 2 ký tự!' },
+                { max: 100, message: 'Tên gói không được quá 100 ký tự!' }
+              ]}
+            >
+              <Input placeholder="Nhập tên gói..." />
+            </Form.Item>
+          </Col>
+          <Col span={12}>
+            <Form.Item
+              label="Giá tiền"
+              name="price"
+              rules={[
+                { required: true, message: 'Vui lòng nhập giá gói!' },
+                { type: 'number', min: 1, message: 'Giá phải lớn hơn 0!' },
+                { 
+                  validator: (_, value) => {
+                    if (value && value > 1000000000) {
+                      return Promise.reject(new Error('Giá không được quá 1 tỷ!'));
+                    }
+                    return Promise.resolve();
+                  }
+                }
+              ]}
+            >
+              <InputNumber
+                placeholder="Nhập giá gói..."
+                style={{ width: '100%' }}
+                min={1}
+                formatter={(value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+              />
+            </Form.Item>
+          </Col>
+        </Row>
 
-        <Form.Item
-          label="Giá (VND)"
-          name="price"
-          rules={[
-            { required: true, message: 'Vui lòng nhập giá gói!' },
-          ]}
-        >
-          <InputNumber 
-            placeholder="Nhập giá gói..." 
-            style={{ width: '100%' }}
-            min={0}
-          />
-        </Form.Item>
+        <Row gutter={16}>
+          <Col span={8}>
+            <Form.Item
+              label="Thời hạn gói"
+              name="durationInDays"
+              rules={[
+                { required: true, message: 'Vui lòng nhập thời hạn!' },
+              ]}
+            >
+              <InputNumber
+                placeholder="Thời hạn gói"
+                style={{ width: '100%' }}
+                min={1}
+              />
+            </Form.Item>
+          </Col>
+          <Col span={8}>
+            <Form.Item
+              label="Tin nổi bật (ngày)"
+              name="jobHotDurationInDays"
+            >
+              <InputNumber
+                placeholder="Thời hạn tin nổi bật"
+                style={{ width: '100%' }}
+                min={0}
+              />
+            </Form.Item>
+          </Col>
+          <Col span={8}>
+            <Form.Item
+              label="Công ty nổi bật (ngày)"
+              name="highlightCompanyDurationInDays"
+            >
+              <InputNumber
+                placeholder="Thời hạn công ty nổi bật"
+                style={{ width: '100%' }}
+                min={0}
+              />
+            </Form.Item>
+          </Col>
+        </Row>
 
-        <Form.Item
-          label="Thời hạn (ngày)"
-          name="durationInDays"
-          rules={[
-            { type: 'number', min: 1, message: 'Thời hạn phải lớn hơn 0!' }
-          ]}
-        >
-          <InputNumber 
-            placeholder="Nhập thời hạn (để trống nếu không giới hạn)..." 
-            style={{ width: '100%' }}
-            min={1}
-          />
-        </Form.Item>
-
-        <Form.Item
-          label="Trạng thái"
-          name="isActive"
-          valuePropName="checked"
-          initialValue={true}
-        >
-          <Switch/>
-        </Form.Item>
+        <Row gutter={16}>
+          <Col span={8}>
+            <Form.Item
+              label="Lượt tìm ứng viên"
+              name="candidateSearchLimit"
+            >
+              <InputNumber
+                placeholder="Lượt tìm ứng viên"
+                style={{ width: '100%' }}
+                min={0}
+              />
+            </Form.Item>
+          </Col>
+          <Col span={8}>
+            <Form.Item
+              label="Lượt xem hồ sơ"
+              name="cvSearchLimit"
+            >
+              <InputNumber
+                placeholder="Lượt xem hồ sơ"
+                style={{ width: '100%' }}
+                min={0}
+              />
+            </Form.Item>
+          </Col>
+          <Col span={8}>
+            <Form.Item
+              label="Số tin đăng tối đa"
+              name="jobPostLimit"
+            >
+              <InputNumber
+                placeholder="Số tin đăng tối đa"
+                style={{ width: '100%' }}
+                min={0}
+              />
+            </Form.Item>
+          </Col>
+        </Row>
 
         <Form.Item
           label="Mô tả"
           name="description"
         >
-          <TextArea 
-            rows={4} 
+          <TextArea
+            rows={5}
             placeholder="Nhập mô tả gói (không bắt buộc)..."
           />
         </Form.Item>
 
-          <div className="flex justify-end gap-2">
-            <Button onClick={onCancel}>
-              Hủy
-            </Button>
-            <Button 
-              type="primary" 
-              htmlType="submit"
-              loading={isSubmiting}
-            >
-              {isEdit ? "Cập nhật" : "Thêm gói"}
-            </Button>
-          </div>
+        <Form.Item
+          name="isActive"
+          valuePropName="checked"
+        >
+          <Checkbox>Hoạt động</Checkbox>
+        </Form.Item>
+
+        <div className="flex justify-end gap-2">
+          <Button onClick={onCancel}>
+            Hủy
+          </Button>
+          <Button
+            type="primary"
+            htmlType="submit"
+            loading={isSubmiting}
+          >
+            {isEdit ? "Cập nhật" : "Thêm gói"}
+          </Button>
+        </div>
       </Form>
     </Modal>
   );

@@ -1,44 +1,54 @@
-import { Button, Space, Tag } from "antd";
-import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
+import { Button, Space } from "antd";
+import { EditOutlined, DeleteOutlined, CheckCircleFilled, StopOutlined } from '@ant-design/icons';
 import { formatVND } from '../../../../../../ultils/functions/formatVND';
+import type { IPackageDto } from '../../../../../../types/package/PackageType';
 
-export const PackageColumns = (handleEdit: (record: any) => void, handleDelete?: (packageId: number) => void) => [
+export const PackageColumns = (handleEdit: (record: IPackageDto) => void, handleDelete?: (packageId: number) => void) => [
   {
-    title: '#',
-    key: 'key',
+    title: 'STT',
+    key: 'index',
+    width: 80,
+    align: 'center' as const,
     render: (_: any, __: any, index: number) => index + 1,
   },
   {
     title: 'Tên gói',
     dataIndex: 'name',
     key: 'name',
+    width: 200,
   },
   {
-    title: 'Giá (VND)',
+    title: 'Giá tiền',
     dataIndex: 'price',
     key: 'price',
+    width: 150,
     render: (price: number) => formatVND(price),
   },
   {
-    title: 'Thời hạn (ngày)',
-    dataIndex: 'durationInDays',
-    key: 'durationInDays',
-    render: (days: number) => days ? `${days} ngày` : 'Không giới hạn',
+    title: 'Mô tả',
+    dataIndex: 'description',
+    key: 'description',
+    ellipsis: true,
+    render: (description: string) => description,
   },
   {
     title: 'Trạng thái',
     dataIndex: 'isActive',
     key: 'isActive',
-    render: (isActive: boolean) => (
-      <Tag color={isActive ? 'green' : 'red'}>
-        {isActive ? 'Hoạt động' : 'Không hoạt động'}
-      </Tag>
-    ),
+    width: 120,
+    align: 'center' as const,
+    render: (isActive: boolean) =>
+      isActive ? (
+        <CheckCircleFilled style={{ color: '#3CB371', fontSize: '16px' }} />
+      ) : (
+        <StopOutlined  style={{ color: '#B22222', fontSize: '14px' }} />
+      ),
   },
   {
     title: 'Thao tác',
     key: 'action',
-    render: (_: any, record: any) => (
+    width: 120,
+    render: (_: any, record: IPackageDto) => (
       <Space size="middle">
         <Button 
           type="primary" 

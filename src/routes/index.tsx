@@ -3,7 +3,7 @@ import CandidateRegisterPage from "../pages/auth/candidate/RegisterPage";
 import CompanyLoginPage from "../pages/auth/employer/LoginPage";
 import CompanyRegisterPage from "../pages/auth/employer/RegisterPage";
 import HomePage from "../pages/home/HomePage";
-import JobsPage from "../pages/jobs/JobPage";
+import JobsPage from "../pages/jobs";
 import CompanyPage from "../pages/company";
 
 import { BrowserRouter, Route, Routes } from "react-router-dom";

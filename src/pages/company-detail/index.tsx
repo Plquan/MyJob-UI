@@ -11,6 +11,7 @@ import { useParams } from "react-router-dom";
 import type { RootState } from "../../stores";
 import { companyActions } from "../../stores/companyStore/companyReducer";
 import CompanyImages from "./components/CompanyImages";
+import JobCard from "../../components/JobCard";
 
 export default function CompanyDetail() {
   const dispatch = useDispatch();
@@ -24,7 +25,6 @@ export default function CompanyDetail() {
     }
   }, [dispatch, companyId]);
 
-  // Lấy dữ liệu từ API hoặc fallback về dữ liệu mặc định
   const company = companyDetail?.company;
   const companyImages = companyDetail?.images
     ?.filter(img => img.fileType === "COMPANY_IMAGE")
@@ -50,7 +50,6 @@ export default function CompanyDetail() {
   return (
     <div className="mb-10">
       <div className="max-w-5xl mx-auto bg-white rounded-xl shadow overflow-hidden">
-        {/* Cover Image */}
         <div className="relative">
           <img
             src={companyDetail?.images?.find(img => img.fileType === "COVER_IMAGE")?.url || "/assets/hiring-banner.png"}
@@ -65,7 +64,7 @@ export default function CompanyDetail() {
               size={90}
               shape="square"
               src={companyDetail?.images?.find(img => img.fileType === "LOGO")?.url || "/assets/vinhuni.png"}
-              className="border-4 border-white bg-white! shadow-xl"
+              className="border-5! border-white bg-white! shadow-xl"
             />
             <div className="mt-10">
               <div className="font-bold text-lg">{company.companyName}</div>
@@ -94,30 +93,23 @@ export default function CompanyDetail() {
         </div>
       </div>
 
-      {/* 2 Card phía dưới header */}
       <div className="max-w-5xl mx-auto mt-6 flex gap-6">
-        {/* Card Về công ty */}
         <div className="flex-1 bg-white rounded-xl shadow p-6">
           <div className="font-bold text-lg mb-2 text-[#2d2172]">Về công ty</div>
-          <div className="text-sm text-gray-700">
-            {company.description || "Chưa có mô tả về công ty"}
-          </div>
-          {/* Phần Việc làm đang tuyển */}
+          {company.description ? (
+            <div className="text-sm text-gray-700">
+              {company.description}
+            </div>
+          ) : (
+            <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description="Chưa có mô tả về công ty" />
+          )}
           <div className="mt-6">
             <div className="font-bold text-lg mb-2 text-[#2d2172]">Việc làm đang tuyển</div>
-            <div className="flex flex-col items-center justify-center py-4">
+            <div className="py-4">
               {jobPosts.length > 0 ? (
-                <div className="w-full">
+                <div className="space-y-4">
                   {jobPosts.map((job) => (
-                    <div key={job.id} className="border-b border-gray-200 py-3 last:border-b-0">
-                      <div className="font-medium text-gray-900">{job.jobName}</div>
-                      <div className="text-sm text-gray-600 mt-1">
-                        {job.salaryMin && job.salaryMax 
-                          ? `${job.salaryMin.toLocaleString()} - ${job.salaryMax.toLocaleString()} VNĐ`
-                          : "Lương thỏa thuận"
-                        }
-                      </div>
-                    </div>
+                  <h1></h1>
                   ))}
                 </div>
               ) : (

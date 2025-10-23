@@ -1,27 +1,21 @@
 import { createSlice } from "@reduxjs/toolkit";
-import type { IFeature, IPackageFeature, IPackage, IPackagesWithFeatures } from "../../types/package/PackageType";
+import type { IPackageDto } from "../../types/package/PackageType";
 import packageThunks from "./packageThunk";
 import { message } from "antd";
 
-interface PackageState{
-    packages: IPackage[]
-    features:IFeature[]
-    packageFeatures: IPackageFeature[]
-    packagesWithFeatures: IPackagesWithFeatures[]
-
+interface PackageState {
+    allPackages: IPackageDto[],
+    packages: IPackageDto[],
     loading: boolean,
-    isSubmiting:boolean,
+    isSubmiting: boolean,
     error?: string,
 }
 
 const initialState: PackageState = {
+    allPackages: [],
     packages: [],
-    features:[],
-    packageFeatures:[],
-    packagesWithFeatures: [],
-
     loading: false,
-    isSubmiting:false,
+    isSubmiting: false,
     error: undefined,
 }
 
@@ -30,95 +24,77 @@ export const packageSlice = createSlice({
     initialState,
     reducers: {},
     extraReducers: (builder) => {
-        // get packages
+        // get all packages
         builder.addCase(packageThunks.getAllPackages.pending, (state) => {
             state.loading = true;
         });
         builder.addCase(packageThunks.getAllPackages.fulfilled, (state, action) => {
-            state.packages = action.payload.data;
+            state.allPackages = action.payload;
             state.loading = false;
         });
         builder.addCase(packageThunks.getAllPackages.rejected, (state, action) => {
             state.loading = false;
+            message.error((action.payload as { message: string }).message);
         });
-
         // create package
         builder.addCase(packageThunks.createPackage.pending, (state) => {
-            state.isSubmiting = true;
+            state.loading = true;
         });
         builder.addCase(packageThunks.createPackage.fulfilled, (state, action) => {
-            state.packages?.push(action.payload.data)
-            message.success("Thêm gói dịch vụ thành công")
-            state.isSubmiting = false;
+            state.allPackages.push(action.payload)
+            state.loading = false;
+            message.success("Thêm mới gói thành công");
         });
         builder.addCase(packageThunks.createPackage.rejected, (state, action) => {
-            state.isSubmiting = false;
+            state.loading = false;
+            message.error((action.payload as { message: string }).message);
         });
 
         // update package
         builder.addCase(packageThunks.updatePackage.pending, (state) => {
-            state.isSubmiting = true;
+            state.loading = true;
         });
         builder.addCase(packageThunks.updatePackage.fulfilled, (state, action) => {
-            state.packages = state.packages?.map(
-                (pkg) => (pkg.id === action.payload.data.id ? action.payload.data : pkg)
-            )
-            message.success("Cập nhật gói dịch vụ thành công")
-            state.isSubmiting = false;
+            const updated = action.payload;
+            state.allPackages = state.allPackages.map(pkg =>
+                pkg.id === updated.id ? updated : pkg
+            );
+            state.loading = false;
+            message.success("Cập nhật gói thành công");
         });
         builder.addCase(packageThunks.updatePackage.rejected, (state, action) => {
-            state.isSubmiting = false;
+            state.loading = false;
+            message.error((action.payload as { message: string }).message);
         });
 
-        
         // delete package
         builder.addCase(packageThunks.deletePackage.pending, (state) => {
-            state.isSubmiting = true;
+            state.loading = true;
         });
         builder.addCase(packageThunks.deletePackage.fulfilled, (state, action) => {
-            state.packages = state.packages.filter(pkg => pkg.id !== action.meta.arg);
-            message.success("Xóa gói dịch vụ thành công")
-            state.isSubmiting = false;
+            state.allPackages = state.allPackages.filter(pkg => pkg.id !== action.meta.arg);
+            state.loading = false;
+            message.success("Xóa gói thành công");
         });
         builder.addCase(packageThunks.deletePackage.rejected, (state, action) => {
-            state.isSubmiting = false;
+            state.loading = false;
+            message.error((action.payload as { message: string }).message);
         });
 
-          // get features of package
-          builder.addCase(packageThunks.getPackageFeatures.pending, (state) => {
+        // get  packages
+        builder.addCase(packageThunks.getPackages.pending, (state) => {
             state.loading = true;
         });
-        builder.addCase(packageThunks.getPackageFeatures.fulfilled, (state, action) => {
-            state.packageFeatures = action.payload.data;
+        builder.addCase(packageThunks.getPackages.fulfilled, (state, action) => {
+            state.packages = action.payload;
             state.loading = false;
         });
-        builder.addCase(packageThunks.getPackageFeatures.rejected, (state, action) => {
+        builder.addCase(packageThunks.getPackages.rejected, (state, action) => {
             state.loading = false;
+            message.error((action.payload as { message: string }).message);
         });
 
-        // update package features
-        builder.addCase(packageThunks.updatePackageFeatures.pending, (state) => {
-            state.loading = true;
-        })
-        builder.addCase(packageThunks.updatePackageFeatures.fulfilled, (state, action) => {
-            message.success("Cập nhật gói tính năng thành công")
-            state.loading = false;
-        })
-        builder.addCase(packageThunks.updatePackageFeatures.rejected, (state, action) => {
-            state.loading = false;
-        })
-        
-        // get all packages with features
-        builder.addCase(packageThunks.getAllPackagesWithFeatures.pending, (state) => {
-            state.loading = true;
-        });
-        builder.addCase(packageThunks.getAllPackagesWithFeatures.fulfilled, (state, action) => {
-            state.packagesWithFeatures = action.payload.data
-            state.loading = false;
-        });
-        builder.addCase(packageThunks.getAllPackagesWithFeatures.rejected, (state, action) => {
-            state.loading = false;
-        });
+
     },
 });
 

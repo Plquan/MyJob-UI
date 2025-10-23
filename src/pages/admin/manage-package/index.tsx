@@ -1,7 +1,6 @@
 import { Card, Tabs } from 'antd';
 import type { TabsProps } from 'antd';
 import TablePackage from './components/TablePackage';
-import Setting from './components/SettingPackage';
 
 
 const items: TabsProps['items'] = [
@@ -14,11 +13,6 @@ const items: TabsProps['items'] = [
     key: '2',
     label: 'Thanh toán',
     children: "",
-  },
-  {
-    key: '3',
-    label: 'Cài đặt',
-    children: <Setting />,
   },
 ]
 
