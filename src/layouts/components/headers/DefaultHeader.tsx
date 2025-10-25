@@ -121,7 +121,7 @@ const DefaultHeader = () => {
 
         <Button
           type="default"
-          onClick={() => navigate(ROUTE_PATH.PACKAGES)}
+          onClick={() => navigate(ROUTE_PATH.PRODUCTS)}
           icon={<BankOutlined/>}
           className="flex items-center mr-3!"
         >

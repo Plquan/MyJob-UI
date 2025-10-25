@@ -1,7 +1,7 @@
 {
-  "home":{
+  "home": {
     "title1": "Find your dream job",
-    "title2":"of you",
+    "title2": "of you",
     "subtitle1": "More than",
     "subtitle2": "jobs are waiting for you",
     "qualityJob": "Quality Jobs",
@@ -14,15 +14,14 @@
     }
   },
   "header": {
-  "jobSearch": "Jobs/ Locations",
-  "companySearch": "Companies",
-  "guideSearch": "Career Guide",
-  "cvSearch": "CV Templates",
-  "employer":"Employer",
-  "login": "Login",
-  "register": "Register",
-  "profile": "My Profile",
-  "logout": "Logout"
-}
-
+    "jobSearch": "Jobs/ Locations",
+    "companySearch": "Companies",
+    "guideSearch": "Career Guide",
+    "cvSearch": "CV Templates",
+    "employer": "Employer",
+    "login": "Login",
+    "register": "Register",
+    "profile": "My Profile",
+    "logout": "Logout"
+  }
 }

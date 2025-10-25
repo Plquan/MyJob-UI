@@ -1,5 +1,5 @@
-import { Row, Col, Card, Empty, Button, Tooltip, Spin, List, Tag } from "antd"
-import { CheckCircleOutlined, ShoppingCartOutlined, QuestionCircleFilled, LoadingOutlined, TrophyOutlined, BarChartOutlined, SearchOutlined, CustomerServiceOutlined, FileTextOutlined, LineChartOutlined, ApiOutlined, PushpinOutlined, UserOutlined } from "@ant-design/icons";
+import { Row, Col, Card, Button, Tooltip, List, Tag } from "antd"
+import { ShoppingCartOutlined, QuestionCircleFilled, TrophyOutlined, SearchOutlined, FileTextOutlined, PushpinOutlined } from "@ant-design/icons";
 import { Typography } from "antd"
 import { useDispatch, useSelector } from "react-redux";
 import type { AppDispatch, RootState } from "../../../../stores";
@@ -9,7 +9,7 @@ import { formatVND } from "../../../../ultils/functions/formatVND";
 import { Modal } from "antd";
 import { useNavigate } from "react-router-dom";
 import ROUTE_PATH from "../../../../routes/routePath";
-import { ROLE_NAME } from "../../../../constant/role";
+import { EUserRole } from "../../../../constant/role";
 
 const { Title } = Typography;
 
@@ -26,7 +26,7 @@ export const PackageCard = () => {
   const [selectedPackage, setSelectedPackage] = useState<any>(null);
 
   const showConfirmModal = (pkg: any) => {
-    if (!isAuthenticated || currentUser?.roleName != ROLE_NAME.EMPLOYER) {
+    if (!isAuthenticated || currentUser?.roleName != EUserRole.EMPLOYER) {
       navigate(ROUTE_PATH.EMPLOYER_LOGIN)
     }
     else {

@@ -35,7 +35,7 @@ const ROUTE_PATH = {
     ADMIN_MANAGE_USER: '/admin/manage-user',
 
     //packages
-    PACKAGES: '/packages'
+    PRODUCTS: '/products'
 
   }
 

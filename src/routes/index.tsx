@@ -22,10 +22,11 @@ import ManageUserPage from "../pages/admin/manage-user";
 import RoleManagement from "../pages/admin/manage-package";
 import OnelineResumePage from "../pages/candidate/manage-online-resume";
 import CandidateProfilePage from "../pages/candidate/manage-cv";
-import PackagePage from "../pages/package";
 import EmployerCompanyPage from "../pages/employer/company";
 import EmployerLayout from "../layouts/EmployerLayout";
 import ManageJobPostPage from "../pages/employer/job-post";
+import ProductPage from "../pages/product";
+import { EUserRole } from "../constant/role";
 const AppRoutes = () => {
     return (
        <BrowserRouter>
@@ -35,7 +36,7 @@ const AppRoutes = () => {
             <Route path={ROUTE_PATH.EMPLOYER_LOGIN} element={<CompanyLoginPage />} />
             <Route path={ROUTE_PATH.EMPLOYER_REGISTER} element={<CompanyRegisterPage />} />
 
-            <Route element={<ProtectRoute/>}>
+            <Route element={<ProtectRoute roleName={EUserRole.CANDIDATE}/>}>
             <Route element={<CandidateLayout/>}>
             <Route path={ROUTE_PATH.CANDIDATE_PROFILE} element={<CandidateProfilePage />} />
             <Route path={ROUTE_PATH.CANDIDATE_OVERVIEW} element={<OverviewDashboard />} />
@@ -51,7 +52,7 @@ const AppRoutes = () => {
             <Route path={ROUTE_PATH.COMPANY_DETAIL} element={<CompanyDetail />} />
             <Route path={ROUTE_PATH.JOB_DETAIL} element={<JobDetail />} />
             </Route>
-            <Route element={<ProtectRoute/>}>
+            <Route element={<ProtectRoute roleName={EUserRole.EMPLOYER}/>}>
             <Route element={<EmployerLayout/>}>
             <Route path={ROUTE_PATH.EMPLOYER_DASHBOARD} element={<EmployerDashboard />} />
             <Route path={ROUTE_PATH.EMPLOYER_COMPANY} element={<EmployerCompanyPage />} />
@@ -66,7 +67,7 @@ const AppRoutes = () => {
             
             </Route>
 
-            <Route path={ROUTE_PATH.PACKAGES} element={<PackagePage/>} />
+            <Route path={ROUTE_PATH.PRODUCTS} element={<ProductPage/>} />
 
 
 
