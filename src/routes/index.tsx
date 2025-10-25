@@ -2,7 +2,7 @@ import CandidateLoginPage from "../pages/auth/candidate/LoginPage";
 import CandidateRegisterPage from "../pages/auth/candidate/RegisterPage";
 import CompanyLoginPage from "../pages/auth/employer/LoginPage";
 import CompanyRegisterPage from "../pages/auth/employer/RegisterPage";
-import HomePage from "../pages/home/HomePage";
+import HomePage from "../pages/home";
 import JobsPage from "../pages/jobs";
 import CompanyPage from "../pages/company";
 

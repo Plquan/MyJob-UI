@@ -61,12 +61,25 @@ const getPackages = createAsyncThunk (
     }
 )
 
+const purchasePackage = createAsyncThunk (
+    "package/purchasePackage",
+    async (packageId: number, {rejectWithValue}): Promise<boolean> => {
+        try {
+            const response: boolean = await http.post(`/package/purchase-package?packageId=${packageId}`);
+            return response;
+        } catch (error: any) {
+            return rejectWithValue(error.response.data) as any;
+        }
+    }
+)
+
 const packageThunks = {
     getAllPackages,
     createPackage,
     updatePackage,
     deletePackage,
-    getPackages
+    getPackages,
+    purchasePackage
 }
 export default packageThunks;
 

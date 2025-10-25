@@ -94,7 +94,18 @@ export const packageSlice = createSlice({
             message.error((action.payload as { message: string }).message);
         });
 
-
+        // purchase  package
+        builder.addCase(packageThunks.purchasePackage.pending, (state) => {
+            state.loading = true;
+        });
+        builder.addCase(packageThunks.purchasePackage.fulfilled, (state, action) => {
+            state.loading = false;
+            message.success("Mua gói thành công");
+        });
+        builder.addCase(packageThunks.purchasePackage.rejected, (state, action) => {
+            state.loading = false;
+            message.error((action.payload as { message: string }).message);
+        });
     },
 });
 

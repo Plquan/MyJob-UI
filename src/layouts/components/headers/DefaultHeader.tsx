@@ -6,47 +6,52 @@ import { Link } from 'react-router-dom';
 import { Header } from 'antd/es/layout/layout';
 import type { RootState } from '../../../stores';
 import { useSelector } from 'react-redux';
-const items = [
-  {
-    key: '/jobs',
-    icon: <SearchOutlined />,
-    label: <NavLink to="/jobs">Ngành nghề/ Địa điểm</NavLink>,
-  },
-  {
-    key: '/companies',
-    icon: <BankOutlined />,
-    label: <NavLink to="/companies">Công ty</NavLink>,
-  },
-  {
-    key: '/guide',
-    icon: <FileTextOutlined />,
-    label: <NavLink to="/guide">Cẩm nang việc làm</NavLink>,
-  },
-  {
-    key: '/cv-samples',
-    icon: <FileTextOutlined />,
-    label: <NavLink to="/cv-samples">Mẫu CV xin việc</NavLink>,
-  },
-];
+import LanguageSwitcher from '../../../components/LanguageSwitcher';
+import { useTranslation } from '../../../provider/Languages';
 
 
 const DefaultHeader = () => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
-  const {currentUser} = useSelector((state: RootState) => state.authStore);
+  const { currentUser } = useSelector((state: RootState) => state.authStore);
   const handleMenuClick = ({ key }: { key: string }) => {
     if (key === 'login') navigate(ROUTE_PATH.CANDIDATE_LOGIN);
     if (key === 'register') navigate(ROUTE_PATH.CANDIDATE_REGISTER);
   };
 
-  const  DropdownItems = [
+  const items = [
+    {
+      key: '/jobs',
+      icon: <SearchOutlined />,
+      label: <NavLink to="/jobs">{t('header.jobSearch')}</NavLink>,
+    },
+    {
+      key: '/companies',
+      icon: <BankOutlined />,
+      label: <NavLink to="/companies">{t('header.companySearch')}</NavLink>,
+    },
+    {
+      key: '/guide',
+      icon: <FileTextOutlined />,
+      label: <NavLink to="/guide">{t('header.guideSearch')}</NavLink>,
+    },
+    {
+      key: '/cv-samples',
+      icon: <FileTextOutlined />,
+      label: <NavLink to="/cv-samples">{t('header.cvSearch')}</NavLink>,
+    },
+  ];
+
+
+  const DropdownItems = [
     {
       key: 'login',
-      label: 'Đăng nhập',
+      label: t('header.login'),
       icon: <UserOutlined />,
     },
     {
       key: 'register',
-      label: 'Đăng ký',
+      label: t('header.register'),
       icon: <EditOutlined />,
     },
   ];
@@ -55,78 +60,76 @@ const DefaultHeader = () => {
   const loggedInMenu = [
     {
       key: 'profile',
-      label: <span>Hồ sơ của tôi</span>,
+      label: <span>{t('header.profile')}</span>,
       onClick: () => navigate(ROUTE_PATH.CANDIDATE_OVERVIEW),
     },
     {
       key: 'logout',
       icon: <LogoutOutlined />,
-      label: <span>Đăng xuất</span>,
+      label: <span>{t('header.logout')}</span>,
       onClick: () => navigate(ROUTE_PATH.CANDIDATE_LOGIN),
     },
   ];
-   //fixed
   return (
     <Header className="fixed top-0 left-0 right-0 border border-gray-200 z-50 bg-white! shadow-sm py-3 flex items-center justify-between px-4!">
-      {/* Logo bên trái */}
       <div className="flex items-center">
-      <div className="flex items-center gap-3">
-        <Link to={ROUTE_PATH.HOME}>
-          <img 
-            src="/assets/vinhuni.png" 
-            alt="VINHUNI Logo" 
-            className="h-10 w-auto"
-          />
-        </Link>
+        <div className="flex items-center gap-3">
+          <Link to={ROUTE_PATH.HOME}>
+            <img
+              src="/assets/vinhuni.png"
+              alt="VINHUNI Logo"
+              className="h-10 w-auto"
+            />
+          </Link>
+        </div>
       </div>
-    </div>
       <Menu
-      mode="horizontal"
-      selectedKeys={[location.pathname]}
-      items={items} 
+        mode="horizontal"
+        selectedKeys={[location.pathname]}
+        items={items}
 
-      style={{ fontSize: 14, marginLeft: 'auto',width: '50%', marginRight: 24, height: '100%', display: 'flex', alignItems: 'center' }}
-    />
+        style={{ fontSize: 14, marginLeft: 'auto', width: '50%', marginRight: 24, height: '100%', display: 'flex', alignItems: 'center' }}
+      />
 
-    <div className="flex items-center space-x-6">
-      {currentUser ? (
-        <Dropdown
-          menu={{ items: loggedInMenu }}
-          placement="bottomRight"
-          arrow
+      <div className="flex items-center space-x-6">
+        {currentUser ? (
+          <Dropdown
+            menu={{ items: loggedInMenu }}
+            placement="bottomRight"
+            arrow
+          >
+            <div className="flex items-center text-[13.5px] cursor-pointer">
+              <Avatar size="small" src={currentUser.avatar} className="mr-2!" />
+              <span className="max-w-[120px] truncate">{currentUser.fullName}</span>
+            </div>
+          </Dropdown>
+        ) : (
+          <Dropdown
+            menu={{
+              items: DropdownItems,
+              onClick: handleMenuClick,
+            }}
+            placement="bottomRight"
+            arrow
+          >
+            <div className="flex items-center max-w-[150px] sm:max-w-none text-[13.5px] text-[#6A5ACD] cursor-pointer truncate whitespace-nowrap">
+              <UserOutlined className="mr-2 text-[16px]" />
+              <span className="truncate">{t('header.register')}/{t('header.login')}</span>
+            </div>
+          </Dropdown>
+        )}
+
+        <Button
+          type="default"
+          onClick={() => navigate(ROUTE_PATH.PACKAGES)}
+          icon={<BankOutlined/>}
+          className="flex items-center mr-3!"
         >
-          <div className="flex items-center text-[13.5px] cursor-pointer">
-            <Avatar size="small" src={currentUser.avatar} className="mr-2!" />
-            <span className="max-w-[120px] truncate">{currentUser.fullName}</span>
-          </div>
-        </Dropdown>
-      ) : (
-        // Nếu chưa login
-    <Dropdown
-      menu={{
-        items: DropdownItems,
-        onClick: handleMenuClick,
-      }}
-      placement="bottomRight"
-      arrow
-    >
-      <div className="flex items-center max-w-[150px] sm:max-w-none text-[13.5px] text-[#6A5ACD] cursor-pointer truncate whitespace-nowrap">
-        <UserOutlined className="mr-2 text-[16px]" />
-        <span className="truncate">Đăng ký / Đăng nhập</span>
-      </div>
-    </Dropdown>
-      )}
+          {t('header.employer')}
+        </Button>
 
-      {/* Luôn hiện nút Nhà tuyển dụng */}
-      <Button
-        type="default"
-        onClick={() => navigate(ROUTE_PATH.PACKAGES)}
-        className="flex items-center"
-      >
-        <BankOutlined className="mr-2" />
-        Nhà tuyển dụng
-      </Button>
-    </div>
+        <LanguageSwitcher />
+      </div>
     </Header>
   );
 };
