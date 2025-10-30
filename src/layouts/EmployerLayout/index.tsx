@@ -1,7 +1,6 @@
 import { Outlet } from "react-router-dom";
-import CompanyHeader from "../components/headers/EmployerHeader";
-import CompanySidebar from "../components/Sidebar/EmployerSidebar";
-
+import CompanyHeader from "./components/Header";
+import CompanySidebar from "./components/Sidebar";
 
 export default function EmployerLayout() {
   return (
@@ -10,9 +9,7 @@ export default function EmployerLayout() {
       <div className="flex-1 flex flex-col bg-[#f7f7fb]">
         <CompanyHeader />
         <main className="p-6">
-          <div className="bg-white rounded-lg p-6 shadow mb-6 min-h-[400px]">
             <Outlet />
-          </div>
         </main>
       </div>
     </div>

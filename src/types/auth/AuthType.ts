@@ -1,3 +1,4 @@
+import type { EUserRole } from "../../constant/role";
 import type { ICompanyData } from "../company/CompanyType";
 
 export interface ILoginRequestData {
@@ -27,7 +28,7 @@ export interface ICurrentUser {
     avatar: string
     email: string
     fullName: string
-    roleName:string
+    roleName:EUserRole
     allowSearch:boolean
     isStaff:boolean
     isActive: boolean

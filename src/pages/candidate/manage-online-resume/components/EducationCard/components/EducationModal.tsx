@@ -37,6 +37,7 @@ const EducationModal = ({ open, onSubmit, onCancel,form,initialValues }: Educati
       footer={null}
       width={650}
       centered
+      getContainer={false}
     >
       <Form layout="vertical" onFinish={onSubmit} form={form}>
 

@@ -1,0 +1,27 @@
+{
+  "home":{
+    "title1": "Tìm việc làm mơ ước",
+    "title2":"của bạn",
+    "subtitle1": "Hơn",
+    "subtitle2": "việc làm đang chờ đợi bạn",
+    "qualityJob": "Việc làm chất lượng",
+    "trust": "Uy tín & Bảo mật",
+    "quickResponse": "Tốc độ phản hồi nhanh",
+    "searchJob": {
+      "jobPlacehoder": "Tìm kiếm việc làm, vị trí, công ty...",
+      "provincePlaceHolder": "Chọn địa điểm",
+      "button": "Lọc nâng cao"
+    }
+  },
+  "header":{
+    "jobSearch": "Ngành nghề/ Địa điểm",
+    "companySearch": "Công ty",
+    "guideSearch": "Cẩm nang việc làm",
+    "cvSearch": "Mẫu CV xin việc",
+    "employer": "Nhà tuyển dụng",
+    "login": "Đăng nhập",
+    "register": "Đăng ký",
+    "profile": "Hồ sơ của tôi",
+    "logout": "Đăng xuất"
+  }
+}

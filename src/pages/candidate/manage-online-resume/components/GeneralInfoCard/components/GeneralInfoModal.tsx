@@ -25,6 +25,7 @@ const GeneralInfoModal: React.FC<GeneralInfoModalProps> = ({ open, onCancel, ini
       footer={null}
       width={700}
       centered
+      getContainer={false}
     >
       <Form
         form={form}

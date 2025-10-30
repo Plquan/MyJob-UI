@@ -1,10 +1,17 @@
 export interface IApiResponse<T> {
-    status: number;
+  status: number;
+  message: string;
+  data: T;
+  error?: {
     message: string;
-    data: T;
-    error?: {
-      message: string;
-      details: string;
-    };
-    success: boolean;
+    details: string;
+  };
+  success: boolean;
+}
+export interface IPaginationResponse<T> {
+  items: T[];
+  totalItems: number;
+  totalPages: number;
+  currentPage: number;
+  limit: number;
 }

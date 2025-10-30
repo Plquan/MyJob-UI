@@ -5,6 +5,7 @@ import { useEffect } from "react";
 import AppRoutes from "./routes";
 import { Toaster } from 'react-hot-toast';
 import { careerActions } from "./stores/careerStore/careerReducer";
+import { LanguageProvider } from "./provider/Languages";
 
 export default function App() {
   const dispatch = useDispatch<AppDispatch>();
@@ -16,7 +17,7 @@ export default function App() {
   }, [dispatch]);
 
   return (
-    <>
+    <LanguageProvider>
       <AppRoutes />
       <Toaster
         position="top-center"
@@ -26,6 +27,6 @@ export default function App() {
           duration: 1500,
         }}
       />
-    </>
+    </LanguageProvider>
   );
 }

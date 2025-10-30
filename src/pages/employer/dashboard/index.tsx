@@ -53,12 +53,11 @@ const recentActivities = [
 
 export default function EmployerDashboard() {
   return (
-      <div className="max-w-7xl mx-auto">
-        <h1 className="text-2xl font-bold mb-4">Tổng quan</h1>
+      <Card title="Tổng quan">
         <Row gutter={16} className="mb-4">
           {stats.map((item: any) => (
             <Col xs={24} sm={12} md={6} key={item.title}>
-              <Card className="rounded-lg shadow-sm mb-2">
+              <Card>
                 <div className="flex items-center gap-4">
                   {item.icon}
                   <div>
@@ -73,7 +72,7 @@ export default function EmployerDashboard() {
         {/* Chart row */}
         <Row gutter={16} className="mb-4">
           <Col xs={24} md={16}>
-            <Card className="rounded-lg shadow-sm mb-2" title="Thống kê lượt xem và ứng tuyển">
+            <Card  title="Thống kê lượt xem và ứng tuyển">
               <Line
                 data={[
                   ...lineData.map((d) => ({ month: d.month, value: d.view, type: 'Lượt xem' })),
@@ -103,7 +102,7 @@ export default function EmployerDashboard() {
             </Card>
           </Col>
           <Col xs={24} md={8}>
-            <Card className="rounded-lg shadow-sm mb-2" title="Trạng thái tin tuyển dụng">
+            <Card title="Trạng thái tin tuyển dụng">
               <Pie
                 data={pieData}
                 angleField="value"
@@ -123,7 +122,7 @@ export default function EmployerDashboard() {
         {/* Bottom row */}
         <Row gutter={16}>
           <Col xs={24} md={12}>
-            <Card className="rounded-lg shadow-sm mb-2" title="Trạng thái ứng tuyển">
+            <Card title="Trạng thái ứng tuyển">
               <Bar
                 data={barData}
                 xField="value"
@@ -137,7 +136,7 @@ export default function EmployerDashboard() {
             </Card>
           </Col>
           <Col xs={24} md={12}>
-            <Card className="rounded-lg shadow-sm mb-2" title="Hoạt động gần đây">
+            <Card title="Hoạt động gần đây">
               <ul className="text-sm text-gray-700 space-y-2">
                 {recentActivities.map((a: any, idx: number) => (
                   <li key={idx} className="flex items-center gap-2">
@@ -150,6 +149,6 @@ export default function EmployerDashboard() {
             </Card>
           </Col>
         </Row>
-      </div>
+      </Card>
   );
 }

@@ -1,19 +1,18 @@
 import { Button, Form, Table } from "antd";
-import { PlusOutlined } from '@ant-design/icons'
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import type { AppDispatch, RootState } from "../../../../../stores";
 import { packageActions } from "../../../../../stores/packageStore/packageReducer";
 import PackageModal from "./components/PackageModal";
 import { PackageColumns } from "./components/PackageColumns";
-import type { IPackage } from "../../../../../types/package/PackageType";
+import type { IPackageDto, ICreatePackagedata, IUpdatePackageData } from "../../../../../types/package/PackageType";
 
 const TablePackage = () => {
   const dispatch = useDispatch<AppDispatch>();
   const [form] = Form.useForm();
-  const { packages, loading} = useSelector((state: RootState) => state.packageStore)
+  const { allPackages, loading} = useSelector((state: RootState) => state.packageStore)
   const [isModalOpen, setIsModalOpen] = useState(false)
-  const [editingPackage, setEditingPackage] = useState<IPackage | null>(null);
+  const [editingPackage, setEditingPackage] = useState<IPackageDto | null>(null);
 
   useEffect(() => {
     dispatch(packageActions.getAllPackages())
@@ -24,23 +23,22 @@ const TablePackage = () => {
     setIsModalOpen(true)
   }
 
-  const handleEdit = (record: IPackage) => {
+  const handleEdit = (record: IPackageDto) => {
     setEditingPackage(record)
-    console.log(record)
     form.setFieldsValue({
       ...record
     })
     setIsModalOpen(true)
   }
 
-  const handleFinish = async (data: IPackage) => {
-    console.log(data)
+  const handleFinish = async (data: ICreatePackagedata | IUpdatePackageData) => {
     if (editingPackage) {
-      dispatch(packageActions.updatePackage(data))
+      dispatch(packageActions.updatePackage(data as IUpdatePackageData))
     } else {
-      dispatch(packageActions.createPackage(data))
+      dispatch(packageActions.createPackage(data as ICreatePackagedata))
     }
     setIsModalOpen(false)
+    form.resetFields()
   }
 
   const handleCancel = () => {
@@ -55,23 +53,21 @@ const TablePackage = () => {
 
   return (
     <div>
-
         <Button 
           type="primary" 
           className="mb-4!"
-          icon={<PlusOutlined />}
           onClick={handleAdd}
         >
           Thêm gói
         </Button>
-
-
       <Table 
         columns={PackageColumns(handleEdit, handleDelete)} 
-        dataSource={packages}
+        dataSource={allPackages}
         loading={loading}
         pagination={false} 
-        bordered 
+        bordered
+        scroll={{ x: 800 }}
+        rowKey="id"
       />
 
       <PackageModal

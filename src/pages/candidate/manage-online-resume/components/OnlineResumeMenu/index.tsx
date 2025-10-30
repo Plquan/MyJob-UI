@@ -38,7 +38,6 @@ const OnlineResumeMenu = () => {
     skills
   }
 
-  // Tính completion
   let completion = 0;
 
   if(candidate?.phone) completion += 25

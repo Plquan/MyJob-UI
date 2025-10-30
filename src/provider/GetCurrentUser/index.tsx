@@ -10,14 +10,9 @@ const GetCurrentUserProvider = ({ children }: { children: JSX.Element }) => {
   React.useEffect(() => {
     if(!hasCheckedAuth){
       dispatch<any>(authActions.getCurrentUser());
-    }
-      
-    
+    }     
   }, [dispatch]);
-  if(!hasCheckedAuth){
-    return null;
-  }
   return children;
-};
 
+};
 export default GetCurrentUserProvider;

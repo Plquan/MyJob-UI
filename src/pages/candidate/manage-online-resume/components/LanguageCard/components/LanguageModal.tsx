@@ -32,6 +32,7 @@ const LanguageModal = ({ open, onSubmit, onCancel,form, initialValues }: Languag
       title="Ngôn ngữ"
       footer={null}
       centered
+      getContainer={false}
     >
       <Form
         form={form}

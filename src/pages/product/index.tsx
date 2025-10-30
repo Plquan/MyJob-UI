@@ -1,4 +1,4 @@
-import EmployerHeader from "../../layouts/components/headers/EmployerHeader"
+import EmployerHeader from "../../layouts/EmployerLayout/components/Header"
 import { Typography, Button } from "antd"
 import CustomDivider from "../../components/Divider";
 import DefaultFooter from "../../layouts/components/footer/DefaultFooter";
@@ -12,7 +12,7 @@ import PackageCard from "./components/PackageCard";
 import ArrowLeftOutlined from "@ant-design/icons/lib/icons/ArrowLeftOutlined";
 const { Title, Text } = Typography;
 
-const PackagePage = () => {
+const ProductPage = () => {
     const navigate = useNavigate()
   return (
     <>
@@ -26,7 +26,6 @@ const PackagePage = () => {
           <Title level={2} className="!mb-2">Dịch vụ của chúng tôi</Title>
           <Text className="text-gray-500">Tìm kiếm và tuyển dụng ứng viên phù hợp nhanh chóng với các gói dịch vụ đăng tuyển đa dạng.</Text>
         </div>
-
         <CustomDivider/>
         <PackageCard/>
         <CustomDivider/>
@@ -37,7 +36,6 @@ const PackagePage = () => {
         <FaqSection/>
         <CustomDivider/>
         <PartnerSection/>
-        
        </div>
        </div>
       </div>
@@ -45,4 +43,4 @@ const PackagePage = () => {
     </>
   )
 }
-export default PackagePage
+export default ProductPage

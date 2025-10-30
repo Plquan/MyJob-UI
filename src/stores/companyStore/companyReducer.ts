@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit"
-import type { ICompanyData, ICompanyWithImagesData } from "../../types/company/CompanyType";
+import type { ICompanyData, ICompanyDetail, ICompanyWithImagesData } from "../../types/company/CompanyType";
 import companyThunks from "./companyThunk";
 import type { IMyJobFile } from "../../types/myJobFile/myJobFileType";
 import { FileType } from "../../constant/fileType";
@@ -10,13 +10,15 @@ interface CompanyState {
     companies: ICompanyWithImagesData[],
     logo?: IMyJobFile,
     coverImage?: IMyJobFile,
-    companyImages: IMyJobFile[]
+    companyImages: IMyJobFile[],
+    companyDetail?: ICompanyDetail
     loading: boolean,
     submitting: {
         logo: boolean;
         cover: boolean;
         images: boolean;
         company: boolean;
+        followCompany: boolean;
     };
     error?: string,
 }
@@ -28,10 +30,12 @@ const initialState: CompanyState = {
         cover: false,
         images: false,
         company: false,
+        followCompany:false,
     },
     error: undefined,
     companyImages: [],
-    companies:[]
+    companies: [],
+
 }
 export const companySlice = createSlice({
     name: "Company",
@@ -54,6 +58,7 @@ export const companySlice = createSlice({
         });
         builder.addCase(companyThunks.getEmployerCompany.rejected, (state, action) => {
             state.loading = false;
+            message.error((action.payload as { message: string }).message);
         })
         // upload company logo
         builder.addCase(companyThunks.uploadCompanyLogo.pending, (state) => {
@@ -66,6 +71,7 @@ export const companySlice = createSlice({
         });
         builder.addCase(companyThunks.uploadCompanyLogo.rejected, (state, action) => {
             state.submitting.logo = false;
+            message.error((action.payload as { message: string }).message);
         })
         // upload company cover image
         builder.addCase(companyThunks.uploadCompanyCoverImage.pending, (state) => {
@@ -78,6 +84,7 @@ export const companySlice = createSlice({
         });
         builder.addCase(companyThunks.uploadCompanyCoverImage.rejected, (state, action) => {
             state.submitting.cover = false;
+            message.error((action.payload as { message: string }).message);
         })
 
         // upload company images
@@ -90,6 +97,7 @@ export const companySlice = createSlice({
         });
         builder.addCase(companyThunks.uploadCompanyImages.rejected, (state, action) => {
             state.submitting.images = false;
+            message.error((action.payload as { message: string }).message);
         })
 
         // delete company image
@@ -99,8 +107,9 @@ export const companySlice = createSlice({
         builder.addCase(companyThunks.deleteCompanyImage.fulfilled, (state, action) => {
             state.submitting.images = false;
         });
-        builder.addCase(companyThunks.deleteCompanyImage.rejected, (state, action) => {
+        builder.addCase(companyThunks.deleteCompanyImage.rejected, (state) => {
             state.submitting.images = false;
+            message.error("Xóa ảnh thất bại");
         })
 
         // get companies
@@ -113,7 +122,38 @@ export const companySlice = createSlice({
         });
         builder.addCase(companyThunks.getCompanies.rejected, (state, action) => {
             state.loading = false;
+            message.error((action.payload as { message: string }).message);
         })
+
+        // get company detail
+        builder.addCase(companyThunks.getCompanyDetail.pending, (state) => {
+            state.loading = true;
+        });
+        builder.addCase(companyThunks.getCompanyDetail.fulfilled, (state, action) => {
+            state.companyDetail = action.payload
+            state.loading = false;
+        });
+        builder.addCase(companyThunks.getCompanyDetail.rejected, (state, action) => {
+            state.loading = false;
+            message.error((action.payload as { message: string }).message);
+        })
+
+         // toggle follow company
+         builder.addCase(companyThunks.toggleFollowCompany.pending, (state) => {
+            state.submitting.followCompany = true;
+        });
+        builder.addCase(companyThunks.toggleFollowCompany.fulfilled, (state, action) => {
+            const company = state.companies.find(c => c.company.id === action.meta.arg);
+            if (company) {
+                company.isFollowed = action.payload;
+            }
+            state.submitting.followCompany = false;
+        });
+        builder.addCase(companyThunks.toggleFollowCompany.rejected, (state, action) => {
+            state.submitting.followCompany = false;
+            message.error((action.payload as { message: string }).message);
+        })
+
     }
 })
 

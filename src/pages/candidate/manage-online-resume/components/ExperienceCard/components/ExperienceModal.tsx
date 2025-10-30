@@ -37,6 +37,7 @@ const ExperienceModal = ({ open, onSubmit, onCancel,form,initialValues }: Experi
       closeIcon={<CloseOutlined />}
       footer={null}
       centered
+      getContainer={false}
     >
       <Form layout="vertical" onFinish={onSubmit} form={form}>
 
