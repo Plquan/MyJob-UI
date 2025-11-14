@@ -29,7 +29,7 @@ export const authSlice = createSlice({
             state.loading = true;
         });
         builder.addCase(authThunks.getCurrentUser.fulfilled, (state, action) => {
-            state.currentUser = action.payload.data;
+            state.currentUser = action.payload;
             state.isAuthenticated = true;
             state.loading = false;
             state.hasCheckedAuth = true;

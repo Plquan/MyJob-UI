@@ -22,6 +22,7 @@
     "login": "Đăng nhập",
     "register": "Đăng ký",
     "profile": "Hồ sơ của tôi",
-    "logout": "Đăng xuất"
+    "logout": "Đăng xuất",
+    "dashboard": "Tổng quan"
   }
 }

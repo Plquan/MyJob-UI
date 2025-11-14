@@ -22,6 +22,7 @@
     "login": "Login",
     "register": "Register",
     "profile": "My Profile",
-    "logout": "Logout"
+    "logout": "Logout",
+    "dashboard": "Dashboard"
   }
 }

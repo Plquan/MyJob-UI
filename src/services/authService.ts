@@ -1,45 +1,56 @@
 import http from "../ultils/axios/axiosCustom";
 import type { IApiResponse } from "../types/AppType";
-import type { ILoginRequestData, ICandidateRegisterRequestData, ICompanyRegisterRequestData, ILoginResponseData } from "../types/auth/AuthType";
+import type { ILoginRequestData, ICandidateRegisterRequestData, ICompanyRegisterRequestData } from "../types/auth/AuthType";
 
 
-const candidateLogin = async (data: ILoginRequestData): Promise<IApiResponse<any>> => {
+const candidateLogin = async (data: ILoginRequestData): Promise<string> => {
    try {
-    const response:  IApiResponse<any> = await http.post("/auth/login/candidate", data);
+    const response:  string = await http.post("/auth/login/candidate", data);
     return response;
    } catch (error:any) {
     throw error.response.data;
    }
 }
-const companyLogin = async (data: ILoginRequestData): Promise<IApiResponse<any>> => {
+const companyLogin = async (data: ILoginRequestData): Promise<string> => {
     try {
-     const response:  IApiResponse<any> = await http.post("/auth/login/company", data);
+     const response:  string = await http.post("/auth/login/company", data);
      return response;
     } catch (error:any) {
      throw error.response.data;
     }
  }
-const candidateRegister = async (data: ICandidateRegisterRequestData): Promise<IApiResponse<any>> => {
+const candidateRegister = async (data: ICandidateRegisterRequestData): Promise<boolean> => {
     try {
-        const response: IApiResponse<any> = await http.post("/auth/register/candidate", data);
+        const response: boolean = await http.post("/auth/register/candidate", data);
         return response;
     } catch (error: any) {
         throw error.response.data;
     }
 }
-const companyRegister = async (data: ICompanyRegisterRequestData): Promise<IApiResponse<any>> => {
+const companyRegister = async (data: ICompanyRegisterRequestData): Promise<string> => {
     try {
-        const response: IApiResponse<any> = await http.post("/auth/register/company", data);
+        const response: string = await http.post("/auth/register/employer", data);
         return response;
     } catch (error: any) {
         throw error.response.data;
     }
 }
 
+const logout = async (): Promise<boolean> => {
+    try {
+        const response: boolean = await http.post("/auth/logout");
+        return response;
+    } catch (error: any) {
+        throw error.response.data;
+    }
+}
+
+
 const authService = {
     candidateLogin,
     companyLogin,
     candidateRegister,
-    companyRegister
+    companyRegister,
+    logout
   };
 export default authService;

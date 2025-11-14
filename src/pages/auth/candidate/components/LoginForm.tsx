@@ -19,11 +19,9 @@ const LoginForm = () => {
     try {
       setLoading(true)
       const result = await authService.candidateLogin(values)
-       if(!result.success){
-          toast.error(result.message)
-       }
+       localStorage.setItem("accessToken", result)
        dispatch(authActions.getCurrentUser())
-       toast.success(result.message)
+       toast.success("Đăng nhập thành công")
        navigate(ROUTE_PATH.HOME)
     } catch (error:any) {
       toast.error(error.message)

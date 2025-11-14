@@ -19,12 +19,10 @@ const FormLogin = ({ mounted }: { mounted: boolean }) => {
         try {
             const values = await form.getFieldsValue();
             const response = await authService.companyLogin(values);
-            if (response.success) {
-                toast.success('Đăng nhập thành công');
-                localStorage.setItem("accessToken", response.data);
-                dispatch(authActions.getCurrentUser());
-                navigate(ROUTE_PATH.HOME);
-            }
+            localStorage.setItem("accessToken", response);
+            dispatch(authActions.getCurrentUser());
+            toast.success("Đăng nhập thành công");
+            navigate(ROUTE_PATH.HOME);
         } catch (error:any) {
             toast.error(error.message);
             console.log(error);

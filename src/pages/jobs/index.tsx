@@ -5,7 +5,6 @@ import { useNavigate } from 'react-router-dom';
 import ROUTE_PATH from '../../routes/routePath';
 const { Title } = Typography;
 
-
 const jobs:any[] = [
   {
     id: 1,
