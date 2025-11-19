@@ -98,9 +98,9 @@ const DefaultHeader = () => {
   const loggedInMenu = [
     {
       key: 'profile',
-      icon: getIconRole(currentUser?.roleName),
-      label: <span>{getLabelRole(currentUser?.roleName)}</span>,
-      onClick: () => navigate(getPathRole(currentUser?.roleName)),
+      icon: getIconRole(currentUser?.role),
+      label: <span>{getLabelRole(currentUser?.role)}</span>,
+      onClick: () => navigate(getPathRole(currentUser?.role)),
     },
     {
       key: 'logout',

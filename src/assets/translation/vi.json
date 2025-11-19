@@ -1,7 +1,14 @@
 {
-  "home":{
+  "auth": {
+    "errorCode": {
+      "1003": "Tài khoản đã tồn tại",
+      "1004": "Thông tin đăng nhập không chính xác",
+      "1010": "Tài khoản đã bị khóa"
+    }
+  },
+  "home": {
     "title1": "Tìm việc làm mơ ước",
-    "title2":"của bạn",
+    "title2": "của bạn",
     "subtitle1": "Hơn",
     "subtitle2": "việc làm đang chờ đợi bạn",
     "qualityJob": "Việc làm chất lượng",
@@ -13,7 +20,7 @@
       "button": "Lọc nâng cao"
     }
   },
-  "header":{
+  "header": {
     "jobSearch": "Ngành nghề/ Địa điểm",
     "companySearch": "Công ty",
     "guideSearch": "Cẩm nang việc làm",

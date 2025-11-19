@@ -9,6 +9,7 @@ import type { AppDispatch, RootState } from '../../../../stores';
 import { toast } from 'react-hot-toast';
 import {useNavigate } from 'react-router-dom';
 import { provinceActions } from '../../../../stores/provinceStore/provinceReducer';
+import { useTranslation } from '../../../../provider/Languages';
 const { Option } = Select;
 
 const RegisterForm = () => {
@@ -18,6 +19,7 @@ const RegisterForm = () => {
   const [form] = Form.useForm<ICompanyRegisterRequestData>();
   const [step, setStep] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
+  const { t } = useTranslation();
   const handleNext = async () => {
     try {
       await form.validateFields(['fullname', 'email', 'password', 'confirmPassword']);
@@ -30,16 +32,19 @@ const RegisterForm = () => {
     try {
       setIsLoading(true);
       const data = form.getFieldsValue();
-      console.log(data);
-      const response = await authService.companyRegister(data);
-       if(response.success){
-        toast.success('Đăng ký thành công!');
-        navigate(ROUTE_PATH.EMPLOYER_LOGIN);
-       }
-
+      await authService.companyRegister(data);
+       toast.success('Đăng ký thành công');  
+       navigate(ROUTE_PATH.EMPLOYER_LOGIN);
     } catch (error:any) {
-      toast.error(error.message);
-      console.log(error);
+      if(error.errorCode == "1004"){
+        toast.error(t(`auth.errorCode.${error.errorCode}`))
+      } 
+      if(error.errorCode == "1010"){
+        toast.error(t(`auth.errorCode.${error.errorCode}`))
+      }
+      if(error.errorCode == "1003"){
+        toast.error(t(`auth.errorCode.${error.errorCode}`))
+      }
     } finally {
       setIsLoading(false);
     }

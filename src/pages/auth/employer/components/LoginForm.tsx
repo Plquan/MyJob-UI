@@ -8,6 +8,7 @@ import { useNavigate } from 'react-router-dom'
 import { authActions } from '../../../../stores/authStore/authReducer';
 import { useDispatch } from 'react-redux';
 import type { AppDispatch } from '../../../../stores';
+import { useTranslation } from '../../../../provider/Languages';
 
 
 const FormLogin = ({ mounted }: { mounted: boolean }) => {
@@ -15,17 +16,25 @@ const FormLogin = ({ mounted }: { mounted: boolean }) => {
   const dispatch = useDispatch<AppDispatch>();
     const [form] = Form.useForm<ILoginRequestData>();
     const slideLogin = mounted ? 'translate-y-0 opacity-100 transition-all duration-600 ease-out' : 'translate-y-80 opacity-0';
+    const { t } = useTranslation();
     const handleLogin = async () => {
         try {
             const values = await form.getFieldsValue();
-            const response = await authService.companyLogin(values);
-            localStorage.setItem("accessToken", response);
+            const result = await authService.companyLogin(values);
+            localStorage.setItem("accessToken", result);
             dispatch(authActions.getCurrentUser());
             toast.success("Đăng nhập thành công");
             navigate(ROUTE_PATH.HOME);
         } catch (error:any) {
-            toast.error(error.message);
-            console.log(error);
+            if(error.errorCode == "1004"){
+                toast.error(t(`auth.errorCode.${error.errorCode}`))
+            }
+            if(error.errorCode == "1010"){
+                toast.error(t(`auth.errorCode.${error.errorCode}`))
+            }
+            if(error.errorCode == "1003"){
+                toast.error(t(`auth.errorCode.${error.errorCode}`))
+            }
         }
     }
 

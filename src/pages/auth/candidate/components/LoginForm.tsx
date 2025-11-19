@@ -9,12 +9,15 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import type { AppDispatch } from "../../../../stores";
 import { authActions } from "../../../../stores/authStore/authReducer";
+import { useTranslation } from "../../../../provider/Languages";
+
 
 const LoginForm = () => {
   const navigate = useNavigate()
   const dispatch = useDispatch<AppDispatch>()
   const [form] = Form.useForm();
   const [loading,setLoading] = useState(false)
+  const { t } = useTranslation();
   const onFinish = async (values: any) => {
     try {
       setLoading(true)
@@ -24,7 +27,15 @@ const LoginForm = () => {
        toast.success("Đăng nhập thành công")
        navigate(ROUTE_PATH.HOME)
     } catch (error:any) {
-      toast.error(error.message)
+      if(error.errorCode == "1004"){
+        toast.error(t(`auth.errorCode.${error.errorCode}`))
+      } 
+      if(error.errorCode == "1010"){
+        toast.error(t(`auth.errorCode.${error.errorCode}`))
+      }
+      if(error.errorCode == "1003"){
+        toast.error(t(`auth.errorCode.${error.errorCode}`))
+      }
     }
     finally {
       setLoading(false)

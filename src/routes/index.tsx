@@ -36,7 +36,7 @@ const AppRoutes = () => {
             <Route path={ROUTE_PATH.EMPLOYER_LOGIN} element={<CompanyLoginPage />} />
             <Route path={ROUTE_PATH.EMPLOYER_REGISTER} element={<CompanyRegisterPage />} />
 
-            <Route element={<ProtectRoute roleName={EUserRole.CANDIDATE}/>}>
+            <Route element={<ProtectRoute role={EUserRole.CANDIDATE}/>}>
             <Route element={<CandidateLayout/>}>
             <Route path={ROUTE_PATH.CANDIDATE_PROFILE} element={<CandidateProfilePage />} />
             <Route path={ROUTE_PATH.CANDIDATE_OVERVIEW} element={<OverviewDashboard />} />
@@ -53,7 +53,7 @@ const AppRoutes = () => {
             <Route path={ROUTE_PATH.JOB_DETAIL} element={<JobDetail />} />
             </Route>
             
-            <Route element={<ProtectRoute roleName={EUserRole.EMPLOYER}/>}>
+            <Route element={<ProtectRoute role={EUserRole.EMPLOYER}/>}>
             <Route element={<EmployerLayout/>}>
             <Route path={ROUTE_PATH.EMPLOYER_DASHBOARD} element={<EmployerDashboard />} />
             <Route path={ROUTE_PATH.EMPLOYER_COMPANY} element={<EmployerCompanyPage />} />

@@ -6,28 +6,28 @@ import type { RootState } from "../stores";
 import { EUserRole } from "../constant/role";
 
 interface ProtectRouteProps {
-  roleName: EUserRole;
+  role: EUserRole;
 }
 
-const ProtectRoute = ({ roleName }: ProtectRouteProps): JSX.Element | null => {
+const ProtectRoute = ({ role }: ProtectRouteProps): JSX.Element | null => {
   const { isAuthenticated, hasCheckedAuth, currentUser } = useSelector((state: RootState) => state.authStore);
 
   if (hasCheckedAuth && !isAuthenticated) {
-    if (roleName === EUserRole.CANDIDATE) {
+    if (role === EUserRole.CANDIDATE) {
       return <Navigate to={ROUTE_PATH.CANDIDATE_LOGIN} />;
-    } else if (roleName === EUserRole.EMPLOYER) {
+    } else if (role === EUserRole.EMPLOYER) {
       return <Navigate to={ROUTE_PATH.EMPLOYER_LOGIN} />;
-    } else if (roleName === EUserRole.ADMIN) {
+    } else if (role === EUserRole.ADMIN) {
       return <Navigate to={ROUTE_PATH.EMPLOYER_LOGIN} />;
     }
   }
 
-  if (hasCheckedAuth && isAuthenticated && currentUser?.roleName !== roleName) {
-    if (roleName === EUserRole.CANDIDATE) {
+  if (hasCheckedAuth && isAuthenticated && currentUser?.role !== role) {
+    if (role === EUserRole.CANDIDATE) {
       return <Navigate to={ROUTE_PATH.CANDIDATE_LOGIN} />;
-    } else if (roleName === EUserRole.EMPLOYER) {
+    } else if (role === EUserRole.EMPLOYER) {
       return <Navigate to={ROUTE_PATH.EMPLOYER_LOGIN} />;
-    } else if (roleName === EUserRole.ADMIN) {
+    } else if (role === EUserRole.ADMIN) {
       return <Navigate to={ROUTE_PATH.EMPLOYER_LOGIN} />;
     }
   }

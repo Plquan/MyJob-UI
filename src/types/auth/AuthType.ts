@@ -28,7 +28,7 @@ export interface ICurrentUser {
     avatar: string
     email: string
     fullName: string
-    roleName:EUserRole
+    role:EUserRole
     allowSearch:boolean
     isStaff:boolean
     isActive: boolean

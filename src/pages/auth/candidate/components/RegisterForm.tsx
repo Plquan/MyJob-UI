@@ -6,23 +6,29 @@ import { useNavigate } from "react-router-dom";
 import ROUTE_PATH from "../../../../routes/routePath";
 import LoadingLayout from "../../../../components/LoadingLayout";
 import { useState } from "react";
+import { useTranslation } from "../../../../provider/Languages";
 
 const RegisterForm = () => {
   const navigate = useNavigate()
   const [loading,setLoading] = useState(false)
   const [form] = Form.useForm();
-
+  const { t } = useTranslation();
   const onFinish = async (values: any) => {
     try {
       setLoading(true)
-      const result = await authService.candidateRegister(values)
-       if(!result.success){
-          toast.error(result.message)
-       }
-       toast.success(result.message)
+       await authService.candidateRegister(values)
+       toast.success("Đăng ký thành công")
        navigate(ROUTE_PATH.CANDIDATE_LOGIN)
     } catch (error:any) {
-      toast.error(error.message)
+      if(error.errorCode == "1004"){
+        toast.error(t(`auth.errorCode.${error.errorCode}`))
+      } 
+      if(error.errorCode == "1010"){
+        toast.error(t(`auth.errorCode.${error.errorCode}`))
+      }
+      if(error.errorCode == "1003"){
+        toast.error(t(`auth.errorCode.${error.errorCode}`))
+      }
     }
     finally {
       setLoading(false)

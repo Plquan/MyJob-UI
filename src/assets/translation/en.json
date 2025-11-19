@@ -1,4 +1,11 @@
 {
+  "auth": {
+    "errorCode": {
+      "1003": "Account already exists",
+      "1004": "Login information is incorrect",
+      "1010": "Account is locked"
+    }
+  },
   "home": {
     "title1": "Find your dream job",
     "title2": "of you",
