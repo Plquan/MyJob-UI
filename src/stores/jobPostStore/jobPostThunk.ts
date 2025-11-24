@@ -1,13 +1,13 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import type { ICreateJobPostReq, IJobPostData, IGetJobPostsReqParams, IJobPostUpdate } from "../../types/job-post/JobPostType";
+import type { ICreateJobPostReq, ICompanyJobPost, IGetJobPostsReqParams, IJobPostUpdate, IJobPost } from "../../types/job-post/JobPostType";
 import http from "../../ultils/axios/axiosCustom";
 import type { IPaginationResponse } from "../../types/AppType";
 
 const createJobPost = createAsyncThunk (
     "jobPost/createJobPost",
-    async (data: ICreateJobPostReq, {rejectWithValue}): Promise<IJobPostData> => {
+    async (data: ICreateJobPostReq, {rejectWithValue}): Promise<ICompanyJobPost> => {
         try {
-            const response: IJobPostData = await http.post("/job-post",data);
+            const response: ICompanyJobPost = await http.post("/job-post",data);
             return response;
         } catch (error: any) {
             return rejectWithValue(error.response.data) as any;
@@ -16,9 +16,9 @@ const createJobPost = createAsyncThunk (
 )
 const getCompanyJobPosts = createAsyncThunk (
     "jobPost/getCompanyJobPosts",
-    async (params: IGetJobPostsReqParams, {rejectWithValue}): Promise<IPaginationResponse<IJobPostData>> => {
+    async (params: IGetJobPostsReqParams, {rejectWithValue}): Promise<IPaginationResponse<ICompanyJobPost>> => {
         try {
-            const response: IPaginationResponse<IJobPostData> = await http.get("/job-post/get-company-job-posts", {
+            const response: IPaginationResponse<ICompanyJobPost> = await http.get("/job-post/get-company-job-posts", {
                 params: {
                     page: params.page,
                     limit: params.limit,
@@ -35,9 +35,21 @@ const getCompanyJobPosts = createAsyncThunk (
 
 const updateJobPost = createAsyncThunk (
     "jobPost/updateJobPost",
-    async (data: IJobPostUpdate, {rejectWithValue}): Promise<IJobPostData> => {
+    async (data: IJobPostUpdate, {rejectWithValue}): Promise<ICompanyJobPost> => {
         try {
-            const response: IJobPostData = await http.put("/job-post",data);
+            const response: ICompanyJobPost = await http.put("/job-post",data);
+            return response;
+        } catch (error: any) {
+            return rejectWithValue(error.response.data) as any;
+        }
+    }
+)
+
+const getJobPost = createAsyncThunk (
+    "jobPost/getJobPost",
+    async (_, {rejectWithValue}): Promise<IJobPost[]> => {
+        try {
+            const response: IJobPost[] = await http.get("/job-post");
             return response;
         } catch (error: any) {
             return rejectWithValue(error.response.data) as any;
@@ -50,7 +62,8 @@ const updateJobPost = createAsyncThunk (
 const jobPostThunks = {
     createJobPost,
     getCompanyJobPosts,
-    updateJobPost
+    updateJobPost,
+    getJobPost
 }
 
 export default  jobPostThunks

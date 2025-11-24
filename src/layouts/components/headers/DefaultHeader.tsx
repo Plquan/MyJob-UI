@@ -1,21 +1,22 @@
 import { NavLink, useNavigate } from 'react-router-dom';
-import { Dropdown, Button, Menu, Avatar } from 'antd';
-import { UserOutlined, EditOutlined, SearchOutlined, BankOutlined, FileTextOutlined, HomeOutlined, ArrowRightOutlined } from '@ant-design/icons';
+import { Dropdown, Button, Menu, Avatar, Spin } from 'antd';
+import { UserOutlined, EditOutlined, SearchOutlined, BankOutlined, FileTextOutlined, HomeOutlined, ArrowRightOutlined, LoadingOutlined } from '@ant-design/icons';
 import ROUTE_PATH from '../../../routes/routePath';
 import { Link } from 'react-router-dom';
 import { Header } from 'antd/es/layout/layout';
-import type { RootState } from '../../../stores';
-import { useSelector } from 'react-redux';
+import type { AppDispatch, RootState } from '../../../stores';
+import { useDispatch, useSelector } from 'react-redux';
 import LanguageSwitcher from '../../../components/LanguageSwitcher';
 import { useTranslation } from '../../../provider/Languages';
-import authService from '../../../services/authService';
 import { EUserRole } from '../../../constant/role';
+import { authActions } from '../../../stores/authStore/authReducer';
 
 
 const DefaultHeader = () => {
   const { t } = useTranslation();
+  const dispatch = useDispatch<AppDispatch>()
   const navigate = useNavigate();
-  const { currentUser } = useSelector((state: RootState) => state.authStore);
+  const { currentUser, loading } = useSelector((state: RootState) => state.authStore);
   const handleMenuClick = ({ key }: { key: string }) => {
     if (key === 'login') navigate(ROUTE_PATH.CANDIDATE_LOGIN);
     if (key === 'register') navigate(ROUTE_PATH.CANDIDATE_REGISTER);
@@ -59,8 +60,13 @@ const DefaultHeader = () => {
   ];
 
   const logout = async () => {
-    await authService.logout();
-    navigate(ROUTE_PATH.CANDIDATE_LOGIN);
+    try {
+      await dispatch(authActions.logout()).unwrap();
+      navigate(ROUTE_PATH.CANDIDATE_LOGIN);
+    } catch (error) {
+      dispatch(authActions.logout());
+      navigate(ROUTE_PATH.CANDIDATE_LOGIN);
+    }
   }
   const getLabelRole = (role: EUserRole | undefined): string => {
     switch (role) {
@@ -101,17 +107,21 @@ const DefaultHeader = () => {
       icon: getIconRole(currentUser?.role),
       label: <span>{getLabelRole(currentUser?.role)}</span>,
       onClick: () => navigate(getPathRole(currentUser?.role)),
+      disabled: loading,
     },
     {
       key: 'logout',
-      icon: <ArrowRightOutlined />,
-      label: <span>{t('header.logout')}</span>,
+      icon: loading ? <LoadingOutlined spin /> : <ArrowRightOutlined />,
+      label: <span>{loading ? t('header.loggingOut') || 'Đang đăng xuất...' : t('header.logout')}</span>,
       onClick: logout,
+      disabled: loading,
     },
   ];
 
   return (
-    <Header className="fixed top-0 left-0 right-0 border border-gray-200 z-50 bg-white! shadow-sm py-3 flex items-center justify-between px-4!">
+    <>
+      <Spin spinning={loading} fullscreen />
+      <Header className="fixed top-0 left-0 right-0 border border-gray-200 z-50 bg-white! shadow-sm py-3 flex items-center justify-between px-4!">
       <div className="flex items-center">
         <div className="flex items-center gap-3">
           <Link to={ROUTE_PATH.HOME}>
@@ -170,6 +180,7 @@ const DefaultHeader = () => {
         <LanguageSwitcher />
       </div>
     </Header>
+    </>
   );
 };
 

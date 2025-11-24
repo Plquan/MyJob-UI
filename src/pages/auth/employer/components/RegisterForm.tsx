@@ -2,7 +2,6 @@ import { Form, Input, Button, Select, DatePicker, Col, Row } from 'antd';
 import { EyeInvisibleOutlined, EyeTwoTone } from '@ant-design/icons';
 import { useState } from 'react';
 import ROUTE_PATH from '../../../../routes/routePath';
-import authService from '../../../../services/authService';
 import type { ICompanyRegisterRequestData } from '../../../../types/auth/AuthType';
 import { useDispatch, useSelector } from 'react-redux';
 import type { AppDispatch, RootState } from '../../../../stores';
@@ -10,6 +9,7 @@ import { toast } from 'react-hot-toast';
 import {useNavigate } from 'react-router-dom';
 import { provinceActions } from '../../../../stores/provinceStore/provinceReducer';
 import { useTranslation } from '../../../../provider/Languages';
+import { authActions } from '../../../../stores/authStore/authReducer';
 const { Option } = Select;
 
 const RegisterForm = () => {
@@ -32,7 +32,7 @@ const RegisterForm = () => {
     try {
       setIsLoading(true);
       const data = form.getFieldsValue();
-      await authService.companyRegister(data);
+      await dispatch(authActions.companyRegister(data)).unwrap();
        toast.success('Đăng ký thành công');  
        navigate(ROUTE_PATH.EMPLOYER_LOGIN);
     } catch (error:any) {

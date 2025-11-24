@@ -23,13 +23,13 @@ import type { AppDispatch, RootState } from '../../../../stores';
 import { careerActions } from '../../../../stores/careerStore/careerReducer';
 import { provinceActions } from '../../../../stores/provinceStore/provinceReducer';
 import { jobPostActions } from '../../../../stores/jobPostStore/jobPostReducer';
-import type { ICreateJobPostReq, IJobPostData } from '../../../../types/job-post/JobPostType';
+import type { ICreateJobPostReq, ICompanyJobPost } from '../../../../types/job-post/JobPostType';
 
 interface EditJobPostModalProps {
   visible: boolean;
   onCancel: () => void;
   onSubmit: (values: any) => void;
-  editData?: IJobPostData; 
+  editData?: ICompanyJobPost; 
 }
 
 const EditJobPostModal: React.FC<EditJobPostModalProps> = ({

@@ -2,7 +2,6 @@ import { Form, Input, Button } from 'antd';
 import { EyeInvisibleOutlined, EyeTwoTone } from '@ant-design/icons';
 import ROUTE_PATH from '../../../../routes/routePath';
 import type { ILoginRequestData } from '../../../../types/auth/AuthType';
-import authService from '../../../../services/authService';
 import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom'
 import { authActions } from '../../../../stores/authStore/authReducer';
@@ -20,8 +19,7 @@ const FormLogin = ({ mounted }: { mounted: boolean }) => {
     const handleLogin = async () => {
         try {
             const values = await form.getFieldsValue();
-            const result = await authService.companyLogin(values);
-            localStorage.setItem("accessToken", result);
+            await dispatch(authActions.companyLogin(values)).unwrap();
             dispatch(authActions.getCurrentUser());
             toast.success("Đăng nhập thành công");
             navigate(ROUTE_PATH.HOME);

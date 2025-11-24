@@ -1,14 +1,15 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit"
 import jobPostThunks from "./jobPostThunk";
 import { message } from "antd";
-import type { IJobPostData } from "../../types/job-post/JobPostType";
+import type { ICompanyJobPost, IJobPost } from "../../types/job-post/JobPostType";
 
 
 interface JobPostState {
     loading: boolean,
     isSubmiting: boolean,
     error?: string,
-    companyJobPost: IJobPostData[],
+    companyJobPost: ICompanyJobPost[],
+    jobPosts: IJobPost[],
     page: number,
     limit: number,
     search: string,
@@ -23,6 +24,7 @@ const initialState: JobPostState = {
     isSubmiting: false,
     error: undefined,
     companyJobPost: [],
+    jobPosts: [],
     page: 1,
     limit: 10,
     search: "",
@@ -98,7 +100,16 @@ export const jobPostSlice = createSlice({
             message.error((action.payload as { message: string }).message);
         })
 
-
+        builder.addCase(jobPostThunks.getJobPost.pending, (state) => {
+            state.loading = true;
+        });
+        builder.addCase(jobPostThunks.getJobPost.fulfilled, (state, action) => {
+            state.jobPosts = action.payload
+            state.loading = false;
+        });
+        builder.addCase(jobPostThunks.getJobPost.rejected, (state) => {
+            state.loading = false;
+        })
     }
 })
 

@@ -1,4 +1,4 @@
-export interface IJobPostData {
+export interface ICompanyJobPost {
   id: number;
   careerId:number;
   companyId: number;
@@ -76,4 +76,20 @@ export interface IGetJobPostsReqParams {
   limit: number;
   search: string;
   jobPostStatus?: number;
+}
+
+export interface IJobPost {
+  id: number;
+  jobName: string;
+  salaryMin: number;
+  salaryMax: number;
+  provinceName: string;
+  createdAt: Date;
+  company: {
+    companyName: string;
+    logo?: string;
+  };
+  isHot: boolean
+  isNew: boolean
+  deadline: Date
 }

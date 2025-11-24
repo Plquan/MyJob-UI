@@ -7,6 +7,7 @@ import { FileType } from "../../constant/fileType";
 import ROUTE_PATH from "../../routes/routePath";
 import { companyActions } from "../../stores/companyStore/companyReducer";
 import type { RootState, AppDispatch } from "../../stores";
+import { BookmarkIcon } from "../../assets/icon/bookmark";
 
 interface CompanyItemProps {
   company: ICompanyWithImagesData;
@@ -88,10 +89,12 @@ const CompanyItem = ({ company }: CompanyItemProps) => {
             className="w-full"
             onClick={handleToggleFollow}
             loading={submitting.followCompany}
-            icon={company.isFollowed ? <HeartFilled /> : <HeartOutlined />}
+            icon={company.isFollowed ?  <BookmarkIcon className="w-4 h-4" stroke="white" fill="white" /> : <BookmarkIcon className="w-4 h-4" />
+            
+            }
             type={company.isFollowed ? "primary" : "default"}
           >
-            {company.isFollowed ? "Đã theo dõi" : "Theo dõi"}
+            {company.isFollowed ? "Đang theo dõi" : "Theo dõi"}
           </Button>
         </div>
       </div>

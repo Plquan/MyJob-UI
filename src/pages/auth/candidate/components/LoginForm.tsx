@@ -4,7 +4,6 @@ import { useState } from "react";
 import toast from "react-hot-toast";
 import LoadingLayout from "../../../../components/LoadingLayout";
 import ROUTE_PATH from "../../../../routes/routePath";
-import authService from "../../../../services/authService";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import type { AppDispatch } from "../../../../stores";
@@ -21,8 +20,7 @@ const LoginForm = () => {
   const onFinish = async (values: any) => {
     try {
       setLoading(true)
-      const result = await authService.candidateLogin(values)
-       localStorage.setItem("accessToken", result)
+      await dispatch(authActions.candidateLogin(values)).unwrap()
        dispatch(authActions.getCurrentUser())
        toast.success("Đăng nhập thành công")
        navigate(ROUTE_PATH.HOME)
