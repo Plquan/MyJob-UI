@@ -20,7 +20,7 @@ const ROUTE_PATH = {
     COMPANY_DETAIL: '/company-detail/:companyId',
 
     //job
-    JOB_DETAIL: '/job-detail',
+    JOB_DETAIL: '/jobs/job-detail/:jobPostId',
 
 
     //employer

@@ -265,8 +265,8 @@ const CVPdfDocument: React.FC<{ resume: IOnlineResume }> = ({ resume }) => {
           <Image src={resume.userInfo?.avatar?.url || DEFAULT_AVATAR} style={styles.avatar} />
           <View style={styles.headerInfo}>
             <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
-              <Text style={styles.name}>{resume.userInfo?.fullName}</Text>
-              <Text style={styles.emailHeader}>{resume.userInfo?.email}</Text>
+              <Text style={styles.name}>{resume.candidate?.fullName}</Text>
+              <Text style={styles.emailHeader}>{resume.candidate?.email}</Text>
             </View>
             <Text style={styles.position}>{resume.resume?.title}</Text>
             <Text style={styles.updated}>Thời gian cập nhật: {formatDate(String(resume.resume?.updatedAt))}</Text>

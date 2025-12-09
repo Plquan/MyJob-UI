@@ -1,12 +1,12 @@
 import { Select, Typography, Card, Breadcrumb, Empty } from 'antd';
 import AdvancedFilter from './components/AdvancedFilter';
 import { useNavigate } from 'react-router-dom';
-import ROUTE_PATH from '../../routes/routePath';
-import JobCard from '../../components/JobCard';
-import type { AppDispatch, RootState } from '../../stores';
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';
-import jobPostThunks from '../../stores/jobPostStore/jobPostThunk';
+import JobCard from '../../../components/JobCard';
+import ROUTE_PATH from '../../../routes/routePath';
+import type { RootState, AppDispatch } from '../../../stores';
+import jobPostThunks from '../../../stores/jobPostStore/jobPostThunk';
 const { Title } = Typography;
 
 const breadcrumbItems = [
@@ -73,8 +73,9 @@ const JobPage  = () => {
                   key={job.id} 
                   job={job}
                   size="large"
-                  onClick={(jobPostId) => {
-                    navigate(`${ROUTE_PATH.JOB_DETAIL}/${jobPostId}`);
+                  onClick={async (jobPostId) => {
+                    await dispatch(jobPostThunks.getJobPostById(jobPostId));
+                    navigate(ROUTE_PATH.JOB_DETAIL.replace(':jobPostId', jobPostId.toString()));
                   }}
                 />
               ))}

@@ -1,7 +1,10 @@
-import React from 'react';
-import { Tag } from 'antd';
-import { EnvironmentOutlined, CalendarOutlined, HeartOutlined } from '@ant-design/icons';
+import React, { useMemo } from 'react';
+import { Button, Tag } from 'antd';
+import { EnvironmentOutlined, CalendarOutlined, HeartOutlined, HeartFilled } from '@ant-design/icons';
 import type { IJobPost } from '../../types/job-post/JobPostType';
+import { useDispatch, useSelector } from 'react-redux';
+import type { AppDispatch, RootState } from '../../stores';
+import { jobPostActions } from '../../stores/jobPostStore/jobPostReducer';
 
 interface JobCardProps {
   job: IJobPost;
@@ -11,6 +14,21 @@ interface JobCardProps {
 
 const JobCard: React.FC<JobCardProps> = ({ job, onClick, size = 'default' }) => {
   const isLarge = size === 'large';
+  const dispatch = useDispatch<AppDispatch>();
+  const { isSubmiting } = useSelector((state: RootState) => state.jobPostStore);
+  const { provinces } = useSelector((state: RootState) => state.provinceStore);
+
+  // Lấy tên tỉnh từ store
+  const provinceName = useMemo(() => {
+    if (!job.provinceId) return 'N/A';
+    const province = provinces?.find(p => p.id === job.provinceId);
+    return province?.name || 'N/A';
+  }, [job.provinceId, provinces]);
+
+  const handleToggleSave = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    dispatch(jobPostActions.toggleSaveJobPost(job.id));
+  };
 
   return (
     <div
@@ -56,7 +74,7 @@ const JobCard: React.FC<JobCardProps> = ({ job, onClick, size = 'default' }) => 
             </div>
           </div>
           <span className={`text-gray-600 truncate ${isLarge
-            ? 'text-sm md:text-base mt-1.5 md:mt-2'
+            ? 'text-sm md:text-base mt-1 md:mt-1'
             : 'text-xs mt-1'
             }`}>
             {job.company.companyName}
@@ -64,7 +82,7 @@ const JobCard: React.FC<JobCardProps> = ({ job, onClick, size = 'default' }) => 
         </div>
       </div>
       <div className={`flex flex-wrap items-center justify-between ${isLarge
-        ? 'gap-2 md:gap-3 text-xs md:text-sm mt-1.5 md:mt-2'
+        ? 'gap-2 md:gap-3 text-xs md:text-sm mt-1.5 md:mt-3'
         : 'gap-2 text-xs mt-1.5'
         } text-gray-700`}>
         <div className={`flex flex-wrap items-center ${isLarge ? 'gap-2 md:gap-3' : 'gap-2'
@@ -75,7 +93,7 @@ const JobCard: React.FC<JobCardProps> = ({ job, onClick, size = 'default' }) => 
           </span>
           <span className="flex items-center gap-1">
             <EnvironmentOutlined className={isLarge ? 'text-xs md:text-sm' : 'text-[13px]'} />
-            <span className={isLarge ? 'text-xs md:text-sm' : ''}>{job.provinceName}</span>
+            <span className={isLarge ? 'text-xs md:text-sm' : ''}>{provinceName}</span>
           </span>
           <span className="flex items-center gap-1">
             <CalendarOutlined className={isLarge ? 'text-xs md:text-sm' : 'text-[13px]'} />
@@ -85,7 +103,15 @@ const JobCard: React.FC<JobCardProps> = ({ job, onClick, size = 'default' }) => 
           </span>
         </div>
 
-          <HeartOutlined className={`text-[#6A5ACD] ${ isLarge ?'text-[16px]' : 'text-[15px]' }`} />
+        <Button
+          onClick={handleToggleSave}
+          shape="circle"
+          size="small"
+          loading={isSubmiting}
+          className="bg-gray-200! border-gray-200!"
+          icon={(job.isSaved ? <HeartFilled className="text-[#6A5ACD]!" /> : <HeartOutlined/>)}
+        >
+        </Button>
     
       </div>
     </div>

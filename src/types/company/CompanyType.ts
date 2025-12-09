@@ -4,7 +4,6 @@ import type { IMyJobFile } from "../myJobFile/myJobFileType";
 export interface ICompanyData {
   id: number;
   provinceId?: number;
-  districtId?: number;
   userId: number;
   companyName: string;
   companyEmail: string;
@@ -32,7 +31,6 @@ export interface ICompanyWithImagesData {
 export interface IUpdateCompanyRequest {
   id: number;
   provinceId: number;
-  districtId: number;
   userId: number;
   companyName: string;
   companyEmail: string;

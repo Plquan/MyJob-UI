@@ -12,7 +12,6 @@ import { message } from "antd";
 interface CandidateState{
     resume?: IResume    
     candidate?:ICandidate
-    userInfo?: IUserInfo
     educations:IEducation[]
     certificates:ICertificate[]
     experiences:IExperience[]
@@ -64,15 +63,13 @@ const initialState: CandidateState = {
     experiences: [],
     languages: [],
     skills: [],
-  
 }
 
 export const onlineResumeSlice = createSlice({
     name: "onlineResume",
     initialState,
     reducers: {},
-    extraReducers: (builder) => {
-        //get online resume
+    extraReducers: (builder) => {       
         builder.addCase(onlineResumeThunks.getOnlineResume.pending, (state) => {
             state.loading.candidate = true;
             state.loading.education = true;
@@ -82,14 +79,13 @@ export const onlineResumeSlice = createSlice({
             state.loading.skills = true;
         })
         builder.addCase(onlineResumeThunks.getOnlineResume.fulfilled, (state, action) => {
-            state.resume = action.payload.data.resume
-            state.educations = action.payload.data.educations
-            state.certificates = action.payload.data.certificates
-            state.experiences = action.payload.data.experiences
-            state.languages = action.payload.data.languages
-            state.skills = action.payload.data.skills
-            state.userInfo = action.payload.data.userInfo
-            state.candidate = action.payload.data.candidate
+            state.resume = action.payload.resume
+            state.educations = action.payload.educations
+            state.certificates = action.payload.certificates
+            state.experiences = action.payload.experiences
+            state.languages = action.payload.languages
+            state.skills = action.payload.skills
+            state.candidate = action.payload.candidate
 
             state.loading.candidate = false;
             state.loading.education = false;

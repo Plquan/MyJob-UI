@@ -57,7 +57,7 @@ const AdvancedFilter = () => (
         <Col xs={24} sm={12} md={4} lg={3}>
           <Button
             icon={<SearchOutlined />}
-            style={{ width: '100%', height: 40, fontSize: 16 }}
+            style={{ width: '100%', height: 40, fontSize: 16,backgroundColor: '#6A5ACD' }}
             type="primary"
           >
             Tìm kiếm

@@ -6,13 +6,13 @@ import type { IResume } from "../../../../../../types/resume/ResumeType";
 
 const { Option } = Select;
 
-interface GeneralInfoModalProps {
+interface ResumeModalProps {
   open: boolean;
   onCancel: () => void;
   onFinish: (values: any) => void;
   initialValues?: IResume;
 }
-const GeneralInfoModal: React.FC<GeneralInfoModalProps> = ({ open, onCancel, initialValues, onFinish }) => {
+const ResumeModal: React.FC<ResumeModalProps> = ({ open, onCancel, initialValues, onFinish }) => {
   const { careers } = useSelector((state: RootState) => state.careerStore)
   const { provinces } = useSelector((state: RootState) => state.provinceStore)
   const [form] = Form.useForm<IResume>()
@@ -169,4 +169,4 @@ const GeneralInfoModal: React.FC<GeneralInfoModalProps> = ({ open, onCancel, ini
   );
 };
 
-export default GeneralInfoModal; 
+export default ResumeModal; 

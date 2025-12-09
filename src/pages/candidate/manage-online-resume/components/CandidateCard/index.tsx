@@ -1,37 +1,42 @@
-import React, { useState } from 'react'
+import React, { useMemo, useState } from 'react'
 import { Card, Typography, Row, Col, Button, Form } from 'antd'
 import { EditOutlined } from '@ant-design/icons'
 import { useDispatch, useSelector } from 'react-redux'
-import ProfileModal from './components/ProfileModal'
+import ProfileModal from './components/CandidateModal'
 import { GENDER_OPTIONS, MARTIALSTATUS_OPTIONS } from '../../../../../constant/selectOptions'
 import type { AppDispatch, RootState } from '../../../../../stores'
 import type { ICandidate } from '../../../../../types/candidate/CandidateType'
-import  { getLabelFromValue } from '../../../../../ultils/functions/getLabelFromValue'
+import { getLabelFromValue } from '../../../../../ultils/functions/getLabelFromValue'
 import { onlineResumeActions } from '../../../../../stores/onlineResumeStore/onlineResumeReducer'
 
 const { Text } = Typography;
 
-const ProfileCard: React.FC = () => {
+const CandidateCard: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
-  const { candidate,loading } = useSelector((state: RootState) => state.onlineResumeStore);
+  const { candidate, loading } = useSelector((state: RootState) => state.onlineResumeStore);
+  const { provinces } = useSelector((state: RootState) => state.provinceStore)
+
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [form] = Form.useForm()
-  
-  
+
+
   const handleEdit = () => setIsModalOpen(true);
   const handleCancel = () => setIsModalOpen(false);
   const handleFinish = (values: ICandidate) => {
     dispatch(onlineResumeActions.updateProfile(values))
     setIsModalOpen(false);
   }
+  const currentProvince = useMemo(() => {
+    return provinces?.find(p => p.id === candidate?.provinceId);
+  }, [provinces, candidate?.provinceId]);
 
-  const NOT_UPDATE =  <span className="text-gray-400 text-xs italic">Chưa cập nhật</span>
+  const NOT_UPDATE = <span className="text-gray-400 text-xs italic">Chưa cập nhật</span>
   const renderField = (value: any) => !!value ? value : NOT_UPDATE
 
   return (
     <>
-      <Card  title={"Thông tin cá nhân"} 
-        extra ={
+      <Card title={"Thông tin cá nhân"}
+        extra={
           <Button type="default" className="border border-gray-300 flex items-center" onClick={handleEdit}>
             <EditOutlined className="mr-1" />
             Chỉnh sửa
@@ -44,12 +49,12 @@ const ProfileCard: React.FC = () => {
             <div className="mb-4">
               <Text strong>Số điện thoại</Text>
               <br />
-              {candidate?.phone??NOT_UPDATE}
+              {candidate?.phone ?? NOT_UPDATE}
             </div>
             <div className="mb-4">
               <Text strong>Giới tính</Text>
               <br />
-              {renderField(getLabelFromValue(GENDER_OPTIONS,candidate?.gender))}
+              {renderField(getLabelFromValue(GENDER_OPTIONS, candidate?.gender))}
             </div>
             <div className="mb-4">
               <Text strong>Ngày sinh</Text>
@@ -66,19 +71,14 @@ const ProfileCard: React.FC = () => {
             <div className="mb-4">
               <Text strong>Tình trạng hôn nhân</Text>
               <br />
-              {renderField(getLabelFromValue(MARTIALSTATUS_OPTIONS,candidate?.maritalStatus))}
+              {renderField(getLabelFromValue(MARTIALSTATUS_OPTIONS, candidate?.maritalStatus))}
             </div>
             <div className="mb-4">
               <Text strong>Tỉnh/Thành phố</Text>
               <br />
-              {renderField(candidate?.province?.name)}
+              {renderField(currentProvince?.name)}
             </div>
-            <div className="mb-4">
-              <Text strong>Quận/Huyện</Text>
-              <br />
-              {renderField(candidate?.district?.name)}
-            </div>
- 
+
           </Col>
         </Row>
       </Card>
@@ -93,4 +93,4 @@ const ProfileCard: React.FC = () => {
   );
 };
 
-export default ProfileCard;
+export default CandidateCard;

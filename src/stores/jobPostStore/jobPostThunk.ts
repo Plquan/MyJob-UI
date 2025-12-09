@@ -14,6 +14,7 @@ const createJobPost = createAsyncThunk (
         }
     }
 )
+
 const getCompanyJobPosts = createAsyncThunk (
     "jobPost/getCompanyJobPosts",
     async (params: IGetJobPostsReqParams, {rejectWithValue}): Promise<IPaginationResponse<ICompanyJobPost>> => {
@@ -57,13 +58,37 @@ const getJobPost = createAsyncThunk (
     }
 )
 
+const toggleSaveJobPost = createAsyncThunk (
+    "jobPost/toggleSaveJobPost",
+    async (jobPostId: number, {rejectWithValue}): Promise<boolean> => {
+        try {
+            const response: boolean = await http.post(`/job-post/toggle-save-job-post/${jobPostId}`);
+            return response;
+        } catch (error: any) {
+            return rejectWithValue(error.response.data) as any;
+        }
+    }
+)
 
+const getJobPostById = createAsyncThunk (
+    "jobPost/getJobPostById",
+    async (jobPostId: number, {rejectWithValue}): Promise<IJobPost> => {
+        try {
+            const response: IJobPost = await http.get(`/job-post/${jobPostId}`);
+            return response;
+        } catch (error: any) {
+            return rejectWithValue(error.response.data) as any;
+        }
+    }
+)
 
 const jobPostThunks = {
     createJobPost,
     getCompanyJobPosts,
     updateJobPost,
-    getJobPost
+    getJobPost,
+    toggleSaveJobPost,
+    getJobPostById
 }
 
 export default  jobPostThunks

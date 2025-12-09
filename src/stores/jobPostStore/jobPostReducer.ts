@@ -16,6 +16,7 @@ interface JobPostState {
     totalItems: number;
     totalPages: number;
     jobPostStatus?: number | undefined,
+    jobPostDetail?: IJobPost
 
 }
 
@@ -110,6 +111,32 @@ export const jobPostSlice = createSlice({
         builder.addCase(jobPostThunks.getJobPost.rejected, (state) => {
             state.loading = false;
         })
+
+        builder.addCase(jobPostThunks.toggleSaveJobPost.pending, (state) => {
+            state.isSubmiting = true;
+        });
+        builder.addCase(jobPostThunks.toggleSaveJobPost.fulfilled, (state, action) => {
+            const jobPost = state.jobPosts.find(c => c.id === action.meta.arg);
+            if(jobPost){
+                jobPost.isSaved = action.payload;
+            }
+            state.isSubmiting = false;
+        });
+        builder.addCase(jobPostThunks.toggleSaveJobPost.rejected, (state) => {
+            state.isSubmiting = false;
+        })
+
+        builder.addCase(jobPostThunks.getJobPostById.pending, (state) => {
+            state.loading = true;
+        });
+        builder.addCase(jobPostThunks.getJobPostById.fulfilled, (state, action) => {
+            state.jobPostDetail = action.payload
+            state.loading = false;
+        });
+        builder.addCase(jobPostThunks.getJobPostById.rejected, (state) => {
+            state.loading = false;
+        })
+        
     }
 })
 

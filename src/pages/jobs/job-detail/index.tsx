@@ -1,6 +1,13 @@
-import React from 'react';
-import { Card, Button, List } from 'antd';
-import { MailOutlined, PhoneOutlined, HeartOutlined, EnvironmentOutlined, CalendarOutlined, DollarOutlined, UserOutlined, BookOutlined, SolutionOutlined, ClockCircleOutlined } from '@ant-design/icons';
+
+import { Card, Button, List, Spin } from 'antd';
+import { MailOutlined, PhoneOutlined, HeartOutlined, HeartFilled, LoadingOutlined, EnvironmentOutlined, CalendarOutlined, UserOutlined, BookOutlined, SolutionOutlined, ClockCircleOutlined } from '@ant-design/icons';
+import { useParams } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { useEffect, useMemo } from 'react';
+import type { AppDispatch, RootState } from '../../../stores';
+import { jobPostActions } from '../../../stores/jobPostStore/jobPostReducer';
+import jobPostThunks from '../../../stores/jobPostStore/jobPostThunk';
+import { provinceActions } from '../../../stores/provinceStore/provinceReducer';
 
 const similarJobs = [
   {
@@ -30,6 +37,53 @@ const similarJobs = [
 ];
 
 const JobDetail = () => {
+  const { jobPostId } = useParams<{ jobPostId: string }>();
+  const dispatch = useDispatch<AppDispatch>();
+  const { jobPostDetail, isSubmiting, loading } = useSelector((state: RootState) => state.jobPostStore);
+  const { provinces } = useSelector((state: RootState) => state.provinceStore);
+  
+  const currentJob = jobPostDetail;
+  const isSaved = currentJob?.isSaved ?? false;
+
+  // Lấy tên tỉnh từ store
+  const provinceName = useMemo(() => {
+    if (!currentJob?.provinceId) return 'N/A';
+    const province = provinces?.find(p => p.id === currentJob.provinceId);
+    return province?.name || 'N/A';
+  }, [currentJob?.provinceId, provinces]);
+
+  useEffect(() => {
+    if (jobPostId) {
+      dispatch(jobPostThunks.getJobPostById(parseInt(jobPostId)));
+    }
+    // Load provinces nếu chưa có
+    if (!provinces || provinces.length === 0) {
+      dispatch(provinceActions.getAllProvinces());
+    }
+  }, [jobPostId, dispatch, provinces]);
+
+  const handleToggleSave = () => {
+    if (jobPostId) {
+      dispatch(jobPostActions.toggleSaveJobPost(parseInt(jobPostId)));
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <Spin size="large" />
+      </div>
+    );
+  }
+
+  if (!currentJob) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-gray-500">Không tìm thấy thông tin công việc</div>
+      </div>
+    );
+  }
+
   return (
     <div className=" min-h-screen flex justify-center py-8">
       <div className="w-full max-w-5xl flex gap-6">
@@ -39,23 +93,45 @@ const JobDetail = () => {
           <Card className="rounded-xl shadow p-0 border border-[#e0c6e6] bg-white">
             <div className="flex flex-col md:flex-row items-center md:items-stretch gap-4 p-6 pb-2">
               <div className="flex-shrink-0 flex items-center justify-center">
-                <img src="https://media3.scdn.vn/img4/2020/05_27/6Qw2QwQkQwQwQwQwQwQw_simg_de2fe0_250x250_maxb.jpg" alt="Sendo" className="w-24 h-24 rounded-xl object-contain border border-[#e0c6e6] bg-white" />
+                <img 
+                  src={currentJob.company.logo || "https://via.placeholder.com/100"} 
+                  alt={currentJob.company.companyName} 
+                  className="w-24 h-24 rounded-xl object-contain border border-[#e0c6e6] bg-white" 
+                />
               </div>
               <div className="flex-1 flex flex-col justify-center md:justify-between md:flex-row md:items-center gap-2">
                 <div className="flex-1 flex flex-col items-center md:items-start">
-                  <h2 className="text-2xl font-bold text-[#222] mb-1">Senior Embedded Engineer</h2>
-                  <div className="text-[#a259c6] font-semibold mb-1">Sendo JSC</div>
+                  <h2 className="text-2xl font-bold text-[#222] mb-1">{currentJob.jobName}</h2>
+                  <div className="text-[#a259c6] font-semibold mb-1">{currentJob.company.companyName}</div>
                   <div className="flex flex-wrap gap-4 text-[#6c6c6c] text-sm mb-1">
-                  <span className="flex items-center text-[#a259c6]"> 45.000.000 đ</span>
-                    <span className="flex items-center"><EnvironmentOutlined className="mr-1" />Đà Nẵng</span>
-                    <span className="flex items-center"><CalendarOutlined className="mr-1" />Hết hạn: 2/1/2026</span>
+                    <span className="flex items-center text-[#a259c6] font-bold">
+                      {currentJob.salaryMin.toLocaleString('vi-VN')} - {currentJob.salaryMax.toLocaleString('vi-VN')} đ
+                    </span>
+                    <span className="flex items-center">
+                      <EnvironmentOutlined className="mr-1" />
+                      {provinceName}
+                    </span>
+                    {currentJob.deadline && (
+                      <span className="flex items-center">
+                        <CalendarOutlined className="mr-1" />
+                        Hết hạn: {new Date(currentJob.deadline).toLocaleDateString('vi-VN')}
+                      </span>
+                    )}
                   </div>
                 </div>
               </div>
             </div>
             <div className="flex flex-col md:flex-row gap-4 px-6 pb-6 pt-2">
               <Button type="primary" className="bg-[#a259c6] px-8 font-semibold text-base h-10">Nộp đơn ngay</Button>
-              <Button icon={<HeartOutlined />} className="border-[#a259c6] text-[#a259c6] font-semibold h-10">Lưu tin</Button>
+              <Button 
+                icon={isSubmiting ? <LoadingOutlined spin /> : (isSaved ? <HeartFilled /> : <HeartOutlined />)}
+                className={`border-[#a259c6] font-semibold h-10 ${isSaved ? 'bg-red-50 text-red-500 border-red-300' : 'text-[#a259c6]'}`}
+                onClick={handleToggleSave}
+                disabled={isSubmiting || !jobPostId}
+                loading={isSubmiting}
+              >
+                {isSaved ? 'Đã lưu' : 'Lưu tin'}
+              </Button>
             </div>
           </Card>
           {/* Mô tả công việc */}
@@ -63,24 +139,25 @@ const JobDetail = () => {
             <div className="px-6 py-6 ">
              <Card className="rounded-xl shadow border border-[#e0c6e6] bg-white p-0 mb-3! ">
              <h3 className="font-bold text-xl text-[#222] border-b-2 border-[#a259c6]/30 pb-2 mb-4">Mô tả công việc</h3>
-              <div className="text-[#222] text-base mb-6">
-                Embedded Systems Engineer. Yêu cầu:<br />
-                - 5+ năm kinh nghiệm embedded systems<br />
-                - C/C++<br />
-                - RTOS<br />
-                - Hardware Interfaces<br />
-                - IoT Protocols
+              <div className="text-[#222] text-base mb-6 whitespace-pre-line">
+                {currentJob.jobDescription || 'Chưa có mô tả công việc'}
               </div>
              </Card>
               {/* Thông tin chi tiết */}
               <Card className="rounded-xl shadow border border-[#e0c6e6] bg-white mb-3!">
               <h3 className="font-bold text-xl text-[#222] border-b-2 border-[#a259c6]/30 pb-2 mb-4">Thông tin chi tiết</h3>
               <div className="grid grid-cols-2 gap-y-2 gap-x-8 text-base text-[#222] mb-6">
-                <div><span className="font-semibold">Mã công việc:</span> JOB-00048</div>
-                <div><span className="font-semibold">Chức danh:</span> Software Developer</div>
-                <div><span className="font-semibold">Ngành nghề:</span> IT & Telecommunications</div>
-                <div><span className="font-semibold">Địa điểm:</span> Đà Nẵng</div>
-                <div><span className="font-semibold">Mức lương:</span> <span className="text-[#a259c6] font-bold">45.000.000 đ</span></div>
+                <div><span className="font-semibold">Mã công việc:</span> JOB-{String(currentJob.id).padStart(5, '0')}</div>
+                <div><span className="font-semibold">Số lượng:</span> {currentJob.quantity || 'Không giới hạn'}</div>
+                <div><span className="font-semibold">Địa điểm:</span> {provinceName}</div>
+                <div><span className="font-semibold">Mức lương:</span> 
+                  <span className="text-[#a259c6] font-bold ml-2">
+                    {currentJob.salaryMin.toLocaleString('vi-VN')} - {currentJob.salaryMax.toLocaleString('vi-VN')} đ
+                  </span>
+                </div>
+                {currentJob.deadline && (
+                  <div><span className="font-semibold">Hạn nộp hồ sơ:</span> {new Date(currentJob.deadline).toLocaleDateString('vi-VN')}</div>
+                )}
               </div>
              </Card>
 
@@ -143,21 +220,37 @@ const JobDetail = () => {
               <Card className="rounded-xl shadow border border-[#e0c6e6] bg-white p-0">
               <h3 className="font-bold text-xl text-[#222] border-b-2 border-[#a259c6]/30 pb-2 mb-4">Thông tin liên hệ</h3>
               <div className="flex flex-col gap-4">
-                <div className="bg-[#f6fafd] border border-[#e0c6e6] rounded-lg p-3 flex items-center gap-2">
-                  <MailOutlined className="text-[#a259c6] text-lg" />
-                  <div>
-                    <div className="text-xs text-[#888] mb-1">Email:</div>
-                    <a href="mailto:careers@sendo.vn" className="font-semibold text-[#1677ff] hover:text-[#a259c6] underline">careers@sendo.vn</a>
+                {currentJob.contactPersonEmail && (
+                  <div className="bg-[#f6fafd] border border-[#e0c6e6] rounded-lg p-3 flex items-center gap-2">
+                    <MailOutlined className="text-[#a259c6] text-lg" />
+                    <div>
+                      <div className="text-xs text-[#888] mb-1">Email:</div>
+                      <a href={`mailto:${currentJob.contactPersonEmail}`} className="font-semibold text-[#1677ff] hover:text-[#a259c6] underline">
+                        {currentJob.contactPersonEmail}
+                      </a>
+                    </div>
                   </div>
-                </div>
-                <div className="bg-[#f6fafd] border border-[#e0c6e6] rounded-lg p-3 flex items-center gap-2">
-                  <PhoneOutlined className="text-[#a259c6] text-lg" />
-                  <div>
-                    <div className="text-xs text-[#888] mb-1">Hotline:</div>
-                    <a href="tel:19001090" className="font-semibold text-[#1677ff] hover:text-[#a259c6] underline">19001090</a>
+                )}
+                {currentJob.contactPersonPhone && (
+                  <div className="bg-[#f6fafd] border border-[#e0c6e6] rounded-lg p-3 flex items-center gap-2">
+                    <PhoneOutlined className="text-[#a259c6] text-lg" />
+                    <div>
+                      <div className="text-xs text-[#888] mb-1">Hotline:</div>
+                      <a href={`tel:${currentJob.contactPersonPhone}`} className="font-semibold text-[#1677ff] hover:text-[#a259c6] underline">
+                        {currentJob.contactPersonPhone}
+                      </a>
+                    </div>
                   </div>
-                </div>
-            
+                )}
+                {currentJob.contactPersonName && (
+                  <div className="bg-[#f6fafd] border border-[#e0c6e6] rounded-lg p-3 flex items-center gap-2">
+                    <UserOutlined className="text-[#a259c6] text-lg" />
+                    <div>
+                      <div className="text-xs text-[#888] mb-1">Người liên hệ:</div>
+                      <div className="font-semibold text-[#222]">{currentJob.contactPersonName}</div>
+                    </div>
+                  </div>
+                )}
               </div>
               </Card>
             </div>

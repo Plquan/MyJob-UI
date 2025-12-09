@@ -42,7 +42,7 @@ const EditJobPostModal: React.FC<EditJobPostModalProps> = ({
   const dispatch = useDispatch<AppDispatch>();
 
   const { careers, loading: careerLoading } = useSelector((state: RootState) => state.careerStore);
-  const { provinces, districts, loading: provinceLoading } = useSelector((state: RootState) => state.provinceStore);
+  const { provinces, loading: provinceLoading } = useSelector((state: RootState) => state.provinceStore);
   const { loading: jobPostLoading } = useSelector((state: RootState) => state.jobPostStore);
 
   useEffect(() => {
@@ -54,10 +54,6 @@ const EditJobPostModal: React.FC<EditJobPostModalProps> = ({
           ...editData,
           deadline: editData.deadline ? dayjs(editData.deadline) : undefined,
         });
-        
-        if (editData.provinceId) {
-          dispatch(provinceActions.getDistrictsByProvince(editData.provinceId));
-        }
       } else {
         form.resetFields();
       }
@@ -66,9 +62,6 @@ const EditJobPostModal: React.FC<EditJobPostModalProps> = ({
 
   const handleProvinceChange = (provinceId: number) => {
     form.setFieldsValue({ districtId: undefined });
-    if (provinceId) {
-      dispatch(provinceActions.getDistrictsByProvince(provinceId));
-    }
   };
 
   const handleSubmit = async (values: any) => {
@@ -427,30 +420,6 @@ const EditJobPostModal: React.FC<EditJobPostModalProps> = ({
                 {provinces?.map((province: any) => (
                   <Select.Option key={province.id} value={province.id}>
                     {province.name}
-                  </Select.Option>
-                ))}
-              </Select>
-            </Form.Item>
-          </Col>
-          <Col span={12}>
-            <Form.Item
-              label="Quận/Huyện"
-              name="districtId"
-              rules={[{ required: true, message: 'Vui lòng chọn quận/huyện!' }]}
-            >
-              <Select
-                placeholder="Chọn Quận/Huyện"
-                loading={provinceLoading}
-                disabled={!districts || districts.length === 0}
-                showSearch
-                optionFilterProp="children"
-                filterOption={(input, option) =>
-                  (option?.children as unknown as string)?.toLowerCase().includes(input.toLowerCase())
-                }
-              >
-                {districts?.map((district: any) => (
-                  <Select.Option key={district.id} value={district.id}>
-                    {district.name}
                   </Select.Option>
                 ))}
               </Select>

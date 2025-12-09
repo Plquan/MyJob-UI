@@ -53,7 +53,6 @@ import type { ISkill } from "./SkillType"
   }
 
   export interface IOnlineResume {
-    userInfo?: IUserInfo
     resume?: IResume
     candidate?: ICandidate
     educations: IEducation[]
