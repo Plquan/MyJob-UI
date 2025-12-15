@@ -8,7 +8,7 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import type { AppDispatch } from "../../../../stores";
 import { authActions } from "../../../../stores/authStore/authReducer";
-import { useTranslation } from "../../../../provider/Languages";
+import { EUserRole } from "../../../../constant/role";
 
 
 const LoginForm = () => {
@@ -16,24 +16,15 @@ const LoginForm = () => {
   const dispatch = useDispatch<AppDispatch>()
   const [form] = Form.useForm();
   const [loading,setLoading] = useState(false)
-  const { t } = useTranslation();
   const onFinish = async (values: any) => {
     try {
       setLoading(true)
-      await dispatch(authActions.candidateLogin(values)).unwrap()
+      await dispatch(authActions.login(values)).unwrap()
        dispatch(authActions.getCurrentUser())
        toast.success("Đăng nhập thành công")
        navigate(ROUTE_PATH.HOME)
     } catch (error:any) {
-      if(error.errorCode == "1004"){
-        toast.error(t(`auth.errorCode.${error.errorCode}`))
-      } 
-      if(error.errorCode == "1010"){
-        toast.error(t(`auth.errorCode.${error.errorCode}`))
-      }
-      if(error.errorCode == "1003"){
-        toast.error(t(`auth.errorCode.${error.errorCode}`))
-      }
+      toast.error(error.message);
     }
     finally {
       setLoading(false)
@@ -48,7 +39,13 @@ const LoginForm = () => {
       layout="vertical"
       name="login"
       onFinish={onFinish}
+      initialValues={{
+        role: EUserRole.CANDIDATE
+      }}
     >
+      <Form.Item name="role" hidden>
+        <Input />
+      </Form.Item>
       <Form.Item
         name="email"
         label="Email"

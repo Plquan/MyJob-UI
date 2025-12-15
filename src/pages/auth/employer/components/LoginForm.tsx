@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom'
 import { authActions } from '../../../../stores/authStore/authReducer';
 import { useDispatch } from 'react-redux';
 import type { AppDispatch } from '../../../../stores';
-import { useTranslation } from '../../../../provider/Languages';
+import { EUserRole } from '../../../../constant/role';
 
 
 const FormLogin = ({ mounted }: { mounted: boolean }) => {
@@ -15,24 +15,15 @@ const FormLogin = ({ mounted }: { mounted: boolean }) => {
   const dispatch = useDispatch<AppDispatch>();
     const [form] = Form.useForm<ILoginRequestData>();
     const slideLogin = mounted ? 'translate-y-0 opacity-100 transition-all duration-600 ease-out' : 'translate-y-80 opacity-0';
-    const { t } = useTranslation();
     const handleLogin = async () => {
         try {
             const values = await form.getFieldsValue();
-            await dispatch(authActions.companyLogin(values)).unwrap();
+            await dispatch(authActions.login(values)).unwrap();
             dispatch(authActions.getCurrentUser());
             toast.success("Đăng nhập thành công");
             navigate(ROUTE_PATH.HOME);
         } catch (error:any) {
-            if(error.errorCode == "1004"){
-                toast.error(t(`auth.errorCode.${error.errorCode}`))
-            }
-            if(error.errorCode == "1010"){
-                toast.error(t(`auth.errorCode.${error.errorCode}`))
-            }
-            if(error.errorCode == "1003"){
-                toast.error(t(`auth.errorCode.${error.errorCode}`))
-            }
+           toast.error(error.message)
         }
     }
 
@@ -46,7 +37,13 @@ const FormLogin = ({ mounted }: { mounted: boolean }) => {
               layout="vertical"
               name="login-employer"
               onFinish={handleLogin}
+              initialValues={{
+                role: EUserRole.EMPLOYER
+              }}
             >
+              <Form.Item name="role" hidden>
+                <Input />
+              </Form.Item>
               <Form.Item
                 name="email"
                 label={

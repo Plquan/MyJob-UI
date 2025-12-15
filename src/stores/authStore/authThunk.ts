@@ -39,11 +39,11 @@ const allowSearch = createAsyncThunk (
     }
 )
 
-const candidateLogin = createAsyncThunk(
-    "auth/candidateLogin",
+const login = createAsyncThunk(
+    "auth/login",
     async (data: ILoginRequestData, { rejectWithValue }): Promise<string> => {
         try {
-            const response: string = await http.post("/auth/login/candidate", data);
+            const response: string = await http.post("/auth/login", data);
             return response;
         } catch (error: any) {
             return rejectWithValue(error.response.data) as any;
@@ -51,17 +51,6 @@ const candidateLogin = createAsyncThunk(
     }
 )
 
-const companyLogin = createAsyncThunk(
-    "auth/companyLogin",
-    async (data: ILoginRequestData, { rejectWithValue }): Promise<string> => {
-        try {
-            const response: string = await http.post("/auth/login/company", data);
-            return response;
-        } catch (error: any) {
-            return rejectWithValue(error.response.data) as any;
-        }
-    }
-)
 
 const candidateRegister = createAsyncThunk(
     "auth/candidateRegister",
@@ -104,8 +93,7 @@ const authThunks = {
     getCurrentUser,
     updateAvatar,
     allowSearch,
-    candidateLogin,
-    companyLogin,
+    login,
     candidateRegister,
     companyRegister,
     logout

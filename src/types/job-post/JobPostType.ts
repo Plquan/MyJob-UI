@@ -112,3 +112,11 @@ export interface IJobPost {
   updatedAt: Date;
   status: number;
 }
+
+export interface IApplyJobRequest {
+  jobPostId: number;
+  resumeId: number;
+  fullName: string;
+  email: string;
+  phone: string;
+}

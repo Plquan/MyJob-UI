@@ -1,11 +1,11 @@
 // AttachedResumeColumns.tsx
-import { Button, Tooltip } from "antd"
+import { Button, Tooltip, Tag } from "antd"
 import { DeleteOutlined, EditOutlined, DownloadOutlined, EyeOutlined, RightOutlined } from "@ant-design/icons"
 import type { IResume } from "../../../../types/resume/ResumeType"
 import downloadFile from "../../../../ultils/functions/dowloadFile"
-import CV_TYPE from "../../../../constant/CvType"
 import ROUTE_PATH from "../../../../routes/routePath"
 import type { ColumnsType } from "antd/es/table"
+import { EResumeType } from "../../../../enums/resume/EResumeType"
 
 interface ColumnsProps {
   isSubmitting: boolean
@@ -33,7 +33,7 @@ const AttachedResumeColumns = ({
       title: 'Tùy chỉnh',
       key: 'selected',
       align: 'center' as const,
-      render: (_: any, record: IResume, index: number) => (
+      render: (_: any, record: IResume) => (
         <input
           type="radio"
           name="resume-radio-group"
@@ -46,11 +46,24 @@ const AttachedResumeColumns = ({
       title: 'Tiêu đề',
       dataIndex: 'title',
       key: 'title',
-      render: (text: string, record) => (
-        <span className="font-medium">
-          {record.type === CV_TYPE.CV_ONLINE ? 'MyJob CV' : text}
-        </span>
-      ),
+      render: (text: string, record) => {
+        if (record.type === EResumeType.ONLINE) {
+          return <span className="font-medium">MyJob CV</span>;
+        }
+        return <span className="font-medium">{text || record.title || 'Chưa có tiêu đề'}</span>;
+      },
+    },
+    {
+      title: 'Loại hồ sơ',
+      dataIndex: 'type',
+      key: 'type',
+      align: 'center' as const,
+      render: (type: EResumeType) => {
+        if (type === EResumeType.ONLINE) {
+          return <Tag color="blue">Trực tuyến</Tag>;
+        }
+        return <Tag color="green">Đính kèm</Tag>;
+      },
     },
     {
       title: 'Cập nhật lần cuối',
@@ -63,7 +76,7 @@ const AttachedResumeColumns = ({
       key: 'actions',
       align: 'center' as const,
       render: (_: any, record) => {
-        if (record.type === CV_TYPE.CV_ONLINE) {
+        if (record.type === EResumeType.ONLINE) {
           return (
                 <Tooltip title="Đi tới hồ sơ trực tuyến">
                 <Button

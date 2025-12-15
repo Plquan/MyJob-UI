@@ -82,28 +82,15 @@ export const authSlice = createSlice({
             state.error = action.error as string;
         });
 
-        //candidate login
-        builder.addCase(authThunks.candidateLogin.pending, (state) => {
+        // login
+        builder.addCase(authThunks.login.pending, (state) => {
             state.isSubmitting = true;
         });
-        builder.addCase(authThunks.candidateLogin.fulfilled, (state, action) => {
+        builder.addCase(authThunks.login.fulfilled, (state, action) => {
             localStorage.setItem("accessToken", action.payload);
             state.isSubmitting = false;
         });
-        builder.addCase(authThunks.candidateLogin.rejected, (state, action) => {
-            state.isSubmitting = false;
-            state.error = action.error as string;
-        });
-
-        //company login
-        builder.addCase(authThunks.companyLogin.pending, (state) => {
-            state.isSubmitting = true;
-        });
-        builder.addCase(authThunks.companyLogin.fulfilled, (state, action) => {
-            localStorage.setItem("accessToken", action.payload);
-            state.isSubmitting = false;
-        });
-        builder.addCase(authThunks.companyLogin.rejected, (state, action) => {
+        builder.addCase(authThunks.login.rejected, (state, action) => {
             state.isSubmitting = false;
             state.error = action.error as string;
         });

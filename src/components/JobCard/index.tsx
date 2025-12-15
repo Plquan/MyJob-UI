@@ -5,6 +5,8 @@ import type { IJobPost } from '../../types/job-post/JobPostType';
 import { useDispatch, useSelector } from 'react-redux';
 import type { AppDispatch, RootState } from '../../stores';
 import { jobPostActions } from '../../stores/jobPostStore/jobPostReducer';
+import { useAuthorization } from '../../ultils/hooks/useAuthorization';
+import { EUserRole } from '../../constant/role';
 
 interface JobCardProps {
   job: IJobPost;
@@ -17,8 +19,9 @@ const JobCard: React.FC<JobCardProps> = ({ job, onClick, size = 'default' }) => 
   const dispatch = useDispatch<AppDispatch>();
   const { isSubmiting } = useSelector((state: RootState) => state.jobPostStore);
   const { provinces } = useSelector((state: RootState) => state.provinceStore);
+  const jobSubmiting = isSubmiting[job.id] ?? false;
+  const { requireCandidate } = useAuthorization([EUserRole.CANDIDATE]);
 
-  // Lấy tên tỉnh từ store
   const provinceName = useMemo(() => {
     if (!job.provinceId) return 'N/A';
     const province = provinces?.find(p => p.id === job.provinceId);
@@ -27,6 +30,9 @@ const JobCard: React.FC<JobCardProps> = ({ job, onClick, size = 'default' }) => 
 
   const handleToggleSave = (e: React.MouseEvent) => {
     e.stopPropagation();
+    if (!requireCandidate()) {
+      return;
+    }
     dispatch(jobPostActions.toggleSaveJobPost(job.id));
   };
 
@@ -38,24 +44,23 @@ const JobCard: React.FC<JobCardProps> = ({ job, onClick, size = 'default' }) => 
         : 'px-3 py-2 min-h-[80px]'
         }`}
     >
-      <div className="flex flex-row items-start w-full min-w-0">
+      <div className="flex flex-row items-start w-full min-w-0 cursor-pointer" onClick={() => onClick?.(job.id)}>
         <div className={`border-1 border-gray-300 bg-white flex items-center justify-center rounded-none shrink-0 ${isLarge
           ? 'w-12 h-12 md:w-14 md:h-14 mr-3 md:mr-4'
           : 'w-10 h-10 mr-2'
           }`}>
           <img
             src={job.company.logo}
-            className="max-w-[80%] max-h-[80%] object-contain"
+            className="w-full h-full object-contain p-1!"
           />
         </div>
         <div className="flex-1 min-w-0 flex flex-col">
           <div className="flex flex-row items-center min-w-0">
             <span
-              className={`font-semibold text-gray-900 truncate mr-2 cursor-pointer hover:text-[#6A5ACD] transition-colors ${isLarge
+              className={`font-semibold text-gray-900 truncate mr-2  hover:text-[#6A5ACD] transition-colors ${isLarge
                 ? 'text-base md:text-lg'
                 : 'text-[15px]'
                 }`}
-              onClick={() => onClick?.(job.id)}
             >
               {job.jobName}
             </span>
@@ -107,7 +112,7 @@ const JobCard: React.FC<JobCardProps> = ({ job, onClick, size = 'default' }) => 
           onClick={handleToggleSave}
           shape="circle"
           size="small"
-          loading={isSubmiting}
+          loading={jobSubmiting}
           className="bg-gray-200! border-gray-200!"
           icon={(job.isSaved ? <HeartFilled className="text-[#6A5ACD]!" /> : <HeartOutlined/>)}
         >

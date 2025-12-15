@@ -26,6 +26,7 @@ import ProductPage from "../pages/product";
 import { EUserRole } from "../constant/role";
 import JobPage from "../pages/jobs/list-job";
 import ProtectRoute from "./protectRoute";
+import ManageResumePage from "../pages/employer/manage-resume";
 const AppRoutes = () => {
     return (
        <BrowserRouter>
@@ -57,6 +58,7 @@ const AppRoutes = () => {
             <Route path={ROUTE_PATH.EMPLOYER_DASHBOARD} element={<EmployerDashboard />} />
             <Route path={ROUTE_PATH.EMPLOYER_COMPANY} element={<EmployerCompanyPage />} />
             <Route path={ROUTE_PATH.EMPLOYER_JOB_POST} element={<ManageJobPostPage />} />
+            <Route path={ROUTE_PATH.EMPLOYER_MANAGE_RESUME} element={<ManageResumePage />} />
             </Route>
             </Route>
 

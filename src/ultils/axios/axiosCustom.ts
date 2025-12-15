@@ -13,6 +13,10 @@ http.interceptors.request.use((config) => {
   if (getAccessToken() !== undefined) {
     config.headers.Authorization = "Bearer " + String(getAccessToken());
   }
+  // Nếu là FormData thì không set Content-Type để browser tự set với boundary
+  if (config.data instanceof FormData) {
+    delete config.headers['Content-Type'];
+  }
   return config;
 });
 http.interceptors.response.use(

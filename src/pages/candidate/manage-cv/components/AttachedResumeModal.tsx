@@ -1,4 +1,4 @@
-import { Modal, Form, Input, Select, Button, Upload } from "antd";
+import { Modal, Form, Input, Select, Button, Upload, message } from "antd";
 import { useSelector } from "react-redux";
 import { UploadOutlined } from "@ant-design/icons";
 import { useEffect } from "react";
@@ -68,13 +68,20 @@ const AttachedResumeModal: React.FC<AttachedResumeModalProps> = ({ open, onCance
         
       <Form.Item
         name="file"
-        label={<span>Chọn tệp CV của bạn (Hỗ trợ *.doc, *.docx, *.pdf, và &lt; 5MB)</span>}
+        label={<span>Chọn tệp CV của bạn (Hỗ trợ *.doc, *.docx, *.pdf, và &lt; 10MB)</span>}
         valuePropName="fileList"
         getValueFromEvent={(e) => (Array.isArray(e) ? e : e?.fileList)}
         rules={[{ required: true, message: "Vui lòng tải lên tệp CV" }]}
       >
        <Upload
-        beforeUpload={() => false}
+        beforeUpload={(file) => {
+          const maxSize = 10 * 1024 * 1024; // 10MB
+          if (file.size > maxSize) {
+            message.error(`File không được vượt quá 10MB. File của bạn: ${(file.size / 1024 / 1024).toFixed(2)}MB`);
+            return Upload.LIST_IGNORE;
+          }
+          return false; // Prevent auto upload
+        }}
         accept=".pdf,.doc,.docx"
         maxCount={1}
         listType="text"

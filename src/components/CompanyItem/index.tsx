@@ -1,5 +1,5 @@
 import { Card, Avatar, Button } from "antd";
-import { CarryOutOutlined, EnvironmentOutlined, FlagOutlined, TeamOutlined, UsergroupAddOutlined, UserOutlined, HeartOutlined, HeartFilled } from "@ant-design/icons";
+import { CarryOutOutlined, EnvironmentOutlined, FlagOutlined, TeamOutlined, UsergroupAddOutlined, UserOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import type { ICompanyWithImagesData } from "../../types/company/CompanyType";
@@ -8,6 +8,8 @@ import ROUTE_PATH from "../../routes/routePath";
 import { companyActions } from "../../stores/companyStore/companyReducer";
 import type { RootState, AppDispatch } from "../../stores";
 import { BookmarkIcon } from "../../assets/icon/bookmark";
+import { useAuthorization } from "../../ultils/hooks/useAuthorization";
+import { EUserRole } from "../../constant/role";
 
 interface CompanyItemProps {
   company: ICompanyWithImagesData;
@@ -27,9 +29,14 @@ const CompanyItem = ({ company }: CompanyItemProps) => {
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
   const { submitting } = useSelector((state: RootState) => state.companyStore);
+  const companySubmiting = submitting.followCompany[company.company.id] ?? false;
+  const { requireCandidate } = useAuthorization([EUserRole.CANDIDATE]);
 
   const handleToggleFollow = async (e: React.MouseEvent) => {
     e.stopPropagation();
+    if (!requireCandidate()) {
+      return;
+    }
     await dispatch(companyActions.toggleFollowCompany(company.company.id)).unwrap();
   };
 
@@ -88,7 +95,7 @@ const CompanyItem = ({ company }: CompanyItemProps) => {
           <Button
             className="w-full"
             onClick={handleToggleFollow}
-            loading={submitting.followCompany}
+            loading={companySubmiting}
             icon={company.isFollowed ?  <BookmarkIcon className="w-4 h-4" stroke="white" fill="white" /> : <BookmarkIcon className="w-4 h-4" />
             
             }

@@ -9,6 +9,7 @@ import { onlineResumeSlice } from "./onlineResumeStore/onlineResumeReducer";
 import { attachedResumeSlice } from "./attachedResumeStore/attachedResumeReducer";
 import { companySlice } from "./companyStore/companyReducer";
 import { jobPostSlice } from "./jobPostStore/jobPostReducer";
+import { jobPostActivitySlice } from "./jobPostActivityStore/jobPostActivityReducer";
 
 export const store = configureStore({
   reducer: {
@@ -22,6 +23,7 @@ export const store = configureStore({
     attachedResumeStore: attachedResumeSlice.reducer,
     companyStore: companySlice.reducer,
     jobPostStore: jobPostSlice.reducer,
+    jobPostActivityStore: jobPostActivitySlice.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

@@ -122,64 +122,64 @@ const DefaultHeader = () => {
     <>
       <Spin spinning={loading} fullscreen />
       <Header className="fixed top-0 left-0 right-0 border border-gray-200 z-50 bg-white! shadow-sm py-3 flex items-center justify-between px-4!">
-      <div className="flex items-center">
-        <div className="flex items-center gap-3">
-          <Link to={ROUTE_PATH.HOME}>
-            <img
-              src="/assets/vinhuni.png"
-              alt="VINHUNI Logo"
-              className="h-10 w-auto"
-            />
-          </Link>
+        <div className="flex items-center">
+          <div className="flex items-center gap-3">
+            <Link to={ROUTE_PATH.HOME}>
+              <img
+                src="/assets/vinhuni.png"
+                alt="VINHUNI Logo"
+                className="h-10 w-auto"
+              />
+            </Link>
+          </div>
         </div>
-      </div>
-      <Menu
-        mode="horizontal"
-        selectedKeys={[location.pathname]}
-        items={items}
+        <Menu
+          mode="horizontal"
+          selectedKeys={[location.pathname]}
+          items={items}
 
-        style={{ fontSize: 14, marginLeft: 'auto', width: '50%', marginRight: 24, height: '100%', display: 'flex', alignItems: 'center' }}
-      />
+          style={{ fontSize: 14, marginLeft: 'auto', width: '50%', marginRight: 24, height: '100%', display: 'flex', alignItems: 'center' }}
+        />
 
-      <div className="flex items-center space-x-6">
-        {currentUser ? (
-          <Dropdown
-            menu={{ items: loggedInMenu }}
-            placement="bottomRight"
-            arrow
+        <div className="flex items-center space-x-6">
+          {currentUser ? (
+            <Dropdown
+              menu={{ items: loggedInMenu }}
+              placement="bottomRight"
+              arrow
+            >
+              <div className="flex items-center text-[13.5px] cursor-pointer">
+                <Avatar size="small" src={currentUser.avatar} className="mr-2!" />
+                <span className="max-w-[120px] truncate">{currentUser.role === EUserRole.CANDIDATE ? currentUser.candidate?.fullName : currentUser.company?.companyName}</span>
+              </div>
+            </Dropdown>
+          ) : (
+            <Dropdown
+              menu={{
+                items: DropdownItems,
+                onClick: handleMenuClick,
+              }}
+              placement="bottomRight"
+              arrow
+            >
+              <div className="flex items-center max-w-[150px] sm:max-w-none text-[13.5px] text-[#6A5ACD] cursor-pointer truncate whitespace-nowrap">
+                <UserOutlined className="mr-2 text-[16px]" />
+                <span className="truncate">{t('header.register')}/{t('header.login')}</span>
+              </div>
+            </Dropdown>
+          )}
+
+          <Button
+            type="default"
+            onClick={() => navigate(ROUTE_PATH.PRODUCTS)}
+            icon={<BankOutlined />}
+            className="flex items-center mr-3!"
           >
-            <div className="flex items-center text-[13.5px] cursor-pointer">
-              <Avatar size="small" src={currentUser.avatar} className="mr-2!" />
-              <span className="max-w-[120px] truncate">{currentUser.fullName}</span>
-            </div>
-          </Dropdown>
-        ) : (
-          <Dropdown
-            menu={{
-              items: DropdownItems,
-              onClick: handleMenuClick,
-            }}
-            placement="bottomRight"
-            arrow
-          >
-            <div className="flex items-center max-w-[150px] sm:max-w-none text-[13.5px] text-[#6A5ACD] cursor-pointer truncate whitespace-nowrap">
-              <UserOutlined className="mr-2 text-[16px]" />
-              <span className="truncate">{t('header.register')}/{t('header.login')}</span>
-            </div>
-          </Dropdown>
-        )}
-
-        <Button
-          type="default"
-          onClick={() => navigate(ROUTE_PATH.PRODUCTS)}
-          icon={<BankOutlined />}
-          className="flex items-center mr-3!"
-        >
-          {t('header.employer')}
-        </Button>
-        <LanguageSwitcher />
-      </div>
-    </Header>
+            {t('header.employer')}
+          </Button>
+          <LanguageSwitcher />
+        </div>
+      </Header>
     </>
   );
 };

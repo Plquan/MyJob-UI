@@ -16,7 +16,7 @@ const AttchedResumeCard = () => {
   const [selectedRow, setSelectedRow] = useState<number | null>(null);
 
   useEffect (() => {
-    dispatch(attachedResumeActions.getAllAttachedResumes())
+    dispatch(attachedResumeActions.getResumes())
   },[dispatch])
 
   const showModal = () => {
@@ -36,8 +36,9 @@ const AttchedResumeCard = () => {
       formData.append("file", fileList[0].originFileObj);
     }
 
+    const { file, ...restValues } = values;
     const resumeData = {
-      ...values,
+      ...restValues,
       salaryMin: +values.salaryMin,
       salaryMax: +values.salaryMax,
     }

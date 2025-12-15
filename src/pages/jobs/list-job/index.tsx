@@ -73,8 +73,7 @@ const JobPage  = () => {
                   key={job.id} 
                   job={job}
                   size="large"
-                  onClick={async (jobPostId) => {
-                    await dispatch(jobPostThunks.getJobPostById(jobPostId));
+                  onClick={(jobPostId) => {
                     navigate(ROUTE_PATH.JOB_DETAIL.replace(':jobPostId', jobPostId.toString()));
                   }}
                 />

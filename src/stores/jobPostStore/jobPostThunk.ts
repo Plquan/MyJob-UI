@@ -1,5 +1,5 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import type { ICreateJobPostReq, ICompanyJobPost, IGetJobPostsReqParams, IJobPostUpdate, IJobPost } from "../../types/job-post/JobPostType";
+import type { ICreateJobPostReq, ICompanyJobPost, IGetJobPostsReqParams, IJobPostUpdate, IJobPost, IApplyJobRequest } from "../../types/job-post/JobPostType";
 import http from "../../ultils/axios/axiosCustom";
 import type { IPaginationResponse } from "../../types/AppType";
 
@@ -81,6 +81,18 @@ const getJobPostById = createAsyncThunk (
         }
     }
 )
+const applyJob = createAsyncThunk (
+    "jobPost/applyJob",
+    async (request: IApplyJobRequest, {rejectWithValue}): Promise<boolean> => {
+        try {
+            const response: boolean = await http.post("/job-post-activity/apply-job",request);
+            return response;
+        } catch (error: any) {
+            return rejectWithValue(error.response.data) as any;
+        }
+    }
+)
+
 
 const jobPostThunks = {
     createJobPost,
@@ -88,7 +100,8 @@ const jobPostThunks = {
     updateJobPost,
     getJobPost,
     toggleSaveJobPost,
-    getJobPostById
+    getJobPostById,
+    applyJob
 }
 
 export default  jobPostThunks
