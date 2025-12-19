@@ -70,7 +70,7 @@ const ViewResumeModal = ({
         }
     };
 
-    const handleSendEmail = () => {
+    const handleSendEmailClick = () => {
         if (activity) {
             onSendEmail(activity);
         }
@@ -91,7 +91,7 @@ const ViewResumeModal = ({
                     <Button
                         type="primary"
                         icon={<MailOutlined />}
-                        onClick={handleSendEmail}
+                        onClick={handleSendEmailClick}
                         disabled={!activity?.email || activity?.isSentMail}
                     >
                         Gửi email

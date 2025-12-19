@@ -15,6 +15,7 @@ const ROUTE_PATH = {
     CANDIDATE_PROFILE: '/ung-vien/ho-so',
     CANDIDATE_MY_COMPANIES: '/candidate/cong-ty-cua-toi',
     CANDIDATE_ONLINE_RESUME: '/candidate/online-resume',
+    CHAT: '/chat',
 
     //company
     COMPANY_DETAIL: '/company-detail/:companyId',

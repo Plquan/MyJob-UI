@@ -1,6 +1,6 @@
 import { NavLink, useNavigate } from 'react-router-dom';
-import { Dropdown, Button, Menu, Avatar, Spin } from 'antd';
-import { UserOutlined, EditOutlined, SearchOutlined, BankOutlined, FileTextOutlined, HomeOutlined, ArrowRightOutlined, LoadingOutlined } from '@ant-design/icons';
+import { Dropdown, Button, Menu, Avatar, Spin, Badge } from 'antd';
+import { UserOutlined, EditOutlined, SearchOutlined, BankOutlined, FileTextOutlined, HomeOutlined, ArrowRightOutlined, LoadingOutlined, MessageOutlined, CommentOutlined } from '@ant-design/icons';
 import ROUTE_PATH from '../../../routes/routePath';
 import { Link } from 'react-router-dom';
 import { Header } from 'antd/es/layout/layout';
@@ -37,11 +37,6 @@ const DefaultHeader = () => {
       key: '/guide',
       icon: <FileTextOutlined />,
       label: <NavLink to="/guide">{t('header.guideSearch')}</NavLink>,
-    },
-    {
-      key: '/cv-samples',
-      icon: <FileTextOutlined />,
-      label: <NavLink to="/cv-samples">{t('header.cvSearch')}</NavLink>,
     },
   ];
 
@@ -142,6 +137,18 @@ const DefaultHeader = () => {
         />
 
         <div className="flex items-center space-x-6">
+          {currentUser && (
+              <Button
+                className='mr-3!'
+                type='text'
+                icon={
+                  <Badge count={1} size="small">
+                    <CommentOutlined  className="text-[18px]! text-gray-500!" />
+                  </Badge>
+                }
+                onClick={() => navigate(ROUTE_PATH.CHAT)}
+              />
+          )}
           {currentUser ? (
             <Dropdown
               menu={{ items: loggedInMenu }}

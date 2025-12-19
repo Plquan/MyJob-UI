@@ -26,6 +26,7 @@ import { POSITION_OPTIONS } from '../../../constant/selectOptions';
 import { EResumeType } from '../../../enums/resume/EResumeType';
 import { EJobPostActivityStatus } from '../../../enums/job-post-activity/EJobPostActivity';
 import ViewResumeModal from './components/ViewResumeModal';
+import SendEmailModal from './components/SendEmailModal';
 
 // Status options cho job activity
 const JOB_ACTIVITY_STATUS_OPTIONS = [
@@ -47,6 +48,8 @@ const ManageResumePage = () => {
   
   const [viewModalVisible, setViewModalVisible] = useState(false);
   const [selectedActivity, setSelectedActivity] = useState<IJobPostActivityDto | null>(null);
+  const [emailModalVisible, setEmailModalVisible] = useState(false);
+  const [selectedEmailActivity, setSelectedEmailActivity] = useState<IJobPostActivityDto | null>(null);
   const debouncedSearch = useDebounce(requestParams.search || '', 500);
 
 
@@ -98,14 +101,31 @@ const ManageResumePage = () => {
     });
   };
 
-  // Gửi email
+  // Gửi email - mở modal
   const handleSendEmail = (record: IJobPostActivityDto) => {
     if (!record.email) {
       message.warning('Ứng viên chưa có email');
       return;
     }
-    // TODO: Implement send email API
-    message.success('Đã gửi email thành công');
+    setSelectedEmailActivity(record);
+    setEmailModalVisible(true);
+  };
+
+  // Xử lý khi gửi email từ modal
+  const handleEmailSend = (values: { to: string; subject: string; content: string }) => {
+    if (selectedEmailActivity) {
+      // TODO: Implement send email API với values
+      console.log('Sending email:', values);
+      message.success('Đã gửi email thành công');
+      setEmailModalVisible(false);
+      setSelectedEmailActivity(null);
+    }
+  };
+
+  // Đóng modal email
+  const handleEmailModalCancel = () => {
+    setEmailModalVisible(false);
+    setSelectedEmailActivity(null);
   };
 
   const columns: ColumnsType<IJobPostActivityDto> = [
@@ -276,6 +296,14 @@ const ManageResumePage = () => {
         }}
         onSendEmail={handleSendEmail}
         onDelete={handleDelete}
+      />
+
+      {/* Modal gửi email */}
+      <SendEmailModal
+        open={emailModalVisible}
+        activity={selectedEmailActivity}
+        onCancel={handleEmailModalCancel}
+        onSend={handleEmailSend}
       />
     </Card>
   );
