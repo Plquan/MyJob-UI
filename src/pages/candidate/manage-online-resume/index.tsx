@@ -1,11 +1,11 @@
 import ExperienceCard from "./components/ExperienceCard";
 import LanguageCard from "./components/LanguageCard";
-import ProfileCard from "./components/ProfileCard";
+import ProfileCard from "./components/CandidateCard";
 import OnlineResumeMenu from "./components/OnlineResumeMenu";
 import EducationCard from "./components/EducationCard";
 import SkillCard from "./components/SkillCard";
 import CertificateCard from "./components/CertificateCard";
-import GeneralInfoCard from "./components/GeneralInfoCard";
+import GeneralInfoCard from "./components/ResumeCard";
 import { useDispatch } from "react-redux";
 import type { AppDispatch } from "../../../stores";
 import { useEffect } from "react";

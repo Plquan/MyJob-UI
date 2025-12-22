@@ -1,16 +1,15 @@
 import React, { useEffect } from 'react'
 import { Modal, Form, Input, Select, Button, Row, Col, DatePicker } from 'antd'
-import { useDispatch, useSelector } from 'react-redux'
+import { useSelector } from 'react-redux'
 import { GENDER_OPTIONS, MARTIALSTATUS_OPTIONS } from '../../../../../../constant/selectOptions'
-import type { AppDispatch, RootState } from '../../../../../../stores'
-import  { provinceActions } from '../../../../../../stores/provinceStore/provinceReducer'
+import type { RootState } from '../../../../../../stores'
 import type { ICandidate } from '../../../../../../types/candidate/CandidateType'
 import { normalizeDate } from '../../../../../../ultils/functions/normalizeDate'
 
 
 const { Option } = Select
 
-interface ProfileModalProps {
+interface CandidateModalProps {
   open: boolean
   onCancel: () => void
   onFinish: (values: any) => void
@@ -18,25 +17,17 @@ interface ProfileModalProps {
   form:any
 }
 
-const ProfileModal: React.FC<ProfileModalProps> = ({ open, onCancel,onFinish, initialValues,form }) => {
-  const dispatch = useDispatch<AppDispatch>();
-  const { provinces, districts, loading, isSubmiting } = useSelector(
+const CandidateModal: React.FC<CandidateModalProps> = ({ open, onCancel,onFinish, initialValues,form }) => {
+  const { provinces, loading } = useSelector(
     (state: RootState) => state.provinceStore
   )
-
-  useEffect(() => {
-    if (initialValues?.provinceId) {
-      dispatch(provinceActions.getDistrictsByProvince(initialValues.provinceId));
-    }
-  }, [initialValues])
 
   useEffect(() => {
     if(open){
       if (initialValues?.id) {
         form.setFieldsValue({
           ...initialValues,
-          provinceId: initialValues.province?.id,
-          districtId: initialValues.district?.id,
+          provinceId: initialValues.provinceId,
           birthday: normalizeDate(initialValues.birthday)
         })
       } else {
@@ -44,13 +35,6 @@ const ProfileModal: React.FC<ProfileModalProps> = ({ open, onCancel,onFinish, in
       }
     }
   }, [open,initialValues, form])
-
-  const onProvinceChange = (provinceId: number) => {
-    form.setFieldsValue({
-      districtId: undefined
-    })
-    dispatch(provinceActions.getDistrictsByProvince(provinceId));
-  }
 
   return (
     <Modal
@@ -97,7 +81,7 @@ const ProfileModal: React.FC<ProfileModalProps> = ({ open, onCancel,onFinish, in
               label="Tỉnh/Thành phố"
               rules={[{ required: true, message: 'Vui lòng chọn tỉnh/thành phố' }]}
             >
-              <Select loading={loading} onChange={onProvinceChange}>
+              <Select loading={loading}>
                 {provinces?.map((province) => (
                   <Option key={province.id} value={province.id}>
                     {province.name}
@@ -129,20 +113,6 @@ const ProfileModal: React.FC<ProfileModalProps> = ({ open, onCancel,onFinish, in
                ))}
               </Select>
             </Form.Item>
-
-            <Form.Item
-              name="districtId"
-              label="Quận/Huyện"
-              rules={[{ required: true, message: 'Vui lòng nhập quận/huyện' }]}
-            >
-              <Select loading={isSubmiting}>
-                {districts?.map((district) => (
-                  <Option key={district.id} value={district.id}>
-                    {district.name}
-                  </Option>
-                ))}
-              </Select>
-            </Form.Item>
           </Col>
         </Row>
 
@@ -165,4 +135,4 @@ const ProfileModal: React.FC<ProfileModalProps> = ({ open, onCancel,onFinish, in
   );
 };
 
-export default ProfileModal
+export default CandidateModal

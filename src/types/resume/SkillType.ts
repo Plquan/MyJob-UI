@@ -3,4 +3,6 @@ export interface ISkill {
     resumeId: number
     name: string
     level: number
+    createdAt: Date
+    updatedAt: Date
 }

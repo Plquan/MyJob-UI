@@ -1,9 +1,11 @@
 import type { EUserRole } from "../../constant/role";
+import type { ICandidate } from "../candidate/CandidateType";
 import type { ICompanyData } from "../company/CompanyType";
 
 export interface ILoginRequestData {
     email: string;
     password: string;
+    role: EUserRole
 }
 
 export interface ILoginResponseData {
@@ -27,10 +29,10 @@ export interface ICurrentUser {
     id: number
     avatar: string
     email: string
-    fullName: string
-    roleName:EUserRole
+    role:EUserRole
     allowSearch:boolean
     isStaff:boolean
     isActive: boolean
-    companyId: number
+    company?: ICompanyData
+    candidate?:ICandidate
 }

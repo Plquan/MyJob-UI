@@ -1,4 +1,5 @@
 
+import type { EResumeType } from "../../enums/resume/EResumeType"
 import type { ICandidate } from "../candidate/CandidateType"
 import type { IMyJobFile } from "../myJobFile/myJobFileType"
 import type { ICertificate } from "./CertificateType"
@@ -22,7 +23,7 @@ import type { ISkill } from "./SkillType"
     experience: number
     academicLevel: number
     jobType: number
-    type: string
+    type: EResumeType
     selected: boolean
     myJobFile: IMyJobFile
     createdAt:Date
@@ -53,7 +54,6 @@ import type { ISkill } from "./SkillType"
   }
 
   export interface IOnlineResume {
-    userInfo?: IUserInfo
     resume?: IResume
     candidate?: ICandidate
     educations: IEducation[]

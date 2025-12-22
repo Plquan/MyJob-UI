@@ -19,10 +19,10 @@ const uploadCompanyLogo = createAsyncThunk (
     "company/uploadCompanyLogo",
     async (file: FormData, {rejectWithValue}): Promise<IMyJobFile> => {
         try {
-            const response: IMyJobFile = await http.put("/company/upload-company-logo",file);
+            const response: IMyJobFile = await http.put("/company/upload-company-logo", file);
             return response;
         } catch (error: any) {
-            return rejectWithValue(error.response.data) as any;
+            return rejectWithValue(error.response?.data || error.message) as any;
         }
     }
 )
@@ -31,10 +31,10 @@ const uploadCompanyCoverImage = createAsyncThunk (
     "company/uploadCompanyCoverImage",
     async (file: FormData, {rejectWithValue}): Promise<IMyJobFile> => {
         try {
-            const response: IMyJobFile = await http.put("/company/upload-company-cover-image",file);
+            const response: IMyJobFile = await http.put("/company/upload-company-cover-image", file);
             return response;
         } catch (error: any) {
-            return rejectWithValue(error.response.data) as any;
+            return rejectWithValue(error.response?.data || error.message) as any;
         }
     }
 )
@@ -42,10 +42,10 @@ const uploadCompanyImages = createAsyncThunk (
     "company/uploadCompanyImages",
     async (file: FormData, {rejectWithValue}): Promise<IMyJobFile> => {
         try {
-            const response: IMyJobFile = await http.post("/company/upload-company-images",file);
+            const response: IMyJobFile = await http.post("/company/upload-company-images", file);
             return response;
         } catch (error: any) {
-            return rejectWithValue(error.response.data) as any;
+            return rejectWithValue(error.response?.data || error.message) as any;
         }
     }
 )

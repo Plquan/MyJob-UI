@@ -4,11 +4,12 @@ import { useState } from "react";
 import toast from "react-hot-toast";
 import LoadingLayout from "../../../../components/LoadingLayout";
 import ROUTE_PATH from "../../../../routes/routePath";
-import authService from "../../../../services/authService";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import type { AppDispatch } from "../../../../stores";
 import { authActions } from "../../../../stores/authStore/authReducer";
+import { EUserRole } from "../../../../constant/role";
+
 
 const LoginForm = () => {
   const navigate = useNavigate()
@@ -18,15 +19,12 @@ const LoginForm = () => {
   const onFinish = async (values: any) => {
     try {
       setLoading(true)
-      const result = await authService.candidateLogin(values)
-       if(!result.success){
-          toast.error(result.message)
-       }
+      await dispatch(authActions.login(values)).unwrap()
        dispatch(authActions.getCurrentUser())
-       toast.success(result.message)
+       toast.success("Đăng nhập thành công")
        navigate(ROUTE_PATH.HOME)
     } catch (error:any) {
-      toast.error(error.message)
+      toast.error(error.message);
     }
     finally {
       setLoading(false)
@@ -41,7 +39,13 @@ const LoginForm = () => {
       layout="vertical"
       name="login"
       onFinish={onFinish}
+      initialValues={{
+        role: EUserRole.CANDIDATE
+      }}
     >
+      <Form.Item name="role" hidden>
+        <Input />
+      </Form.Item>
       <Form.Item
         name="email"
         label="Email"

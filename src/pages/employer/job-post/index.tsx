@@ -19,7 +19,7 @@ import type { ColumnsType } from 'antd/es/table';
 import EditJobPostModal from './components/EditJobPostModal';
 import { useDispatch, useSelector } from 'react-redux';
 import type { AppDispatch, RootState } from '../../../stores';
-import type { IJobPostData, IGetJobPostsReqParams } from '../../../types/job-post/JobPostType';
+import type { ICompanyJobPost, IGetJobPostsReqParams } from '../../../types/job-post/JobPostType';
 import { jobPostActions } from '../../../stores/jobPostStore/jobPostReducer';
 import { JOB_POST_STATUS_OPTIONS } from '../../../constant/selectOptions';
 
@@ -83,7 +83,7 @@ const ManageJobPostPage = () => {
     return <Tag color={config.color}>{config.text}</Tag>;
   };
 
-  const columns: ColumnsType<IJobPostData> = [
+  const columns: ColumnsType<ICompanyJobPost> = [
     {
       title: '#',
       key: 'index',

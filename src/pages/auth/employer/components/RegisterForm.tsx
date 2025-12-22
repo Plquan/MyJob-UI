@@ -2,22 +2,24 @@ import { Form, Input, Button, Select, DatePicker, Col, Row } from 'antd';
 import { EyeInvisibleOutlined, EyeTwoTone } from '@ant-design/icons';
 import { useState } from 'react';
 import ROUTE_PATH from '../../../../routes/routePath';
-import authService from '../../../../services/authService';
 import type { ICompanyRegisterRequestData } from '../../../../types/auth/AuthType';
 import { useDispatch, useSelector } from 'react-redux';
 import type { AppDispatch, RootState } from '../../../../stores';
 import { toast } from 'react-hot-toast';
-import {useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { provinceActions } from '../../../../stores/provinceStore/provinceReducer';
+import { useTranslation } from '../../../../provider/Languages';
+import { authActions } from '../../../../stores/authStore/authReducer';
 const { Option } = Select;
 
 const RegisterForm = () => {
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
-  const { provinces,districts,loading } = useSelector((state: RootState) => state.provinceStore);
+  const { provinces, loading } = useSelector((state: RootState) => state.provinceStore);
   const [form] = Form.useForm<ICompanyRegisterRequestData>();
   const [step, setStep] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
+  const { t } = useTranslation();
   const handleNext = async () => {
     try {
       await form.validateFields(['fullname', 'email', 'password', 'confirmPassword']);
@@ -30,16 +32,19 @@ const RegisterForm = () => {
     try {
       setIsLoading(true);
       const data = form.getFieldsValue();
-      console.log(data);
-      const response = await authService.companyRegister(data);
-       if(response.success){
-        toast.success('Đăng ký thành công!');
-        navigate(ROUTE_PATH.EMPLOYER_LOGIN);
-       }
-
-    } catch (error:any) {
-      toast.error(error.message);
-      console.log(error);
+      await dispatch(authActions.companyRegister(data)).unwrap();
+      toast.success('Đăng ký thành công');
+      navigate(ROUTE_PATH.EMPLOYER_LOGIN);
+    } catch (error: any) {
+      if (error.errorCode == "1004") {
+        toast.error(t(`auth.errorCode.${error.errorCode}`))
+      }
+      if (error.errorCode == "1010") {
+        toast.error(t(`auth.errorCode.${error.errorCode}`))
+      }
+      if (error.errorCode == "1003") {
+        toast.error(t(`auth.errorCode.${error.errorCode}`))
+      }
     } finally {
       setIsLoading(false);
     }
@@ -50,10 +55,8 @@ const RegisterForm = () => {
       companyInfo: {
         ...form.getFieldValue("companyInfo"),
         provinceId,
-        districtId: undefined,
       },
     });
-    dispatch(provinceActions.getDistrictsByProvince(provinceId));
   }
 
   return (
@@ -156,7 +159,7 @@ const RegisterForm = () => {
           {/* Step 2 fields */}
           <div style={{ display: step === 2 ? 'block' : 'none' }}>
             <Form.Item
-              name= {["companyInfo", "companyName"]}
+              name={["companyInfo", "companyName"]}
               label="Tên công ty"
               rules={[{ required: true, message: 'Vui lòng nhập tên công ty!' }]}
             >
@@ -164,7 +167,7 @@ const RegisterForm = () => {
             </Form.Item>
 
             <Form.Item
-              name= {["companyInfo", "companyEmail"]}
+              name={["companyInfo", "companyEmail"]}
               label="Email công ty"
               rules={[{ required: true, message: 'Vui lòng nhập số hotline!' }]}
             >
@@ -173,7 +176,7 @@ const RegisterForm = () => {
 
             <div className="flex gap-4">
               <Form.Item
-                name= {["companyInfo", "companyPhone"]}
+                name={["companyInfo", "companyPhone"]}
                 label="Hotline công ty"
                 className="flex-1"
                 rules={[{ required: true, message: 'Vui lòng nhập số liên lạc!' }]}
@@ -181,7 +184,7 @@ const RegisterForm = () => {
                 <Input placeholder="Nhập số liên lạc" className="rounded-md h-8 text-base" />
               </Form.Item>
               <Form.Item
-                name= {["companyInfo", "taxCode"]}
+                name={["companyInfo", "taxCode"]}
                 label="Mã số thuế"
                 className="flex-1"
                 rules={[{ required: true, message: 'Mã số thuế là bắt buộc!' }]}
@@ -193,7 +196,7 @@ const RegisterForm = () => {
             <Row gutter={16}>
               <Col span={16}>
                 <Form.Item
-                  name= {["companyInfo", "fieldOperation"]}
+                  name={["companyInfo", "fieldOperation"]}
                   label="Lĩnh vực hoạt động"
                   rules={[{ required: true, message: 'Vui lòng chọn lĩnh vực!' }]}
                 >
@@ -202,7 +205,7 @@ const RegisterForm = () => {
               </Col>
               <Col span={8}>
                 <Form.Item
-                  name= {["companyInfo", "since"]}
+                  name={["companyInfo", "since"]}
                   label="Ngày thành lập"
                   rules={[{ required: true, message: 'Vui lòng chọn ngày!' }]}
                 >
@@ -211,14 +214,14 @@ const RegisterForm = () => {
               </Col>
             </Row>
 
-            <Form.Item label="Địa chỉ công ty" required>
-              <div className="flex gap-4">
+            <Row gutter={16}>
+              <Col span={7}>
                 <Form.Item
-                  name= {["companyInfo", "provinceId"]}
+                  name={["companyInfo", "provinceId"]}
                   noStyle
                   rules={[{ required: true, message: 'Chọn tỉnh/thành phố!' }]}
                 >
-                  <Select loading={loading} onChange={onProvinceChange}  placeholder="Tỉnh/Thành phố" style={{ width: '100%' }}>
+                  <Select loading={loading} onChange={onProvinceChange} placeholder="Tỉnh/Thành phố" style={{ width: '100%' }}>
                     {provinces?.map((province) => (
                       <Option key={province.id} value={province.id}>
                         {province.name}
@@ -226,28 +229,16 @@ const RegisterForm = () => {
                     ))}
                   </Select>
                 </Form.Item>
-
+              </Col>
+              <Col span={17}>
                 <Form.Item
-                  name={["companyInfo", "districtId"]}
-                  noStyle
-                  rules={[{ required: true, message: 'Chọn quận/huyện!' }]}
+                  name={["companyInfo", "address"]}
+                  rules={[{ required: true, message: 'Nhập địa chỉ chi tiết!' }]}
                 >
-                  <Select loading={loading} placeholder="Chọn quận/huyện" style={{ width: '100%' }}>
-                    {districts?.map((d) => (
-                      <Option key={d.id} value={d.id}>{d.name}</Option>
-                    ))}
-                  </Select>
+                  <Input placeholder="Số nhà, phường/xã" />
                 </Form.Item>
-              </div>
-              
-              <Form.Item
-                name= {["companyInfo", "address"]}
-                rules={[{ required: true, message: 'Nhập địa chỉ chi tiết!' }]}
-                style={{ marginTop: 8, marginBottom: 0 }}
-              >
-                <Input placeholder="Số nhà, phường/xã" />
-              </Form.Item>
-            </Form.Item>
+              </Col>
+            </Row>
 
             <div className="flex justify-between">
               <Button onClick={() => setStep(1)}>Quay lại</Button>
@@ -258,7 +249,7 @@ const RegisterForm = () => {
 
         <div className="text-center text-sm mt-7 mb-2">
           Bạn đã có tài khoản?{' '}
-          <span onClick ={() => navigate(ROUTE_PATH.EMPLOYER_LOGIN)} className="text-blue-600 hover:underline">
+          <span onClick={() => navigate(ROUTE_PATH.EMPLOYER_LOGIN)} className="text-blue-600 hover:underline">
             Đăng nhập
           </span>
         </div>

@@ -1,28 +1,31 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit"
 import jobPostThunks from "./jobPostThunk";
 import { message } from "antd";
-import type { IJobPostData } from "../../types/job-post/JobPostType";
+import type { ICompanyJobPost, IJobPost } from "../../types/job-post/JobPostType";
 
 
 interface JobPostState {
     loading: boolean,
-    isSubmiting: boolean,
+    isSubmiting: Record<number, boolean>,
     error?: string,
-    companyJobPost: IJobPostData[],
+    companyJobPost: ICompanyJobPost[],
+    jobPosts: IJobPost[],
     page: number,
     limit: number,
     search: string,
     totalItems: number;
     totalPages: number;
     jobPostStatus?: number | undefined,
+    jobPostDetail?: IJobPost
 
 }
 
 const initialState: JobPostState = {
     loading: false,
-    isSubmiting: false,
+    isSubmiting: {},
     error: undefined,
     companyJobPost: [],
+    jobPosts: [],
     page: 1,
     limit: 10,
     search: "",
@@ -82,7 +85,7 @@ export const jobPostSlice = createSlice({
             state.loading = true;
         });
         builder.addCase(jobPostThunks.updateJobPost.fulfilled, (state, action) => {
-            const updated = action.payload; 
+            const updated = action.payload;
             const index = state.companyJobPost.findIndex(job => job.id === updated.id);
             if (index !== -1) {
                 state.companyJobPost[index] = {
@@ -98,6 +101,61 @@ export const jobPostSlice = createSlice({
             message.error((action.payload as { message: string }).message);
         })
 
+        builder.addCase(jobPostThunks.getJobPost.pending, (state) => {
+            state.loading = true;
+        });
+        builder.addCase(jobPostThunks.getJobPost.fulfilled, (state, action) => {
+            state.jobPosts = action.payload
+            state.loading = false;
+        });
+        builder.addCase(jobPostThunks.getJobPost.rejected, (state) => {
+            state.loading = false;
+        })
+
+        builder.addCase(jobPostThunks.toggleSaveJobPost.pending, (state, action) => {
+            const jobPostId = action.meta.arg;
+            state.isSubmiting[jobPostId] = true;
+        });
+        builder.addCase(jobPostThunks.toggleSaveJobPost.fulfilled, (state, action) => {
+            const jobPostId = action.meta.arg;
+            const jobPost = state.jobPosts.find(c => c.id === jobPostId);
+            if (jobPost) {
+                jobPost.isSaved = action.payload;
+            }
+            if (state.jobPostDetail && state.jobPostDetail.id === jobPostId) {
+                state.jobPostDetail.isSaved = action.payload;
+            }
+            state.isSubmiting[jobPostId] = false;
+        });
+        builder.addCase(jobPostThunks.toggleSaveJobPost.rejected, (state, action) => {
+            const jobPostId = action.meta.arg;
+            state.isSubmiting[jobPostId] = false;
+            message.error((action.payload as { message: string })?.message || "Có lỗi xảy ra");
+        })
+
+        builder.addCase(jobPostThunks.getJobPostById.pending, (state) => {
+            state.loading = true;
+        });
+        builder.addCase(jobPostThunks.getJobPostById.fulfilled, (state, action) => {
+            state.jobPostDetail = action.payload
+            state.loading = false;
+        });
+        builder.addCase(jobPostThunks.getJobPostById.rejected, (state) => {
+            state.loading = false;
+        })
+
+        builder.addCase(jobPostThunks.applyJob.pending, (state) => {
+            state.loading = true;
+        });
+        builder.addCase(jobPostThunks.applyJob.fulfilled, (state, action) => {
+            if (state.jobPostDetail) {
+                state.jobPostDetail.isApplied = action.payload
+            }
+            state.loading = false;
+        });
+        builder.addCase(jobPostThunks.applyJob.rejected, (state) => {
+            state.loading = false;
+        })
 
     }
 })

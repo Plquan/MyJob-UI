@@ -18,7 +18,7 @@ interface CompanyState {
         cover: boolean;
         images: boolean;
         company: boolean;
-        followCompany: boolean;
+        followCompany: Record<number, boolean>;
     };
     error?: string,
 }
@@ -30,7 +30,7 @@ const initialState: CompanyState = {
         cover: false,
         images: false,
         company: false,
-        followCompany:false,
+        followCompany: {},
     },
     error: undefined,
     companyImages: [],
@@ -104,7 +104,7 @@ export const companySlice = createSlice({
         builder.addCase(companyThunks.deleteCompanyImage.pending, (state) => {
             state.submitting.images = true;
         });
-        builder.addCase(companyThunks.deleteCompanyImage.fulfilled, (state, action) => {
+        builder.addCase(companyThunks.deleteCompanyImage.fulfilled, (state) => {
             state.submitting.images = false;
         });
         builder.addCase(companyThunks.deleteCompanyImage.rejected, (state) => {
@@ -139,18 +139,21 @@ export const companySlice = createSlice({
         })
 
          // toggle follow company
-         builder.addCase(companyThunks.toggleFollowCompany.pending, (state) => {
-            state.submitting.followCompany = true;
+         builder.addCase(companyThunks.toggleFollowCompany.pending, (state, action) => {
+            const companyId = action.meta.arg;
+            state.submitting.followCompany[companyId] = true;
         });
         builder.addCase(companyThunks.toggleFollowCompany.fulfilled, (state, action) => {
-            const company = state.companies.find(c => c.company.id === action.meta.arg);
+            const companyId = action.meta.arg;
+            const company = state.companies.find(c => c.company.id === companyId);
             if (company) {
                 company.isFollowed = action.payload;
             }
-            state.submitting.followCompany = false;
+            state.submitting.followCompany[companyId] = false;
         });
         builder.addCase(companyThunks.toggleFollowCompany.rejected, (state, action) => {
-            state.submitting.followCompany = false;
+            const companyId = action.meta.arg;
+            state.submitting.followCompany[companyId] = false;
             message.error((action.payload as { message: string }).message);
         })
 

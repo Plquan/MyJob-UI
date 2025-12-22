@@ -4,26 +4,54 @@ import {
   TeamOutlined,
   CalendarOutlined,
   ShareAltOutlined,
+  MessageOutlined,
 } from "@ant-design/icons";
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
-import type { RootState } from "../../stores";
+import { useParams, useNavigate } from "react-router-dom";
+import type { RootState, AppDispatch } from "../../stores";
 import { companyActions } from "../../stores/companyStore/companyReducer";
 import CompanyImages from "./components/CompanyImages";
 import JobCard from "../../components/JobCard";
+import { createOrGetConversationThunk } from "../../stores/chatStore/chatThunk";
+import ROUTE_PATH from "../../routes/routePath";
 
 export default function CompanyDetail() {
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
+  const navigate = useNavigate();
   const { companyId } = useParams<{ companyId: string }>();
   const { companyDetail, loading } = useSelector((state: RootState) => state.companyStore);
-  
+  const { currentUser } = useSelector((state: RootState) => state.authStore);
+  const user = currentUser;
+  const [isCreatingChat, setIsCreatingChat] = React.useState(false);
 
   React.useEffect(() => {
     if (companyId) {
       dispatch(companyActions.getCompanyDetail(parseInt(companyId)) as any);
     }
   }, [dispatch, companyId]);
+
+  const handleStartChat = async () => {
+    if (!user?.id || !company?.userId) {
+      return;
+    }
+
+    setIsCreatingChat(true);
+    try {
+      await dispatch(
+        createOrGetConversationThunk({
+          user1Id: user.id,
+          user2Id: company.userId,
+        })
+      ).unwrap();
+      
+      navigate(ROUTE_PATH.CHAT);
+    } catch (error) {
+      console.error('Failed to create conversation:', error);
+    } finally {
+      setIsCreatingChat(false);
+    }
+  };
 
   const company = companyDetail?.company;
   const companyImages = companyDetail?.images
@@ -81,6 +109,16 @@ export default function CompanyDetail() {
                   <CalendarOutlined className="mr-1" />
                   {company.since ? new Date(company.since).toLocaleDateString('vi-VN') : "Chưa cập nhật"}
                 </span>
+                {user && company.userId && user.id !== company.userId && (
+                  <Button
+                    icon={<MessageOutlined />}
+                    className="bg-purple-600 border-none text-white"
+                    onClick={handleStartChat}
+                    loading={isCreatingChat}
+                  >
+                    Nhắn tin
+                  </Button>
+                )}
                 <Button
                   icon={<ShareAltOutlined />}
                   className="bg-orange-400 border-none text-white"

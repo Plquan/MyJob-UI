@@ -6,9 +6,9 @@ import type { IResume } from "../../types/resume/ResumeType";
 
 const updateAttachedResume = createAsyncThunk (
     "resume/updateAttachedResume",
-    async (data: FormData, {rejectWithValue}): Promise<IApiResponse<IResume>> => {
+    async (data: FormData, {rejectWithValue}): Promise<IResume> => {
         try {
-            const response: IApiResponse<IResume> = await http.put("/resume/update-attached-resume",data);
+            const response: IResume= await http.put("/resume/update-attached-resume",data);
             return response;
         } catch (error: any) {
             return rejectWithValue(error.response.data) as any;
@@ -17,20 +17,20 @@ const updateAttachedResume = createAsyncThunk (
 )
 const uploadAttachedResume = createAsyncThunk (
     "resume/uploadAttachedResume",
-    async (data: FormData, {rejectWithValue}): Promise<IApiResponse<IResume>> => {
+    async (data: FormData, {rejectWithValue}): Promise<IResume> => {
         try {
-            const response: IApiResponse<IResume> = await http.post("/resume/upload-attached-resume",data);
+            const response: IResume = await http.post("/resume/create-resume",data);
             return response;
         } catch (error: any) {
             return rejectWithValue(error.response.data) as any;
         }
     }
 )
-const getAllAttachedResumes = createAsyncThunk (
-    "resume/getAllAttachedResumes",
-    async (_, {rejectWithValue}): Promise<IApiResponse<IResume[]>> => {
+const getResumes = createAsyncThunk (
+    "resume/getResumes",
+    async (_, {rejectWithValue}): Promise<IResume[]> => {
         try {
-            const response: IApiResponse<IResume[]> = await http.get("/resume/get-attached-resumes");
+            const response: IResume[] = await http.get("/resume/get-resumes");
             return response;
         } catch (error: any) {
             return rejectWithValue(error.response.data) as any;
@@ -41,9 +41,9 @@ const getAllAttachedResumes = createAsyncThunk (
 
 const deleteAttachedResume = createAsyncThunk (
     "resume/deleteAttachedResume",
-    async (attachedresumeId: number, {rejectWithValue}): Promise<IApiResponse<IResume[]>> => {
+    async (attachedresumeId: number, {rejectWithValue}): Promise<boolean> => {
         try {
-            const response: IApiResponse<IResume[]> = await http.delete(`/resume/delete-attached-resume/${attachedresumeId}`);
+            const response: boolean = await http.delete(`/resume/delete-resume/${attachedresumeId}`);
             return response;
         } catch (error: any) {
             return rejectWithValue(error.response.data) as any;
@@ -65,7 +65,7 @@ const setSelectedResume = createAsyncThunk (
 
 const attachedResumeThunks = {
     uploadAttachedResume,
-    getAllAttachedResumes,
+    getResumes,
     deleteAttachedResume,
     updateAttachedResume,
     setSelectedResume

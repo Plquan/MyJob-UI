@@ -1,9 +1,8 @@
-export interface IJobPostData {
+export interface ICompanyJobPost {
   id: number;
   careerId:number;
   companyId: number;
   provinceId: number;
-  districtId: number;
   jobName: string;
   deadline?: Date;
   quantity?: number;
@@ -44,7 +43,6 @@ export interface IJobPostFilter {
 export interface ICreateJobPostReq {
   careerId: number;
   provinceId: number;
-  districtId: number;
   jobName: string;
   deadline: Date;
   quantity: number;
@@ -76,4 +74,49 @@ export interface IGetJobPostsReqParams {
   limit: number;
   search: string;
   jobPostStatus?: number;
+}
+
+export interface IJobPost {
+  id: number
+  jobName: string
+  provinceId: number
+  company: {
+    companyName: string
+    logo?: string
+    coverImage?: string
+    images: string[]
+  }
+  isSaved: boolean
+  isApplied: boolean
+  isNew: boolean
+  deadline?: Date;
+  quantity?: number;
+  jobDescription?: string;
+  jobRequirement?: string;
+  benefitsEnjoyed?: string;
+  salaryMin: number;
+  salaryMax: number;
+  position: number;
+  typeOfWorkPlace: number;
+  experience: number;
+  academicLevel: number;
+  genderRequirement: number;
+  jobType: number;
+  isHot: boolean;
+  contactPersonName?: string;
+  contactPersonEmail?: string;
+  contactPersonPhone?: string;
+  views: number;
+  applications: number;
+  createdAt: Date;
+  updatedAt: Date;
+  status: number;
+}
+
+export interface IApplyJobRequest {
+  jobPostId: number;
+  resumeId: number;
+  fullName: string;
+  email: string;
+  phone: string;
 }

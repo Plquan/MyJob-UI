@@ -2,7 +2,7 @@ import { Button, Card, Col, Row, Typography } from "antd"
 import { EditOutlined, } from "@ant-design/icons"
 import { useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
-import GeneralInfoModal from "./components/GeneralInfoModal"
+import GeneralInfoModal from "./components/resumeModal"
 import { POSITION_OPTIONS, ACADEMICLEVEL_OPTIONS, EXPERIENCE_OPTIONS, WORKPLACE_OPTIONS, JOBTYPE_OPTIONS } from "../../../../../constant/selectOptions"
 import type { AppDispatch, RootState } from "../../../../../stores"
 import  { onlineResumeActions } from "../../../../../stores/onlineResumeStore/onlineResumeReducer"
@@ -14,7 +14,7 @@ const { Text } = Typography
 const NOT_UPDATE =  <span className="text-gray-400 text-xs italic">Chưa cập nhật</span>
 const renderField = (value: any) => !!value ? value : NOT_UPDATE
 
-const GeneralInfoCard = () => {
+const ResumeCard = () => {
     const dispatch  = useDispatch<AppDispatch>()
     const [openEdit, setOpenEdit] = useState(false)
     const { resume,loading } = useSelector((state: RootState) => state.onlineResumeStore)
@@ -117,4 +117,4 @@ const GeneralInfoCard = () => {
     )
 }
 
-export default GeneralInfoCard
+export default ResumeCard

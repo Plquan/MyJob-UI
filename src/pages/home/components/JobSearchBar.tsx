@@ -11,8 +11,8 @@ const JobSearchBar = () => {
     const { provinces } = useSelector((state: RootState) => state.provinceStore);
 
     return (
-        <div className="bg-white rounded-2xl mt-15 p-4 md:p-6 max-w-5xl mx-auto shadow-lg">
-        <div className="flex items-center gap-3 justify-center w-full flex-wrap md:flex-nowrap pr-10 pl-10">
+        <div className="bg-white rounded-xl mt-15 p-4 md:p-6 max-w-5xl mx-auto shadow-lg">
+        <div className="flex items-center gap-3 justify-center w-full flex-wrap md:flex-nowrap pr-5 pl-5">
           
         <div className="relative flex-[3] min-w-[350px] w-full">
             <Input

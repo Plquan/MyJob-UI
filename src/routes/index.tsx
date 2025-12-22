@@ -3,14 +3,11 @@ import CandidateRegisterPage from "../pages/auth/candidate/RegisterPage";
 import CompanyLoginPage from "../pages/auth/employer/LoginPage";
 import CompanyRegisterPage from "../pages/auth/employer/RegisterPage";
 import HomePage from "../pages/home";
-import JobsPage from "../pages/jobs";
 import CompanyPage from "../pages/company";
-
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import ROUTE_PATH from "./routePath";
 import DefaultLayout from "../layouts/DefaultLayout";
 import CandidateLayout from "../layouts/CandidateLayout";
-import ProtectRoute from "./ProtectRoute";
 import OverviewDashboard from "../pages/candidate/overview";
 import MyCompanyTab from "../pages/candidate/my-companies";
 import EmployerDashboard from "../pages/employer/dashboard";
@@ -27,6 +24,10 @@ import EmployerLayout from "../layouts/EmployerLayout";
 import ManageJobPostPage from "../pages/employer/job-post";
 import ProductPage from "../pages/product";
 import { EUserRole } from "../constant/role";
+import JobPage from "../pages/jobs/list-job";
+import ProtectRoute from "./protectRoute";
+import ManageResumePage from "../pages/employer/manage-resume";
+import ChatPage from "../pages/chat";
 const AppRoutes = () => {
     return (
        <BrowserRouter>
@@ -36,7 +37,7 @@ const AppRoutes = () => {
             <Route path={ROUTE_PATH.EMPLOYER_LOGIN} element={<CompanyLoginPage />} />
             <Route path={ROUTE_PATH.EMPLOYER_REGISTER} element={<CompanyRegisterPage />} />
 
-            <Route element={<ProtectRoute roleName={EUserRole.CANDIDATE}/>}>
+            <Route element={<ProtectRoute role={EUserRole.CANDIDATE}/>}>
             <Route element={<CandidateLayout/>}>
             <Route path={ROUTE_PATH.CANDIDATE_PROFILE} element={<CandidateProfilePage />} />
             <Route path={ROUTE_PATH.CANDIDATE_OVERVIEW} element={<OverviewDashboard />} />
@@ -47,29 +48,32 @@ const AppRoutes = () => {
     
             <Route element={<DefaultLayout/>}>
             <Route path={ROUTE_PATH.HOME} element={<HomePage />} />
-            <Route path={ROUTE_PATH.JOBS} element={<JobsPage />} />
+            <Route path={ROUTE_PATH.JOBS} element={<JobPage />} />
             <Route path={ROUTE_PATH.COMPANIES} element={<CompanyPage />} />
             <Route path={ROUTE_PATH.COMPANY_DETAIL} element={<CompanyDetail />} />
             <Route path={ROUTE_PATH.JOB_DETAIL} element={<JobDetail />} />
             </Route>
-            <Route element={<ProtectRoute roleName={EUserRole.EMPLOYER}/>}>
+            
+            <Route element={<ProtectRoute role={EUserRole.EMPLOYER}/>}>
             <Route element={<EmployerLayout/>}>
             <Route path={ROUTE_PATH.EMPLOYER_DASHBOARD} element={<EmployerDashboard />} />
             <Route path={ROUTE_PATH.EMPLOYER_COMPANY} element={<EmployerCompanyPage />} />
             <Route path={ROUTE_PATH.EMPLOYER_JOB_POST} element={<ManageJobPostPage />} />
+            <Route path={ROUTE_PATH.EMPLOYER_MANAGE_RESUME} element={<ManageResumePage />} />
             </Route>
             </Route>
+
+            {/* Chat route - cho phép cả Candidate và Employer */}
+          
+            <Route path={ROUTE_PATH.CHAT} element={<ChatPage />} />
+        
 
             <Route element={<AdminLayout/>}>
             <Route path={ROUTE_PATH.ADMIN_MANAGE_ROLE} element={<ManageRolePage />} />
             <Route path={ROUTE_PATH.ADMIN_MANAGE_USER} element={<ManageUserPage />} />
             <Route path={ROUTE_PATH.ADMIN_MANAGE_PACKAGE} element={<RoleManagement />} />
-            
             </Route>
-
             <Route path={ROUTE_PATH.PRODUCTS} element={<ProductPage/>} />
-
-
 
         </Routes>
        </BrowserRouter>

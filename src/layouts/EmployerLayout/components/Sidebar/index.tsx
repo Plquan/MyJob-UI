@@ -31,16 +31,12 @@ const items: MenuProps['items'] = [
         label: 'Quản lý tin tuyển dụng',
       },
       {
-        key: '/dashboard/cv',
-        label: 'Quản lý CV',
+        key: ROUTE_PATH.EMPLOYER_MANAGE_RESUME,
+        label: 'Quản lý hồ sơ ứng tuyển',
       },
       {
         key: '/dashboard/candidates',
-        label: 'Quản lý ứng viên',
-      },
-      {
-        key: '/dashboard/report',
-        label: 'Báo cáo & Thống kê',
+        label: 'Tìm ứng viên mới',
       },
     ],
   },

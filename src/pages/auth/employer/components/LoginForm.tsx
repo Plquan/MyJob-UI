@@ -2,12 +2,12 @@ import { Form, Input, Button } from 'antd';
 import { EyeInvisibleOutlined, EyeTwoTone } from '@ant-design/icons';
 import ROUTE_PATH from '../../../../routes/routePath';
 import type { ILoginRequestData } from '../../../../types/auth/AuthType';
-import authService from '../../../../services/authService';
 import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom'
 import { authActions } from '../../../../stores/authStore/authReducer';
 import { useDispatch } from 'react-redux';
 import type { AppDispatch } from '../../../../stores';
+import { EUserRole } from '../../../../constant/role';
 
 
 const FormLogin = ({ mounted }: { mounted: boolean }) => {
@@ -18,16 +18,12 @@ const FormLogin = ({ mounted }: { mounted: boolean }) => {
     const handleLogin = async () => {
         try {
             const values = await form.getFieldsValue();
-            const response = await authService.companyLogin(values);
-            if (response.success) {
-                toast.success('Đăng nhập thành công');
-                localStorage.setItem("accessToken", response.data);
-                dispatch(authActions.getCurrentUser());
-                navigate(ROUTE_PATH.HOME);
-            }
+            await dispatch(authActions.login(values)).unwrap();
+            dispatch(authActions.getCurrentUser());
+            toast.success("Đăng nhập thành công");
+            navigate(ROUTE_PATH.HOME);
         } catch (error:any) {
-            toast.error(error.message);
-            console.log(error);
+           toast.error(error.message)
         }
     }
 
@@ -41,7 +37,13 @@ const FormLogin = ({ mounted }: { mounted: boolean }) => {
               layout="vertical"
               name="login-employer"
               onFinish={handleLogin}
+              initialValues={{
+                role: EUserRole.EMPLOYER
+              }}
             >
+              <Form.Item name="role" hidden>
+                <Input />
+              </Form.Item>
               <Form.Item
                 name="email"
                 label={

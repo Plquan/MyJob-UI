@@ -5,6 +5,9 @@ import {
   HomeOutlined,
   BellOutlined,
   QuestionCircleOutlined,
+  BankOutlined,
+  AuditOutlined,
+  IdcardOutlined,
 } from "@ant-design/icons";
 import { useNavigate, useLocation } from "react-router-dom";
 import ROUTE_PATH from "../../../../routes/routePath";
@@ -27,17 +30,17 @@ export default function CandidateSidebar() {
     },
     {
       key: ROUTE_PATH.CANDIDATE_ONLINE_RESUME,
-      icon: <FileTextOutlined />,
+      icon: <IdcardOutlined />,
       label: "Hồ sơ của tôi",
     },
     {
       key: ROUTE_PATH.CANDIDATE_PROFILE,
-      icon: <FileTextOutlined />,
+      icon: <AuditOutlined />,
       label: "Quản lí cv",
     },
     {
       key: ROUTE_PATH.CANDIDATE_MY_COMPANIES,
-      icon: <FileTextOutlined />,
+      icon: <BankOutlined />,
       label: "Công Ty Của Tôi",
     },
 

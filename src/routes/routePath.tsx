@@ -15,18 +15,20 @@ const ROUTE_PATH = {
     CANDIDATE_PROFILE: '/ung-vien/ho-so',
     CANDIDATE_MY_COMPANIES: '/candidate/cong-ty-cua-toi',
     CANDIDATE_ONLINE_RESUME: '/candidate/online-resume',
+    CHAT: '/chat',
 
     //company
     COMPANY_DETAIL: '/company-detail/:companyId',
 
     //job
-    JOB_DETAIL: '/job-detail',
+    JOB_DETAIL: '/jobs/job-detail/:jobPostId',
 
 
     //employer
     EMPLOYER_DASHBOARD: '/employer',
     EMPLOYER_COMPANY: '/employer/company',
     EMPLOYER_JOB_POST: '/employer/job-post',
+    EMPLOYER_MANAGE_RESUME: '/employer/manage-resume',
 
     //admin
     ADMIN_DASHBOARD: '/admin/dashboard',

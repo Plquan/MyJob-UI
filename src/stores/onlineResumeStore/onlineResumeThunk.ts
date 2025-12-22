@@ -12,9 +12,9 @@ import type { ICandidate } from "../../types/candidate/CandidateType";
 
 const getOnlineResume = createAsyncThunk (
     "resume/getOnlineResume",
-    async (_, {rejectWithValue}): Promise<IApiResponse<IOnlineResume>> => {
+    async (_, {rejectWithValue}): Promise<IOnlineResume> => {
         try {
-            const response: IApiResponse<IOnlineResume> = await http.get("/resume/get-online-resume");
+            const response: IOnlineResume = await http.get("/resume/get-online-resume");
             return response;
         } catch (error: any) {
             return rejectWithValue(error.response.data) as any;
