@@ -1,6 +1,6 @@
 import { NavLink, useNavigate } from 'react-router-dom';
 import { Dropdown, Button, Menu, Avatar, Spin, Badge } from 'antd';
-import { UserOutlined, EditOutlined, SearchOutlined, BankOutlined, FileTextOutlined, HomeOutlined, ArrowRightOutlined, LoadingOutlined, CommentOutlined } from '@ant-design/icons';
+import { UserOutlined, EditOutlined, SearchOutlined, BankOutlined, FileTextOutlined, HomeOutlined, ArrowRightOutlined, LoadingOutlined, CommentOutlined, MessageOutlined } from '@ant-design/icons';
 import ROUTE_PATH from '../../../routes/routePath';
 import { Link } from 'react-router-dom';
 import { Header } from 'antd/es/layout/layout';
@@ -20,7 +20,7 @@ const DefaultHeader = () => {
   const navigate = useNavigate();
   const { currentUser, loading } = useSelector((state: RootState) => state.authStore);
   const { unreadCount } = useSelector((state: RootState) => state.chatStore);
-  
+
   // Fetch unread count periodically
   useEffect(() => {
     if (currentUser?.id) {
@@ -34,9 +34,9 @@ const DefaultHeader = () => {
             console.error('❌ Failed to fetch unread count:', error);
           });
       };
-      
+
       fetchUnread();
-      
+
       // Refresh every 10 seconds (faster for real-time feel)
       const interval = setInterval(fetchUnread, 10000);
 
@@ -123,12 +123,33 @@ const DefaultHeader = () => {
     }
   };
 
+  const handleChatClick = () => {
+    navigate(ROUTE_PATH.CHAT);
+    // Refresh unread count when navigating to chat
+    if (currentUser?.id) {
+      setTimeout(() => {
+        dispatch(getUnreadCountThunk({ userId: currentUser.id }));
+      }, 1000);
+    }
+  };
+
   const loggedInMenu = [
     {
       key: 'profile',
       icon: getIconRole(currentUser?.role),
       label: <span>{getLabelRole(currentUser?.role)}</span>,
       onClick: () => navigate(getPathRole(currentUser?.role)),
+      disabled: loading,
+    },
+    {
+      key: 'chat',
+      icon: (
+        <Badge count={unreadCount > 0 ? unreadCount : 0} size="small" overflowCount={99}>
+          <MessageOutlined />
+        </Badge>
+      ),
+      label: <span>Tin nhắn</span>,
+      onClick: handleChatClick,
       disabled: loading,
     },
     {
@@ -164,26 +185,6 @@ const DefaultHeader = () => {
         />
 
         <div className="flex items-center space-x-6">
-          {currentUser && (
-              <Button
-                className='mr-3!'
-                type='text'
-                icon={
-                  <Badge count={unreadCount > 0 ? unreadCount : 0} size="small" overflowCount={99}>
-                    <CommentOutlined  className="text-[18px]! text-gray-500!" />
-                  </Badge>
-                }
-                onClick={() => {
-                  navigate(ROUTE_PATH.CHAT);
-                  // Refresh unread count when navigating to chat
-                  if (currentUser?.id) {
-                    setTimeout(() => {
-                      dispatch(getUnreadCountThunk({ userId: currentUser.id }));
-                    }, 1000);
-                  }
-                }}
-              />
-          )}
           {currentUser ? (
             <Dropdown
               menu={{ items: loggedInMenu }}
@@ -191,7 +192,13 @@ const DefaultHeader = () => {
               arrow
             >
               <div className="flex items-center text-[13.5px] cursor-pointer">
-                <Avatar size="small" src={currentUser.avatar} className="mr-2!" />
+                <Badge
+                  dot={unreadCount > 0}
+                  className='mr-2!'
+                >
+                  <Avatar size="small" src={currentUser.avatar} />
+                </Badge>
+
                 <span className="max-w-[120px] truncate">{currentUser.role === EUserRole.CANDIDATE ? currentUser.candidate?.fullName : currentUser.company?.companyName}</span>
               </div>
             </Dropdown>

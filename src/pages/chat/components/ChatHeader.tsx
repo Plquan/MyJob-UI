@@ -1,7 +1,6 @@
 import { Button } from 'antd';
-import { HomeOutlined } from '@ant-design/icons';
+import { ArrowLeftOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
-import ROUTE_PATH from '@/routes/routePath';
 
 const ChatHeader = () => {
   const navigate = useNavigate();
@@ -13,15 +12,15 @@ const ChatHeader = () => {
           src="/assets/vinhuni.png"
           alt="MyJob Logo"
           className="h-10 w-auto cursor-pointer"
-          onClick={() => navigate(ROUTE_PATH.HOME)}
+          onClick={() => navigate(-1)}
         />
       </div>
       <Button
-        icon={<HomeOutlined />}
-        onClick={() => navigate(ROUTE_PATH.HOME)}
+        icon={<ArrowLeftOutlined />}
+        onClick={() => navigate(-1)}
         type="default"
       >
-        Về trang chủ
+        Quay lại
       </Button>
     </div>
   );
