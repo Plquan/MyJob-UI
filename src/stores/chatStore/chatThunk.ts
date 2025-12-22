@@ -6,6 +6,7 @@ import {
   IGetMessages,
   IGetConversations,
   IMarkAsRead,
+  IGetUnreadCount,
 } from '@/types/chat/ChatType';
 
 export const getConversationsThunk = createAsyncThunk(
@@ -76,6 +77,18 @@ export const deleteConversationThunk = createAsyncThunk(
       return conversationId;
     } catch (error: any) {
       return rejectWithValue(error.response?.data?.message || 'Failed to delete conversation');
+    }
+  }
+);
+
+export const getUnreadCountThunk = createAsyncThunk(
+  'chat/getUnreadCount',
+  async (data: IGetUnreadCount, { rejectWithValue }) => {
+    try {
+      const count = await chatService.getUnreadCount(data);
+      return count;
+    } catch (error: any) {
+      return rejectWithValue(error.response?.data?.message || 'Failed to get unread count');
     }
   }
 );

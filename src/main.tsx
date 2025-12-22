@@ -6,13 +6,16 @@ import App from './App.tsx';
 import { Provider } from 'react-redux';
 import GetCurrentUserProvider from './provider/GetCurrentUser/index.tsx';
 import { store } from './stores/index.ts';
+import { SocketProvider } from './contexts/SocketContext.tsx';
 
 
 createRoot(document.getElementById('root')!).render(
   // <StrictMode>
      <Provider store={store}> 
      <GetCurrentUserProvider>
-     <App/>
+     <SocketProvider>
+       <App/>
+     </SocketProvider>
      </GetCurrentUserProvider>
       </Provider>
      

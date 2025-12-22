@@ -44,7 +44,6 @@ const AppRoutes = () => {
             <Route path={ROUTE_PATH.CANDIDATE_MY_COMPANIES} element={<MyCompanyTab />} />
             <Route path={ROUTE_PATH.CANDIDATE_ONLINE_RESUME} element={<OnelineResumePage />} />
             </Route>
-            <Route path={ROUTE_PATH.CHAT} element={<ChatPage />} />
             </Route>
     
             <Route element={<DefaultLayout/>}>
@@ -62,8 +61,12 @@ const AppRoutes = () => {
             <Route path={ROUTE_PATH.EMPLOYER_JOB_POST} element={<ManageJobPostPage />} />
             <Route path={ROUTE_PATH.EMPLOYER_MANAGE_RESUME} element={<ManageResumePage />} />
             </Route>
-            <Route path={ROUTE_PATH.CHAT} element={<ChatPage />} />
             </Route>
+
+            {/* Chat route - cho phép cả Candidate và Employer */}
+          
+            <Route path={ROUTE_PATH.CHAT} element={<ChatPage />} />
+        
 
             <Route element={<AdminLayout/>}>
             <Route path={ROUTE_PATH.ADMIN_MANAGE_ROLE} element={<ManageRolePage />} />

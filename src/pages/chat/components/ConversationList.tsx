@@ -1,4 +1,4 @@
-import { memo } from 'react';
+import { memo, useState, useRef, useCallback, useEffect } from 'react';
 import { IConversation } from '@/types/chat/ChatType';
 import ConversationItem from './ConversationItem';
 
@@ -21,17 +21,75 @@ const ConversationList = memo(({
   onSearchChange,
   onSelectConversation,
 }: ConversationListProps) => {
+  const DEFAULT_WIDTH = 384;
+  const MIN_WIDTH = 250;
+  const MAX_WIDTH = 600;
+
+  const [width, setWidth] = useState(() => {
+    const saved = localStorage.getItem('conversationListWidth');
+    return saved ? parseInt(saved, 10) : DEFAULT_WIDTH;
+  });
+  const [isResizing, setIsResizing] = useState(false);
+  const startXRef = useRef(0);
+  const startWidthRef = useRef(0);
+
+  useEffect(() => {
+    localStorage.setItem('conversationListWidth', width.toString());
+  }, [width]);
+
+  const handleMouseDown = useCallback((e: React.MouseEvent) => {
+    e.preventDefault();
+    setIsResizing(true);
+    startXRef.current = e.clientX;
+    startWidthRef.current = width;
+    
+    document.body.style.cursor = 'col-resize';
+    document.body.style.userSelect = 'none';
+  }, [width]);
+
+  const handleMouseMove = useCallback((e: MouseEvent) => {
+    if (!isResizing) return;
+
+    const diff = e.clientX - startXRef.current;
+    const newWidth = Math.max(MIN_WIDTH, Math.min(MAX_WIDTH, startWidthRef.current + diff));
+    setWidth(newWidth);
+  }, [isResizing]);
+
+  const handleMouseUp = useCallback(() => {
+    setIsResizing(false);
+    document.body.style.cursor = '';
+    document.body.style.userSelect = '';
+  }, []);
+
+  useEffect(() => {
+    if (isResizing) {
+      document.addEventListener('mousemove', handleMouseMove);
+      document.addEventListener('mouseup', handleMouseUp);
+      
+      return () => {
+        document.removeEventListener('mousemove', handleMouseMove);
+        document.removeEventListener('mouseup', handleMouseUp);
+        document.body.style.cursor = '';
+        document.body.style.userSelect = '';
+      };
+    }
+  }, [isResizing, handleMouseMove, handleMouseUp]);
+
   const getOtherUser = (conversation: IConversation) => {
     return conversation.user1Id === currentUserId ? conversation.user2 : conversation.user1;
   };
 
   const filteredConversations = conversations.filter((conv) => {
     const otherUser = getOtherUser(conv);
-    return otherUser?.username?.toLowerCase().includes(searchQuery.toLowerCase());
+    const displayName = otherUser?.candidate?.fullName || otherUser?.company?.companyName || otherUser?.email || '';
+    return displayName.toLowerCase().includes(searchQuery.toLowerCase());
   });
 
   return (
-    <div className="w-1/3 bg-white border-r border-gray-200 flex flex-col">
+    <div 
+      className="bg-white border-r border-gray-200 flex flex-col relative"
+      style={{ width: `${width}px`, minWidth: `${MIN_WIDTH}px`, maxWidth: `${MAX_WIDTH}px` }}
+    >
       {/* Search Bar */}
       <div className="p-4 border-b border-gray-200">
         <input
@@ -39,7 +97,7 @@ const ConversationList = memo(({
           placeholder="Tìm kiếm..."
           value={searchQuery}
           onChange={(e) => onSearchChange(e.target.value)}
-          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
+          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0096db]"
         />
       </div>
 
@@ -64,6 +122,13 @@ const ConversationList = memo(({
             />
           ))
         )}
+      </div>
+
+      <div
+        className="absolute top-0 right-0 w-2 h-full cursor-col-resize hover:bg-[#0096db]/20 transition-colors group flex items-center justify-center"
+        onMouseDown={handleMouseDown}
+        style={{ zIndex: 10 }}
+      >
       </div>
     </div>
   );

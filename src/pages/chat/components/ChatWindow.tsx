@@ -1,5 +1,6 @@
 import { memo, useRef, useEffect, useState, useCallback } from 'react';
 import { IConversation, IMessage } from '@/types/chat/ChatType';
+import { SendOutlined } from '@ant-design/icons';
 import MessageItem from './MessageItem';
 
 interface ChatWindowProps {
@@ -17,6 +18,7 @@ const ChatWindow = memo(({
 }: ChatWindowProps) => {
   const [messageInput, setMessageInput] = useState('');
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -26,7 +28,13 @@ const ChatWindow = memo(({
     if (!messageInput.trim()) return;
     onSendMessage(messageInput);
     setMessageInput('');
+    // Focus lại input sau khi gửi
+    inputRef.current?.focus();
   }, [messageInput, onSendMessage]);
+
+  const handleContainerClick = useCallback(() => {
+    inputRef.current?.focus();
+  }, []);
 
   const getOtherUser = (conversation: IConversation) => {
     return conversation.user1Id === currentUserId ? conversation.user2 : conversation.user1;
@@ -45,26 +53,29 @@ const ChatWindow = memo(({
   }
 
   const otherUser = getOtherUser(currentConversation);
+  const displayName = otherUser?.candidate?.fullName || otherUser?.company?.companyName || otherUser?.email || 'Unknown User';
+  const avatarUrl = otherUser?.avatar?.url;
+  const initial = displayName.charAt(0).toUpperCase();
 
   return (
     <div className="flex-1 flex flex-col">
       {/* Chat Header */}
       <div className="bg-white border-b border-gray-200 p-4">
         <div className="flex items-center">
-          {otherUser?.avatar?.fileUrl ? (
+          {avatarUrl ? (
             <img
-              src={otherUser.avatar.fileUrl}
-              alt={otherUser.username}
+              src={avatarUrl}
+              alt={displayName}
               className="w-10 h-10 rounded-full object-cover"
             />
           ) : (
-            <div className="w-10 h-10 rounded-full bg-purple-600 flex items-center justify-center text-white font-semibold">
-              {otherUser?.username?.charAt(0).toUpperCase() || 'U'}
+            <div className="w-8 h-8 rounded-full bg-[#154C91] flex items-center justify-center text-white font-semibold">
+              {initial}
             </div>
           )}
           <div className="ml-3">
             <h2 className="text-lg font-semibold text-gray-900">
-              {otherUser?.username || 'Unknown User'}
+              {displayName}
             </h2>
           </div>
         </div>
@@ -94,24 +105,29 @@ const ChatWindow = memo(({
       </div>
 
       {/* Message Input */}
-      <div className="bg-white border-t border-gray-200 p-4">
-        <div className="flex items-center space-x-2">
-          <input
-            type="text"
-            placeholder="Nhập tin nhắn..."
-            value={messageInput}
-            onChange={(e) => setMessageInput(e.target.value)}
-            onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
-            className="flex-1 px-4 py-2 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-purple-500"
-          />
+      <div className="bg-white border-t border-gray-200 relative min-h-[60px]" onClick={handleContainerClick}>
+        <input
+          ref={inputRef}
+          placeholder="Nhập tin nhắn..."
+          value={messageInput}
+          onChange={(e) => setMessageInput(e.target.value)}
+          onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
+          onClick={(e) => e.stopPropagation()}
+          className="px-4 py-2 absolute inset-0 outline-none focus:outline-none focus:ring-0 focus:border-transparent"
+          style={{ paddingRight: messageInput.trim() ? '3.5rem' : '1rem' }}
+        />
+
+        {messageInput.trim() && (
           <button
-            onClick={handleSendMessage}
-            disabled={!messageInput.trim()}
-            className="px-6 py-2 bg-purple-600 text-white rounded-full hover:bg-purple-700 transition-colors disabled:bg-gray-300 disabled:cursor-not-allowed"
+            onClick={(e) => {
+              e.stopPropagation();
+              handleSendMessage();
+            }}
+            className="absolute right-6 top-1/2 -translate-y-1/2 w-10 h-10 flex items-center justify-center text-white rounded-full hover:bg-gray-200 transition-colors z-10"
           >
-            Gửi
+            <SendOutlined className='text-[#154C91]!'/>
           </button>
-        </div>
+        )}
       </div>
     </div>
   );

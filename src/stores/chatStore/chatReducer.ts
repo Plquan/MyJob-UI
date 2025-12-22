@@ -7,6 +7,7 @@ import {
   createOrGetConversationThunk,
   markAsReadThunk,
   deleteConversationThunk,
+  getUnreadCountThunk,
 } from './chatThunk';
 
 interface ChatState {
@@ -15,6 +16,7 @@ interface ChatState {
   currentConversation: IConversation | null;
   totalConversations: number;
   totalMessages: number;
+  unreadCount: number;
   isLoading: boolean;
   error: string | null;
 }
@@ -25,6 +27,7 @@ const initialState: ChatState = {
   currentConversation: null,
   totalConversations: 0,
   totalMessages: 0,
+  unreadCount: 0,
   isLoading: false,
   error: null,
 };
@@ -41,7 +44,7 @@ const chatSlice = createSlice({
       state.currentConversation = null;
     },
     addMessage: (state, action) => {
-      state.messages.unshift(action.payload);
+      state.messages.push(action.payload);
     },
   },
   extraReducers: (builder) => {
@@ -52,8 +55,8 @@ const chatSlice = createSlice({
     });
     builder.addCase(getConversationsThunk.fulfilled, (state, action) => {
       state.isLoading = false;
-      state.conversations = action.payload.items;
-      state.totalConversations = action.payload.totalItems;
+      state.conversations = action.payload?.items || [];
+      state.totalConversations = action.payload?.totalItems || 0;
     });
     builder.addCase(getConversationsThunk.rejected, (state, action) => {
       state.isLoading = false;
@@ -67,8 +70,8 @@ const chatSlice = createSlice({
     });
     builder.addCase(getMessagesThunk.fulfilled, (state, action) => {
       state.isLoading = false;
-      state.messages = action.payload.items.reverse();
-      state.totalMessages = action.payload.totalItems;
+      state.messages = action.payload?.items?.reverse() || [];
+      state.totalMessages = action.payload?.totalItems || 0;
     });
     builder.addCase(getMessagesThunk.rejected, (state, action) => {
       state.isLoading = false;
@@ -118,6 +121,17 @@ const chatSlice = createSlice({
         state.currentConversation = null;
         state.messages = [];
       }
+    });
+
+    // Get Unread Count
+    builder.addCase(getUnreadCountThunk.pending, (state) => {
+      // Keep current count while loading
+    });
+    builder.addCase(getUnreadCountThunk.fulfilled, (state, action) => {
+      state.unreadCount = action.payload || 0;
+    });
+    builder.addCase(getUnreadCountThunk.rejected, (state) => {
+      // Keep current count on error
     });
   },
 });

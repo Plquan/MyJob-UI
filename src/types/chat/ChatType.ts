@@ -8,6 +8,7 @@ export interface IConversation {
     updatedAt: Date;
     user1?: IUser;
     user2?: IUser;
+    unreadCount?: number;
 }
 
 export interface IMessage {
@@ -23,10 +24,15 @@ export interface IMessage {
 
 export interface IUser {
     id: number;
-    username: string;
     email: string;
     avatar?: {
-        fileUrl: string;
+        url: string;
+    };
+    candidate?: {
+        fullName: string;
+    };
+    company?: {
+        companyName: string;
     };
 }
 
@@ -55,6 +61,10 @@ export interface IGetConversations {
 
 export interface IMarkAsRead {
     conversationId: number;
+    userId: number;
+}
+
+export interface IGetUnreadCount {
     userId: number;
 }
 
