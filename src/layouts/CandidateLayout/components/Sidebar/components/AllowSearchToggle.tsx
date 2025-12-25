@@ -1,9 +1,8 @@
 import { Tooltip, Switch } from "antd";
 import { QuestionCircleOutlined } from "@ant-design/icons"
 import { useDispatch, useSelector } from "react-redux";
-import type { AppDispatch, RootState } from "../../../../../stores";
-import { authActions } from "../../../../../stores/authStore/authReducer";
-
+import { AppDispatch, RootState } from "@/stores";
+import { authActions } from "@/stores/authStore/authReducer";
  const AllowSearchToggle = () => {
     const dispatch = useDispatch<AppDispatch>();
     const { currentUser, isSubmitting } = useSelector((state: RootState) => state.authStore)

@@ -9,11 +9,15 @@ import CompanySearchBar from "./components/CompanySearchBar";
 
 const CompanyPage = () => {
   const dispatch = useDispatch<AppDispatch>();
-  const { companies, loading } = useSelector((state: RootState) => state.companyStore);
+  const { companies, loading, requestParams } = useSelector((state: RootState) => state.companyStore);
 
   useEffect(() => {
-    dispatch(companyActions.getCompanies());
-  }, [dispatch]);
+    dispatch(companyActions.getCompanies({
+      page: requestParams.page,
+      limit: requestParams.limit,
+      companyName: requestParams.companyName
+    }));
+  }, [dispatch, requestParams.page, requestParams.limit, requestParams.companyName]);
 
   return (
     <>
@@ -28,7 +32,7 @@ const CompanyPage = () => {
 
         <div className="bg-white p-4 rounded-xl border border-gray-200 max-w-4xl mx-auto">
           <h2 className="text-base font-bold mb-4">
-            <span className="text-red-500">{companies.length}</span> công ty
+            <span className="text-red-500">{companies.totalItems}</span> công ty
           </h2>
 
           {loading ? (
@@ -37,7 +41,7 @@ const CompanyPage = () => {
             </div>
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-              {companies.map((company: ICompanyWithImagesData) => (
+              {companies.items && companies.items.map((company: ICompanyWithImagesData) => (
                 <CompanyItem key={company.company.id} company={company} />
               ))}
             </div>

@@ -1,7 +1,8 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import http from "../../ultils/axios/axiosCustom";
 import type { IMyJobFile } from "../../types/myJobFile/myJobFileType";
-import type { ICompanyDetail, ICompanyWithImagesData } from "../../types/company/CompanyType";
+import type { ICompanyDetail, ICompanyWithImagesData, IGetCompaniesReqParams } from "../../types/company/CompanyType";
+import type { IPaginationResponse } from "../../types/AppType";
 
 const getEmployerCompany = createAsyncThunk (
     "company/getEmployerCompany",
@@ -64,9 +65,15 @@ const deleteCompanyImage = createAsyncThunk (
 
 const getCompanies = createAsyncThunk (
     "company/getCompanies",
-    async (_, {rejectWithValue}): Promise<ICompanyWithImagesData[]> => {
+    async (params: IGetCompaniesReqParams = { page: 1, limit: 10 }, {rejectWithValue}): Promise<IPaginationResponse<ICompanyWithImagesData>> => {
         try {
-            const response: ICompanyWithImagesData[] = await http.get("/company");
+            const response: IPaginationResponse<ICompanyWithImagesData> = await http.get("/company", {
+                params: {
+                    page: params.page,
+                    limit: params.limit,
+                    companyName: params.companyName || "",
+                }
+            });
             return response;
         } catch (error: any) {
             return rejectWithValue(error.response.data) as any;
@@ -97,6 +104,18 @@ const toggleFollowCompany = createAsyncThunk (
     }
 )
 
+const getSavedCompanies = createAsyncThunk (
+    "company/getSavedCompanies",
+    async (_, {rejectWithValue}): Promise<ICompanyWithImagesData[]> => {
+        try {
+            const response: ICompanyWithImagesData[] = await http.get("/company/saved-companies");
+            return response;
+        } catch (error: any) {
+            return rejectWithValue(error.response.data) as any;
+        }
+    }
+)
+
 
 
 const companyThunks = {
@@ -107,7 +126,8 @@ const companyThunks = {
     deleteCompanyImage,
     getCompanies,
     getCompanyDetail,
-    toggleFollowCompany
+    toggleFollowCompany,
+    getSavedCompanies
 }
 
 export default companyThunks

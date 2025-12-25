@@ -80,7 +80,7 @@ export interface IJobPost {
   id: number
   jobName: string
   provinceId: number
-  company: {
+  company?: {
     companyName: string
     logo?: string
     coverImage?: string

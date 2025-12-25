@@ -1,48 +1,21 @@
 import { NavLink, useNavigate } from 'react-router-dom';
 import { Dropdown, Button, Menu, Avatar, Spin, Badge } from 'antd';
-import { UserOutlined, EditOutlined, SearchOutlined, BankOutlined, FileTextOutlined, HomeOutlined, ArrowRightOutlined, LoadingOutlined, CommentOutlined, MessageOutlined } from '@ant-design/icons';
-import ROUTE_PATH from '../../../routes/routePath';
+import { UserOutlined, EditOutlined, SearchOutlined, BankOutlined, FileTextOutlined, HomeOutlined, ArrowRightOutlined, LoadingOutlined, MessageOutlined } from '@ant-design/icons';
+import ROUTE_PATH from '../../../../routes/routePath';
 import { Link } from 'react-router-dom';
 import { Header } from 'antd/es/layout/layout';
-import type { AppDispatch, RootState } from '../../../stores';
+import type { AppDispatch, RootState } from '../../../../stores';
 import { useDispatch, useSelector } from 'react-redux';
-import LanguageSwitcher from '../../../components/LanguageSwitcher';
-import { useTranslation } from '../../../provider/Languages';
-import { EUserRole } from '../../../constant/role';
-import { authActions } from '../../../stores/authStore/authReducer';
-import { getUnreadCountThunk } from '../../../stores/chatStore/chatThunk';
-import { useEffect } from 'react';
-
-
+import LanguageSwitcher from '../../../../components/LanguageSwitcher';
+import { useTranslation } from '../../../../provider/Languages';
+import { EUserRole } from '../../../../constant/role';
+import { authActions } from '../../../../stores/authStore/authReducer';
 const DefaultHeader = () => {
   const { t } = useTranslation();
   const dispatch = useDispatch<AppDispatch>()
   const navigate = useNavigate();
   const { currentUser, loading } = useSelector((state: RootState) => state.authStore);
   const { unreadCount } = useSelector((state: RootState) => state.chatStore);
-
-  // Fetch unread count periodically
-  useEffect(() => {
-    if (currentUser?.id) {
-      // Fetch immediately
-      const fetchUnread = () => {
-        dispatch(getUnreadCountThunk({ userId: currentUser.id }))
-          .then((result: any) => {
-            console.log('📊 Unread count updated:', result.payload);
-          })
-          .catch((error: any) => {
-            console.error('❌ Failed to fetch unread count:', error);
-          });
-      };
-
-      fetchUnread();
-
-      // Refresh every 10 seconds (faster for real-time feel)
-      const interval = setInterval(fetchUnread, 10000);
-
-      return () => clearInterval(interval);
-    }
-  }, [currentUser?.id, dispatch]);
 
   const handleMenuClick = ({ key }: { key: string }) => {
     if (key === 'login') navigate(ROUTE_PATH.CANDIDATE_LOGIN);
@@ -125,12 +98,6 @@ const DefaultHeader = () => {
 
   const handleChatClick = () => {
     navigate(ROUTE_PATH.CHAT);
-    // Refresh unread count when navigating to chat
-    if (currentUser?.id) {
-      setTimeout(() => {
-        dispatch(getUnreadCountThunk({ userId: currentUser.id }));
-      }, 1000);
-    }
   };
 
   const loggedInMenu = [

@@ -51,3 +51,9 @@ export interface ICompanyDetail extends ICompanyWithImagesData {
   jobPosts?: ICompanyJobPost[];
 }
 
+export interface IGetCompaniesReqParams {
+  page: number;
+  limit: number;
+  companyName?: string;
+}
+

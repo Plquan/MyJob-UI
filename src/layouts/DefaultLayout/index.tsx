@@ -1,5 +1,5 @@
-import DefaultHeader from "../components/headers/DefaultHeader";
-import DefaultFooter from "../components/footer/DefaultFooter";
+import DefaultHeader from "./components/Header";
+import DefaultFooter from "./components/Footer";
 import { Outlet } from "react-router-dom";
 
 const DefaultLayout = () => { 

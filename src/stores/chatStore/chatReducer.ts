@@ -7,7 +7,6 @@ import {
   createOrGetConversationThunk,
   markAsReadThunk,
   deleteConversationThunk,
-  getUnreadCountThunk,
 } from './chatThunk';
 
 interface ChatState {
@@ -30,6 +29,13 @@ const initialState: ChatState = {
   unreadCount: 0,
   isLoading: false,
   error: null,
+};
+
+// Helper function to calculate total unread count from conversations
+const calculateUnreadCount = (conversations: IConversation[]): number => {
+  return conversations.reduce((total, conv) => {
+    return total + (conv.unreadCount || 0);
+  }, 0);
 };
 
 const chatSlice = createSlice({
@@ -57,6 +63,8 @@ const chatSlice = createSlice({
       state.isLoading = false;
       state.conversations = action.payload?.items || [];
       state.totalConversations = action.payload?.totalItems || 0;
+      // Tự động tính unreadCount từ conversations
+      state.unreadCount = calculateUnreadCount(state.conversations);
     });
     builder.addCase(getConversationsThunk.rejected, (state, action) => {
       state.isLoading = false;
@@ -111,6 +119,12 @@ const chatSlice = createSlice({
             ? { ...msg, isRead: true }
             : msg
         );
+        // Cập nhật unreadCount của conversation hiện tại về 0
+        const currentConv = state.conversations.find(conv => conv.id === state.currentConversation!.id);
+        if (currentConv) {
+          currentConv.unreadCount = 0;
+          state.unreadCount = calculateUnreadCount(state.conversations);
+        }
       }
     });
 
@@ -121,17 +135,8 @@ const chatSlice = createSlice({
         state.currentConversation = null;
         state.messages = [];
       }
-    });
-
-    // Get Unread Count
-    builder.addCase(getUnreadCountThunk.pending, (state) => {
-      // Keep current count while loading
-    });
-    builder.addCase(getUnreadCountThunk.fulfilled, (state, action) => {
-      state.unreadCount = action.payload || 0;
-    });
-    builder.addCase(getUnreadCountThunk.rejected, (state) => {
-      // Keep current count on error
+      // Cập nhật unreadCount sau khi xóa conversation
+      state.unreadCount = calculateUnreadCount(state.conversations);
     });
   },
 });

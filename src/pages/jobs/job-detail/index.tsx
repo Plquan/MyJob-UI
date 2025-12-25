@@ -18,7 +18,7 @@ const JobDetail = () => {
   const { jobPostId } = useParams<{ jobPostId: string }>();
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
-  const { jobPostDetail, isSubmiting, loading, jobPosts } = useSelector((state: RootState) => state.jobPostStore);
+  const { jobPostDetail, isSubmiting, loading, jobPosts, requestParams } = useSelector((state: RootState) => state.jobPostStore);
   const { provinces } = useSelector((state: RootState) => state.provinceStore);
   const [isApplyModalOpen, setIsApplyModalOpen] = useState(false);
   const { requireCandidate } = useAuthorization([EUserRole.CANDIDATE]);
@@ -36,11 +36,11 @@ const JobDetail = () => {
 
   // Lấy các job tương tự (loại trừ job hiện tại)
   const similarJobs = useMemo(() => {
-    if (!jobPosts || !currentJob) return [];
-    return jobPosts
+    if (!jobPosts.items || !currentJob) return [];
+    return jobPosts.items
       .filter(job => job.id !== currentJob.id && job.provinceId === currentJob.provinceId)
       .slice(0, 4);
-  }, [jobPosts, currentJob]);
+  }, [jobPosts.items, currentJob]);
 
   // Lấy label từ options
   const getPositionLabel = (value: number) => POSITION_OPTIONS.find(opt => opt.value === value)?.label || 'N/A';
@@ -51,9 +51,13 @@ const JobDetail = () => {
   useEffect(() => {
     if (jobPostId) {
       dispatch(jobPostThunks.getJobPostById(parseInt(jobPostId)));
-      dispatch(jobPostThunks.getJobPost());
+      dispatch(jobPostThunks.getJobPost({ 
+        page: requestParams.page, 
+        limit: requestParams.limit,
+        jobName: requestParams.jobName 
+      }));
     }
-  }, [jobPostId, dispatch]);
+  }, [jobPostId, dispatch, requestParams.page, requestParams.limit, requestParams.jobName]);
 
   const handleToggleSave = () => {
     if (!requireCandidate()) {
@@ -109,8 +113,8 @@ const JobDetail = () => {
               <div className="flex flex-col md:flex-row items-center md:items-stretch gap-4 p-6 pb-2">
                 <div className="flex-shrink-0 flex items-center justify-center">
                   <img
-                    src={currentJob.company.logo || "/assets/vinhuni.png"}
-                    alt={currentJob.company.companyName}
+                    src={currentJob.company?.logo || "/assets/vinhuni.png"}
+                    alt={currentJob.company?.companyName || "Company"}
                     className="w-24 h-24 object-contain p-3 border-2! border-gray-200! bg-white"
                   />
                 </div>
@@ -121,10 +125,10 @@ const JobDetail = () => {
                       {currentJob.isHot && <Tag color="gold">Nổi bật</Tag>}
                       {currentJob.isNew && <Tag color="blue">Mới</Tag>}
                     </div>
-                    <div className="text-[#6A5ACD] font-semibold mb-1">{currentJob.company.companyName}</div>
+                    <div className="text-[#6A5ACD] font-semibold mb-1">{currentJob.company?.companyName || 'N/A'}</div>
                     <div className="flex flex-wrap gap-4 text-gray-600 text-sm mb-1">
                       <span className="flex items-center text-[#6A5ACD] font-bold">
-                        {currentJob.salaryMin.toLocaleString('vi-VN')} - {currentJob.salaryMax.toLocaleString('vi-VN')} đ
+                        {currentJob.salaryMin?.toLocaleString('vi-VN') || 'N/A'} - {currentJob.salaryMax?.toLocaleString('vi-VN') || 'N/A'} đ
                       </span>
                       <span className="flex items-center">
                         <EnvironmentOutlined className="mr-1" />
@@ -200,7 +204,7 @@ const JobDetail = () => {
                   <div><span className="font-semibold">Địa điểm:</span> {provinceName}</div>
                   <div><span className="font-semibold">Mức lương:</span>
                     <span className="text-[#6A5ACD] font-bold ml-2">
-                      {currentJob.salaryMin.toLocaleString('vi-VN')} - {currentJob.salaryMax.toLocaleString('vi-VN')} đ
+                      {currentJob.salaryMin?.toLocaleString('vi-VN') || 'N/A'} - {currentJob.salaryMax?.toLocaleString('vi-VN') || 'N/A'} đ
                     </span>
                   </div>
                   {currentJob.deadline && (

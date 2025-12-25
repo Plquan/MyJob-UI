@@ -9,7 +9,7 @@ import ROUTE_PATH from "./routePath";
 import DefaultLayout from "../layouts/DefaultLayout";
 import CandidateLayout from "../layouts/CandidateLayout";
 import OverviewDashboard from "../pages/candidate/overview";
-import MyCompanyTab from "../pages/candidate/my-companies";
+import MyCompanyTab from "../pages/candidate/my-saved";
 import EmployerDashboard from "../pages/employer/dashboard";
 import CompanyDetail from "../pages/company-detail";
 import JobDetail from "../pages/jobs/job-detail";

@@ -48,9 +48,15 @@ const updateJobPost = createAsyncThunk (
 
 const getJobPost = createAsyncThunk (
     "jobPost/getJobPost",
-    async (_, {rejectWithValue}): Promise<IJobPost[]> => {
+    async (params: { page?: number; limit?: number; jobName?: string } = {}, {rejectWithValue}): Promise<IPaginationResponse<IJobPost>> => {
         try {
-            const response: IJobPost[] = await http.get("/job-post");
+            const response: IPaginationResponse<IJobPost> = await http.get("/job-post", {
+                params: {
+                    page: params?.page || 1,
+                    limit: params?.limit || 10,
+                    jobName: params?.jobName || "",
+                }
+            });
             return response;
         } catch (error: any) {
             return rejectWithValue(error.response.data) as any;
@@ -93,6 +99,18 @@ const applyJob = createAsyncThunk (
     }
 )
 
+const getSavedJobPosts = createAsyncThunk (
+    "jobPost/getSavedJobPosts",
+    async (_, {rejectWithValue}): Promise<IJobPost[]> => {
+        try {
+            const response: IJobPost[] = await http.get("/job-post/saved-job-posts");
+            return response;
+        } catch (error: any) {
+            return rejectWithValue(error.response.data) as any;
+        }
+    }
+)
+
 
 const jobPostThunks = {
     createJobPost,
@@ -101,7 +119,8 @@ const jobPostThunks = {
     getJobPost,
     toggleSaveJobPost,
     getJobPostById,
-    applyJob
+    applyJob,
+    getSavedJobPosts
 }
 
 export default  jobPostThunks

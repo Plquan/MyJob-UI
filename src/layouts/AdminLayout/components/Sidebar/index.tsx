@@ -7,7 +7,7 @@ import {
 } from '@ant-design/icons';
 import { useLocation, useNavigate } from 'react-router-dom';
 import type { MenuProps } from 'antd';
-import ROUTE_PATH from '../../../routes/routePath';
+import ROUTE_PATH from '../../../../routes/routePath';
 
 const items: MenuProps['items'] = [
   {

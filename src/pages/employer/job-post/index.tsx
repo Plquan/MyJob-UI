@@ -180,7 +180,7 @@ const ManageJobPostPage = () => {
          />
 
          <div className="flex items-center gap-2">
-           <span className="text-sm font-medium text-gray-600">Trạng thái tuyển dụng:</span>
+           <span className="text-sm font-medium text-gray-600">Trạng thái:</span>
            <Select
              placeholder="Tất cả"
              className="w-40"

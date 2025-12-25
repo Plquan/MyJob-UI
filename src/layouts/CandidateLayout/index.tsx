@@ -1,5 +1,5 @@
-import DefaultHeader from "../components/headers/DefaultHeader";
-import CandidateSidebar from "../components/Sidebar/CandidateSidebar";
+import DefaultHeader from "../DefaultLayout/components/Header";
+import CandidateSidebar from "./components/Sidebar";
 import { Outlet } from "react-router-dom";
 
 const CandidateLayout = () => { 

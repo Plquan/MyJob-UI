@@ -1,6 +1,7 @@
 import { Button } from 'antd';
 import { ArrowLeftOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
+import ROUTE_PATH from '@/routes/routePath';
 
 const ChatHeader = () => {
   const navigate = useNavigate();
@@ -12,7 +13,7 @@ const ChatHeader = () => {
           src="/assets/vinhuni.png"
           alt="MyJob Logo"
           className="h-10 w-auto cursor-pointer"
-          onClick={() => navigate(-1)}
+          onClick={() => navigate(ROUTE_PATH.HOME)}
         />
       </div>
       <Button
