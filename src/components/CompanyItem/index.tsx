@@ -44,19 +44,21 @@ const CompanyItem = ({ company }: CompanyItemProps) => {
     <Card
       key={company.company.id}
       hoverable
+      className="border-1! border-gray-300!"
       onClick={() => navigate(ROUTE_PATH.COMPANY_DETAIL.replace(':companyId', company.company.id.toString()))}
     >
       <div className="relative">
         <img
           alt="cover"
           src={getCompanyCover(company)}
-          className="w-full h-28 object-cover rounded-t-lg"
+          className="w-full h-28 object-cover rounded-t-lg border-1! border-gray-200!"
         />
 
         <div className="absolute left-3 -bottom-6">
-          <div className="bg-white p-1 rounded-md shadow-md">
+          <div className="bg-white p-1 rounded-md shadow-md border-1! border-gray-200!">
             <Avatar
               size={48}
+              shape="square"
               src={getCompanyLogo(company)}
               style={{ backgroundColor: '#fff' }}
               icon={<UserOutlined />}
@@ -93,14 +95,13 @@ const CompanyItem = ({ company }: CompanyItemProps) => {
 
         <div className="mt-4">
           <Button
-            className="w-full"
             onClick={handleToggleFollow}
             loading={companySubmiting}
-            icon={company.isFollowed ?  <BookmarkIcon className="w-4 h-4" stroke="white" fill="white" /> : <BookmarkIcon className="w-4 h-4" />
-            
+            icon={company.isFollowed ? <BookmarkIcon className="w-4 h-4" stroke="white" fill="white" /> : <BookmarkIcon className="w-4 h-4" />
+
             }
-            type={company.isFollowed ? "primary" : "default"}
-          >
+            className={`w-full ${company.isFollowed ? "bg-[#154C91]! border-[#154C91]!" : "border-gray-200!"} 
+             ${company.isFollowed ? "text-white!" : "text-gray-900!"}`}>
             {company.isFollowed ? "Đang theo dõi" : "Theo dõi"}
           </Button>
         </div>

@@ -1,7 +1,8 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import type { IApiResponse } from "../../types/AppType";
 import http from "../../ultils/axios/axiosCustom";
-import type { IResume } from "../../types/resume/ResumeType";
+import type { IResume, ISearchResumesParams } from "../../types/resume/ResumeType";
+import type { IPaginationResponse } from "../../types/base/IPaginationResponse";
 
 
 const updateAttachedResume = createAsyncThunk (
@@ -63,11 +64,24 @@ const setSelectedResume = createAsyncThunk (
     }
 )
 
+const searchResumes = createAsyncThunk(
+    "resume/searchResumes",
+    async (params: ISearchResumesParams, { rejectWithValue }) => {
+        try {
+            const response: IPaginationResponse<IResume> = await http.get("/resume/search-resumes", { params });
+            return response;
+        } catch (error: any) {
+            return rejectWithValue(error.response?.data || error);
+        }
+    }
+);
+
 const attachedResumeThunks = {
     uploadAttachedResume,
     getResumes,
     deleteAttachedResume,
     updateAttachedResume,
-    setSelectedResume
+    setSelectedResume,
+    searchResumes
 }
 export default attachedResumeThunks

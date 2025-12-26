@@ -116,7 +116,7 @@ const ManageResumePage = () => {
     if (selectedEmailActivity) {
       // TODO: Implement send email API với values
       console.log('Sending email:', values);
-      message.success('Đã gửi email thành công');
+    message.success('Đã gửi email thành công');
       setEmailModalVisible(false);
       setSelectedEmailActivity(null);
     }

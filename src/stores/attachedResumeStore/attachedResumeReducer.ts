@@ -3,12 +3,32 @@ import type { IResume } from "../../types/resume/ResumeType";
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 import attachedResumeThunks from "./attachedResumeThunk";
 import { EResumeType } from "../../enums/resume/EResumeType";
+import { message } from "antd";
 
 interface AttachedResumeState {
     attachedResumes: IResume[]
     loading: boolean,
     error?: string,
-    isSubmitting: boolean
+    isSubmitting: boolean,
+    searchResults: {
+        items: IResume[];
+        totalItems: number;
+        totalPages: number;
+    };
+    searchParams: {
+        page: number;
+        limit: number;
+        title?: string;
+        provinceId?: number;
+        careerId?: number;
+        position?: number;
+        typeOfWorkPlace?: number;
+        experience?: number;
+        academicLevel?: number;
+        jobType?: number;
+        gender?: number;
+        maritalStatus?: number;
+    };
 }
 
 const initialState: AttachedResumeState = {
@@ -16,12 +36,60 @@ const initialState: AttachedResumeState = {
     error: undefined,
     isSubmitting: false,
     attachedResumes: [],
+    searchResults: {
+        items: [],
+        totalItems: 0,
+        totalPages: 0,
+    },
+    searchParams: {
+        page: 1,
+        limit: 10,
+    },
 }
 
 export const attachedResumeSlice = createSlice({
     name: "attachedResume",
     initialState,
-    reducers: {},
+    reducers: {
+        setSearchParams: (
+            state,
+            action: PayloadAction<
+                Partial<{
+                    page: number;
+                    limit: number;
+                    title?: string;
+                    provinceId?: number;
+                    careerId?: number;
+                    position?: number;
+                    typeOfWorkPlace?: number;
+                    experience?: number;
+                    academicLevel?: number;
+                    jobType?: number;
+                    gender?: number;
+                    maritalStatus?: number;
+                }>
+            >
+        ) => {
+            state.searchParams = {
+                ...state.searchParams,
+                ...action.payload,
+            };
+            // Reset to page 1 when filters change (except when only page is changing)
+            if (Object.keys(action.payload).some(key => key !== 'page' && key !== 'limit')) {
+                state.searchParams.page = 1;
+            }
+        },
+        setPage: (state, action: PayloadAction<number>) => {
+            state.searchParams.page = action.payload;
+        },
+        setLimit: (state, action: PayloadAction<number>) => {
+            state.searchParams.limit = action.payload;
+            state.searchParams.page = 1;
+        },
+        resetSearchParams: (state) => {
+            state.searchParams = initialState.searchParams;
+        },
+    },
     extraReducers: (builder) => {
 
         // get all attached resumse
@@ -121,6 +189,32 @@ export const attachedResumeSlice = createSlice({
             state.isSubmitting = false;
             toast.error(action.payload.errorMessage)
         })
+
+        // search resumes
+        builder.addCase(attachedResumeThunks.searchResumes.pending, (state) => {
+            state.loading = true;
+            state.error = undefined;
+        });
+        builder.addCase(attachedResumeThunks.searchResumes.fulfilled, (state, action) => {
+            if (action.payload && Array.isArray(action.payload.items)) {
+                state.searchResults.items = action.payload.items;
+                state.searchResults.totalItems = action.payload.totalItems || 0;
+                state.searchResults.totalPages = action.payload.totalPages || 0;
+            } else {
+                state.searchResults.items = [];
+                state.searchResults.totalItems = 0;
+                state.searchResults.totalPages = 0;
+            }
+            state.loading = false;
+        });
+        builder.addCase(attachedResumeThunks.searchResumes.rejected, (state, action) => {
+            state.searchResults.items = [];
+            state.searchResults.totalItems = 0;
+            state.searchResults.totalPages = 0;
+            state.loading = false;
+            state.error = (action.payload as { message: string })?.message || "Có lỗi xảy ra";
+            message.error(state.error);
+        });
 
     }
 });

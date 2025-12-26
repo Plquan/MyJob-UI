@@ -4,7 +4,7 @@ const { Option } = Select;
 
 const CompanySearchBar = () => {
     return (
-        <div className="bg-indigo-800 p-3 rounded-lg inline-block">
+        <>
             <div className="flex items-center gap-2">
                 <Input placeholder="GSI" allowClear className="w-90!" />
                 <Select defaultValue="Tất cả tỉnh thành" className="w-44!">
@@ -12,11 +12,11 @@ const CompanySearchBar = () => {
                     <Option value="hcm">TP.HCM</Option>
                     <Option value="hn">Hà Nội</Option>
                 </Select>
-                <Button type="primary">
+                <Button type="primary" className="bg-[#154C91]!">
                     Tìm Kiếm
                 </Button>
             </div>
-        </div>
+        </>
 
     );
 };

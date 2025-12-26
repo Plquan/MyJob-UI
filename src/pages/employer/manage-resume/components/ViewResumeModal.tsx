@@ -73,6 +73,7 @@ const ViewResumeModal = ({
     const handleSendEmailClick = () => {
         if (activity) {
             onSendEmail(activity);
+            onClose(); // Đóng modal chi tiết khi click gửi email
         }
     };
 

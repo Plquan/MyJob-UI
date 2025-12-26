@@ -28,12 +28,11 @@ const ManageJobPostPage = () => {
   const { 
     companyJobPost, 
     loading, 
-    page, 
-    limit, 
-    search, 
-    totalItems, 
-    jobPostStatus 
+    companyJobPostRequestParams
   } = useSelector((state: RootState) => state.jobPostStore);
+  
+  const { page, limit, search, jobPostStatus } = companyJobPostRequestParams;
+  const { items, totalItems } = companyJobPost;
   
   const [statusFilter, setStatusFilter] = useState<number | undefined>(undefined);
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -171,11 +170,11 @@ const ManageJobPostPage = () => {
          <Input
            placeholder="Tìm kiếm theo tên tin đăng hoặc công ty"
            className="w-80!"
-           value={search}
-           onChange={(e) => dispatch(jobPostActions.setSearch(e.target.value))}
-           onClear={() => {
-             dispatch(jobPostActions.setSearch(''));
-           }}
+          value={search}
+          onChange={(e) => dispatch(jobPostActions.setCompanyJobPostSearch(e.target.value))}
+          onClear={() => {
+            dispatch(jobPostActions.setCompanyJobPostSearch(undefined));
+          }}
            allowClear
          />
 
@@ -185,11 +184,11 @@ const ManageJobPostPage = () => {
              placeholder="Tất cả"
              className="w-40"
              value={statusFilter}
-             onChange={(value) => {
-               setStatusFilter(value);
-               dispatch(jobPostActions.setPage(1));
-               dispatch(jobPostActions.setJobPostStatus(value));
-             }}
+            onChange={(value) => {
+              setStatusFilter(value);
+              dispatch(jobPostActions.setCompanyJobPostPage(1));
+              dispatch(jobPostActions.setJobPostStatus(value));
+            }}
              allowClear
            >
              {JOB_POST_STATUS_OPTIONS.map(option => (
@@ -206,7 +205,7 @@ const ManageJobPostPage = () => {
         <Table
           rowKey="id"
           columns={columns}
-          dataSource={companyJobPost}
+          dataSource={items}
           bordered
           loading={loading}
           pagination={{
@@ -217,12 +216,12 @@ const ManageJobPostPage = () => {
             pageSizeOptions: ['5', '10', '15', '20', '25'],
             showTotal: (total, range) => `${range[0]}-${range[1]} của ${total} tin đăng`,
             onChange: (newPage, newSize) => {
-              dispatch(jobPostActions.setPage(newPage));
-              dispatch(jobPostActions.setLimit(newSize || 10));
+              dispatch(jobPostActions.setCompanyJobPostPage(newPage));
+              dispatch(jobPostActions.setCompanyJobPostLimit(newSize || 10));
             },
             onShowSizeChange: (_, newSize) => {
-              dispatch(jobPostActions.setPage(1));
-              dispatch(jobPostActions.setLimit(newSize));
+              dispatch(jobPostActions.setCompanyJobPostPage(1));
+              dispatch(jobPostActions.setCompanyJobPostLimit(newSize));
             }
           }}
           size="middle"

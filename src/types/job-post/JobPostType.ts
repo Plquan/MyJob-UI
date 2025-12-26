@@ -72,7 +72,7 @@ export interface IJobPostUpdate extends Partial<ICreateJobPostReq> {
 export interface IGetJobPostsReqParams {
   page: number;
   limit: number;
-  search: string;
+  search?: string;
   jobPostStatus?: number;
 }
 

@@ -23,8 +23,8 @@ const getCompanyJobPosts = createAsyncThunk (
                 params: {
                     page: params.page,
                     limit: params.limit,
-                    search: params.search,
-                    jobPostStatus: params.jobPostStatus
+                    ...(params.search && { search: params.search }),
+                    ...(params.jobPostStatus && { jobPostStatus: params.jobPostStatus })
                 }
             });
             return response;

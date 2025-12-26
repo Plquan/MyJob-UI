@@ -8,7 +8,11 @@ interface JobPostState {
     loading: boolean,
     isSubmiting: Record<number, boolean>,
     error?: string,
-    companyJobPost: ICompanyJobPost[],
+    companyJobPost: {
+        items: ICompanyJobPost[];
+        totalItems: number;
+        totalPages: number;
+    },
     jobPosts: {
         items: IJobPost[];
         totalItems: number;
@@ -34,7 +38,11 @@ const initialState: JobPostState = {
     loading: false,
     isSubmiting: {},
     error: undefined,
-    companyJobPost: [],
+    companyJobPost: {
+        items: [],
+        totalItems: 0,
+        totalPages: 0
+    },
     jobPosts: {
         items: [],
         totalItems: 0,
@@ -106,7 +114,8 @@ export const jobPostSlice = createSlice({
             state.loading = true;
         });
         builder.addCase(jobPostThunks.createJobPost.fulfilled, (state, action) => {
-            state.companyJobPost.push(action.payload)
+            state.companyJobPost.items.push(action.payload)
+            state.companyJobPost.totalItems += 1;
             state.loading = false;
             message.success("Thêm tin tuyển dụng thành công")
         });
@@ -120,10 +129,21 @@ export const jobPostSlice = createSlice({
             state.loading = true;
         });
         builder.addCase(jobPostThunks.getCompanyJobPosts.fulfilled, (state, action) => {
-            state.companyJobPost = action.payload.items;
+            if (action.payload && Array.isArray(action.payload.items)) {
+                state.companyJobPost.items = action.payload.items;
+                state.companyJobPost.totalItems = action.payload.totalItems || 0;
+                state.companyJobPost.totalPages = action.payload.totalPages || 0;
+            } else {
+                state.companyJobPost.items = [];
+                state.companyJobPost.totalItems = 0;
+                state.companyJobPost.totalPages = 0;
+            }
             state.loading = false;
         });
         builder.addCase(jobPostThunks.getCompanyJobPosts.rejected, (state, action) => {
+            state.companyJobPost.items = [];
+            state.companyJobPost.totalItems = 0;
+            state.companyJobPost.totalPages = 0;
             state.loading = false;
             message.error((action.payload as { message: string }).message);
         })
@@ -133,10 +153,10 @@ export const jobPostSlice = createSlice({
         });
         builder.addCase(jobPostThunks.updateJobPost.fulfilled, (state, action) => {
             const updated = action.payload;
-            const index = state.companyJobPost.findIndex(job => job.id === updated.id);
+            const index = state.companyJobPost.items.findIndex(job => job.id === updated.id);
             if (index !== -1) {
-                state.companyJobPost[index] = {
-                    ...state.companyJobPost[index],
+                state.companyJobPost.items[index] = {
+                    ...state.companyJobPost.items[index],
                     ...updated,
                 };
             }
