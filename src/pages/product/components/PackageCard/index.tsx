@@ -16,7 +16,7 @@ const { Title } = Typography;
 export const PackageCard = () => {
   const dispatch = useDispatch<AppDispatch>()
   const navigate = useNavigate()
-  const { packages, loading } = useSelector((state: RootState) => state.packageStore)
+  const { packages, loading, isSubmiting } = useSelector((state: RootState) => state.packageStore)
   const { isAuthenticated, currentUser } = useSelector((state: RootState) => state.authStore)
   useEffect(() => {
     dispatch(packageActions.getPackages())
@@ -26,7 +26,7 @@ export const PackageCard = () => {
   const [selectedPackage, setSelectedPackage] = useState<any>(null);
 
   const showConfirmModal = (pkg: any) => {
-    if (!isAuthenticated || currentUser?.roleName != EUserRole.EMPLOYER) {
+    if (!isAuthenticated || currentUser?.role != EUserRole.EMPLOYER) {
       navigate(ROUTE_PATH.EMPLOYER_LOGIN)
     }
     else {
@@ -35,9 +35,19 @@ export const PackageCard = () => {
     }
   }
 
-  const handleOk = () => {
-    setIsModalOpen(false)
-    setSelectedPackage(null)
+  const handleOk = async () => {
+    if (selectedPackage) {
+      try {
+        await dispatch(packageActions.purchasePackage(selectedPackage.id)).unwrap();
+        setIsModalOpen(false);
+        setSelectedPackage(null);
+        // Navigate to manage package page after successful purchase
+        navigate(ROUTE_PATH.EMPLOYER_MANAGE_PACKAGE);
+      } catch (error) {
+        // Error is already handled by reducer with message.error
+        console.error('Purchase failed:', error);
+      }
+    }
   }
 
   const handleCancel = () => {
@@ -150,8 +160,16 @@ export const PackageCard = () => {
         okText="Xác nhận"
         cancelText="Hủy"
         centered
+        confirmLoading={isSubmiting}
+        okButtonProps={{ disabled: isSubmiting }}
       >
         <p>Bạn có chắc chắn muốn thanh toán cho gói <b className="text-blue-400">{selectedPackage?.name}</b>?</p>
+        {selectedPackage && (
+          <div className="mt-4 p-3 bg-gray-50 rounded">
+            <p className="text-sm text-gray-600 mb-1">Giá: <strong className="text-green-600">{formatVND(selectedPackage.price)}</strong></p>
+            <p className="text-sm text-gray-600">Thời hạn: <strong>{selectedPackage.durationInDays} ngày</strong></p>
+          </div>
+        )}
       </Modal>
     </>
   )

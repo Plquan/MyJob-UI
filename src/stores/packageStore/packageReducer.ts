@@ -1,11 +1,12 @@
 import { createSlice } from "@reduxjs/toolkit";
-import type { IPackageDto } from "../../types/package/PackageType";
+import type { IPackageDto, IPackageUsage } from "../../types/package/PackageType";
 import packageThunks from "./packageThunk";
 import { message } from "antd";
 
 interface PackageState {
     allPackages: IPackageDto[],
     packages: IPackageDto[],
+    companyPackage: IPackageUsage | null,
     loading: boolean,
     isSubmiting: boolean,
     error?: string,
@@ -14,6 +15,7 @@ interface PackageState {
 const initialState: PackageState = {
     allPackages: [],
     packages: [],
+    companyPackage: null,
     loading: false,
     isSubmiting: false,
     error: undefined,
@@ -96,13 +98,26 @@ export const packageSlice = createSlice({
 
         // purchase  package
         builder.addCase(packageThunks.purchasePackage.pending, (state) => {
-            state.loading = true;
+            state.isSubmiting = true;
         });
-        builder.addCase(packageThunks.purchasePackage.fulfilled, (state, action) => {
-            state.loading = false;
+        builder.addCase(packageThunks.purchasePackage.fulfilled, (state) => {
+            state.isSubmiting = false;
             message.success("Mua gói thành công");
         });
         builder.addCase(packageThunks.purchasePackage.rejected, (state, action) => {
+            state.isSubmiting = false;
+            message.error((action.payload as { message: string }).message);
+        });
+
+        // get company package
+        builder.addCase(packageThunks.getCompanyPackage.pending, (state) => {
+            state.loading = true;
+        });
+        builder.addCase(packageThunks.getCompanyPackage.fulfilled, (state, action) => {
+            state.companyPackage = action.payload;
+            state.loading = false;
+        });
+        builder.addCase(packageThunks.getCompanyPackage.rejected, (state, action) => {
             state.loading = false;
             message.error((action.payload as { message: string }).message);
         });

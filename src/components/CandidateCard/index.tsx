@@ -1,6 +1,5 @@
 import React, { useMemo } from 'react';
-import { Tag } from 'antd';
-import { EnvironmentOutlined, DollarOutlined, UserOutlined } from '@ant-design/icons';
+import { EnvironmentOutlined, DollarOutlined } from '@ant-design/icons';
 import type { IResume } from '../../types/resume/ResumeType';
 import { useSelector } from 'react-redux';
 import type { RootState } from '../../stores';
@@ -50,10 +49,10 @@ const CandidateCard: React.FC<CandidateCardProps> = ({ resume, onClick, size = '
   return (
     <div
       key={resume.id}
-      className={`bg-white border-2 border-gray-200 rounded-lg flex flex-col hover:border-[#154C91] cursor-pointer ${
+      className={`bg-white border-1 border-gray-300 rounded-lg flex flex-col hover:border-[#154C91] cursor-pointer ${
         isLarge
-          ? 'px-4 md:px-5 py-3 md:py-4 min-h-[100px] md:min-h-[120px]'
-          : 'px-3 py-2 min-h-[80px]'
+          ? 'px-2 md:px-3 py-1 md:py-2 min-h-[80px] md:min-h-[100px]'
+          : 'px-2 py-1 min-h-[80px]'
       }`}
       onClick={() => onClick?.(resume.id)}
     >
@@ -61,17 +60,17 @@ const CandidateCard: React.FC<CandidateCardProps> = ({ resume, onClick, size = '
         <div className="flex-1 min-w-0 flex flex-col">
           <div className="flex flex-row items-center min-w-0">
             <span
-              className={`font-semibold text-gray-900 truncate mr-2 hover:text-[#6A5ACD] transition-colors ${
-                isLarge ? 'text-base md:text-lg' : 'text-[15px]'
+              className={`font-[500] truncate mr-2 hover:text-[#6A5ACD] transition-colors ${
+                isLarge ? 'text-[14px] md:text-[17px]' : 'text-[15px]'
               }`}
             >
-              {resume.candidate?.fullName || 'N/A'}
+              {"Phạm lê quân"}
               {age ? `(${age} tuổi)` : ''}
             </span>
           </div>
           <span
-            className={`text-gray-600 truncate ${
-              isLarge ? 'text-sm md:text-base mt-1 md:mt-1' : 'text-xs mt-1'
+            className={`truncate ${
+              isLarge ? 'text-[13px] md:text-[14px]' : 'text-[13px]'
             }`}
           >
             {careerName|| 'Chưa có tiêu đề'}
@@ -80,21 +79,21 @@ const CandidateCard: React.FC<CandidateCardProps> = ({ resume, onClick, size = '
       </div>
       <div
         className={`flex flex-wrap items-center justify-between ${
-          isLarge ? 'gap-2 md:gap-3 text-xs md:text-sm mt-1.5 md:mt-3' : 'gap-2 text-xs mt-1.5'
+          isLarge ? 'gap-2 md:gap-3 text-xs md:text-sm mt-1.5 md:mt-2' : 'gap-2 text-xs mt-1.5'
         } text-gray-700`}
       >
         <div className={`flex flex-wrap items-center ${isLarge ? 'gap-2 md:gap-3' : 'gap-2'}`}>
           {resume.salaryMin && resume.salaryMax && (
-            <span className={`flex items-center gap-1 font-semibold text-[#6A5ACD] ${isLarge ? 'text-xs md:text-sm' : ''}`}>
-              <DollarOutlined className={isLarge ? 'text-xs md:text-sm' : 'text-[13px]'} />
+            <span className={`flex items-center gap-1 bg-gray-100 px-2 py-1 rounded-full ${isLarge ? 'text-[10px] md:text-[11px]' : 'text-[11px]'}`}>
+              <DollarOutlined className={isLarge ? 'text-[10px] md:text-[11px]' : 'text-[11px]'} />
               {resume.salaryMin} - {resume.salaryMax}
             </span>
           )}
-          <span className="flex items-center gap-1">
-            <EnvironmentOutlined className={isLarge ? 'text-xs md:text-sm' : 'text-[13px]'} />
-            <span className={isLarge ? 'text-xs md:text-sm' : ''}>{provinceName}</span>
+          <span className={`flex items-center gap-1 bg-gray-100 px-2 py-1 rounded-full ${isLarge ? 'text-[10px] md:text-[11px]' : 'text-[11px]'}`}>
+            <EnvironmentOutlined className={isLarge ? 'text-[10px] md:text-[11px]' : 'text-[13px]'} />
+            <span className={isLarge ? 'text-[10px] md:text-[11px]' : ''}>{provinceName}</span>
           </span>
-          <span className={isLarge ? 'text-xs md:text-sm' : ''}>{experienceLabel}</span>
+          <span className={`bg-gray-100 px-2 py-1 rounded-full ${isLarge ? 'text-[10px] md:text-[11px]' : 'text-[11px]'}`}>{experienceLabel}</span>
         </div>
       </div>
     </div>

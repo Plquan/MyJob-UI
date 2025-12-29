@@ -26,12 +26,10 @@ const CandidateList = ({
   return (
     <div className="flex-1">
       <div className="flex justify-between items-center mb-4">
-        <div>
-          <span className="text-sm text-gray-600">Kết quả tìm thấy: </span>
-          <span className="text-lg font-semibold text-[#6A5ACD]">
-            {searchResults.totalItems} hồ sơ
-          </span>
-        </div>
+        <h3 className="text-base font-semibold text-gray-900">Kết quả tìm thấy: 
+          <span className="text-base font-semibold text-[#154C91]">
+           {searchResults.totalItems} hồ sơ
+        </span></h3>
       </div>
 
       <Spin spinning={loading}>
