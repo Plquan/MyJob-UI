@@ -14,16 +14,16 @@ interface CandidateModalProps {
   onCancel: () => void
   onFinish: (values: any) => void
   initialValues?: ICandidate
-  form:any
+  form: any
 }
 
-const CandidateModal: React.FC<CandidateModalProps> = ({ open, onCancel,onFinish, initialValues,form }) => {
+const CandidateModal: React.FC<CandidateModalProps> = ({ open, onCancel, onFinish, initialValues, form }) => {
   const { provinces, loading } = useSelector(
     (state: RootState) => state.provinceStore
   )
 
   useEffect(() => {
-    if(open){
+    if (open) {
       if (initialValues?.id) {
         form.setFieldsValue({
           ...initialValues,
@@ -34,7 +34,7 @@ const CandidateModal: React.FC<CandidateModalProps> = ({ open, onCancel,onFinish
         form.resetFields()
       }
     }
-  }, [open,initialValues, form])
+  }, [open, initialValues, form])
 
   return (
     <Modal
@@ -47,13 +47,21 @@ const CandidateModal: React.FC<CandidateModalProps> = ({ open, onCancel,onFinish
       centered
       getContainer={false}
     >
-      <Form 
-        form={form} 
-        layout="vertical" 
+      <Form
+        form={form}
+        layout="vertical"
         onFinish={onFinish}
       >
         <Row gutter={[16, 0]}>
           <Col xs={24} md={12}>
+            <Form.Item
+              name="fullName"
+              label="Họ tên"
+              rules={[{ required: true, message: 'Vui lòng nhập họ tên' }]}
+            >
+              <Input />
+            </Form.Item>
+
             <Form.Item
               name="phone"
               label="Số điện thoại"
@@ -68,23 +76,9 @@ const CandidateModal: React.FC<CandidateModalProps> = ({ open, onCancel,onFinish
               rules={[{ required: true, message: 'Vui lòng chọn giới tính' }]}
             >
               <Select>
-              {GENDER_OPTIONS.map(opt => (
+                {GENDER_OPTIONS.map(opt => (
                   <Option key={opt.value} value={opt.value}>
-                  {opt.label}
-                  </Option>
-              ))}
-              </Select>
-            </Form.Item>
-
-            <Form.Item
-              name="provinceId"
-              label="Tỉnh/Thành phố"
-              rules={[{ required: true, message: 'Vui lòng chọn tỉnh/thành phố' }]}
-            >
-              <Select loading={loading}>
-                {provinces?.map((province) => (
-                  <Option key={province.id} value={province.id}>
-                    {province.name}
+                    {opt.label}
                   </Option>
                 ))}
               </Select>
@@ -106,11 +100,24 @@ const CandidateModal: React.FC<CandidateModalProps> = ({ open, onCancel,onFinish
               rules={[{ required: true, message: 'Vui lòng chọn tình trạng hôn nhân' }]}
             >
               <Select>
-              {MARTIALSTATUS_OPTIONS.map(opt => (
-                <Option key={opt.value} value={opt.value}>
-                {opt.label}
-                </Option>
-               ))}
+                {MARTIALSTATUS_OPTIONS.map(opt => (
+                  <Option key={opt.value} value={opt.value}>
+                    {opt.label}
+                  </Option>
+                ))}
+              </Select>
+            </Form.Item>
+            <Form.Item
+              name="provinceId"
+              label="Tỉnh/Thành phố"
+              rules={[{ required: true, message: 'Vui lòng chọn tỉnh/thành phố' }]}
+            >
+              <Select loading={loading}>
+                {provinces?.map((province) => (
+                  <Option key={province.id} value={province.id}>
+                    {province.name}
+                  </Option>
+                ))}
               </Select>
             </Form.Item>
           </Col>

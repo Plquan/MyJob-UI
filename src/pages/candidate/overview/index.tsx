@@ -3,6 +3,7 @@ import {
   HeartOutlined,
   FileTextOutlined,
   SaveOutlined,
+  EyeOutlined,
 } from '@ant-design/icons';
 import { Line } from '@ant-design/charts';
 import { useEffect, useMemo } from 'react';
@@ -11,6 +12,7 @@ import { useNavigate } from 'react-router-dom';
 import type { RootState, AppDispatch } from '../../../stores';
 import candidateThunks from '../../../stores/candidateStore/candidateThunk';
 import JobCard from '../../../components/JobCard';
+import { BookmarkIcon } from '@/assets/icon/bookmark';
 
 const OverviewDashboard = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -33,23 +35,29 @@ const OverviewDashboard = () => {
     {
       title: 'Việc làm đã lưu',
       value: activityStatistics?.savedJobs || 0,
-      icon: <SaveOutlined />,
+      icon: <HeartOutlined />,
       color: 'border-purple-200',
       textColor: 'text-purple-600',
     },
     {
+      title: 'Công ty đã xem hồ sơ',
+      value: 0,
+      icon: <EyeOutlined />,
+      color: 'border-blue-200',
+      textColor: 'text-blue-500',
+    },
+    {
       title: 'Công ty đang theo dõi',
       value: activityStatistics?.followedCompanies || 0,
-      icon: <HeartOutlined />,
+      icon: <BookmarkIcon className="w-6 h-6" />,
       color: 'border-red-200',
       textColor: 'text-red-500',
     },
   ], [activityStatistics]);
 
-  // Transform data for multiple line charts
   const chartData = useMemo(() => {
     if (!activityStatistics?.monthlyActivity) return [];
-    
+
     const data: any[] = [];
     activityStatistics.monthlyActivity.forEach((item) => {
       data.push({
@@ -83,7 +91,7 @@ const OverviewDashboard = () => {
       label: { style: { fontSize: 12 } },
     },
     xAxis: {
-      label: { 
+      label: {
         style: { fontSize: 12 },
         autoRotate: true,
         autoHide: false,
@@ -109,23 +117,23 @@ const OverviewDashboard = () => {
 
   return (
     <>
-    <Row gutter={[24, 24]} className="mb-6">
-      {stats.map((item) => (
-        <Col xs={24} sm={12} lg={6} key={item.title}>
-          <Card className={`rounded-xl ${item.color}`}>
-            <div className="flex flex-col">
-              <span className="text-sm text-gray-500 mb-2">{item.title}</span>
-              <div className="flex items-center gap-3">
-                <span className={`text-2xl ${item.textColor}`}>{item.icon}</span>
-                <span className={`text-xl font-semibold ${item.textColor}`}>{item.value}</span>
+      <Row gutter={[24, 24]} className="mb-6">
+        {stats.map((item) => (
+          <Col xs={24} sm={12} lg={6} key={item.title}>
+            <Card className={`rounded-xl ${item.color}`}>
+              <div className="flex flex-col">
+                <span className="text-sm text-gray-500 mb-2">{item.title}</span>
+                <div className="flex items-center gap-3">
+                  <span className={`text-2xl ${item.textColor}`}>{item.icon}</span>
+                  <span className={`text-xl font-semibold ${item.textColor}`}>{item.value}</span>
+                </div>
               </div>
-            </div>
-          </Card>
-        </Col>
-      ))}
-    </Row>
+            </Card>
+          </Col>
+        ))}
+      </Row>
 
- 
+
       <Card className="rounded-xl  mb-6! w-full">
         <h2 className="text-xl font-bold mb-4">Hoạt động của bạn</h2>
         <Line {...config} />
@@ -150,7 +158,7 @@ const OverviewDashboard = () => {
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-xl font-bold">Việc làm gợi ý</h2>
           {recommendedJobs.length > 0 && (
-            <button 
+            <button
               onClick={() => navigate('/candidate/find-job')}
               className="text-[#6A5ACD] hover:text-[#5848b8] font-medium text-sm"
             >
@@ -158,7 +166,7 @@ const OverviewDashboard = () => {
             </button>
           )}
         </div>
-        
+
         {loadingRecommendations ? (
           <div className="flex justify-center items-center min-h-[200px]">
             <Spin size="large" />
@@ -166,8 +174,8 @@ const OverviewDashboard = () => {
         ) : recommendedJobs.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {recommendedJobs.map((job) => (
-              <JobCard 
-                key={job.id} 
+              <JobCard
+                key={job.id}
                 job={job}
                 onClick={(jobId) => navigate(`/candidate/find-job/${jobId}`)}
                 size="large"

@@ -47,14 +47,14 @@ const CandidateCard: React.FC = () => {
         <Row gutter={[32, 16]}>
           <Col xs={24} md={12}>
             <div className="mb-4">
+              <Text strong>Họ tên</Text>
+              <br />
+              {renderField(candidate?.fullName)}
+            </div>
+            <div className="mb-4">
               <Text strong>Số điện thoại</Text>
               <br />
               {candidate?.phone ?? NOT_UPDATE}
-            </div>
-            <div className="mb-4">
-              <Text strong>Giới tính</Text>
-              <br />
-              {renderField(getLabelFromValue(GENDER_OPTIONS, candidate?.gender))}
             </div>
             <div className="mb-4">
               <Text strong>Ngày sinh</Text>
@@ -68,6 +68,11 @@ const CandidateCard: React.FC = () => {
             </div>
           </Col>
           <Col xs={24} md={12}>
+            <div className="mb-4">
+              <Text strong>Giới tính</Text>
+              <br />
+              {renderField(getLabelFromValue(GENDER_OPTIONS, candidate?.gender))}
+            </div>
             <div className="mb-4">
               <Text strong>Tình trạng hôn nhân</Text>
               <br />
