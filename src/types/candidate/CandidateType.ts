@@ -12,3 +12,16 @@ export interface ICandidate {
   updatedAt: Date;
 }
 
+export interface IMonthlyActivity {
+  month: string;
+  appliedJobs: number;
+  savedJobs: number;
+  followedCompanies: number;
+}
+
+export interface IUserActivityStatistics {
+  appliedJobs: number;
+  savedJobs: number;
+  followedCompanies: number;
+  monthlyActivity: IMonthlyActivity[];
+}
