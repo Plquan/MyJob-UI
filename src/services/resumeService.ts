@@ -1,15 +1,12 @@
+import { IOnlineResume } from "@/types/resume/ResumeType";
+import http from "@/ultils/axios/axiosCustom";
 
-// const candidateLogin = async (data: ILoginRequestData): Promise<IApiResponse<any>> => {
-//    try {
-//     const response:  IApiResponse<any> = await http.post("/auth/login/candidate", data);
-//     return response;
-//    } catch (error:any) {
-//     throw error.response.data;
-//    }
-// }
+class ResumeService {
+    async getResumeForDownload(resumeId: number): Promise<IOnlineResume> {
+        const response = await http.get<IOnlineResume>(`/resume/get-resume-for-download/${resumeId}`);
+        return response as any;
+    }
 
+}
 
-const resumeService = {
-
-  };
-export default resumeService;
+export default new ResumeService();

@@ -1,5 +1,4 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import type { IApiResponse } from "../../types/AppType";
 import http from "../../ultils/axios/axiosCustom";
 import type { IOnlineResume, IResume } from "../../types/resume/ResumeType";
 import type { ICertificate } from "../../types/resume/CertificateType";
@@ -24,9 +23,9 @@ const getOnlineResume = createAsyncThunk (
 
 const updateOnlineResume = createAsyncThunk (
     "resume/updateOnlineResume",
-    async (data: IResume, {rejectWithValue}): Promise<IApiResponse<IResume>> => {
+    async (data: IResume, {rejectWithValue}): Promise<IResume> => {
         try {
-            const response: IApiResponse<IResume> = await http.put("/resume/update-online-resume",data);
+            const response: IResume = await http.put("/resume/update-online-resume",data);
             return response;
         } catch (error: any) {
             return rejectWithValue(error.response.data) as any;
@@ -37,9 +36,9 @@ const updateOnlineResume = createAsyncThunk (
 //candidate
 const updateProfile = createAsyncThunk (
     "candidate/updateProfile",
-    async (data: ICandidate, {rejectWithValue}): Promise<IApiResponse<ICandidate>> => {
+    async (data: ICandidate, {rejectWithValue}): Promise<ICandidate> => {
         try {
-            const response: IApiResponse<ICandidate> = await http.put("/candidate/update-profile",data);
+            const response: ICandidate = await http.put("/candidate/update-profile",data);
             return response;
         } catch (error: any) {
             return rejectWithValue(error.response.data) as any;
@@ -49,9 +48,9 @@ const updateProfile = createAsyncThunk (
 
 const getProfile = createAsyncThunk (
     "candidate/getProfile",
-    async (_, {rejectWithValue}): Promise<IApiResponse<ICandidate>> => {
+    async (_, {rejectWithValue}): Promise<ICandidate> => {
         try {
-            const response: IApiResponse<ICandidate> = await http.get("/candidate/get-profile");
+            const response: ICandidate = await http.get("/candidate/get-profile");
             return response;
         } catch (error: any) {
             return rejectWithValue(error.response.data) as any;
@@ -62,9 +61,9 @@ const getProfile = createAsyncThunk (
 //certificate 
 const createCertificate = createAsyncThunk (
     "certificate/createCertificate",
-    async (data: ICertificate, {rejectWithValue}): Promise<IApiResponse<ICertificate>> => {
+    async (data: ICertificate, {rejectWithValue}): Promise<ICertificate> => {
         try {
-            const response: IApiResponse<ICertificate> = await http.post("/certificate/create-certificate",data);
+            const response: ICertificate = await http.post("/certificate/create-certificate",data);
             return response;
         } catch (error: any) {
             return rejectWithValue(error.response.data) as any;
@@ -74,9 +73,9 @@ const createCertificate = createAsyncThunk (
 
 const updateCertificate = createAsyncThunk (
     "certificate/updateCertificate",
-    async (data: ICertificate, {rejectWithValue}): Promise<IApiResponse<ICertificate>> => {
+    async (data: ICertificate, {rejectWithValue}): Promise<ICertificate> => {
         try {
-            const response: IApiResponse<ICertificate> = await http.put("/certificate/update-certificate",data);
+            const response: ICertificate = await http.put("/certificate/update-certificate",data);
             return response;
         } catch (error: any) {
             return rejectWithValue(error.response.data) as any;
@@ -86,9 +85,9 @@ const updateCertificate = createAsyncThunk (
 
 const deleteCertificate = createAsyncThunk (
     "certificate/deleteCertificate",
-    async (id: number, {rejectWithValue}): Promise<IApiResponse<any>> => {
+    async (id: number, {rejectWithValue}): Promise<boolean> => {
         try {
-            const response: IApiResponse<any> = await http.delete(`/certificate/delete-certificate/${id}`);
+            const response: boolean = await http.delete(`/certificate/delete-certificate/${id}`);
             return response;
         } catch (error: any) {
             return rejectWithValue(error.response.data) as any;
@@ -99,9 +98,9 @@ const deleteCertificate = createAsyncThunk (
 //education
 const createEducation = createAsyncThunk (
     "education/createEducation",
-    async (data: IEducation, {rejectWithValue}): Promise<IApiResponse<IEducation>> => {
+    async (data: IEducation, {rejectWithValue}): Promise<IEducation> => {
         try {
-            const response: IApiResponse<IEducation> = await http.post("/education/create-education",data);
+            const response: IEducation = await http.post("/education/create-education",data);
             return response
         } catch (error: any) {
             return rejectWithValue(error.response.data) as any;
@@ -111,9 +110,9 @@ const createEducation = createAsyncThunk (
 
 const updateEducation = createAsyncThunk (
     "education/updateEducation",
-    async (data: IEducation, {rejectWithValue}): Promise<IApiResponse<IEducation>> => {
+    async (data: IEducation, {rejectWithValue}): Promise<IEducation> => {
         try {
-            const response: IApiResponse<IEducation> = await http.put("/education/update-education",data);
+            const response: IEducation = await http.put("/education/update-education",data);
             return response
         } catch (error: any) {
             return rejectWithValue(error.response.data) as any;
@@ -123,9 +122,9 @@ const updateEducation = createAsyncThunk (
 
 const deleteEducation = createAsyncThunk (
     "education/deleteEducation",
-    async (id: number, {rejectWithValue}): Promise<IApiResponse<any>> => {
+    async (id: number, {rejectWithValue}): Promise<boolean> => {
         try {
-            const response: IApiResponse<any> = await http.delete(`/education/delete-education/${id}`);
+            const response: boolean = await http.delete(`/education/delete-education/${id}`);
             return response
         } catch (error: any) {
             return rejectWithValue(error.response.data) as any;
@@ -136,9 +135,9 @@ const deleteEducation = createAsyncThunk (
 // experience
 const createExperience = createAsyncThunk (
     "experience/createExperience",
-    async (data: IExperience, {rejectWithValue}): Promise<IApiResponse<IExperience>> => {
+    async (data: IExperience, {rejectWithValue}): Promise<IExperience> => {
         try {
-            const response: IApiResponse<IExperience> = await http.post("/experience/create-experience",data);
+            const response: IExperience = await http.post("/experience/create-experience",data);
             return response;
         } catch (error: any) {
             return rejectWithValue(error.response.data) as any;
@@ -147,9 +146,9 @@ const createExperience = createAsyncThunk (
 )
 const updateExperience = createAsyncThunk (
     "experience/updateExperience",
-    async (data: IExperience, {rejectWithValue}): Promise<IApiResponse<IExperience>> => {
+    async (data: IExperience, {rejectWithValue}): Promise<IExperience> => {
         try {
-            const response: IApiResponse<IExperience> = await http.put("/experience/update-experience",data);
+            const response: IExperience = await http.put("/experience/update-experience",data);
             return response;
         } catch (error: any) {
             return rejectWithValue(error.response.data) as any;
@@ -158,9 +157,9 @@ const updateExperience = createAsyncThunk (
 )
 const deleteExperience = createAsyncThunk (
     "experience/deleteExperience",
-    async (id: number, {rejectWithValue}): Promise<IApiResponse<any>> => {
+    async (id: number, {rejectWithValue}): Promise<boolean> => {
         try {
-            const response: IApiResponse<any> = await http.delete(`/experience/delete-experience/${id}`);
+            const response: boolean = await http.delete(`/experience/delete-experience/${id}`);
             return response;
         } catch (error: any) {
             return rejectWithValue(error.response.data) as any;
@@ -171,9 +170,9 @@ const deleteExperience = createAsyncThunk (
 // language
 const createLanguage = createAsyncThunk (
     "language/createLanguage",
-    async (data: ILanguage, {rejectWithValue}): Promise<IApiResponse<ILanguage>> => {
+    async (data: ILanguage, {rejectWithValue}): Promise<ILanguage> => {
         try {
-            const response: IApiResponse<ILanguage> = await http.post("/language/create-language",data);
+            const response: ILanguage = await http.post("/language/create-language",data);
             return response;
         } catch (error: any) {
             return rejectWithValue(error.response.data) as any;
@@ -182,9 +181,9 @@ const createLanguage = createAsyncThunk (
 )
 const updateLanguage = createAsyncThunk (
     "language/updateLanguage",
-    async (data: ILanguage, {rejectWithValue}): Promise<IApiResponse<ILanguage>> => {
+    async (data: ILanguage, {rejectWithValue}): Promise<ILanguage> => {
         try {
-            const response: IApiResponse<ILanguage> = await http.put("/language/update-language",data);
+            const response: ILanguage = await http.put("/language/update-language",data);
             return response;
         } catch (error: any) {
             return rejectWithValue(error.response.data) as any;
@@ -193,9 +192,9 @@ const updateLanguage = createAsyncThunk (
 )
 const deleteLanguage = createAsyncThunk (
     "language/deleteLanguage",
-    async (id: number, {rejectWithValue}): Promise<IApiResponse<any>> => {
+    async (id: number, {rejectWithValue}): Promise<boolean> => {
         try {
-            const response: IApiResponse<any> = await http.delete(`/language/delete-language/${id}`);
+            const response: boolean = await http.delete(`/language/delete-language/${id}`);
             return response;
         } catch (error: any) {
             return rejectWithValue(error.response.data) as any;
@@ -206,9 +205,9 @@ const deleteLanguage = createAsyncThunk (
 // skill
 const createSkill = createAsyncThunk (
     "skill/createSkill",
-    async (data: ISkill, {rejectWithValue}): Promise<IApiResponse<ISkill>> => {
+    async (data: ISkill, {rejectWithValue}): Promise<ISkill> => {
         try {
-            const response: IApiResponse<ISkill> = await http.post("/skill/create-skill",data);
+            const response: ISkill = await http.post("/skill/create-skill",data);
             return response;
         } catch (error: any) {
             return rejectWithValue(error.response.data) as any;
@@ -217,9 +216,9 @@ const createSkill = createAsyncThunk (
 )
 const updateSkill = createAsyncThunk (
     "skill/updateSkill",
-    async (data: ISkill, {rejectWithValue}): Promise<IApiResponse<ISkill>> => {
+    async (data: ISkill, {rejectWithValue}): Promise<ISkill> => {
         try {
-            const response: IApiResponse<ISkill> = await http.put("/skill/update-skill",data);
+            const response: ISkill = await http.put("/skill/update-skill",data);
             return response;
         } catch (error: any) {
             return rejectWithValue(error.response.data) as any;
@@ -228,9 +227,9 @@ const updateSkill = createAsyncThunk (
 )
 const deleteSkill = createAsyncThunk (
     "skill/deleteSkill",
-    async (skillId: number, {rejectWithValue}): Promise<IApiResponse<any>> => {
+    async (skillId: number, {rejectWithValue}): Promise<boolean> => {
         try {
-            const response: IApiResponse<any> = await http.delete(`/skill/delete-skill/${skillId}`);
+            const response: boolean = await http.delete(`/skill/delete-skill/${skillId}`);
             return response;
         } catch (error: any) {
             return rejectWithValue(error.response.data) as any;

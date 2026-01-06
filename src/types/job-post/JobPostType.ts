@@ -72,7 +72,7 @@ export interface IJobPostUpdate extends Partial<ICreateJobPostReq> {
 export interface IGetJobPostsReqParams {
   page: number;
   limit: number;
-  search: string;
+  search?: string;
   jobPostStatus?: number;
 }
 
@@ -80,7 +80,7 @@ export interface IJobPost {
   id: number
   jobName: string
   provinceId: number
-  company: {
+  company?: {
     companyName: string
     logo?: string
     coverImage?: string

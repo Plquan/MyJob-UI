@@ -11,7 +11,7 @@ interface ConversationItemProps {
 
 const ConversationItem = memo(({ conversation, isActive, otherUser, onClick }: ConversationItemProps) => {
   const displayName = otherUser?.candidate?.fullName || otherUser?.company?.companyName || otherUser?.email || 'Unknown User';
-  const avatarUrl = otherUser?.avatar?.url;
+  const avatarUrl = otherUser?.candidate?.avatar?.url;
   const initial = displayName.charAt(0).toUpperCase();
   const unreadCount = conversation.unreadCount || 0;
 

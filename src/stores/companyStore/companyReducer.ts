@@ -1,5 +1,5 @@
-import { createSlice } from "@reduxjs/toolkit"
-import type { ICompanyData, ICompanyDetail, ICompanyWithImagesData } from "../../types/company/CompanyType";
+import { createSlice, type PayloadAction } from "@reduxjs/toolkit"
+import type { ICompanyData, ICompanyDetail, ICompanyStatistics, ICompanyWithImagesData } from "../../types/company/CompanyType";
 import companyThunks from "./companyThunk";
 import type { IMyJobFile } from "../../types/myJobFile/myJobFileType";
 import { FileType } from "../../constant/fileType";
@@ -7,12 +7,24 @@ import { message } from "antd";
 
 interface CompanyState {
     companyInfo?: ICompanyData,
-    companies: ICompanyWithImagesData[],
+    companies: {
+        items: ICompanyWithImagesData[];
+        totalItems: number;
+        totalPages: number;
+    },
+    savedCompanies: ICompanyWithImagesData[],
+    requestParams: {
+        page: number;
+        limit: number;
+        companyName?: string;
+    },
     logo?: IMyJobFile,
     coverImage?: IMyJobFile,
     companyImages: IMyJobFile[],
-    companyDetail?: ICompanyDetail
+    companyDetail?: ICompanyDetail,
+    employerStatistics?: ICompanyStatistics,
     loading: boolean,
+    loadingStatistics: boolean,
     submitting: {
         logo: boolean;
         cover: boolean;
@@ -25,6 +37,7 @@ interface CompanyState {
 
 const initialState: CompanyState = {
     loading: false,
+    loadingStatistics: false,
     submitting: {
         logo: false,
         cover: false,
@@ -34,13 +47,44 @@ const initialState: CompanyState = {
     },
     error: undefined,
     companyImages: [],
-    companies: [],
+    companies: {
+        items: [],
+        totalItems: 0,
+        totalPages: 0
+    },
+    savedCompanies: [],
+    requestParams: {
+        page: 1,
+        limit: 10,
+        companyName: undefined
+    },
+    employerStatistics: undefined,
 
 }
 export const companySlice = createSlice({
     name: "Company",
     initialState,
-    reducers: {},
+    reducers: {
+        setRequestParams: (state, action: PayloadAction<Partial<{ page: number; limit: number; companyName?: string }>>) => {
+            state.requestParams = {
+                ...state.requestParams,
+                ...action.payload
+            };
+            if (action.payload.companyName !== undefined) {
+                state.requestParams.page = 1;
+            }
+        },
+        setPage: (state, action: PayloadAction<number>) => {
+            state.requestParams.page = action.payload;
+        },
+        setLimit: (state, action: PayloadAction<number>) => {
+            state.requestParams.limit = action.payload;
+        },
+        setCompanyName: (state, action: PayloadAction<string | undefined>) => {
+            state.requestParams.companyName = action.payload;
+            state.requestParams.page = 1;
+        },
+    },
     extraReducers: (builder) => {
 
         //get employer company
@@ -117,12 +161,23 @@ export const companySlice = createSlice({
             state.loading = true;
         });
         builder.addCase(companyThunks.getCompanies.fulfilled, (state, action) => {
-            state.companies = action.payload
+            if (action.payload && Array.isArray(action.payload.items)) {
+                state.companies.items = action.payload.items;
+                state.companies.totalItems = action.payload.totalItems || 0;
+                state.companies.totalPages = action.payload.totalPages || 0;
+            } else {
+                state.companies.items = [];
+                state.companies.totalItems = 0;
+                state.companies.totalPages = 0;
+            }
             state.loading = false;
         });
         builder.addCase(companyThunks.getCompanies.rejected, (state, action) => {
+            state.companies.items = [];
+            state.companies.totalItems = 0;
+            state.companies.totalPages = 0;
             state.loading = false;
-            message.error((action.payload as { message: string }).message);
+            message.error((action.payload as { message: string })?.message || "Có lỗi xảy ra");
         })
 
         // get company detail
@@ -145,16 +200,58 @@ export const companySlice = createSlice({
         });
         builder.addCase(companyThunks.toggleFollowCompany.fulfilled, (state, action) => {
             const companyId = action.meta.arg;
-            const company = state.companies.find(c => c.company.id === companyId);
+            const isFollowed = action.payload;
+            
+            // Update in companies list
+            const company = state.companies.items.find(c => c.company.id === companyId);
             if (company) {
-                company.isFollowed = action.payload;
+                company.isFollowed = isFollowed;
             }
+            
+            // Update in savedCompanies list
+            if (isFollowed) {
+                // Add to savedCompanies if not already there
+                const existsInSaved = state.savedCompanies.find(c => c.company.id === companyId);
+                if (!existsInSaved && company) {
+                    state.savedCompanies.push({ ...company, isFollowed: true });
+                }
+            } else {
+                // Remove from savedCompanies
+                state.savedCompanies = state.savedCompanies.filter(c => c.company.id !== companyId);
+            }
+            
             state.submitting.followCompany[companyId] = false;
         });
         builder.addCase(companyThunks.toggleFollowCompany.rejected, (state, action) => {
             const companyId = action.meta.arg;
             state.submitting.followCompany[companyId] = false;
             message.error((action.payload as { message: string }).message);
+        })
+
+        // get saved companies
+        builder.addCase(companyThunks.getSavedCompanies.pending, (state) => {
+            state.loading = true;
+        });
+        builder.addCase(companyThunks.getSavedCompanies.fulfilled, (state, action) => {
+            state.savedCompanies = action.payload
+            state.loading = false;
+        });
+        builder.addCase(companyThunks.getSavedCompanies.rejected, (state, action) => {
+            state.loading = false;
+            message.error((action.payload as { message: string }).message);
+        })
+
+        // get employer statistics
+        builder.addCase(companyThunks.getEmployerStatistics.pending, (state) => {
+            state.loadingStatistics = true;
+        });
+        builder.addCase(companyThunks.getEmployerStatistics.fulfilled, (state, action) => {
+            state.employerStatistics = action.payload;
+            state.loadingStatistics = false;
+        });
+        builder.addCase(companyThunks.getEmployerStatistics.rejected, (state, action) => {
+            state.loadingStatistics = false;
+            message.error((action.payload as string) || "Có lỗi xảy ra khi lấy thống kê");
         })
 
     }

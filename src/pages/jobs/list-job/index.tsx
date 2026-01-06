@@ -26,12 +26,16 @@ const JobPage  = () => {
   const featuredCompanies = [];
   const newPosts = [];
   const navigate = useNavigate();
-  const { jobPosts, loading } = useSelector((state: RootState) => state.jobPostStore);
+  const { jobPosts, loading, requestParams } = useSelector((state: RootState) => state.jobPostStore);
   const dispatch = useDispatch<AppDispatch>();
   
   useEffect(() => {
-    dispatch(jobPostThunks.getJobPost());
-  }, [dispatch]);
+    dispatch(jobPostThunks.getJobPost({ 
+      page: requestParams.page, 
+      limit: requestParams.limit,
+      jobName: requestParams.jobName 
+    }));
+  }, [dispatch, requestParams.page, requestParams.limit, requestParams.jobName]);
 
   return (
     <>
@@ -46,13 +50,13 @@ const JobPage  = () => {
 
           {/* Title bên dưới */}
           <Title level={2} className=' font-bold!'>
-            Tuyển dụng <span className='text-[#6A5ACD]!'>{jobPosts.length}</span> việc làm mới nhất năm <span className="text-[#6A5ACD]! font-bold">2024</span>
+            Tuyển dụng <span className='text-[#6A5ACD]!'>{jobPosts.totalItems}</span> việc làm mới nhất năm <span className="text-[#6A5ACD]! font-bold">2024</span>
           </Title>
         </div>
 
 
           <div className="flex justify-between items-center mb-5 mt-5">
-            <div><span className="font-semibold">{jobPosts.length}</span><span> việc làm</span></div> 
+            <div><span className="font-semibold">{jobPosts.totalItems}</span><span> việc làm</span></div> 
             <Select defaultValue="newest" className="w-40">
               <Select.Option value="newest">Mới nhất</Select.Option>
             </Select>
@@ -62,13 +66,13 @@ const JobPage  = () => {
             <div className="flex flex-col items-center justify-center text-gray-400 py-8">
               <Empty description="Đang tải..." />
             </div>
-          ) : jobPosts.length === 0 ? (
+          ) : jobPosts.items.length === 0 ? (
             <div className="flex flex-col items-center justify-center text-gray-400 py-8">
               <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
             </div>
           ) : (
             <div className="flex flex-col gap-4 md:gap-5">
-              {jobPosts.map((job) => (
+              {jobPosts.items.map((job) => (
                 <JobCard 
                   key={job.id} 
                   job={job}

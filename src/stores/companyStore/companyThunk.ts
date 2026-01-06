@@ -1,7 +1,8 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import http from "../../ultils/axios/axiosCustom";
 import type { IMyJobFile } from "../../types/myJobFile/myJobFileType";
-import type { ICompanyDetail, ICompanyWithImagesData } from "../../types/company/CompanyType";
+import type { ICompanyDetail, ICompanyStatistics, ICompanyWithImagesData, IGetCompaniesReqParams } from "../../types/company/CompanyType";
+import type { IPaginationResponse } from "../../types/AppType";
 
 const getEmployerCompany = createAsyncThunk (
     "company/getEmployerCompany",
@@ -64,9 +65,15 @@ const deleteCompanyImage = createAsyncThunk (
 
 const getCompanies = createAsyncThunk (
     "company/getCompanies",
-    async (_, {rejectWithValue}): Promise<ICompanyWithImagesData[]> => {
+    async (params: IGetCompaniesReqParams = { page: 1, limit: 10 }, {rejectWithValue}): Promise<IPaginationResponse<ICompanyWithImagesData>> => {
         try {
-            const response: ICompanyWithImagesData[] = await http.get("/company");
+            const response: IPaginationResponse<ICompanyWithImagesData> = await http.get("/company", {
+                params: {
+                    page: params.page,
+                    limit: params.limit,
+                    companyName: params.companyName || "",
+                }
+            });
             return response;
         } catch (error: any) {
             return rejectWithValue(error.response.data) as any;
@@ -97,7 +104,34 @@ const toggleFollowCompany = createAsyncThunk (
     }
 )
 
+const getSavedCompanies = createAsyncThunk (
+    "company/getSavedCompanies",
+    async (_, {rejectWithValue}): Promise<ICompanyWithImagesData[]> => {
+        try {
+            const response: ICompanyWithImagesData[] = await http.get("/company/saved-companies");
+            return response;
+        } catch (error: any) {
+            return rejectWithValue(error.response.data) as any;
+        }
+    }
+)
 
+const getEmployerStatistics = createAsyncThunk (
+    "company/getEmployerStatistics",
+    async (params: { startDate?: string; endDate?: string } | undefined, {rejectWithValue}): Promise<ICompanyStatistics> => {
+        try {
+            const response: ICompanyStatistics = await http.get("/company/employer-statistics", {
+                params: {
+                    ...(params?.startDate && { startDate: params.startDate }),
+                    ...(params?.endDate && { endDate: params.endDate })
+                }
+            });
+            return response;
+        } catch (error: any) {
+            return rejectWithValue(error.response?.data?.message || "Lỗi khi lấy thống kê") as any;
+        }
+    }
+)
 
 const companyThunks = {
     getEmployerCompany,
@@ -107,7 +141,9 @@ const companyThunks = {
     deleteCompanyImage,
     getCompanies,
     getCompanyDetail,
-    toggleFollowCompany
+    toggleFollowCompany,
+    getSavedCompanies,
+    getEmployerStatistics
 }
 
 export default companyThunks

@@ -11,7 +11,7 @@ import {
   Modal,
   message
 } from 'antd';
-import useDebounce from '../../../ultils/hooks/useDebounce';
+import useDebounce from '../../../../ultils/hooks/useDebounce';
 import {
   EyeOutlined,
   DeleteOutlined,
@@ -19,14 +19,15 @@ import {
 } from '@ant-design/icons';
 import type { ColumnsType } from 'antd/es/table';
 import { useDispatch, useSelector } from 'react-redux';
-import type { AppDispatch, RootState } from '../../../stores';
-import { jobPostActivityActions } from '../../../stores/jobPostActivityStore/jobPostActivityReducer';
-import type { IJobPostActivityDto } from '../../../types/job-post-activity/JobPostActivity';
-import { POSITION_OPTIONS } from '../../../constant/selectOptions';
-import { EResumeType } from '../../../enums/resume/EResumeType';
-import { EJobPostActivityStatus } from '../../../enums/job-post-activity/EJobPostActivity';
-import ViewResumeModal from './components/ViewResumeModal';
+import { useNavigate } from 'react-router-dom';
+import type { AppDispatch, RootState } from '../../../../stores';
+import { jobPostActivityActions } from '../../../../stores/jobPostActivityStore/jobPostActivityReducer';
+import type { IJobPostActivityDto } from '../../../../types/job-post-activity/JobPostActivity';
+import { POSITION_OPTIONS } from '../../../../constant/selectOptions';
+import { EResumeType } from '../../../../enums/resume/EResumeType';
+import { EJobPostActivityStatus } from '../../../../enums/job-post-activity/EJobPostActivity';
 import SendEmailModal from './components/SendEmailModal';
+import ROUTE_PATH from '../../../../routes/routePath';
 
 // Status options cho job activity
 const JOB_ACTIVITY_STATUS_OPTIONS = [
@@ -40,14 +41,13 @@ const JOB_ACTIVITY_STATUS_OPTIONS = [
 
 const ManageResumePage = () => {
   const dispatch = useDispatch<AppDispatch>();
+  const navigate = useNavigate();
   const { 
     jobPostActivities, 
     loading, 
     requestParams
   } = useSelector((state: RootState) => state.jobPostActivityStore);
   
-  const [viewModalVisible, setViewModalVisible] = useState(false);
-  const [selectedActivity, setSelectedActivity] = useState<IJobPostActivityDto | null>(null);
   const [emailModalVisible, setEmailModalVisible] = useState(false);
   const [selectedEmailActivity, setSelectedEmailActivity] = useState<IJobPostActivityDto | null>(null);
   const debouncedSearch = useDebounce(requestParams.search || '', 500);
@@ -82,8 +82,7 @@ const ManageResumePage = () => {
 
   // Xem chi tiết
   const handleView = (activity: IJobPostActivityDto) => {
-    setSelectedActivity(activity);
-    setViewModalVisible(true);
+    navigate(ROUTE_PATH.EMPLOYER_RESUME_DETAIL.replace(':jobPostActivityId', activity.id.toString()));
   };
 
   // Xóa
@@ -112,13 +111,18 @@ const ManageResumePage = () => {
   };
 
   // Xử lý khi gửi email từ modal
-  const handleEmailSend = (values: { to: string; subject: string; content: string }) => {
+  const handleEmailSend = async (values: { to: string; subject: string; content: string }) => {
     if (selectedEmailActivity) {
-      // TODO: Implement send email API với values
-      console.log('Sending email:', values);
-      message.success('Đã gửi email thành công');
-      setEmailModalVisible(false);
-      setSelectedEmailActivity(null);
+      try {
+        await dispatch(jobPostActivityActions.sendEmailToCandidate({
+          jobPostActivityId: selectedEmailActivity.id,
+          ...values
+        })).unwrap();
+        setEmailModalVisible(false);
+        setSelectedEmailActivity(null);
+      } catch (error) {
+        console.error('Error sending email:', error);
+      }
     }
   };
 
@@ -186,6 +190,18 @@ const ManageResumePage = () => {
       render: (status) => getStatusTag(status),
     },
     {
+      title: 'Email',
+      dataIndex: 'isSentMail',
+      key: 'isSentMail',
+      width: 100,
+      align: 'center',
+      render: (isSentMail: boolean) => (
+        <Tag color={isSentMail ? 'green' : 'default'}>
+          {isSentMail ? 'Đã gửi' : 'Chưa gửi'}
+        </Tag>
+      ),
+    },
+    {
       title: 'Hành động',
       key: 'action',
       width: 150,
@@ -201,7 +217,7 @@ const ManageResumePage = () => {
               onClick={() => handleView(record)}
             />
           </Tooltip>
-          <Tooltip title="Gửi email">
+          <Tooltip title={record.isSentMail ? "Đã gửi email" : "Gửi email"}>
             <Button 
               type="text" 
               size="small" 
@@ -285,18 +301,6 @@ const ManageResumePage = () => {
           size="middle"
         />
       </div>
-
-      {/* Modal xem chi tiết */}
-      <ViewResumeModal
-        open={viewModalVisible}
-        activity={selectedActivity}
-        onClose={() => {
-          setViewModalVisible(false);
-          setSelectedActivity(null);
-        }}
-        onSendEmail={handleSendEmail}
-        onDelete={handleDelete}
-      />
 
       {/* Modal gửi email */}
       <SendEmailModal

@@ -30,7 +30,7 @@ export const roleSlice = createSlice({
             state.loading = true;
         });
         builder.addCase(roleThunks.getAllFunctions.fulfilled, (state, action) => {
-            state.functions = action.payload.data;
+            state.functions = action.payload;
             state.loading = false;
         });
         builder.addCase(roleThunks.getAllFunctions.rejected, (state, action) => {
@@ -43,7 +43,7 @@ export const roleSlice = createSlice({
             state.loading = true;
         })
         builder.addCase(roleThunks.getAllRoles.fulfilled, (state, action) => {
-            state.roles = action.payload.data;
+            state.roles = action.payload;
             state.loading = false;
         })
         builder.addCase(roleThunks.getAllRoles.rejected, (state, action) => {
@@ -56,9 +56,9 @@ export const roleSlice = createSlice({
             state.isSubmiting = true;
         })
         builder.addCase(roleThunks.createRole.fulfilled, (state, action) => {
-            state.roles?.unshift(action.payload.data)
+            state.roles?.unshift(action.payload)
             state.isSubmiting = false
-            toast.success(action.payload.message)
+            toast.success("Tạo vai trò thành công")
         })
         builder.addCase(roleThunks.createRole.rejected, (state, action) => {
             state.isSubmiting = false;
@@ -70,9 +70,9 @@ export const roleSlice = createSlice({
             state.isSubmiting = true;
         });
         builder.addCase(roleThunks.updateRole.fulfilled, (state, action) => {
-            state.roles = state.roles?.map((role) => (role.id === action.payload.data.id ? action.payload.data : role));
+            state.roles = state.roles?.map((role) => (role.id === action.payload.id ? action.payload : role));
             state.isSubmiting = false;
-            toast.success(action.payload.message)
+            toast.success("Cập nhật vai trò thành công")
         });
         builder.addCase(roleThunks.updateRole.rejected, (state, action) => {
             state.isSubmiting = false
@@ -86,7 +86,7 @@ export const roleSlice = createSlice({
         builder.addCase(roleThunks.deleteRole.fulfilled, (state, action) => {   
             state.roles = state.roles?.filter((role) => role.id !== action.meta.arg);   
             state.isSubmiting = false;
-            toast.success(action.payload.message)
+            toast.success("Xóa vai trò thành công")
 
         });
         builder.addCase(roleThunks.deleteRole.rejected, (state, action) => {
@@ -99,9 +99,10 @@ export const roleSlice = createSlice({
             state.loading = true;
         })
         builder.addCase(roleThunks.updateRolePermissions.fulfilled, (state, action) => {   
-            state.roles = state.roles?.map((role) => (role.id === action.payload.data.id ? action.payload.data : role));
+            // Note: updateRolePermissions returns boolean, not role data
+            // If you need to update the role in state, you should refetch it
             state.loading = false;
-            toast.success(action.payload.message)
+            toast.success("Cập nhật quyền thành công")
 
         });
         builder.addCase(roleThunks.updateRolePermissions.rejected, (state, action) => {

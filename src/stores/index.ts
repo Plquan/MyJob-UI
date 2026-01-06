@@ -11,6 +11,7 @@ import { companySlice } from "./companyStore/companyReducer";
 import { jobPostSlice } from "./jobPostStore/jobPostReducer";
 import { jobPostActivitySlice } from "./jobPostActivityStore/jobPostActivityReducer";
 import chatReducer from "./chatStore/chatReducer";
+import { candidateSlice } from "./candidateStore/candidateReducer";
 
 export const store = configureStore({
   reducer: {
@@ -26,6 +27,7 @@ export const store = configureStore({
     jobPostStore: jobPostSlice.reducer,
     jobPostActivityStore: jobPostActivitySlice.reducer,
     chatStore: chatReducer,
+    candidateStore: candidateSlice.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

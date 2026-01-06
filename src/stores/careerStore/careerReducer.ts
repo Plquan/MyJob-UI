@@ -25,7 +25,7 @@ export const careerSlice = createSlice({
             state.loading = true;
         });
         builder.addCase(careerThunks.getAllCareers.fulfilled, (state, action) => {
-            state.careers = action.payload.data;
+            state.careers = action.payload;
             state.loading = false;
         });
         builder.addCase(careerThunks.getAllCareers.rejected, (state, action) => {

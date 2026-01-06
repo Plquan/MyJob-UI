@@ -1,154 +1,195 @@
-import { Card, Row, Col } from 'antd';
-import { FileTextOutlined, EyeOutlined, UserOutlined, CheckCircleOutlined } from '@ant-design/icons';
-import { Pie, Line, Bar } from '@ant-design/plots';
+import { Card, Row, Col, Spin, DatePicker, Space } from 'antd';
+import { FileTextOutlined, ClockCircleOutlined, UserOutlined, CloseCircleOutlined } from '@ant-design/icons';
+import { Column, Pie } from '@ant-design/charts';
+import { useEffect, useMemo, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import type { RootState, AppDispatch } from '../../../stores';
+import companyThunks from '../../../stores/companyStore/companyThunk';
+import type { Dayjs } from 'dayjs';
 
-const stats = [
-  {
-    title: 'Tin tuyển dụng đang đăng',
-    value: 4,
-    icon: <FileTextOutlined className="text-2xl text-gray-500" />,
-  },
-  {
-    title: 'Lượt xem tin',
-    value: 30,
-    icon: <EyeOutlined className="text-2xl text-gray-500" />,
-  },
-  {
-    title: 'Ứng viên mới',
-    value: 1,
-    icon: <UserOutlined className="text-2xl text-gray-500" />,
-  },
-  {
-    title: 'CV đã duyệt',
-    value: 1,
-    icon: <CheckCircleOutlined className="text-2xl text-gray-500" />,
-  },
-];
-
-const lineData = [
-  { month: 'T1', view: 150, apply: 120 },
-  { month: 'T2', view: 200, apply: 180 },
-  { month: 'T3', view: 170, apply: 160 },
-  { month: 'T4', view: 300, apply: 290 },
-  { month: 'T5', view: 250, apply: 240 },
-  { month: 'T6', view: 270, apply: 260 },
-];
-
-const pieData = [
-  { type: 'Đang hiển thị', value: 60 },
-  { type: 'Chờ duyệt', value: 25 },
-  { type: 'Hết hạn', value: 15 },
-];
-
-const barData = [
-  { status: 'Chờ duyệt', value: 10 },
-  { status: 'Đã duyệt', value: 20 },
-  { status: 'Không đạt', value: 7 },
-];
-
-const recentActivities = [
-  { text: 'Ứng viên mới ứng tuyển vị trí Frontend Developer', time: '2 giờ trước' },
-  { text: 'Đăng tin tuyển dụng mới: "Senior Backend Developer"', time: '3 giờ trước' },
-];
+const { RangePicker } = DatePicker;
 
 export default function EmployerDashboard() {
+  const dispatch = useDispatch<AppDispatch>();
+  const { employerStatistics, loadingStatistics } = useSelector((state: RootState) => state.companyStore);
+  const [dateRange, setDateRange] = useState<[Dayjs | null, Dayjs | null] | null>(null);
+
+  useEffect(() => {
+    const params = dateRange 
+      ? {
+          startDate: dateRange[0]?.format('YYYY-MM-DD'),
+          endDate: dateRange[1]?.format('YYYY-MM-DD')
+        }
+      : undefined;
+    dispatch(companyThunks.getEmployerStatistics(params));
+  }, [dispatch, dateRange]);
+
+  const stats = useMemo(() => [
+    {
+      title: 'Tất cả tin tuyển dụng',
+      value: employerStatistics?.totalJobPosts || 0,
+      icon: <FileTextOutlined />,
+      color: 'border-green-200',
+      textColor: 'text-green-600',
+    },
+    {
+      title: 'Tin tuyển dụng chờ duyệt',
+      value: employerStatistics?.pendingJobPosts || 0,
+      icon: <ClockCircleOutlined />,
+      color: 'border-blue-200',
+      textColor: 'text-blue-500',
+    },
+    {
+      title: 'Tin tuyển dụng hết hạn',
+      value: employerStatistics?.expiredJobPosts || 0,
+      icon: <CloseCircleOutlined />,
+      color: 'border-purple-200',
+      textColor: 'text-purple-600',
+    },
+    {
+      title: 'Ứng viên ứng tuyển',
+      value: employerStatistics?.totalApplications || 0,
+      icon: <UserOutlined />,
+      color: 'border-red-200',
+      textColor: 'text-red-500',
+    },
+  ], [employerStatistics]);
+
+  const columnConfig = useMemo(() => {
+    if (!employerStatistics?.applicationsMonthly) return { data: [] };
+
+    const data: any[] = [];
+    employerStatistics.applicationsMonthly.forEach(item => {
+      data.push({
+        month: item.month,
+        value: item.year2024,
+        category: '2024'
+      });
+      data.push({
+        month: item.month,
+        value: item.year2023,
+        category: '2023'
+      });
+    });
+
+    return {
+      data,
+      xField: 'month',
+      yField: 'value',
+      seriesField: 'category',
+      isGroup: true,
+      color: ['#5B8FF9', '#5AD8A6'],
+      columnStyle: {
+        radius: [4, 4, 0, 0],
+      },
+      legend: {
+        position: 'top-right' as const,
+      },
+      label: false,
+      tooltip: {
+        shared: true,
+      },
+      xAxis: {
+        label: {
+          autoRotate: false,
+          autoHide: true,
+        },
+      },
+    };
+  }, [employerStatistics]);
+
+  const pieConfig = useMemo(() => {
+    if (!employerStatistics?.applicationsByStatus) return { data: [] };
+
+    const data = employerStatistics.applicationsByStatus.map(item => ({
+      type: item.statusName,
+      value: item.count
+    }));
+
+    return {
+      data,
+      angleField: 'value',
+      colorField: 'type',
+      color: ['#5B8FF9', '#5AD8A6', '#5D7092', '#F6BD16', '#E8684A', '#6DC8EC', '#9270CA', '#FF9D4D', '#269A99', '#FF99C3'],
+      radius: 0.9,
+      label: false,
+      legend: {
+        position: 'right' as const,
+        offsetX: -10,
+        itemName: {
+          style: {
+            fontSize: 14,
+          },
+        },
+      },
+      interactions: [
+        {
+          type: 'element-selected',
+        },
+        {
+          type: 'element-active',
+        },
+      ],
+    };
+  }, [employerStatistics]);
+
+  if (loadingStatistics) {
+    return (
+      <div className="flex justify-center items-center min-h-[400px]">
+        <Spin size="large" />
+      </div>
+    );
+  }
+
+  const handleDateRangeChange = (dates: [Dayjs | null, Dayjs | null] | null) => {
+    setDateRange(dates);
+  };
+
   return (
-      <Card title="Tổng quan">
-        <Row gutter={16} className="mb-4">
-          {stats.map((item: any) => (
-            <Col xs={24} sm={12} md={6} key={item.title}>
-              <Card>
-                <div className="flex items-center gap-4">
-                  {item.icon}
-                  <div>
-                    <div className="text-gray-500 text-xs mb-1">{item.title}</div>
-                    <div className="text-xl font-bold">{item.value}</div>
-                  </div>
+    <Card 
+      title="Tổng quan"
+      extra={
+        <Space>
+          <RangePicker
+            value={dateRange}
+            onChange={handleDateRangeChange}
+            format="DD/MM/YYYY"
+            placeholder={['Từ ngày', 'Đến ngày']}
+            allowClear
+            style={{ width: 230 }}
+          />
+        </Space>
+      }
+    >
+      <Row gutter={[24, 24]} className="mb-6">
+        {stats.map((item: any) => (
+          <Col xs={24} sm={12} lg={6} key={item.title}>
+            <Card className={`rounded-xl ${item.color}`}>
+              <div className="flex flex-col">
+                <span className="text-sm text-gray-500 mb-2">{item.title}</span>
+                <div className="flex items-center gap-3">
+                  <span className={`text-2xl ${item.textColor}`}>{item.icon}</span>
+                  <span className={`text-xl font-semibold ${item.textColor}`}>{item.value}</span>
                 </div>
-              </Card>
-            </Col>
-          ))}
-        </Row>
-        {/* Chart row */}
-        <Row gutter={16} className="mb-4">
-          <Col xs={24} md={16}>
-            <Card  title="Thống kê lượt xem và ứng tuyển">
-              <Line
-                data={[
-                  ...lineData.map((d) => ({ month: d.month, value: d.view, type: 'Lượt xem' })),
-                  ...lineData.map((d) => ({ month: d.month, value: d.apply, type: 'Lượt ứng tuyển' })),
-                ]}
-                xField="month"
-                yField="value"
-                seriesField="type"
-                height={220}
-                autoFit
-                legend={{ position: 'top' }}
-                color={["#1677ff", "#52c41a"]}
-                meta={{
-                  view: { alias: 'Lượt xem' },
-                  apply: { alias: 'Lượt ứng tuyển' },
-                }}
-                tooltip={{
-                  customItems: (items: any) => items.map((item: any, idx: number) => ({ ...item, name: idx === 0 ? 'Lượt xem' : 'Lượt ứng tuyển' })),
-                }}
-                xAxis={{
-                  label: { style: { fontSize: 12 } },
-                }}
-                yAxis={{
-                  label: { style: { fontSize: 12 } },
-                }}
-              />
+              </div>
             </Card>
           </Col>
-          <Col xs={24} md={8}>
-            <Card title="Trạng thái tin tuyển dụng">
-              <Pie
-                data={pieData}
-                angleField="value"
-                colorField="type"
-                radius={0.9}
-                height={220}
-                label={{
-                  type: 'spider',
-                  content: '{name}: {percentage}',
-                }}
-                legend={{ position: 'bottom' }}
-                color={["#1677ff", "#52c41a", "#faad14"]}
-              />
-            </Card>
-          </Col>
-        </Row>
-        {/* Bottom row */}
-        <Row gutter={16}>
-          <Col xs={24} md={12}>
-            <Card title="Trạng thái ứng tuyển">
-              <Bar
-                data={barData}
-                xField="value"
-                yField="status"
-                seriesField="status"
-                height={180}
-                color="#722ed1"
-                legend={false}
-                barWidthRatio={0.5}
-              />
-            </Card>
-          </Col>
-          <Col xs={24} md={12}>
-            <Card title="Hoạt động gần đây">
-              <ul className="text-sm text-gray-700 space-y-2">
-                {recentActivities.map((a: any, idx: number) => (
-                  <li key={idx} className="flex items-center gap-2">
-                    <FileTextOutlined className="text-blue-500" />
-                    <span>{a.text}</span>
-                    <span className="text-xs text-gray-400 ml-auto">{a.time}</span>
-                  </li>
-                ))}
-              </ul>
-            </Card>
-          </Col>
-        </Row>
-      </Card>
+        ))}
+      </Row>
+      {/* Charts row */}
+      <Row gutter={16}>
+        <Col xs={24} md={12}>
+          <Card title="Biểu đồ ứng viên">
+            <Column {...columnConfig} height={280} />
+          </Card>
+        </Col>
+        <Col xs={24} md={12}>
+          <Card title="Biểu đồ tuyển dụng">
+            <Pie {...pieConfig} height={280} />
+          </Card>
+        </Col>
+      </Row>
+    </Card>
   );
 }
+

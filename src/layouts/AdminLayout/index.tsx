@@ -1,6 +1,6 @@
 import { Outlet } from "react-router-dom";
-import AdminSidebar from "../components/Sidebar/AdminSidebar";
-import AdminHeader from "../components/headers/AdminHeader";
+import AdminSidebar from "./components/Sidebar";
+import AdminHeader from "./components/Header";
 import { Card } from "antd";
 
 

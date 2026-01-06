@@ -25,11 +25,11 @@ export interface IMessage {
 export interface IUser {
     id: number;
     email: string;
-    avatar?: {
-        url: string;
-    };
     candidate?: {
         fullName: string;
+        avatar?: {
+            url: string;
+        };
     };
     company?: {
         companyName: string;

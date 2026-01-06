@@ -1,15 +1,20 @@
 /*
 MyJob Recruitment System - Part of MyJob Platform
-
-Author: Pham Le Quan (updated)
-Email: phamlequan118@gmail.com
-Copyright (c) 2025 Pham Le Quan
-
-License: MIT License
+Updated Design: Modern Minimalist Two-Column
 */
 
 import React from 'react';
-import { Page, Text, View, Document, Image, StyleSheet, Font } from '@react-pdf/renderer';
+import {
+  Page,
+  Text,
+  View,
+  Document,
+  Image,
+  StyleSheet,
+  Font,
+  Svg,
+  Path,
+} from '@react-pdf/renderer';
 import env from '../../constant/env';
 import type { IOnlineResume } from '../../types/resume/ResumeType';
 import { getLabelFromValue } from '../../ultils/functions/getLabelFromValue';
@@ -19,238 +24,254 @@ import {
   EXPERIENCE_OPTIONS,
   WORKPLACE_OPTIONS,
   JOBTYPE_OPTIONS,
-  MARTIALSTATUS_OPTIONS,
-  GENDER_OPTIONS,
   LANGUAGE_OPTIONS
 } from '../../constant/selectOptions';
 
 const DEFAULT_AVATAR = env.DEFAULT_AVATAR;
+const DEFAULT_THEME_COLOR = '#2B3A55'; // Màu mặc định sang trọng hơn (Deep Navy)
+const LOGO_IMAGE = '/assets/vinhuni.png';
 
+// Font registration giữ nguyên
 Font.register({
-  family: 'FZ Poppins',
+  family: 'Roboto',
   fonts: [
     { src: '/fonts/FZ Poppins-Regular.ttf', fontWeight: 400 },
-    { src: '/fonts/FZ Poppins-Bold.ttf', fontWeight: 700 },
-    { src: '/fonts/FZ Poppins-Italic.ttf', fontWeight: 400, fontStyle: 'italic' },
-    { src: '/fonts/FZ Poppins-Black.ttf', fontWeight: 900 },
     { src: '/fonts/FZ Poppins-Medium.ttf', fontWeight: 500 },
-    { src: '/fonts/FZ Poppins-SemiBold.ttf', fontWeight: 600 },
-    { src: '/fonts/FZ Poppins-Light.ttf', fontWeight: 300 },
+    { src: '/fonts/FZ Poppins-Bold.ttf', fontWeight: 700 },
+    { src: '/fonts/FZ Poppins-Black.ttf', fontWeight: 900 },
+    { src: '/fonts/FZ Poppins-Italic.ttf', fontWeight: 400, fontStyle: 'italic' },
   ],
 });
 
-const styles = StyleSheet.create({
-  page: {
-    padding: 0,
-    backgroundColor: '#f5f5f5',
-    fontFamily: 'FZ Poppins',
-    fontSize: 10,
-    color: '#333',
-    paddingTop: 30,
-    paddingBottom:30
-  },
-  
-  // Header với avatar và thông tin cơ bản
-  header: {
-    backgroundColor: '#4a5568',
-    padding: '20 30',
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 20,
-    margin: '0 20 0 20',
-  },
-  avatar: {
-    width: 70,
-    height: 70,
-    objectFit: 'cover',
-  },
-  headerInfo: {
-    flex: 1,
-  },
-  name: { 
-    fontSize: 16, 
-    fontWeight: 600, 
-    color: '#fff',
-    marginBottom: 3,
-  },
-  emailHeader: {
-    fontSize: 11,
-    fontStyle: 'italic',
-    color: '#cbd5e0',
-    marginLeft: 8,
-  },
-  position: { 
-    fontSize: 12, 
-    fontWeight: 400, 
-    color: '#e2e8f0',
-    marginBottom: 2,
-  },
-  updated: { 
-    fontSize: 10, 
-    color: '#cbd5e0',
-  },
-
-  // Section container
-  section: {
-    backgroundColor: '#fff',
-    margin: '0 20 10 20',
-  },
-
-  // Section header
-  sectionHeader: {
-    backgroundColor: '#4a5568',
-    padding: '12 20',
-  },
-  sectionTitle: {
-    fontSize: 12,
-    fontWeight: 600,
-    color: '#fff',
-  },
-
-  // Section content
-  sectionContent: {
-    padding: '15 20',
-  },
-
-  // Grid layout for info (3 columns)
-  infoGrid: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-  },
-  infoCol: {
-    width: '33.33%',
-    marginBottom: 12,
-    paddingRight: 10,
-  },
-  infoLabel: {
-    fontSize: 10,
-    fontWeight: 500,
-    color: '#2d3748',
-    marginBottom: 3,
-  },
-  infoValue: {
-    fontSize: 10,
-    color: '#4a5568',
-    lineHeight: 1.3,
-  },
-
-  // Goal text
-  goalText: {
-    fontSize: 10,
-    color: '#4a5568',
-    lineHeight: 1.5,
-    textAlign: 'justify',
-  },
-
-  // Experience item
-  experienceItem: {
-    marginBottom: 15,
-    paddingBottom: 12,
-  },
-  experienceTitle: {
-    fontSize: 11,
-    fontWeight: 600,
-    color: '#2d3748',
-    marginBottom: 3,
-  },
-  experienceCompany: {
-    fontSize: 10,
-    fontWeight: 400,
-    color: '#4a5568',
-    marginBottom: 3,
-  },
-  experienceDate: {
-    fontSize: 10,
-    color: '#718096',
-    marginBottom: 6,
-  },
-  experienceDesc: {
-    fontSize: 10,
-    color: '#4a5568',
-    lineHeight: 1.4,
-  },
-
-  // Education item
-  educationItem: {
-    marginBottom: 10,
-  },
-  educationText: {
-    fontSize: 10,
-    color: '#4a5568',
-    lineHeight: 1.4,
-  },
-
-  // Last item (no margin bottom)
-  lastItem: {
-    marginBottom: 0,
-    paddingBottom: 0,
-  },
-
-  // Experience/Education Block (individual item container)
-  itemBlock: {
-    backgroundColor: '#fff',
-    margin: '0 20 5 20',
-  },
-
-  // Item content (for individual blocks)
-  itemContent: {
-    padding: '8 12',
-  },
-
-  // Footer text at bottom right of each page
-  pageFooter: {
-    position: 'absolute',
-    bottom: 10,
-    right: 40,
-    fontSize: 10,
-    color: '#bbb',
-  },
-  dotFilled: {
-    color: '#222',
-    fontSize: 30,
-    marginBottom:4,
-    marginRight: 1,
-    fontFamily: 'Times-Roman',
-  },
-  dotEmpty: {
-    color: '#bbb',
-    fontSize: 30,
-    marginBottom:4,
-    marginRight: 1,
-    fontFamily: 'Times-Roman',
-  },
-  dotRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginTop: 2,
-    marginBottom: 2,
-  },
-});
-
-const formatDate = (dateInput: string | Date) => {
-  if (!dateInput) return '';
-  const date = typeof dateInput === 'string' ? new Date(dateInput) : dateInput;
-  return `${date.getDate().toString().padStart(2, '0')}/${(date.getMonth() + 1)
-    .toString()
-    .padStart(2, '0')}/${date.getFullYear()}`;
+interface CVPdfDocumentProps {
+  resume: IOnlineResume;
+  themeColor?: string;
+  avatarUrl?: string;
+  email?: string;
 }
 
-const renderDot = (level: number) => {
-  const max = 5;
-  const dots = [];
-  for (let i = 0; i < max; i++) {
-    dots.push(
-      <Text key={i} style={i < level ? styles.dotFilled : styles.dotEmpty}>
-        •
-      </Text>
-    );
-  }
-  return <View style={styles.dotRow}>{dots}</View>;
-};
+const CVPdfDocument: React.FC<CVPdfDocumentProps> = ({ resume, themeColor, avatarUrl, email }) => {
+  const primaryColor = themeColor || DEFAULT_THEME_COLOR;
+  const secondaryColor = '#555555';
+  const lightBg = '#F4F6F8'; // Màu nền nhẹ cho cột trái
 
+  const styles = StyleSheet.create({
+    page: {
+      flexDirection: 'row',
+      backgroundColor: '#FFFFFF',
+      fontFamily: 'Roboto',
+    },
+    // --- Left Column (Sidebar) ---
+    leftColumn: {
+      width: '32%',
+      backgroundColor: lightBg,
+      padding: '30 20',
+      minHeight: '100%',
+      color: '#333',
+    },
+    avatarContainer: {
+      alignItems: 'center',
+      marginBottom: 20,
+    },
+    avatar: {
+      width: 100,
+      height: 100,
+      borderRadius: 50,
+      objectFit: 'cover',
+      border: `3px solid ${primaryColor}`,
+    },
+    contactSection: {
+      marginBottom: 25,
+      paddingBottom: 20,
+      borderBottom: `1px solid #E0E0E0`,
+    },
+    sectionTitleSmall: {
+      fontSize: 12,
+      fontWeight: 700,
+      color: primaryColor,
+      textTransform: 'uppercase',
+      marginBottom: 10,
+      letterSpacing: 1,
+    },
+    contactRow: {
+      marginBottom: 8,
+    },
+    contactLabel: {
+      fontSize: 9,
+      color: '#777',
+      marginBottom: 2,
+    },
+    contactValue: {
+      fontSize: 10,
+      fontWeight: 500,
+      color: '#333',
+      wordBreak: 'break-all',
+    },
+    // Skills in Sidebar
+    skillItem: {
+      marginBottom: 8,
+    },
+    skillName: {
+      fontSize: 10,
+      fontWeight: 500,
+      marginBottom: 3,
+    },
+    progressBarBg: {
+      height: 4,
+      backgroundColor: '#D1D5DB',
+      borderRadius: 2,
+    },
+    progressBarFill: {
+      height: '100%',
+      backgroundColor: primaryColor,
+      borderRadius: 2,
+    },
+    // Languages in Sidebar
+    langItem: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      marginBottom: 6,
+      alignItems: 'center',
+    },
+    langName: {
+      fontSize: 10,
+      fontWeight: 500,
+    },
+    langLevel: {
+      fontSize: 9,
+      color: '#666',
+      fontStyle: 'italic',
+    },
 
-const CVPdfDocument: React.FC<{ resume: IOnlineResume }> = ({ resume }) => {
-  // Đảm bảo các trường là mảng, tránh lỗi undefined
+    // --- Right Column (Main Content) ---
+    rightColumn: {
+      width: '68%',
+      padding: '30 30',
+    },
+    headerWrapper: {
+      marginBottom: 25,
+      borderBottom: `2px solid ${primaryColor}`,
+      paddingBottom: 15,
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'flex-start'
+    },
+    headerText: {
+      flex: 1,
+    },
+    fullName: {
+      fontSize: 24,
+      fontWeight: 900,
+      color: primaryColor,
+      textTransform: 'uppercase',
+      marginBottom: 4,
+      letterSpacing: 0.5,
+    },
+    positionTitle: {
+      fontSize: 14,
+      fontWeight: 500,
+      color: secondaryColor,
+      textTransform: 'uppercase',
+      letterSpacing: 1.5,
+    },
+    logo: {
+      width: 40,
+      height: 40,
+      marginLeft: 15,
+      objectFit: 'contain'
+    },
+    mainSection: {
+      marginBottom: 20,
+    },
+    mainSectionTitle: {
+      fontSize: 14,
+      fontWeight: 700,
+      color: primaryColor,
+      textTransform: 'uppercase',
+      marginBottom: 12,
+      borderBottom: `1px solid #E0E0E0`,
+      paddingBottom: 4,
+      letterSpacing: 1,
+    },
+    // Grid for General Info
+    gridContainer: {
+      flexDirection: 'row',
+      flexWrap: 'wrap',
+      gap: 10,
+    },
+    gridItem: {
+      width: '48%',
+      flexDirection: 'row',
+      marginBottom: 4,
+    },
+    gridLabel: {
+      fontSize: 10,
+      color: '#666',
+      width: 70,
+    },
+    gridValue: {
+      fontSize: 10,
+      fontWeight: 500,
+      color: '#333',
+      flex: 1,
+    },
+    // Experience & Education Items
+    itemWrapper: {
+      marginBottom: 12,
+    },
+    itemHeader: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      marginBottom: 2,
+    },
+    itemTitle: {
+      fontSize: 12,
+      fontWeight: 700,
+      color: '#222',
+    },
+    itemDate: {
+      fontSize: 9,
+      color: primaryColor,
+      fontWeight: 500,
+      backgroundColor: `${primaryColor}15`, // 15% opacity
+      padding: '2 6',
+      borderRadius: 4,
+    },
+    itemSubtitle: {
+      fontSize: 11,
+      fontWeight: 500,
+      color: secondaryColor,
+      marginBottom: 4,
+      fontStyle: 'italic',
+    },
+    itemDescription: {
+      fontSize: 10,
+      color: '#444',
+      lineHeight: 1.5,
+      textAlign: 'justify',
+    },
+    tagContainer: {
+      flexDirection: 'row',
+      flexWrap: 'wrap',
+      gap: 6,
+      marginTop: 4,
+    },
+    tag: {
+      fontSize: 8,
+      backgroundColor: '#E5E7EB',
+      padding: '2 6',
+      borderRadius: 4,
+      color: '#4B5563',
+    },
+  });
+
+  const formatDate = (dateString: string | Date | undefined) => {
+    if (!dateString) return '';
+    const date = new Date(dateString);
+    return `${date.getMonth() + 1}/${date.getFullYear()}`;
+  };
+
   const experiences = resume.experiences || [];
   const educations = resume.educations || [];
   const certificates = resume.certificates || [];
@@ -260,233 +281,169 @@ const CVPdfDocument: React.FC<{ resume: IOnlineResume }> = ({ resume }) => {
   return (
     <Document>
       <Page size="A4" style={styles.page}>
-        {/* Header */}
-        <View style={styles.header}>
-          <Image src={resume.userInfo?.avatar?.url || DEFAULT_AVATAR} style={styles.avatar} />
-          <View style={styles.headerInfo}>
-            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
-              <Text style={styles.name}>{resume.candidate?.fullName}</Text>
-              <Text style={styles.emailHeader}>{resume.candidate?.email}</Text>
-            </View>
-            <Text style={styles.position}>{resume.resume?.title}</Text>
-            <Text style={styles.updated}>Thời gian cập nhật: {formatDate(String(resume.resume?.updatedAt))}</Text>
+        
+        {/* === LEFT COLUMN (SIDEBAR) === */}
+        <View style={styles.leftColumn}>
+          {/* Avatar */}
+          <View style={styles.avatarContainer}>
+            <Image style={styles.avatar} src={avatarUrl || DEFAULT_AVATAR} />
           </View>
-        </View>
 
-        {/* Thông tin cá nhân */}
-        <View style={styles.section}>
-          <View style={styles.sectionHeader}>
-            <Text style={styles.sectionTitle}>Thông tin cá nhân</Text>
-          </View>
-          <View style={styles.sectionContent}>
-            <View style={styles.infoGrid}>
-              <View style={styles.infoCol}>
-                <Text style={styles.infoLabel}>Số điện thoại</Text>
-                <Text style={styles.infoValue}>{resume.candidate?.phone}</Text>
-              </View>
-              <View style={styles.infoCol}>
-                <Text style={styles.infoLabel}>Giới tính</Text>
-                <Text style={styles.infoValue}>{getLabelFromValue(GENDER_OPTIONS, resume.candidate?.gender)}</Text>
-              </View>
-              <View style={styles.infoCol}>
-                <Text style={styles.infoLabel}>Ngày sinh</Text>
-                <Text style={styles.infoValue}>{formatDate(String(resume.candidate?.birthday)) }</Text>
-              </View>
-              <View style={styles.infoCol}>
-                <Text style={styles.infoLabel}>Tình trạng hôn nhân</Text>
-                <Text style={styles.infoValue}>{getLabelFromValue(MARTIALSTATUS_OPTIONS, resume.candidate?.maritalStatus)}</Text>
-              </View>
-              <View style={styles.infoCol}>
-                <Text style={styles.infoLabel}>Tỉnh/Thành phố</Text>
-                <Text style={styles.infoValue}>{resume.candidate?.province?.name}</Text>
-              </View>
-              <View style={styles.infoCol}>
-                <Text style={styles.infoLabel}>Quận/Huyện</Text>
-                <Text style={styles.infoValue}>{resume.candidate?.district?.name }</Text>
-              </View>
-              <View style={styles.infoCol}>
-                <Text style={styles.infoLabel}>Địa chỉ</Text>
-                <Text style={styles.infoValue}>{resume.candidate?.address}</Text>
-              </View>
+          {/* Contact Info */}
+          <View style={styles.contactSection}>
+            <Text style={styles.sectionTitleSmall}>Liên hệ</Text>
+            
+            <View style={styles.contactRow}>
+              <Text style={styles.contactLabel}>Điện thoại</Text>
+              <Text style={styles.contactValue}>{resume?.candidate?.phone || "---"}</Text>
+            </View>
+            <View style={styles.contactRow}>
+              <Text style={styles.contactLabel}>Email</Text>
+              <Text style={styles.contactValue}>{email || "---"}</Text>
+            </View>
+            <View style={styles.contactRow}>
+              <Text style={styles.contactLabel}>Cập nhật lần cuối</Text>
+              <Text style={styles.contactValue}>{formatDate(resume?.resume?.updatedAt)}</Text>
             </View>
           </View>
+
+          {/* Professional Skills (Sidebar) */}
+          {skills.length > 0 && (
+            <View style={styles.contactSection}>
+              <Text style={styles.sectionTitleSmall}>Kỹ năng</Text>
+              {skills.map((skill, index) => (
+                <View key={index} style={styles.skillItem}>
+                  <Text style={styles.skillName}>{skill.name}</Text>
+                  <View style={styles.progressBarBg}>
+                    <View style={[styles.progressBarFill, { width: `${(skill.level / 5) * 100}%` }]} />
+                  </View>
+                </View>
+              ))}
+            </View>
+          )}
+
+          {/* Languages (Sidebar) */}
+          {languages.length > 0 && (
+            <View style={styles.contactSection}>
+              <Text style={styles.sectionTitleSmall}>Ngôn ngữ</Text>
+              {languages.map((lang, index) => (
+                <View key={index} style={styles.langItem}>
+                  <Text style={styles.langName}>{getLabelFromValue(LANGUAGE_OPTIONS, lang?.language)}</Text>
+                  <Text style={styles.langLevel}>{lang.level}/5</Text>
+                </View>
+              ))}
+            </View>
+          )}
         </View>
 
-        {/* Thông tin chung */}
-        <View style={styles.section}>
-          <View style={styles.sectionHeader}>
-            <Text style={styles.sectionTitle}>Thông tin chung</Text>
+        {/* === RIGHT COLUMN (MAIN CONTENT) === */}
+        <View style={styles.rightColumn}>
+          
+          {/* Header */}
+          <View style={styles.headerWrapper}>
+            <View style={styles.headerText}>
+              <Text style={styles.fullName}>{resume?.candidate?.fullName}</Text>
+              <Text style={styles.positionTitle}>{resume?.resume?.title}</Text>
+            </View>
+            {/* Logo ở góc phải header */}
+            <Image style={styles.logo} src={LOGO_IMAGE} />
           </View>
-          <View style={styles.sectionContent}>
-            <View style={styles.infoGrid}>
-              <View style={styles.infoCol}>
-                <Text style={styles.infoLabel}>Vị trí mong muốn</Text>
-                <Text style={styles.infoValue}>{resume.resume?.title}</Text>
+
+          {/* General Info Summary */}
+          <View style={styles.mainSection}>
+            <Text style={styles.mainSectionTitle}>Thông tin chung</Text>
+            <View style={styles.gridContainer}>
+              <View style={styles.gridItem}>
+                <Text style={styles.gridLabel}>Vị trí:</Text>
+                <Text style={styles.gridValue}>{getLabelFromValue(POSITION_OPTIONS, resume?.resume?.position)}</Text>
               </View>
-              <View style={styles.infoCol}>
-                <Text style={styles.infoLabel}>Cấp bậc mong muốn</Text>
-                <Text style={styles.infoValue}>{getLabelFromValue(POSITION_OPTIONS, resume.resume?.position)}</Text>
+              <View style={styles.gridItem}>
+                <Text style={styles.gridLabel}>Kinh nghiệm:</Text>
+                <Text style={styles.gridValue}>{getLabelFromValue(EXPERIENCE_OPTIONS, resume?.resume?.experience)}</Text>
               </View>
-              <View style={styles.infoCol}>
-                <Text style={styles.infoLabel}>Trình độ học vấn</Text>
-                <Text style={styles.infoValue}>{getLabelFromValue(ACADEMICLEVEL_OPTIONS, resume.resume?.academicLevel)}</Text>
+              <View style={styles.gridItem}>
+                <Text style={styles.gridLabel}>Học vấn:</Text>
+                <Text style={styles.gridValue}>{getLabelFromValue(ACADEMICLEVEL_OPTIONS, resume?.resume?.academicLevel)}</Text>
               </View>
-              <View style={styles.infoCol}>
-                <Text style={styles.infoLabel}>Kinh nghiệm</Text>
-                <Text style={styles.infoValue}>{getLabelFromValue(EXPERIENCE_OPTIONS, resume.resume?.experience)}</Text>
+              <View style={styles.gridItem}>
+                <Text style={styles.gridLabel}>Hình thức:</Text>
+                <Text style={styles.gridValue}>{getLabelFromValue(JOBTYPE_OPTIONS, resume?.resume?.jobType)}</Text>
               </View>
-              <View style={styles.infoCol}>
-                <Text style={styles.infoLabel}>Nghề nghiệp</Text>
-                <Text style={styles.infoValue}>{resume.resume?.careerId}</Text>
-              </View>
-              <View style={styles.infoCol}>
-                <Text style={styles.infoLabel}>Địa điểm làm việc</Text>
-                <Text style={styles.infoValue}>{getLabelFromValue(WORKPLACE_OPTIONS, resume.resume?.typeOfWorkPlace)}</Text>
-              </View>
-              <View style={styles.infoCol}>
-                <Text style={styles.infoLabel}>Nơi làm việc</Text>
-                <Text style={styles.infoValue}>Làm việc tại văn phòng</Text>
-              </View>
-              <View style={styles.infoCol}>
-                <Text style={styles.infoLabel}>Hình thức làm việc</Text>
-                <Text style={styles.infoValue}>{getLabelFromValue(JOBTYPE_OPTIONS, resume.resume?.jobType)}</Text>
-              </View>
-              <View style={styles.infoCol}>
-                <Text style={styles.infoLabel}>Mức lương mong muốn</Text>
-                <Text style={styles.infoValue}>
-                  {resume.resume?.salaryMin && resume.resume?.salaryMax 
-                    ? `${resume.resume.salaryMin} - ${resume.resume.salaryMax}` 
-                    : ''
-                  }
+              <View style={styles.gridItem}>
+                <Text style={styles.gridLabel}>Mức lương:</Text>
+                <Text style={styles.gridValue}>
+                    {resume?.resume?.salaryMin && resume?.resume?.salaryMax
+                      ? `${(resume.resume.salaryMin / 1000000).toFixed(0)} - ${(resume.resume.salaryMax / 1000000).toFixed(0)} triệu`
+                      : 'Thỏa thuận'}
                 </Text>
               </View>
+              <View style={styles.gridItem}>
+                <Text style={styles.gridLabel}>Nơi làm việc:</Text>
+                <Text style={styles.gridValue}>{getLabelFromValue(WORKPLACE_OPTIONS, resume?.resume?.typeOfWorkPlace)}</Text>
+              </View>
             </View>
           </View>
-        </View>
 
-        {/* Mục tiêu nghề nghiệp */}
-        <View style={styles.section}>
-          <View style={styles.sectionHeader}>
-            <Text style={styles.sectionTitle}>Mục tiêu nghề nghiệp</Text>
-          </View>
-          <View style={styles.sectionContent}>
-            <Text style={styles.goalText}>
-              {resume.resume?.description || 'Đây là mục tiêu nghề nghiệp của tôi. Mục tiêu nghề nghiệp rõ ràng!'}
-            </Text>
-          </View>
-        </View>
-
-        {/* Section header cho Kinh nghiệm làm việc */}
-        {experiences.length > 0 && (
-          <>
-            <View style={styles.section} wrap={false}>
-              <View style={styles.sectionHeader}>
-                <Text style={styles.sectionTitle}>Kinh nghiệm làm việc</Text>
-              </View>
-            </View>
-            {experiences.map((exp, i) => (
-              <View key={i} style={styles.itemBlock}>
-                <View style={styles.itemContent}>
-                  <Text><Text style={styles.infoLabel}>Vị trí: </Text><Text style={styles.experienceTitle}>{exp.jobName}</Text></Text>
-                  <Text><Text style={styles.infoLabel}>Công ty: </Text><Text style={styles.experienceCompany}>{exp.companyName}</Text></Text>
-                  <Text><Text style={styles.infoLabel}>Thời gian: </Text><Text style={styles.experienceDate}>{formatDate(exp.startDate)} - {formatDate(exp.endDate)}</Text></Text>
-                  <Text><Text style={styles.infoLabel}>Mô tả: </Text><Text style={styles.experienceDesc}>{exp.description}</Text></Text>
-                </View>
-              </View>
-            ))}
-          </>
-        )}
-
-        {/* Section header cho Học vấn */}
-        {educations.length > 0 && (
-          <>
-            <View style={styles.section} wrap={false}>
-              <View style={styles.sectionHeader}>
-                <Text style={styles.sectionTitle}>Học vấn</Text>
-              </View>
-            </View>
-            {educations.map((edu, i) => (
-              <View key={i} style={styles.itemBlock}>
-                <View style={styles.itemContent}>
-                  <Text><Text style={styles.infoLabel}>Bằng cấp: </Text><Text style={styles.experienceTitle}>{edu.degreeName}</Text></Text>
-                  <Text><Text style={styles.infoLabel}>Nơi đào tạo: </Text><Text style={styles.experienceCompany}>{edu.trainingPlace}</Text></Text>
-                  <Text><Text style={styles.infoLabel}>Thời gian: </Text><Text style={styles.experienceDate}>{formatDate(edu.startDate)} - {formatDate(edu?.completedDate)}</Text></Text>
-                  <Text><Text style={styles.infoLabel}>Mô tả: </Text><Text style={styles.experienceDesc}>{edu.description}</Text></Text>
-                </View>
-              </View>
-            ))}
-          </>
-        )}
-
-        {/* Section header cho Chứng chỉ */}
-        {certificates.length > 0 && (
-          <>
-            <View style={styles.section} wrap={false}>
-              <View style={styles.sectionHeader}>
-                <Text style={styles.sectionTitle}>Chứng chỉ</Text>
-              </View>
-            </View>
-            {certificates.map((cert, i) => (
-              <View key={i} style={styles.itemBlock}>
-                <View style={styles.itemContent}>
-                  <Text><Text style={styles.infoLabel}>Tên chứng chỉ: </Text><Text style={styles.experienceTitle}>{cert.name}</Text></Text>
-                  <Text><Text style={styles.infoLabel}>Nơi cấp: </Text><Text style={styles.experienceCompany}>{cert.trainingPlace}</Text></Text>
-                  <Text><Text style={styles.infoLabel}>Thời gian: </Text><Text style={styles.experienceDate}>{formatDate(cert.startDate)} - {formatDate(cert.expirationDate)}</Text></Text>
-                </View>
-              </View>
-            ))}
-          </>
-        )}
-
-        {/* Section header cho Ngoại ngữ */}
-        {languages.length > 0 && (
-          <>
-            <View style={styles.section} wrap={false}>
-              <View style={styles.sectionHeader}>
-                <Text style={styles.sectionTitle}>Ngoại ngữ</Text>
-              </View>
-            </View>
-            {languages.map((lang, i) => (
-              <View key={i} style={styles.itemBlock}>
-                <View style={styles.itemContent}>
-                  <Text><Text style={styles.infoLabel}>Ngôn ngữ: </Text><Text style={styles.experienceTitle}>{getLabelFromValue(LANGUAGE_OPTIONS, lang.language)}</Text></Text>
-                  <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                    <Text style={styles.infoLabel}>Trình độ: </Text>
-                    {renderDot(lang.level)}
+          {/* Work Experience */}
+          {experiences.length > 0 && (
+            <View style={styles.mainSection}>
+              <Text style={styles.mainSectionTitle}>Kinh nghiệm làm việc</Text>
+              {experiences.map((exp, index) => (
+                <View key={index} style={styles.itemWrapper} wrap={false}>
+                  <View style={styles.itemHeader}>
+                    <Text style={styles.itemTitle}>{exp?.jobName}</Text>
+                    <Text style={styles.itemDate}>
+                      {formatDate(exp?.startDate)} - {formatDate(exp?.endDate) || "Hiện tại"}
+                    </Text>
                   </View>
+                  <Text style={styles.itemSubtitle}>{exp?.companyName}</Text>
+                  <Text style={styles.itemDescription}>{exp?.description}</Text>
                 </View>
-              </View>
-            ))}
-          </>
-        )}
-
-        {/* Section header cho Kỹ năng */}
-        {skills.length > 0 && (
-          <>
-            <View style={styles.section} wrap={false}>
-              <View style={styles.sectionHeader}>
-                <Text style={styles.sectionTitle}>Kỹ năng</Text>
-              </View>
+              ))}
             </View>
-            {skills.map((skill, i) => (
-              <View key={i} style={styles.itemBlock}>
-                <View style={styles.itemContent}>
-                  <Text><Text style={styles.infoLabel}>Kỹ năng: </Text><Text style={styles.experienceTitle}>{skill.name}</Text></Text>
-                  <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                    <Text style={styles.infoLabel}>Trình độ: </Text>
-                    {renderDot(skill.level)}
+          )}
+
+          {/* Education */}
+          {educations.length > 0 && (
+            <View style={styles.mainSection}>
+              <Text style={styles.mainSectionTitle}>Học vấn</Text>
+              {educations.map((edu, index) => (
+                <View key={index} style={styles.itemWrapper} wrap={false}>
+                  <View style={styles.itemHeader}>
+                    <Text style={styles.itemTitle}>{edu?.degreeName} {edu?.major ? `- ${edu.major}` : ''}</Text>
+                    <Text style={styles.itemDate}>
+                      {formatDate(edu?.startDate)} - {formatDate(edu?.completedDate)}
+                    </Text>
                   </View>
+                  <Text style={styles.itemSubtitle}>{edu?.trainingPlace}</Text>
+                  {edu?.description && <Text style={styles.itemDescription}>{edu?.description}</Text>}
                 </View>
-              </View>
-            ))}
-          </>
-        )}
-        <Text style={styles.pageFooter} fixed>
-          MyJob.Cv
-        </Text>
+              ))}
+            </View>
+          )}
+
+          {/* Certificates */}
+          {certificates.length > 0 && (
+            <View style={styles.mainSection}>
+              <Text style={styles.mainSectionTitle}>Chứng chỉ</Text>
+              {certificates.map((cert, index) => (
+                <View key={index} style={styles.itemWrapper} wrap={false}>
+                  <View style={styles.itemHeader}>
+                    <Text style={styles.itemTitle}>{cert?.name}</Text>
+                    <Text style={styles.itemDate}>
+                      {formatDate(cert?.startDate)}
+                    </Text>
+                  </View>
+                  <Text style={styles.itemSubtitle}>{cert?.trainingPlace}</Text>
+                </View>
+              ))}
+            </View>
+          )}
+
+        </View>
       </Page>
     </Document>
   );
-}
+};
 
 export default CVPdfDocument;

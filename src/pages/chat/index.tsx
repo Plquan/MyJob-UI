@@ -6,7 +6,6 @@ import {
   getMessagesThunk,
   sendMessageThunk,
   markAsReadThunk,
-  getUnreadCountThunk,
 } from '@/stores/chatStore/chatThunk';
 import { setCurrentConversation, addMessage } from '@/stores/chatStore/chatReducer';
 import { IConversation } from '@/types/chat/ChatType';
@@ -37,7 +36,6 @@ const ChatPage = () => {
   useEffect(() => {
     if (user?.id) {
       dispatch(getConversationsThunk({ userId: user.id }));
-      dispatch(getUnreadCountThunk({ userId: user.id }));
     }
   }, [dispatch, user?.id]);
 
@@ -45,14 +43,6 @@ const ChatPage = () => {
     if (currentConversation?.id) {
       dispatch(getMessagesThunk({ conversationId: currentConversation.id }));
       dispatch(markAsReadThunk({ conversationId: currentConversation.id, userId: user?.id || 0 }));
-      
-      // Chỉ refresh unread count khi conversation thực sự thay đổi (không phải lần mount đầu)
-      const conversationChanged = previousConversationId.current !== currentConversation.id;
-      if (user?.id && conversationChanged && !isInitialMount.current) {
-        setTimeout(() => {
-          dispatch(getUnreadCountThunk({ userId: user.id }));
-        }, 500);
-      }
       
       previousConversationId.current = currentConversation.id;
     }
@@ -74,9 +64,9 @@ const ChatPage = () => {
           dispatch(getConversationsThunk({ userId: user.id }));
         }
       } else if (message.senderId !== user?.id) {
-        // Message from other conversation - update unread count
+        // Message from other conversation - refresh conversations to update unread count
         if (user?.id) {
-          dispatch(getUnreadCountThunk({ userId: user.id }));
+          dispatch(getConversationsThunk({ userId: user.id }));
         }
       }
     });
@@ -91,10 +81,9 @@ const ChatPage = () => {
       if (data.conversationId !== currentConversation?.id) {
         antdMessage.info('Bạn có tin nhắn mới!');
         
-        // Refresh conversations list and unread count
+        // Refresh conversations list to update unread count
         if (user?.id) {
           dispatch(getConversationsThunk({ userId: user.id }));
-          dispatch(getUnreadCountThunk({ userId: user.id }));
         }
       }
     });
@@ -117,10 +106,8 @@ const ChatPage = () => {
       })
     );
     
-    // Refresh conversations to update last message
+    // Refresh conversations to update last message and unread count
     dispatch(getConversationsThunk({ userId: user.id }));
-    // Refresh unread count (in case we sent to a conversation with unread messages)
-    dispatch(getUnreadCountThunk({ userId: user.id }));
   }, [currentConversation, user?.id, dispatch]);
 
   const handleSearchChange = useCallback((value: string) => {

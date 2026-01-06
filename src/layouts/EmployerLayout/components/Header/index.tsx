@@ -19,7 +19,7 @@ const EmployerHeader = () =>  {
         {currentUser ? (
           <div className="flex items-center gap-2">
             <UserOutlined className="text-xl" />
-            <span className="text-sm">{currentUser.email || currentUser.fullName}</span>
+            <span className="text-sm">{currentUser.email || currentUser.company?.companyName}</span>
           </div>
         ) : (
           <Button

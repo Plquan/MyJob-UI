@@ -1,13 +1,12 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import http from "../../ultils/axios/axiosCustom";
-import type { IApiResponse } from "../../types/AppType";
 import type { ICreateUser, IPagingResponse, IUpdateUser, IUserData, IUserFilter } from "../../types/user/UserType";
 
 const getAllUsers = createAsyncThunk (
     "user/getAllUsers",
-    async (data: IUserFilter | undefined, {rejectWithValue}): Promise<IApiResponse<IPagingResponse>> => {
+    async (data: IUserFilter | undefined, {rejectWithValue}): Promise<IPagingResponse> => {
         try {
-            const response: IApiResponse<IPagingResponse> = await http.post("/user/get-all-users",data);
+            const response: IPagingResponse = await http.post("/user/get-all-users",data);
             return response;
         } catch (error: any) {
             return rejectWithValue(error.response.data) as any;
@@ -17,9 +16,9 @@ const getAllUsers = createAsyncThunk (
 
 const getUserById = createAsyncThunk (
     "user/getUserById",
-    async (userId: number, {rejectWithValue}): Promise<IApiResponse<IUserData>> => {
+    async (userId: number, {rejectWithValue}): Promise<IUserData> => {
         try {
-            const response: IApiResponse<IUserData> = await http.get(`/user/get-user/${userId}`);
+            const response: IUserData = await http.get(`/user/get-user/${userId}`);
             return response;
         } catch (error: any) {
             return rejectWithValue(error.response.data) as any;
@@ -29,9 +28,9 @@ const getUserById = createAsyncThunk (
 
 const updateUser = createAsyncThunk (
     "user/updateUser",
-    async (data: IUpdateUser, {rejectWithValue}): Promise<IApiResponse<IUserData>> => {
+    async (data: IUpdateUser, {rejectWithValue}): Promise<IUserData> => {
         try {
-            const response: IApiResponse<IUserData> = await http.put("/user/update-user",data);
+            const response: IUserData = await http.put("/user/update-user",data);
             return response;
         } catch (error: any) {
             return rejectWithValue(error.response.data) as any;
@@ -41,9 +40,9 @@ const updateUser = createAsyncThunk (
 
 const createUser = createAsyncThunk (
     "user/createUser",
-    async (data: ICreateUser, {rejectWithValue}): Promise<IApiResponse<IUserData>> => {
+    async (data: ICreateUser, {rejectWithValue}): Promise<IUserData> => {
         try {
-            const response: IApiResponse<IUserData> = await http.post("/user/create-user",data);
+            const response: IUserData = await http.post("/user/create-user",data);
             return response;
         } catch (error: any) {
             return rejectWithValue(error.response.data) as any;
@@ -53,9 +52,9 @@ const createUser = createAsyncThunk (
 
 const deleteUser = createAsyncThunk(
     "user/deleteUser",
-    async (userId: number, {rejectWithValue}): Promise<IApiResponse<any>> => {
+    async (userId: number, {rejectWithValue}): Promise<boolean> => {
         try {
-            const response: IApiResponse<any> = await http.delete(`/user/delete-user/${userId}`);
+            const response: boolean = await http.delete(`/user/delete-user/${userId}`);
             return response;
         } catch (error: any) {
             return rejectWithValue(error.response.data) as any;

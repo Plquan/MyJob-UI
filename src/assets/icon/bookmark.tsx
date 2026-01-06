@@ -5,7 +5,7 @@ export function BookmarkIcon(props: React.SVGProps<SVGSVGElement>) {
       viewBox="0 0 24 24"
       fill="none"
       stroke="currentColor"   // quan trọng
-      strokeWidth={1.2}
+      strokeWidth={1.5}
       strokeLinecap="round"
       strokeLinejoin="round"
       {...props}

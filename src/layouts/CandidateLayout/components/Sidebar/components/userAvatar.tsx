@@ -2,9 +2,9 @@ import { Button, Upload, Modal } from "antd";
 import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
 import ImgCrop from "antd-img-crop";
 import { useDispatch, useSelector } from "react-redux";
-import type { AppDispatch, RootState } from "../../../../../stores";
-import { authActions } from "../../../../../stores/authStore/authReducer";
 import { useState } from "react";
+import { AppDispatch, RootState } from "@/stores";
+import { authActions } from "@/stores/authStore/authReducer";
 
  const UserAvatar = () =>  {
   const dispatch = useDispatch<AppDispatch>();

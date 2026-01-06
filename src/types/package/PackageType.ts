@@ -32,3 +32,15 @@ export interface IUpdatePackageData extends Partial<ICreatePackagedata> {
   id: number;
   isActive: boolean;
 }
+
+export interface IPackageUsage {
+  id: number;
+  packageId: number;
+  companyId: number;
+  candidateSearchUsed: number;
+  jobPostUsed: number;
+  createdAt: Date;
+  updatedAt: Date;
+  package: IPackageDto;
+  expiryDate: Date;
+}

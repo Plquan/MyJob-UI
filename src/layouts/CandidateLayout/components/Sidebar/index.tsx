@@ -1,11 +1,8 @@
-import { Menu, Tooltip, Switch } from "antd";
+import { Menu } from "antd";
 import {
-  FileTextOutlined,
   UserOutlined,
   HomeOutlined,
   BellOutlined,
-  QuestionCircleOutlined,
-  BankOutlined,
   AuditOutlined,
   IdcardOutlined,
 } from "@ant-design/icons";
@@ -16,6 +13,7 @@ import { useSelector } from "react-redux"
 import type { RootState } from "../../../../stores"
 import UserAvatar from "./components/userAvatar"
 import AllowSearchToggle from "./components/AllowSearchToggle";
+import { BookmarkIcon } from "@/assets/icon/bookmark";
 
 export default function CandidateSidebar() {
   const navigate = useNavigate()
@@ -40,14 +38,8 @@ export default function CandidateSidebar() {
     },
     {
       key: ROUTE_PATH.CANDIDATE_MY_COMPANIES,
-      icon: <BankOutlined />,
-      label: "Công Ty Của Tôi",
-    },
-
-    {
-      key: "/notifications",
-      icon: <BellOutlined />,
-      label: "Thông Báo",
+      icon: <BookmarkIcon className="w-4 h-4"/>,
+      label: "Danh sách đã lưu",
     },
     {
       key: "/account",
@@ -60,7 +52,7 @@ export default function CandidateSidebar() {
     <div className="fixed mt-5 top-14 left-0 w-64 bg-white border-r border-gray-200 p-4 h-[calc(100vh-56px)] flex flex-col z-50">
       <div className="flex flex-col items-center p-4 flex-shrink-0">
         <UserAvatar/>
-        <h3 className="font-medium text-center">{currentUser?.fullName}</h3>
+        <h3 className="font-medium text-center">{currentUser?.candidate?.fullName}</h3>
       <p className="text-xs text-gray-500">{currentUser?.email}</p>
       <div className="bg-gray-50 rounded-lg">
           <AllowSearchToggle />

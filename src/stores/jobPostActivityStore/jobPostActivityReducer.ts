@@ -90,6 +90,24 @@ export const jobPostActivitySlice = createSlice({
             state.loading = false;
             toast.error(action.payload.errorMessage)
         })
+
+        //send email
+        builder.addCase(jobPostActivityThunks.sendEmailToCandidate.pending, (state) => {
+            state.loading = true;
+        });
+        builder.addCase(jobPostActivityThunks.sendEmailToCandidate.fulfilled, (state, action) => {
+            const jobPostActivityId = action.meta.arg.jobPostActivityId;
+            const activity = state.jobPostActivities.items.find(item => item.id === jobPostActivityId);
+            if (activity) {
+                activity.isSentMail = true;
+            }
+            state.loading = false;
+            message.success("Gửi email thành công")
+        });
+        builder.addCase(jobPostActivityThunks.sendEmailToCandidate.rejected, (state, action: PayloadAction<any>) => {
+            state.loading = false;
+            toast.error(action.payload?.errorMessage || "Có lỗi xảy ra khi gửi email")
+        })
     }
 })
 

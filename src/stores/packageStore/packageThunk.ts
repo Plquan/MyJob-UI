@@ -1,6 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import http from "../../ultils/axios/axiosCustom";
-import type { ICreatePackagedata, IPackageDto, IUpdatePackageData } from "../../types/package/PackageType";
+import type { ICreatePackagedata, IPackageDto, IUpdatePackageData, IPackageUsage } from "../../types/package/PackageType";
 
 const getAllPackages = createAsyncThunk (
     "package/getAllPackages",
@@ -73,13 +73,26 @@ const purchasePackage = createAsyncThunk (
     }
 )
 
+const getCompanyPackage = createAsyncThunk (
+    "package/getCompanyPackage",
+    async (_, {rejectWithValue}): Promise<IPackageUsage> => {
+        try {
+            const response: IPackageUsage = await http.get("/package/get-company-package");
+            return response;
+        } catch (error: any) {
+            return rejectWithValue(error.response.data) as any;
+        }
+    }
+)
+
 const packageThunks = {
     getAllPackages,
     createPackage,
     updatePackage,
     deletePackage,
     getPackages,
-    purchasePackage
+    purchasePackage,
+    getCompanyPackage
 }
 export default packageThunks;
 

@@ -28,6 +28,7 @@ import type { ISkill } from "./SkillType"
     myJobFile: IMyJobFile
     createdAt:Date
     updatedAt:Date
+    candidate?: ICandidate
   }
 
   export interface IUpdateAttachedResume {
@@ -61,4 +62,19 @@ import type { ISkill } from "./SkillType"
     experiences: IExperience[]
     languages: ILanguage[] 
     skills: ISkill[]
+  }
+
+  export interface ISearchResumesParams {
+    page: number;
+    limit: number;
+    title?: string;
+    provinceId?: number;
+    careerId?: number;
+    position?: number;
+    typeOfWorkPlace?: number;
+    experience?: number;
+    academicLevel?: number;
+    jobType?: number;
+    gender?: number;
+    maritalStatus?: number;
   }

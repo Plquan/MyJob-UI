@@ -1,7 +1,7 @@
 import EmployerHeader from "../../layouts/EmployerLayout/components/Header"
 import { Typography, Button } from "antd"
 import CustomDivider from "../../components/Divider";
-import DefaultFooter from "../../layouts/components/footer/DefaultFooter";
+import DefaultFooter from "../../layouts/DefaultLayout/components/Footer";
 import { useNavigate } from "react-router-dom";
 import ROUTE_PATH from "../../routes/routePath";
 import FaqSection from "./components/FaqSection";

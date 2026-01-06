@@ -1,7 +1,7 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import type { ICurrentUser, ILoginRequestData, ICandidateRegisterRequestData, ICompanyRegisterRequestData } from "../../types/auth/AuthType";
-import type { IApiResponse } from "../../types/AppType";
 import http from "../../ultils/axios/axiosCustom";
+import type { IMyJobFile } from "../../types/myJobFile/myJobFileType";
 
 const getCurrentUser = createAsyncThunk(
     "auth/getMe",
@@ -17,9 +17,9 @@ const getCurrentUser = createAsyncThunk(
 
 const updateAvatar = createAsyncThunk (
     "account/updateAvatar",
-    async (file: FormData, {rejectWithValue}): Promise<IApiResponse<any>> => {
+    async (file: FormData, {rejectWithValue}): Promise<IMyJobFile> => {
         try {
-            const response: IApiResponse<any> = await http.post("/account/update-avatar",file);
+            const response: IMyJobFile = await http.post("/account/update-avatar",file);
             return response;
         } catch (error: any) {
             return rejectWithValue(error.response.data) as any;
@@ -29,9 +29,9 @@ const updateAvatar = createAsyncThunk (
 
 const allowSearch = createAsyncThunk (
     "candidate/allowSearch",
-    async (status: boolean, {rejectWithValue}): Promise<IApiResponse<any>> => {
+    async (status: boolean, {rejectWithValue}): Promise<boolean> => {
         try {
-            const response: IApiResponse<any> = await http.put("/candidate/allow-search",{ status });
+            const response: boolean = await http.put("/candidate/allow-search",{ status });
             return response;
         } catch (error: any) {
             return rejectWithValue(error.response.data) as any;

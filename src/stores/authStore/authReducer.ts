@@ -56,7 +56,7 @@ export const authSlice = createSlice({
         });
         builder.addCase(authThunks.updateAvatar.fulfilled, (state, action) => {
             if (state.currentUser) {
-                state.currentUser.avatar = action.payload.data;
+                state.currentUser.avatar = action.payload.url;
             }
             state.loading = false;
             toast.success("Cập nhật ảnh đại diện thành công")
@@ -73,7 +73,7 @@ export const authSlice = createSlice({
         });
         builder.addCase(authThunks.allowSearch.fulfilled, (state, action) => {
             if (state.currentUser) {
-                state.currentUser.allowSearch = action.payload.data
+                state.currentUser.allowSearch = action.payload
             }
             state.isSubmitting = false
         })

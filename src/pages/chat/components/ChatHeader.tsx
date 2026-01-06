@@ -1,5 +1,5 @@
 import { Button } from 'antd';
-import { HomeOutlined } from '@ant-design/icons';
+import { ArrowLeftOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
 import ROUTE_PATH from '@/routes/routePath';
 
@@ -17,11 +17,11 @@ const ChatHeader = () => {
         />
       </div>
       <Button
-        icon={<HomeOutlined />}
-        onClick={() => navigate(ROUTE_PATH.HOME)}
+        icon={<ArrowLeftOutlined />}
+        onClick={() => navigate(-1)}
         type="default"
       >
-        Về trang chủ
+        Quay lại
       </Button>
     </div>
   );

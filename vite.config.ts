@@ -11,4 +11,8 @@ export default defineConfig({
       '@': path.resolve(__dirname, './src'),
     },
   },
+  server: {
+    host: true, // Cho phép truy cập từ IP local
+    port: 5173, // Port mặc định của Vite (có thể thay đổi nếu muốn)
+  },
 });

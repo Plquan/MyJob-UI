@@ -1,7 +1,7 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import type { IApiResponse } from "../../types/AppType";
 import http from "../../ultils/axios/axiosCustom";
-import type { IResume } from "../../types/resume/ResumeType";
+import type { IResume, ISearchResumesParams } from "../../types/resume/ResumeType";
+import type { IPaginationResponse } from "../../types/base/IPaginationResponse";
 
 
 const updateAttachedResume = createAsyncThunk (
@@ -53,9 +53,9 @@ const deleteAttachedResume = createAsyncThunk (
 
 const setSelectedResume = createAsyncThunk (
     "resume/setSelectedResume",
-    async (resumeId: number, {rejectWithValue}): Promise<IApiResponse<any>> => {
+    async (resumeId: number, {rejectWithValue}): Promise<boolean> => {
         try {
-            const response: IApiResponse<any> = await http.put(`/resume/set-selected-resume/${resumeId}`);
+            const response: boolean = await http.put(`/resume/set-selected-resume/${resumeId}`);
             return response;
         } catch (error: any) {
             return rejectWithValue(error.response.data) as any;
@@ -63,11 +63,38 @@ const setSelectedResume = createAsyncThunk (
     }
 )
 
+const searchResumes = createAsyncThunk(
+    "resume/searchResumes",
+    async (params: ISearchResumesParams, { rejectWithValue }) => {
+        try {
+            const response: IPaginationResponse<IResume> = await http.get("/resume/search-resumes", { params });
+            return response;
+        } catch (error: any) {
+            return rejectWithValue(error.response?.data || error);
+        }
+    }
+);
+
+const getResumeById = createAsyncThunk(
+    "resume/getResumeById",
+    async (resumeId: number, { rejectWithValue }) => {
+        try {
+            const response: IResume = await http.get(`/resume/search-resumes/${resumeId}`);
+            return response;
+        } catch (error: any) {
+            return rejectWithValue(error.response?.data || error);
+        }
+    }
+);
+
+
 const attachedResumeThunks = {
     uploadAttachedResume,
     getResumes,
     deleteAttachedResume,
     updateAttachedResume,
-    setSelectedResume
+    setSelectedResume,
+    searchResumes,
+    getResumeById
 }
 export default attachedResumeThunks

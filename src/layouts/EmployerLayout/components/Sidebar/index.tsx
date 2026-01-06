@@ -4,6 +4,7 @@ import {
   ApartmentOutlined,
   FileTextOutlined,
   GiftOutlined,
+  UserOutlined,
 } from '@ant-design/icons';
 import { useLocation, useNavigate } from 'react-router-dom';
 import type { MenuProps } from 'antd';
@@ -22,26 +23,34 @@ const items: MenuProps['items'] = [
     icon: <ApartmentOutlined />,
   },
   {
-    key: 'recruitment',
-    label: 'Tuyển dụng',
+    key: 'manage-jobpost',
+    label: 'Quản lý tin tuyển dụng',
     icon: <FileTextOutlined />,
     children: [
       {
         key: ROUTE_PATH.EMPLOYER_JOB_POST,
-        label: 'Quản lý tin tuyển dụng',
+        label: 'Danh sách tin đăng',
       },
+    ],
+  },
+  {
+    key: 'recruitment',
+    label: 'Quản lý ứng viên',
+    icon: <UserOutlined />,
+    children: [
+
       {
         key: ROUTE_PATH.EMPLOYER_MANAGE_RESUME,
-        label: 'Quản lý hồ sơ ứng tuyển',
+        label: 'Hồ sơ ứng tuyển',
       },
       {
-        key: '/dashboard/candidates',
+        key: ROUTE_PATH.EMPLOYER_FIND_CANDIDATE,
         label: 'Tìm ứng viên mới',
       },
     ],
   },
   {
-    key: '/dashboard/subscription',
+    key: ROUTE_PATH.EMPLOYER_MANAGE_PACKAGE,
     label: 'Gói dịch vụ',
     icon: <GiftOutlined />,
   },

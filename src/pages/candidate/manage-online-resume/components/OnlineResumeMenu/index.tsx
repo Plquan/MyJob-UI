@@ -1,10 +1,11 @@
-import { UserOutlined, IdcardOutlined, ProfileOutlined, ReadOutlined, SafetyCertificateOutlined, GlobalOutlined, ToolOutlined, DownloadOutlined } from "@ant-design/icons";
-import { Card, Progress, Tooltip, Button } from "antd";
+import { UserOutlined, IdcardOutlined, ProfileOutlined, ReadOutlined, SafetyCertificateOutlined, GlobalOutlined, ToolOutlined } from "@ant-design/icons";
+import { Card, Progress, Tooltip, Button, message } from "antd";
 import { useSelector } from "react-redux";
 import type { RootState } from "../../../../../stores";
-import type { IOnlineResume } from "../../../../../types/resume/ResumeType";
-import { PDFDownloadLink } from "@react-pdf/renderer";
+import { pdf } from "@react-pdf/renderer";
 import CVPdfDocument from "../../../../../components/CVdoc";
+import resumeService from "../../../../../services/resumeService";
+import { useState } from "react";
 
 const menuItems = [
   { icon: <UserOutlined />, label: "Thông tin cá nhân", id: "profile" },
@@ -22,21 +23,13 @@ const OnlineResumeMenu = () => {
     resume,
     skills,
     candidate,
-    userInfo,
     certificates,
     languages,
     experiences } = useSelector((state: RootState) => state.onlineResumeStore)
 
-  const onlineResume: IOnlineResume = {
-    userInfo,
-    resume,
-    candidate,
-    educations,
-    certificates,
-    experiences,
-    languages,
-    skills
-  }
+  const { currentUser } = useSelector((state: RootState) => state.authStore)
+
+  const [downloadLoading, setDownloadLoading] = useState(false);
 
   let completion = 0;
 
@@ -61,21 +54,54 @@ const OnlineResumeMenu = () => {
     }
   }
 
+  const handleDownload = async () => {
+    if (!resume?.id) {
+      message.error('Không tìm thấy thông tin CV');
+      return;
+    }
+
+    try {
+      setDownloadLoading(true);
+      // Gọi API để lấy dữ liệu CV mới nhất
+      const resumeData = await resumeService.getResumeForDownload(resume.id);
+      
+      // Tạo PDF từ dữ liệu với avatar và email từ authStore
+      const blob = await pdf(
+        <CVPdfDocument 
+          resume={resumeData} 
+          avatarUrl={currentUser?.avatar}
+          email={currentUser?.email}
+        />
+      ).toBlob();
+      
+      // Tạo link download và tự động click
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `myjob-cv-${candidate?.fullName || 'resume'}.pdf`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+      
+      message.success('Tải xuống CV thành công');
+    } catch (error) {
+      console.error('Download error:', error);
+      message.error('Không thể tải xuống CV. Vui lòng thử lại!');
+    } finally {
+      setDownloadLoading(false);
+    }
+  }
+
   return (
     <Card title={"Hồ sơ của bạn"} className="w-72" 
      extra = {     
-      <PDFDownloadLink
-        document={<CVPdfDocument resume={onlineResume} />}
-        fileName="myjob-cv.pdf"
+      <Button
+        loading={downloadLoading}
+        onClick={handleDownload}
       >
-        {({ loading }) => (
-          <Button
-            loading={loading}
-          >
-            Tải xuống
-          </Button>
-        )}
-      </PDFDownloadLink>
+        Tải xuống
+      </Button>
      }
     >
       <div className="flex flex-col items-center mb-4">
