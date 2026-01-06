@@ -109,7 +109,7 @@ export const onlineResumeSlice = createSlice({
             state.loading.resume = true;
         })
         builder.addCase(onlineResumeThunks.updateOnlineResume.fulfilled, (state, action:PayloadAction<any>) => {
-            state.resume = action.payload.data
+            state.resume = action.payload
             state.loading.resume = false;
             message.success("Cập nhật thành công")
         })
@@ -123,7 +123,7 @@ export const onlineResumeSlice = createSlice({
             state.loading.candidate = true;
         })
         builder.addCase(onlineResumeThunks.updateProfile.fulfilled, (state, action) => {
-            state.candidate = action.payload.data
+            state.candidate = action.payload
             state.loading.candidate = false;
             message.success("Cập nhật thành công")
         })
@@ -136,7 +136,7 @@ export const onlineResumeSlice = createSlice({
             state.loading.candidate = true;
         })
         builder.addCase(onlineResumeThunks.getProfile.fulfilled, (state, action) => {
-            state.candidate = action.payload.data
+            state.candidate = action.payload
             state.loading.candidate = false;
         })
         builder.addCase(onlineResumeThunks.getProfile.rejected, (state, action) => {
@@ -148,7 +148,7 @@ export const onlineResumeSlice = createSlice({
             state.loading.certificates = true;
         })
         builder.addCase(onlineResumeThunks.createCertificate.fulfilled, (state, action) => {
-            state.certificates.push(action.payload.data)
+            state.certificates.push(action.payload)
             state.loading.certificates = false;
             message.success("Thêm chứng chỉ thành công")
         })
@@ -163,7 +163,7 @@ export const onlineResumeSlice = createSlice({
         })
         builder.addCase(onlineResumeThunks.updateCertificate.fulfilled, (state, action) => {
             state.certificates = state.certificates?.map(
-                (cert) => (cert.id === action.payload.data.id ? action.payload.data : cert)
+                (cert) => (cert.id === action.payload.id ? action.payload : cert)
             )
             state.loading.certificates = false;
             message.success("Cập nhật chứng chỉ thành công")
@@ -192,7 +192,7 @@ export const onlineResumeSlice = createSlice({
             state.loading.education = true;
         })
         builder.addCase(onlineResumeThunks.createEducation.fulfilled, (state, action) => {
-            state.educations.push(action.payload.data)
+            state.educations.push(action.payload)
             state.loading.education = false;
             message.success("Thêm học vấn thành công")
         })
@@ -207,7 +207,7 @@ export const onlineResumeSlice = createSlice({
         })
         builder.addCase(onlineResumeThunks.updateEducation.fulfilled, (state, action) => {
             state.educations = state.educations?.map(
-                (edu) => (edu.id === action.payload.data.id ? action.payload.data : edu)
+                (edu) => (edu.id === action.payload.id ? action.payload : edu)
             )
             state.loading.education = false;
             message.success("Cập nhật học vấn thành công")
@@ -236,7 +236,7 @@ export const onlineResumeSlice = createSlice({
             state.loading.experiences = true;
         })
         builder.addCase(onlineResumeThunks.createExperience.fulfilled, (state, action) => {
-            state.experiences.push(action.payload.data)
+            state.experiences.push(action.payload)
             state.loading.experiences = false;
         })
         builder.addCase(onlineResumeThunks.createExperience.rejected, (state, action) => {
@@ -249,7 +249,7 @@ export const onlineResumeSlice = createSlice({
         })
         builder.addCase(onlineResumeThunks.updateExperience.fulfilled, (state, action) => {
             state.experiences = state.experiences?.map(
-                (cert) => (cert.id === action.payload.data.id ? action.payload.data : cert)
+                (cert) => (cert.id === action.payload.id ? action.payload : cert)
             )
             state.loading.experiences = false;
         })
@@ -274,7 +274,7 @@ export const onlineResumeSlice = createSlice({
             state.loading.languages = true;
         })
         builder.addCase(onlineResumeThunks.createLanguage.fulfilled, (state, action) => {
-            state.languages.push(action.payload.data)
+            state.languages.push(action.payload)
             state.loading.languages = false;
             message.success("Thêm ngôn ngữ thành công")
         })
@@ -289,7 +289,7 @@ export const onlineResumeSlice = createSlice({
         })
         builder.addCase(onlineResumeThunks.updateLanguage.fulfilled, (state, action) => {
             state.languages = state.languages?.map(
-                (lang) => (lang.id === action.payload.data.id ? action.payload.data : lang)
+                (lang) => (lang.id === action.payload.id ? action.payload : lang)
             )
             state.isSubmitting.languages = false;
             message.success("Cập nhật ngôn ngữ thành công")
@@ -318,7 +318,7 @@ export const onlineResumeSlice = createSlice({
             state.loading.skills = true;
         })
         builder.addCase(onlineResumeThunks.createSkill.fulfilled, (state, action) => {
-            state.skills.push(action.payload.data)
+            state.skills.push(action.payload)
             state.loading.skills = false;
             message.success("Thêm kĩ thành công")
         })
@@ -333,7 +333,7 @@ export const onlineResumeSlice = createSlice({
         })
         builder.addCase(onlineResumeThunks.updateSkill.fulfilled, (state, action) => {
             state.skills = state.skills?.map(
-                (lang) => (lang.id === action.payload.data.id ? action.payload.data : lang)
+                (lang) => (lang.id === action.payload.id ? action.payload : lang)
             )
             state.isSubmitting.skills = false;
             message.success("Cập nhật kĩ năng thành công")

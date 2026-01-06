@@ -1,14 +1,10 @@
-import { Menu, Tooltip, Switch } from "antd";
+import { Menu } from "antd";
 import {
-  FileTextOutlined,
   UserOutlined,
   HomeOutlined,
   BellOutlined,
-  QuestionCircleOutlined,
-  BankOutlined,
   AuditOutlined,
   IdcardOutlined,
-  HeartOutlined,
 } from "@ant-design/icons";
 import { useNavigate, useLocation } from "react-router-dom";
 import ROUTE_PATH from "../../../../routes/routePath";
@@ -44,12 +40,6 @@ export default function CandidateSidebar() {
       key: ROUTE_PATH.CANDIDATE_MY_COMPANIES,
       icon: <BookmarkIcon className="w-4 h-4"/>,
       label: "Danh sách đã lưu",
-    },
-
-    {
-      key: "/notifications",
-      icon: <BellOutlined />,
-      label: "Thông Báo",
     },
     {
       key: "/account",

@@ -2,7 +2,7 @@ import { Modal, Form, Input, Button } from 'antd';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import { useEffect, useState } from 'react';
-import type { IJobPostActivityDto } from '../../../../types/job-post-activity/JobPostActivity';
+import { IJobPostActivityDto } from '@/types/job-post-activity/JobPostActivity';
 
 interface SendEmailModalProps {
     open: boolean;
@@ -21,6 +21,7 @@ const SendEmailModal = ({
 }: SendEmailModalProps) => {
     const [form] = Form.useForm();
     const [editorContent, setEditorContent] = useState('');
+    const [submitting, setSubmitting] = useState(false);
 
     useEffect(() => {
         if (open && activity) {
@@ -41,10 +42,15 @@ const SendEmailModal = ({
 
     const handleSubmit = async () => {
         try {
+            setSubmitting(true);
             const values = await form.validateFields();
-            onSend(values);
+            await onSend(values);
+            form.resetFields();
+            setEditorContent('');
         } catch (error) {
             console.error('Validation failed:', error);
+        } finally {
+            setSubmitting(false);
         }
     };
 
@@ -54,10 +60,10 @@ const SendEmailModal = ({
             open={open}
             onCancel={handleCancel}
             footer={[
-                <Button key="cancel" onClick={handleCancel}>
+                <Button key="cancel" onClick={handleCancel} disabled={submitting}>
                     Hủy
                 </Button>,
-                <Button key="send" type="primary" onClick={handleSubmit} loading={loading}>
+                <Button key="send" type="primary" onClick={handleSubmit} loading={submitting || loading}>
                     Gửi email
                 </Button>,
             ]}

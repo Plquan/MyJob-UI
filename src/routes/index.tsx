@@ -26,7 +26,8 @@ import ProductPage from "../pages/product";
 import { EUserRole } from "../constant/role";
 import JobPage from "../pages/jobs/list-job";
 import ProtectRoute from "./protectRoute";
-import ManageResumePage from "../pages/employer/manage-resume";
+import ManageResumePage from "../pages/employer/manage-resume/ListResume";
+import ResumeDetailPage from "../pages/employer/manage-resume/ResumeDetail";
 import ChatPage from "../pages/chat";
 import FindCandidatePage from "../pages/employer/find-candidate";
 import ManagePackagePage from "../pages/employer/manage-package";
@@ -63,6 +64,7 @@ const AppRoutes = () => {
             <Route path={ROUTE_PATH.EMPLOYER_COMPANY} element={<EmployerCompanyPage />} />
             <Route path={ROUTE_PATH.EMPLOYER_JOB_POST} element={<ManageJobPostPage />} />
             <Route path={ROUTE_PATH.EMPLOYER_MANAGE_RESUME} element={<ManageResumePage />} />
+            <Route path={ROUTE_PATH.EMPLOYER_RESUME_DETAIL} element={<ResumeDetailPage />} />
             <Route path={ROUTE_PATH.EMPLOYER_FIND_CANDIDATE} element={<FindCandidatePage />} />
             <Route path={ROUTE_PATH.EMPLOYER_MANAGE_PACKAGE} element={<ManagePackagePage />} />
             </Route>

@@ -1,3 +1,5 @@
+import { IMyJobFile } from "../myJobFile/myJobFileType";
+
 export interface ICandidate {
   id: number;
   userId: number;
@@ -10,6 +12,7 @@ export interface ICandidate {
   address?: string;
   createdAt: Date;
   updatedAt: Date;
+  avatar?: IMyJobFile
 }
 
 export interface IMonthlyActivity {

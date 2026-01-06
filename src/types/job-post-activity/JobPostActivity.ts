@@ -20,3 +20,10 @@ export interface IGetJobPostActivityRequest {
     search?: string
     status?: number
 }
+
+export interface ISendEmailRequest {
+    jobPostActivityId: number
+    to: string
+    subject: string
+    content: string
+}

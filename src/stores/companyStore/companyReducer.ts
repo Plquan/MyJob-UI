@@ -1,5 +1,5 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit"
-import type { ICompanyData, ICompanyDetail, ICompanyWithImagesData } from "../../types/company/CompanyType";
+import type { ICompanyData, ICompanyDetail, ICompanyStatistics, ICompanyWithImagesData } from "../../types/company/CompanyType";
 import companyThunks from "./companyThunk";
 import type { IMyJobFile } from "../../types/myJobFile/myJobFileType";
 import { FileType } from "../../constant/fileType";
@@ -21,8 +21,10 @@ interface CompanyState {
     logo?: IMyJobFile,
     coverImage?: IMyJobFile,
     companyImages: IMyJobFile[],
-    companyDetail?: ICompanyDetail
+    companyDetail?: ICompanyDetail,
+    employerStatistics?: ICompanyStatistics,
     loading: boolean,
+    loadingStatistics: boolean,
     submitting: {
         logo: boolean;
         cover: boolean;
@@ -35,6 +37,7 @@ interface CompanyState {
 
 const initialState: CompanyState = {
     loading: false,
+    loadingStatistics: false,
     submitting: {
         logo: false,
         cover: false,
@@ -55,6 +58,7 @@ const initialState: CompanyState = {
         limit: 10,
         companyName: undefined
     },
+    employerStatistics: undefined,
 
 }
 export const companySlice = createSlice({
@@ -235,6 +239,19 @@ export const companySlice = createSlice({
         builder.addCase(companyThunks.getSavedCompanies.rejected, (state, action) => {
             state.loading = false;
             message.error((action.payload as { message: string }).message);
+        })
+
+        // get employer statistics
+        builder.addCase(companyThunks.getEmployerStatistics.pending, (state) => {
+            state.loadingStatistics = true;
+        });
+        builder.addCase(companyThunks.getEmployerStatistics.fulfilled, (state, action) => {
+            state.employerStatistics = action.payload;
+            state.loadingStatistics = false;
+        });
+        builder.addCase(companyThunks.getEmployerStatistics.rejected, (state, action) => {
+            state.loadingStatistics = false;
+            message.error((action.payload as string) || "Có lỗi xảy ra khi lấy thống kê");
         })
 
     }

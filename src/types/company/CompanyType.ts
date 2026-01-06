@@ -57,3 +57,28 @@ export interface IGetCompaniesReqParams {
   companyName?: string;
 }
 
+export interface ICompanyStatistics {
+  totalJobPosts: number;
+  pendingJobPosts: number;
+  expiredJobPosts: number;
+  totalApplications: number;
+  applicationsByStatus: IApplicationByStatus[];
+  applicationsMonthly: IApplicationMonthly[];
+}
+
+export interface IApplicationByStatus {
+  status: number;
+  statusName: string;
+  count: number;
+}
+
+export interface IApplicationMonthly {
+  month: string;
+  year2024: number;
+  year2023: number;
+}
+
+export interface IGetEmployerStatisticsRequest {
+  startDate?: string;
+  endDate?: string;
+}

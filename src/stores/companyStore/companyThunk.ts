@@ -1,7 +1,7 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import http from "../../ultils/axios/axiosCustom";
 import type { IMyJobFile } from "../../types/myJobFile/myJobFileType";
-import type { ICompanyDetail, ICompanyWithImagesData, IGetCompaniesReqParams } from "../../types/company/CompanyType";
+import type { ICompanyDetail, ICompanyStatistics, ICompanyWithImagesData, IGetCompaniesReqParams } from "../../types/company/CompanyType";
 import type { IPaginationResponse } from "../../types/AppType";
 
 const getEmployerCompany = createAsyncThunk (
@@ -116,7 +116,22 @@ const getSavedCompanies = createAsyncThunk (
     }
 )
 
-
+const getEmployerStatistics = createAsyncThunk (
+    "company/getEmployerStatistics",
+    async (params: { startDate?: string; endDate?: string } | undefined, {rejectWithValue}): Promise<ICompanyStatistics> => {
+        try {
+            const response: ICompanyStatistics = await http.get("/company/employer-statistics", {
+                params: {
+                    ...(params?.startDate && { startDate: params.startDate }),
+                    ...(params?.endDate && { endDate: params.endDate })
+                }
+            });
+            return response;
+        } catch (error: any) {
+            return rejectWithValue(error.response?.data?.message || "Lỗi khi lấy thống kê") as any;
+        }
+    }
+)
 
 const companyThunks = {
     getEmployerCompany,
@@ -127,7 +142,8 @@ const companyThunks = {
     getCompanies,
     getCompanyDetail,
     toggleFollowCompany,
-    getSavedCompanies
+    getSavedCompanies,
+    getEmployerStatistics
 }
 
 export default companyThunks
