@@ -1,12 +1,12 @@
 import { useState, useEffect } from 'react';
-import { 
-  Card, 
-  Input, 
-  Select, 
-  Table, 
-  Button, 
-  Space, 
-  Tag, 
+import {
+  Card,
+  Input,
+  Select,
+  Table,
+  Button,
+  Space,
+  Tag,
   Tooltip,
   Modal,
   message
@@ -42,12 +42,12 @@ const JOB_ACTIVITY_STATUS_OPTIONS = [
 const ManageResumePage = () => {
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
-  const { 
-    jobPostActivities, 
-    loading, 
+  const {
+    jobPostActivities,
+    loading,
     requestParams
   } = useSelector((state: RootState) => state.jobPostActivityStore);
-  
+
   const [emailModalVisible, setEmailModalVisible] = useState(false);
   const [selectedEmailActivity, setSelectedEmailActivity] = useState<IJobPostActivityDto | null>(null);
   const debouncedSearch = useDebounce(requestParams.search || '', 500);
@@ -64,20 +64,6 @@ const ManageResumePage = () => {
   const getPositionLabel = (position?: number) => {
     if (!position) return 'N/A';
     return POSITION_OPTIONS.find(opt => opt.value === position)?.label || 'N/A';
-  };
-
-  // Status tag
-  const getStatusTag = (status: number) => {
-    const statusConfig = {
-      [EJobPostActivityStatus.PENDING]: { color: 'orange', text: 'Chờ xử lý' },
-      [EJobPostActivityStatus.CONTACTED]: { color: 'cyan', text: 'Đã liên hệ' },
-      [EJobPostActivityStatus.TESTED]: { color: 'blue', text: 'Đã test' },
-      [EJobPostActivityStatus.INTERVIEWED]: { color: 'purple', text: 'Đã phỏng vấn' },
-      [EJobPostActivityStatus.ACCEPTED]: { color: 'green', text: 'Đã chấp nhận' },
-      [EJobPostActivityStatus.REJECTED]: { color: 'red', text: 'Đã từ chối' },
-    };
-    const config = statusConfig[status as keyof typeof statusConfig] || { color: 'default', text: 'Không xác định' };
-    return <Tag color={config.color}>{config.text}</Tag>;
   };
 
   // Xem chi tiết
@@ -130,6 +116,39 @@ const ManageResumePage = () => {
   const handleEmailModalCancel = () => {
     setEmailModalVisible(false);
     setSelectedEmailActivity(null);
+  };
+
+  // Cập nhật trạng thái
+  const handleStatusChange = async (newStatus: number, record: IJobPostActivityDto) => {
+    Modal.confirm({
+      title: 'Xác nhận cập nhật',
+      content: 'Bạn có muốn cập nhật trạng thái hồ sơ ứng tuyển?',
+      okText: 'OK',
+      cancelText: 'Hủy',
+      centered: true,
+      onOk: async () => {
+        try {
+          const jobPostActivityService = (await import('../../../../services/jobPostActivityService')).default;
+          const result = await jobPostActivityService.updateJobPostActivityStatus({
+            jobPostActivityId: record.id,
+            status: newStatus as EJobPostActivityStatus
+          });
+
+          if (result) {
+            message.success('Cập nhật trạng thái thành công');
+            dispatch(jobPostActivityActions.getJobPostActivities({
+              ...requestParams,
+              search: debouncedSearch || undefined
+            }));
+          } else {
+            message.error('Cập nhật trạng thái thất bại');
+          }
+        } catch (error) {
+          console.error('Error updating status:', error);
+          message.error('Có lỗi xảy ra khi cập nhật trạng thái');
+        }
+      },
+    });
   };
 
   const columns: ColumnsType<IJobPostActivityDto> = [
@@ -185,9 +204,16 @@ const ManageResumePage = () => {
       title: 'Trạng thái',
       dataIndex: 'status',
       key: 'status',
-      width: 120,
+      width: 150,
       align: 'center',
-      render: (status) => getStatusTag(status),
+      render: (status, record) => (
+        <Select
+          value={status}
+          onChange={(newStatus) => handleStatusChange(newStatus, record)}
+          className="w-full"
+          options={JOB_ACTIVITY_STATUS_OPTIONS}
+        />
+      ),
     },
     {
       title: 'Email',
@@ -210,26 +236,26 @@ const ManageResumePage = () => {
       render: (_, record) => (
         <Space size="small">
           <Tooltip title="Xem chi tiết">
-            <Button 
-              type="text" 
-              size="small" 
-              icon={<EyeOutlined className="text-blue-500!" />} 
+            <Button
+              type="text"
+              size="small"
+              icon={<EyeOutlined className="text-blue-500!" />}
               onClick={() => handleView(record)}
             />
           </Tooltip>
           <Tooltip title={record.isSentMail ? "Gửi lại email" : "Gửi email"}>
-            <Button 
-              type="text" 
-              size="small" 
-              icon={<MailOutlined className="text-green-500!" />} 
+            <Button
+              type="text"
+              size="small"
+              icon={<MailOutlined className="text-green-500!" />}
               onClick={() => handleSendEmail(record)}
             />
           </Tooltip>
           <Tooltip title="Xóa">
-            <Button 
-              type="text" 
-              danger 
-              icon={<DeleteOutlined />} 
+            <Button
+              type="text"
+              danger
+              icon={<DeleteOutlined />}
               size="small"
               onClick={() => handleDelete(record)}
             />

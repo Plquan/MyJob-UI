@@ -76,11 +76,7 @@ const SendEmailModal = ({
                 className="mt-4"
             >
                 <Form.Item
-                    label={
-                        <span>
-                            To: <span className="text-red-500">*</span>
-                        </span>
-                    }
+                    label="Tới"
                     name="to"
                     rules={[
                         { required: true, message: 'Vui lòng nhập email người nhận!' },
@@ -91,11 +87,7 @@ const SendEmailModal = ({
                 </Form.Item>
 
                 <Form.Item
-                    label={
-                        <span>
-                            Tiêu đề <span className="text-red-500">*</span>
-                        </span>
-                    }
+                    label="Tiêu đề"
                     name="subject"
                     rules={[{ required: true, message: 'Vui lòng nhập tiêu đề!' }]}
                 >
@@ -103,11 +95,7 @@ const SendEmailModal = ({
                 </Form.Item>
 
                 <Form.Item
-                    label={
-                        <span>
-                            Nội dung email <span className="text-red-500">*</span>
-                        </span>
-                    }
+                    label="Nội dung email"
                     name="content"
                     rules={[{ required: true, message: 'Vui lòng nhập nội dung email!' }]}
                 >

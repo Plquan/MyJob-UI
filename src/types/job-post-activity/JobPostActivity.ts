@@ -1,3 +1,4 @@
+import { EJobPostActivityStatus } from "@/enums/job-post-activity/EJobPostActivity";
 import type { IResume } from "../resume/ResumeType";
 
 export interface IJobPostActivityDto {
@@ -26,4 +27,9 @@ export interface ISendEmailRequest {
     to: string
     subject: string
     content: string
+}
+
+export interface updateJobPostActivityStatusRequest {
+    jobPostActivityId: number
+    status: EJobPostActivityStatus
 }
