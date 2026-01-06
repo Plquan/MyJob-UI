@@ -214,6 +214,7 @@ const ResumeDetail = () => {
                   </Button>
                 </div>
               </div>
+            
             </Space>
           </div>
         </div>

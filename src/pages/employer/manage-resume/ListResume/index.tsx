@@ -217,13 +217,12 @@ const ManageResumePage = () => {
               onClick={() => handleView(record)}
             />
           </Tooltip>
-          <Tooltip title={record.isSentMail ? "Đã gửi email" : "Gửi email"}>
+          <Tooltip title={record.isSentMail ? "Gửi lại email" : "Gửi email"}>
             <Button 
               type="text" 
               size="small" 
               icon={<MailOutlined className="text-green-500!" />} 
               onClick={() => handleSendEmail(record)}
-              disabled={!record.email || record.isSentMail}
             />
           </Tooltip>
           <Tooltip title="Xóa">

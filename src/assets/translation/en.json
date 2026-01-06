@@ -31,5 +31,13 @@
     "profile": "My Profile",
     "logout": "Logout",
     "dashboard": "Dashboard"
+  },
+  "guide": {
+    "title": "Career Guide",
+    "articles": "articles",
+    "heroTitle": "IT Career Guide",
+    "heroSubtitle": "Discover articles, tips, and career development paths in the Information Technology industry",
+    "popular": "Popular Articles",
+    "featured": "Featured Content"
   }
 }

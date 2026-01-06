@@ -31,59 +31,61 @@ import ResumeDetailPage from "../pages/employer/manage-resume/ResumeDetail";
 import ChatPage from "../pages/chat";
 import FindCandidatePage from "../pages/employer/find-candidate";
 import ManagePackagePage from "../pages/employer/manage-package";
+import GuidePage from "../pages/guide";
 
 const AppRoutes = () => {
     return (
-       <BrowserRouter>
-        <Routes>
-            <Route path={ROUTE_PATH.CANDIDATE_LOGIN} element={<CandidateLoginPage />} />
-            <Route path={ROUTE_PATH.CANDIDATE_REGISTER} element={<CandidateRegisterPage />} />
-            <Route path={ROUTE_PATH.EMPLOYER_LOGIN} element={<CompanyLoginPage />} />
-            <Route path={ROUTE_PATH.EMPLOYER_REGISTER} element={<CompanyRegisterPage />} />
+        <BrowserRouter>
+            <Routes>
+                <Route path={ROUTE_PATH.CANDIDATE_LOGIN} element={<CandidateLoginPage />} />
+                <Route path={ROUTE_PATH.CANDIDATE_REGISTER} element={<CandidateRegisterPage />} />
+                <Route path={ROUTE_PATH.EMPLOYER_LOGIN} element={<CompanyLoginPage />} />
+                <Route path={ROUTE_PATH.EMPLOYER_REGISTER} element={<CompanyRegisterPage />} />
 
-            <Route element={<ProtectRoute role={EUserRole.CANDIDATE}/>}>
-            <Route element={<CandidateLayout/>}>
-            <Route path={ROUTE_PATH.CANDIDATE_PROFILE} element={<CandidateProfilePage />} />
-            <Route path={ROUTE_PATH.CANDIDATE_OVERVIEW} element={<OverviewDashboard />} />
-            <Route path={ROUTE_PATH.CANDIDATE_MY_COMPANIES} element={<MyCompanyTab />} />
-            <Route path={ROUTE_PATH.CANDIDATE_ONLINE_RESUME} element={<OnelineResumePage />} />
-            </Route>
-            </Route>
-    
-            <Route element={<DefaultLayout/>}>
-            <Route path={ROUTE_PATH.HOME} element={<HomePage />} />
-            <Route path={ROUTE_PATH.JOBS} element={<JobPage />} />
-            <Route path={ROUTE_PATH.COMPANIES} element={<CompanyPage />} />
-            <Route path={ROUTE_PATH.COMPANY_DETAIL} element={<CompanyDetail />} />
-            <Route path={ROUTE_PATH.JOB_DETAIL} element={<JobDetail />} />
-            </Route>
-            
-            <Route element={<ProtectRoute role={EUserRole.EMPLOYER}/>}>
-            <Route element={<EmployerLayout/>}>
-            <Route path={ROUTE_PATH.EMPLOYER_DASHBOARD} element={<EmployerDashboard />} />
-            <Route path={ROUTE_PATH.EMPLOYER_COMPANY} element={<EmployerCompanyPage />} />
-            <Route path={ROUTE_PATH.EMPLOYER_JOB_POST} element={<ManageJobPostPage />} />
-            <Route path={ROUTE_PATH.EMPLOYER_MANAGE_RESUME} element={<ManageResumePage />} />
-            <Route path={ROUTE_PATH.EMPLOYER_RESUME_DETAIL} element={<ResumeDetailPage />} />
-            <Route path={ROUTE_PATH.EMPLOYER_FIND_CANDIDATE} element={<FindCandidatePage />} />
-            <Route path={ROUTE_PATH.EMPLOYER_MANAGE_PACKAGE} element={<ManagePackagePage />} />
-            </Route>
-            </Route>
+                <Route element={<ProtectRoute role={EUserRole.CANDIDATE} />}>
+                    <Route element={<CandidateLayout />}>
+                        <Route path={ROUTE_PATH.CANDIDATE_PROFILE} element={<CandidateProfilePage />} />
+                        <Route path={ROUTE_PATH.CANDIDATE_OVERVIEW} element={<OverviewDashboard />} />
+                        <Route path={ROUTE_PATH.CANDIDATE_MY_COMPANIES} element={<MyCompanyTab />} />
+                        <Route path={ROUTE_PATH.CANDIDATE_ONLINE_RESUME} element={<OnelineResumePage />} />
+                    </Route>
+                </Route>
 
-            {/* Chat route - cho phép cả Candidate và Employer */}
-          
-            <Route path={ROUTE_PATH.CHAT} element={<ChatPage />} />
-        
+                <Route element={<DefaultLayout />}>
+                    <Route path={ROUTE_PATH.HOME} element={<HomePage />} />
+                    <Route path={ROUTE_PATH.JOBS} element={<JobPage />} />
+                    <Route path={ROUTE_PATH.COMPANIES} element={<CompanyPage />} />
+                    <Route path={ROUTE_PATH.GUIDE} element={<GuidePage />} />
+                    <Route path={ROUTE_PATH.COMPANY_DETAIL} element={<CompanyDetail />} />
+                    <Route path={ROUTE_PATH.JOB_DETAIL} element={<JobDetail />} />
+                </Route>
 
-            <Route element={<AdminLayout/>}>
-            <Route path={ROUTE_PATH.ADMIN_MANAGE_ROLE} element={<ManageRolePage />} />
-            <Route path={ROUTE_PATH.ADMIN_MANAGE_USER} element={<ManageUserPage />} />
-            <Route path={ROUTE_PATH.ADMIN_MANAGE_PACKAGE} element={<RoleManagement />} />
-            </Route>
-            <Route path={ROUTE_PATH.PRODUCTS} element={<ProductPage/>} />
+                <Route element={<ProtectRoute role={EUserRole.EMPLOYER} />}>
+                    <Route element={<EmployerLayout />}>
+                        <Route path={ROUTE_PATH.EMPLOYER_DASHBOARD} element={<EmployerDashboard />} />
+                        <Route path={ROUTE_PATH.EMPLOYER_COMPANY} element={<EmployerCompanyPage />} />
+                        <Route path={ROUTE_PATH.EMPLOYER_JOB_POST} element={<ManageJobPostPage />} />
+                        <Route path={ROUTE_PATH.EMPLOYER_MANAGE_RESUME} element={<ManageResumePage />} />
+                        <Route path={ROUTE_PATH.EMPLOYER_RESUME_DETAIL} element={<ResumeDetailPage />} />
+                        <Route path={ROUTE_PATH.EMPLOYER_FIND_CANDIDATE} element={<FindCandidatePage />} />
+                        <Route path={ROUTE_PATH.EMPLOYER_MANAGE_PACKAGE} element={<ManagePackagePage />} />
+                    </Route>
+                </Route>
 
-        </Routes>
-       </BrowserRouter>
+                {/* Chat route - cho phép cả Candidate và Employer */}
+
+                <Route path={ROUTE_PATH.CHAT} element={<ChatPage />} />
+
+
+                <Route element={<AdminLayout />}>
+                    <Route path={ROUTE_PATH.ADMIN_MANAGE_ROLE} element={<ManageRolePage />} />
+                    <Route path={ROUTE_PATH.ADMIN_MANAGE_USER} element={<ManageUserPage />} />
+                    <Route path={ROUTE_PATH.ADMIN_MANAGE_PACKAGE} element={<RoleManagement />} />
+                </Route>
+                <Route path={ROUTE_PATH.PRODUCTS} element={<ProductPage />} />
+
+            </Routes>
+        </BrowserRouter>
     )
 }
 

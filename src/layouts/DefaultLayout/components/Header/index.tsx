@@ -147,7 +147,6 @@ const DefaultHeader = () => {
           mode="horizontal"
           selectedKeys={[location.pathname]}
           items={items}
-
           style={{ fontSize: 14, marginLeft: 'auto', width: '50%', marginRight: 24, height: '100%', display: 'flex', alignItems: 'center' }}
         />
 

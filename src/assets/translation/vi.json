@@ -31,5 +31,13 @@
     "profile": "Hồ sơ của tôi",
     "logout": "Đăng xuất",
     "dashboard": "Tổng quan"
+  },
+  "guide": {
+    "title": "Cẩm nang việc làm",
+    "articles": "bài viết",
+    "heroTitle": "Cẩm nang việc làm IT",
+    "heroSubtitle": "Khám phá các bài viết hướng dẫn, kinh nghiệm và lộ trình phát triển sự nghiệp trong ngành Công nghệ thông tin",
+    "popular": "Bài viết phổ biến",
+    "featured": "Nội dung nổi bật"
   }
 }
