@@ -170,17 +170,19 @@ const ResumeDetail = () => {
             className="border-2 border-gray-100 flex-shrink-0 bg-orange-100 text-orange-600"
           />
           <div>
-            <Title level={2} className="mb-1 !mt-0 !text-gray-800">
+            <Title level={2} className="mb-2! !mt-0 !text-gray-800">
               {fullName || candidate?.fullName || 'N/A'}
             </Title>
             <div className="text-base text-black font-medium mb-2">
               {resume?.title || 'Lập trình viên'}
             </div>
             <Space direction="vertical" size={2}>
-              <Text type="secondary" className="text-sm">
-                Thời gian cập nhật: <span className="font-medium text-gray-700">{formatDate(updatedAt)}</span>
+              <Text
+                type="secondary"
+                className="text-[11px]! bg-[#154C91]/80 px-2 py-1 rounded-full text-white!">
+                Cập nhật lần cuối: <span>{formatDate(updatedAt)}</span>
               </Text>
-              {/* Mail and Chat buttons */}
+
               <div className="flex items-center mt-4 gap-2 ">
                 <div className="flex items-center gap-2">
                   <Button
@@ -214,12 +216,11 @@ const ResumeDetail = () => {
                   </Button>
                 </div>
               </div>
-            
+
             </Space>
           </div>
         </div>
 
-        {/* View and Download buttons on far right */}
 
       </div>
 
@@ -291,10 +292,8 @@ const ResumeDetail = () => {
 
       <div>
         <Title level={4} className="mb-4 !text-gray-800">Mục tiêu nghề nghiệp</Title>
-        <div className="p-4 rounded border border-gray-200">
-          <Paragraph className="mb-0 text-gray-800 whitespace-pre-wrap">
-            {resume?.description || 'Chưa cập nhật mục tiêu nghề nghiệp.'}
-          </Paragraph>
+        <div className="p-2 rounded border border-gray-200">
+          {resume?.description || 'Chưa cập nhật mục tiêu nghề nghiệp.'}
         </div>
       </div>
     </Card>

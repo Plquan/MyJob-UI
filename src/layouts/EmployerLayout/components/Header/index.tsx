@@ -6,11 +6,11 @@ import { useNavigate } from 'react-router-dom';
 import ROUTE_PATH from '../../../../routes/routePath';
 import { Button } from 'antd';
 
-const EmployerHeader = () =>  {
-    const navigate = useNavigate()
-    const { currentUser } = useSelector((state: RootState) => state.authStore)
+const EmployerHeader = () => {
+  const navigate = useNavigate()
+  const { currentUser } = useSelector((state: RootState) => state.authStore)
   return (
-    <Header className="h-14 bg-black flex items-center justify-between px-6 text-white">
+    <Header className="h-14 bg-[#154C91]! flex items-center justify-between px-6">
       <div className="flex items-center gap-6 ml-auto text-white!">
         <div className="flex items-center gap-2">
           <MessageOutlined className="text-xl" />
@@ -32,6 +32,6 @@ const EmployerHeader = () =>  {
       </div>
     </Header>
   )
-} 
+}
 
 export default EmployerHeader
