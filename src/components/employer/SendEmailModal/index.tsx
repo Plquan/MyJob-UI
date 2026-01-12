@@ -2,11 +2,10 @@ import { Modal, Form, Input, Button } from 'antd';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import { useEffect, useState } from 'react';
-import { IJobPostActivityDto } from '@/types/job-post-activity/JobPostActivity';
 
 interface SendEmailModalProps {
     open: boolean;
-    activity: IJobPostActivityDto | null;
+    toEmail: string;
     onCancel: () => void;
     onSend: (values: { to: string; subject: string; content: string }) => void;
     loading?: boolean;
@@ -14,7 +13,7 @@ interface SendEmailModalProps {
 
 const SendEmailModal = ({
     open,
-    activity,
+    toEmail,
     onCancel,
     onSend,
     loading = false,
@@ -24,15 +23,15 @@ const SendEmailModal = ({
     const [submitting, setSubmitting] = useState(false);
 
     useEffect(() => {
-        if (open && activity) {
+        if (open && toEmail) {
             form.setFieldsValue({
-                to: activity.email || '',
+                to: toEmail,
                 subject: '',
                 content: '',
             });
             setEditorContent('');
         }
-    }, [open, activity, form]);
+    }, [open, toEmail, form]);
 
     const handleCancel = () => {
         form.resetFields();
@@ -83,7 +82,7 @@ const SendEmailModal = ({
                         { type: 'email', message: 'Email không hợp lệ!' },
                     ]}
                 >
-                    <Input placeholder="Nhập email người nhận" />
+                    <Input placeholder="Nhập email người nhận" disabled />
                 </Form.Item>
 
                 <Form.Item
@@ -127,4 +126,3 @@ const SendEmailModal = ({
 };
 
 export default SendEmailModal;
-

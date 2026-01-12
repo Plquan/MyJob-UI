@@ -7,6 +7,7 @@ import {
   createOrGetConversationThunk,
   markAsReadThunk,
   deleteConversationThunk,
+  getUnreadCountThunk,
 } from './chatThunk';
 
 interface ChatState {
@@ -50,7 +51,18 @@ const chatSlice = createSlice({
       state.currentConversation = null;
     },
     addMessage: (state, action) => {
-      state.messages.push(action.payload);
+      const message = action.payload;
+      // Kiểm tra xem message đã tồn tại chưa để tránh duplicate
+      const messageExists = state.messages.some(msg => msg.id === message.id);
+      if (!messageExists) {
+        state.messages.push(message);
+      }
+    },
+    incrementUnreadCount: (state) => {
+      state.unreadCount = (state.unreadCount || 0) + 1;
+    },
+    setUnreadCount: (state, action) => {
+      state.unreadCount = action.payload || 0;
     },
   },
   extraReducers: (builder) => {
@@ -78,7 +90,8 @@ const chatSlice = createSlice({
     });
     builder.addCase(getMessagesThunk.fulfilled, (state, action) => {
       state.isLoading = false;
-      state.messages = action.payload?.items?.reverse() || [];
+      // Backend đã reverse rồi nên không cần reverse nữa
+      state.messages = action.payload?.items || [];
       state.totalMessages = action.payload?.totalItems || 0;
     });
     builder.addCase(getMessagesThunk.rejected, (state, action) => {
@@ -91,7 +104,13 @@ const chatSlice = createSlice({
       state.error = null;
     });
     builder.addCase(sendMessageThunk.fulfilled, (state, action) => {
-      state.messages.push(action.payload);
+      const message = action.payload;
+      // Kiểm tra xem message đã tồn tại chưa để tránh duplicate
+      // (vì có thể đã được add qua socket trước đó)
+      const messageExists = state.messages.some(msg => msg.id === message.id);
+      if (!messageExists) {
+        state.messages.push(message);
+      }
     });
     builder.addCase(sendMessageThunk.rejected, (state, action) => {
       state.error = action.payload as string;
@@ -138,9 +157,21 @@ const chatSlice = createSlice({
       // Cập nhật unreadCount sau khi xóa conversation
       state.unreadCount = calculateUnreadCount(state.conversations);
     });
+
+    // Get Unread Count
+    builder.addCase(getUnreadCountThunk.pending, (state) => {
+      state.error = null;
+    });
+    builder.addCase(getUnreadCountThunk.fulfilled, (state, action) => {
+      state.unreadCount = action.payload || 0;
+    });
+    builder.addCase(getUnreadCountThunk.rejected, (state, action) => {
+      state.error = action.payload as string;
+      state.unreadCount = 0;
+    });
   },
 });
 
-export const { setCurrentConversation, clearMessages, addMessage } = chatSlice.actions;
+export const { setCurrentConversation, clearMessages, addMessage, incrementUnreadCount, setUnreadCount } = chatSlice.actions;
 export default chatSlice.reducer;
 

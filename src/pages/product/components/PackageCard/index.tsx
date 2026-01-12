@@ -10,6 +10,7 @@ import { Modal } from "antd";
 import { useNavigate } from "react-router-dom";
 import ROUTE_PATH from "../../../../routes/routePath";
 import { EUserRole } from "../../../../constant/role";
+import { message } from "antd";
 
 const { Title } = Typography;
 
@@ -38,14 +39,28 @@ export const PackageCard = () => {
   const handleOk = async () => {
     if (selectedPackage) {
       try {
-        await dispatch(packageActions.purchasePackage(selectedPackage.id)).unwrap();
-        setIsModalOpen(false);
-        setSelectedPackage(null);
-        // Navigate to manage package page after successful purchase
-        navigate(ROUTE_PATH.EMPLOYER_MANAGE_PACKAGE);
-      } catch (error) {
-        // Error is already handled by reducer with message.error
-        console.error('Purchase failed:', error);
+        // Create checkout session with Stripe
+        const baseUrl = window.location.origin;
+        const successUrl = `${baseUrl}${ROUTE_PATH.PAYMENT_SUCCESS}`;
+        const cancelUrl = `${baseUrl}${ROUTE_PATH.PAYMENT_CANCEL}`;
+
+        const response = await dispatch(
+          packageActions.createCheckoutSession({
+            packageId: selectedPackage.id,
+            successUrl,
+            cancelUrl,
+          })
+        ).unwrap();
+
+        // Redirect to Stripe checkout
+        if (response.url) {
+          window.location.href = response.url;
+        } else {
+          message.error('Không thể tạo phiên thanh toán');
+        }
+      } catch (error: any) {
+        message.error(error?.message || 'Không thể tạo phiên thanh toán');
+        console.error('Checkout session creation failed:', error);
       }
     }
   }

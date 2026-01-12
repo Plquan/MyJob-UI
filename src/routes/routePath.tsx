@@ -30,8 +30,9 @@ const ROUTE_PATH = {
   EMPLOYER_COMPANY: '/employer/company',
   EMPLOYER_JOB_POST: '/employer/job-post',
   EMPLOYER_MANAGE_RESUME: '/employer/manage-resume',
-  EMPLOYER_RESUME_DETAIL: '/employer/manage-resume/:jobPostActivityId',
+  EMPLOYER_RESUME_DETAIL: '/employer/manage-resume/:resumeId',
   EMPLOYER_FIND_CANDIDATE: '/employer/find-candidate',
+  EMPLOYER_FIND_CANDIDATE_DETAIL: '/employer/find-candidate/:resumeId',
   EMPLOYER_MANAGE_PACKAGE: '/employer/manage-package',
 
   //admin
@@ -41,7 +42,9 @@ const ROUTE_PATH = {
   ADMIN_MANAGE_USER: '/admin/manage-user',
 
   //packages
-  PRODUCTS: '/products'
+  PRODUCTS: '/products',
+  PAYMENT_SUCCESS: '/payment/success',
+  PAYMENT_CANCEL: '/payment/cancel'
 
 }
 

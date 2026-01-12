@@ -1,30 +1,26 @@
-export interface IUserData {
+export interface IUser {
     id: number;
     email: string;
-    fullName: string;
     isVerifyEmail: boolean;
     isActive: boolean;
-    roleName: string;
-    createdAt: string;      
-    updatedAt: string;      
-    avatar?: string | null; 
-    groupRoles?: number[]; 
     isSuperUser: boolean;
     isStaff: boolean;
+    createdAt: Date;
+    updatedAt: Date;
 }
 
-export interface IPagingResponse{
-  users: IUserData[];
-  page: number;
-  limit: number;
-  totalItem: number;
+export interface IPagingResponse {
+    users: IUser[];
+    page: number;
+    limit: number;
+    totalItem: number;
 }
 
-export interface IUpdateUser{
+export interface IUpdateUser {
     id: number
     email: string
     fullName: string
-    password:string
+    password: string
     isVerifyEmail: boolean
     isActive: boolean
     groupRoles?: number[]
@@ -32,10 +28,10 @@ export interface IUpdateUser{
     isStaff: boolean
 }
 
-export interface ICreateUser{
+export interface ICreateUser {
     email: string
     fullName: string
-    password:string
+    password: string
     isVerifyEmail: boolean
     isActive: boolean
     roleName?: string
@@ -43,11 +39,12 @@ export interface ICreateUser{
     isSuperUser: boolean
     isStaff: boolean
 }
+
 export interface IUserFilter {
     searchKey?: string
-    roleName?:string
+    roleName?: string
     isActive?: boolean
-    isVerifyEmail?:boolean
-    page?:number
+    isVerifyEmail?: boolean
+    page?: number
     limit?: number
- }
+}

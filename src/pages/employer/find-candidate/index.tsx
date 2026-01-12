@@ -1,13 +1,16 @@
 import { useEffect, useState } from 'react';
 import { Card } from 'antd';
+import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import type { AppDispatch, RootState } from '../../../stores';
 import { attachedResumeActions } from '../../../stores/attachedResumeStore/attachedResumeReducer';
+import ROUTE_PATH from '../../../routes/routePath';
 import SearchHeader from './components/SearchHeader';
 import AdvancedFilters from './components/AdvancedFilters';
 import CandidateList from './components/CandidateList';
 
 const FindCandidate = () => {
+  const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
   const { searchResults, searchParams, loading } = useSelector((state: RootState) => state.attachedResumeStore);
   const { provinces } = useSelector((state: RootState) => state.provinceStore);
@@ -22,8 +25,6 @@ const FindCandidate = () => {
     experience: undefined as number | undefined,
     academicLevel: undefined as number | undefined,
     jobType: undefined as number | undefined,
-    gender: undefined as number | undefined,
-    maritalStatus: undefined as number | undefined,
   });
 
   useEffect(() => {
@@ -63,8 +64,6 @@ const FindCandidate = () => {
       experience: undefined,
       academicLevel: undefined,
       jobType: undefined,
-      gender: undefined,
-      maritalStatus: undefined,
     });
     dispatch(attachedResumeActions.resetSearchParams());
   };
@@ -74,8 +73,7 @@ const FindCandidate = () => {
   };
 
   const handleCandidateClick = (resumeId: number) => {
-    // TODO: Navigate to candidate detail page
-    console.log('Clicked resume:', resumeId);
+    navigate(ROUTE_PATH.EMPLOYER_FIND_CANDIDATE_DETAIL.replace(':resumeId', resumeId.toString()));
   };
 
   const hasActiveFilters = Object.values(filters).some(value => value !== undefined && value !== '');
@@ -101,8 +99,6 @@ const FindCandidate = () => {
             experience: filters.experience,
             academicLevel: filters.academicLevel,
             jobType: filters.jobType,
-            gender: filters.gender,
-            maritalStatus: filters.maritalStatus,
           }}
           careers={careers}
           hasActiveFilters={hasActiveFilters}

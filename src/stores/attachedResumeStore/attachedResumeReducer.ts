@@ -26,8 +26,6 @@ interface AttachedResumeState {
         experience?: number;
         academicLevel?: number;
         jobType?: number;
-        gender?: number;
-        maritalStatus?: number;
     };
 }
 
@@ -65,8 +63,6 @@ export const attachedResumeSlice = createSlice({
                     experience?: number;
                     academicLevel?: number;
                     jobType?: number;
-                    gender?: number;
-                    maritalStatus?: number;
                 }>
             >
         ) => {

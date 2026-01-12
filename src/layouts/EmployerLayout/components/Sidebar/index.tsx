@@ -62,19 +62,13 @@ export default function CompanySidebar() {
 
   return (
     <div
-      className="min-h-screen flex flex-col"
-      style={{ backgroundColor: 'white' }}
-    >
-      <div
-        className="h-16 flex items-center ml-5"
-      >
+      className="min-h-screen flex flex-col">
+      <div className="h-16 flex items-center ml-5 border-r border-gray-200">
         <img
           src="/assets/vinhuni.png"
           className="h-10 object-contain"
         />
       </div>
-
-
       <Menu
         theme="light"
         mode="inline"
@@ -91,6 +85,5 @@ export default function CompanySidebar() {
         }}
       />
     </div>
-
-  );
+  )
 }

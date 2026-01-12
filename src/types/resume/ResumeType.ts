@@ -75,6 +75,4 @@ import type { ISkill } from "./SkillType"
     experience?: number;
     academicLevel?: number;
     jobType?: number;
-    gender?: number;
-    maritalStatus?: number;
   }

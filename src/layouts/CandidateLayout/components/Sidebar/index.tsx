@@ -1,10 +1,11 @@
-import { Menu } from "antd";
+import { Menu, Badge } from "antd";
 import {
   UserOutlined,
   HomeOutlined,
   BellOutlined,
   AuditOutlined,
   IdcardOutlined,
+  MessageOutlined,
 } from "@ant-design/icons";
 import { useNavigate, useLocation } from "react-router-dom";
 import ROUTE_PATH from "../../../../routes/routePath";
@@ -19,6 +20,7 @@ export default function CandidateSidebar() {
   const navigate = useNavigate()
   const location = useLocation()
   const {currentUser} = useSelector((state: RootState) => state.authStore)
+  const { unreadCount } = useSelector((state: RootState) => state.chatStore)
 
   const menuItems: MenuProps["items"] = [
     {

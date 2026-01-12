@@ -6,6 +6,7 @@ import {
   getMessagesThunk,
   sendMessageThunk,
   markAsReadThunk,
+  getUnreadCountThunk,
 } from '@/stores/chatStore/chatThunk';
 import { setCurrentConversation, addMessage } from '@/stores/chatStore/chatReducer';
 import { IConversation } from '@/types/chat/ChatType';
@@ -55,19 +56,26 @@ const ChatPage = () => {
 
   // Listen for new messages in current conversation
   useEffect(() => {
+    if (!currentConversation?.id || !user?.id) {
+      return;
+    }
+
     const cleanup = onNewMessage((message: any) => {
       // Only add message if it's in the current conversation and not from current user
-      if (message.conversationId === currentConversation?.id && message.senderId !== user?.id) {
+      if (message.conversationId === currentConversation.id && message.senderId !== user.id) {
         dispatch(addMessage(message));
-        // Refresh conversations to update last message
-        if (user?.id) {
-          dispatch(getConversationsThunk({ userId: user.id }));
-        }
-      } else if (message.senderId !== user?.id) {
-        // Message from other conversation - refresh conversations to update unread count
-        if (user?.id) {
-          dispatch(getConversationsThunk({ userId: user.id }));
-        }
+        
+        // Tự động đánh dấu đã đọc khi B đang mở chat của A
+        dispatch(markAsReadThunk({ 
+          conversationId: currentConversation.id, 
+          userId: user.id 
+        }));
+        
+        dispatch(getConversationsThunk({ userId: user.id }));
+        dispatch(getUnreadCountThunk({ userId: user.id }));
+      } else if (message.senderId !== user.id) {
+        dispatch(getConversationsThunk({ userId: user.id }));
+        dispatch(getUnreadCountThunk({ userId: user.id }));
       }
     });
 
@@ -84,6 +92,8 @@ const ChatPage = () => {
         // Refresh conversations list to update unread count
         if (user?.id) {
           dispatch(getConversationsThunk({ userId: user.id }));
+          // Cập nhật unread count
+          dispatch(getUnreadCountThunk({ userId: user.id }));
         }
       }
     });

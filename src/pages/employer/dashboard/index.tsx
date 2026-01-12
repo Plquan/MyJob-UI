@@ -1,4 +1,4 @@
-import { Card, Row, Col, Spin, DatePicker, Space } from 'antd';
+import { Card, Row, Col, DatePicker } from 'antd';
 import { FileTextOutlined, ClockCircleOutlined, UserOutlined, CloseCircleOutlined } from '@ant-design/icons';
 import { Column, Pie } from '@ant-design/charts';
 import { useEffect, useMemo, useState } from 'react';
@@ -15,11 +15,11 @@ export default function EmployerDashboard() {
   const [dateRange, setDateRange] = useState<[Dayjs | null, Dayjs | null] | null>(null);
 
   useEffect(() => {
-    const params = dateRange 
+    const params = dateRange
       ? {
-          startDate: dateRange[0]?.format('YYYY-MM-DD'),
-          endDate: dateRange[1]?.format('YYYY-MM-DD')
-        }
+        startDate: dateRange[0]?.format('YYYY-MM-DD'),
+        endDate: dateRange[1]?.format('YYYY-MM-DD')
+      }
       : undefined;
     dispatch(companyThunks.getEmployerStatistics(params));
   }, [dispatch, dateRange]);
@@ -133,34 +133,12 @@ export default function EmployerDashboard() {
     };
   }, [employerStatistics]);
 
-  if (loadingStatistics) {
-    return (
-      <div className="flex justify-center items-center min-h-[400px]">
-        <Spin size="large" />
-      </div>
-    );
-  }
-
   const handleDateRangeChange = (dates: [Dayjs | null, Dayjs | null] | null) => {
     setDateRange(dates);
   };
 
   return (
-    <Card 
-      title="Tổng quan"
-      extra={
-        <Space>
-          <RangePicker
-            value={dateRange}
-            onChange={handleDateRangeChange}
-            format="DD/MM/YYYY"
-            placeholder={['Từ ngày', 'Đến ngày']}
-            allowClear
-            style={{ width: 230 }}
-          />
-        </Space>
-      }
-    >
+    <Card title="Tổng quan">
       <Row gutter={[24, 24]} className="mb-6">
         {stats.map((item: any) => (
           <Col xs={24} sm={12} lg={6} key={item.title}>
@@ -176,15 +154,35 @@ export default function EmployerDashboard() {
           </Col>
         ))}
       </Row>
+
+      {/* Date range filter */}
+      <Row className="mb-6">
+        <Col span={24}>
+          <div className="flex items-center gap-2">
+            <span className="text-sm font-medium">Lọc biểu đồ:</span>
+            <RangePicker
+              value={dateRange}
+              onChange={handleDateRangeChange}
+              format="DD/MM/YYYY"
+              placeholder={['Từ ngày', 'Đến ngày']}
+              allowClear
+              style={{ width: 260 }}
+            />
+          </div>
+        </Col>
+      </Row>
+
       {/* Charts row */}
       <Row gutter={16}>
-        <Col xs={24} md={12}>
-          <Card title="Biểu đồ ứng viên">
+        <Col xs={24} md={12} >
+          <Card title="Biểu đồ ứng viên" loading={loadingStatistics}
+            styles={{ body: { minHeight: '330px' } }}>
             <Column {...columnConfig} height={280} />
           </Card>
         </Col>
-        <Col xs={24} md={12}>
-          <Card title="Biểu đồ tuyển dụng">
+        <Col xs={24} md={12} >
+          <Card title="Biểu đồ tuyển dụng" loading={loadingStatistics}
+            styles={{ body: { minHeight: '330px' } }}>
             <Pie {...pieConfig} height={280} />
           </Card>
         </Col>

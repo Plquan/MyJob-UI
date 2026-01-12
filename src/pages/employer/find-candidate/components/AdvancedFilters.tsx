@@ -7,8 +7,6 @@ import {
   EnvironmentOutlined,
   ClockCircleOutlined,
   ExperimentOutlined,
-  ManOutlined,
-  HeartOutlined,
 } from '@ant-design/icons';
 import {
   POSITION_OPTIONS,
@@ -16,8 +14,6 @@ import {
   EXPERIENCE_OPTIONS,
   ACADEMICLEVEL_OPTIONS,
   JOBTYPE_OPTIONS,
-  GENDER_OPTIONS,
-  MARTIALSTATUS_OPTIONS,
 } from '../../../../constant/selectOptions';
 
 const { Option } = Select;
@@ -30,8 +26,6 @@ interface AdvancedFiltersProps {
     experience: number | undefined;
     academicLevel: number | undefined;
     jobType: number | undefined;
-    gender: number | undefined;
-    maritalStatus: number | undefined;
   };
   careers: any[] | undefined;
   hasActiveFilters: boolean;
@@ -197,48 +191,6 @@ const AdvancedFilters = ({
               className="w-full"
             >
               {JOBTYPE_OPTIONS.map((option) => (
-                <Option key={option.value} value={option.value}>
-                  {option.label}
-                </Option>
-              ))}
-            </Select>
-          </div>
-
-          {/* Giới tính */}
-          <div>
-            <label className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2">
-              <ManOutlined className="text-cyan-500" />
-              Giới tính
-            </label>
-            <Select
-              placeholder="Tất cả giới tính"
-              value={filters.gender}
-              onChange={(value) => handleSelectChange('gender', value)}
-              allowClear
-              className="w-full"
-            >
-              {GENDER_OPTIONS.map((option) => (
-                <Option key={option.value} value={option.value}>
-                  {option.label}
-                </Option>
-              ))}
-            </Select>
-          </div>
-
-          {/* Tình trạng hôn nhân */}
-          <div>
-            <label className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2">
-              <HeartOutlined className="text-pink-500" />
-              Tình trạng hôn nhân
-            </label>
-            <Select
-              placeholder="Tất cả tình trạng"
-              value={filters.maritalStatus}
-              onChange={(value) => handleSelectChange('maritalStatus', value)}
-              allowClear
-              className="w-full"
-            >
-              {MARTIALSTATUS_OPTIONS.map((option) => (
                 <Option key={option.value} value={option.value}>
                   {option.label}
                 </Option>

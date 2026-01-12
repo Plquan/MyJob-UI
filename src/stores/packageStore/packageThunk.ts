@@ -1,6 +1,7 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import http from "../../ultils/axios/axiosCustom";
 import type { ICreatePackagedata, IPackageDto, IUpdatePackageData, IPackageUsage } from "../../types/package/PackageType";
+import type { ICreateCheckoutSessionRequest, ICreateCheckoutSessionResponse } from "../../types/payment/PaymentType";
 
 const getAllPackages = createAsyncThunk (
     "package/getAllPackages",
@@ -85,6 +86,18 @@ const getCompanyPackage = createAsyncThunk (
     }
 )
 
+const createCheckoutSession = createAsyncThunk (
+    "package/createCheckoutSession",
+    async (data: ICreateCheckoutSessionRequest, {rejectWithValue}): Promise<ICreateCheckoutSessionResponse> => {
+        try {
+            const response: ICreateCheckoutSessionResponse = await http.post("/payment/create-checkout-session", data);
+            return response;
+        } catch (error: any) {
+            return rejectWithValue(error.response?.data || { message: 'Failed to create checkout session' }) as any;
+        }
+    }
+)
+
 const packageThunks = {
     getAllPackages,
     createPackage,
@@ -92,7 +105,8 @@ const packageThunks = {
     deletePackage,
     getPackages,
     purchasePackage,
-    getCompanyPackage
+    getCompanyPackage,
+    createCheckoutSession
 }
 export default packageThunks;
 

@@ -3,9 +3,9 @@ import type { IJobPostActivityDto, IGetJobPostActivityRequest, ISendEmailRequest
 import http from "../../ultils/axios/axiosCustom";
 import type { IPaginationResponse } from "../../types/AppType";
 
-const getJobPostActivities = createAsyncThunk (
+const getJobPostActivities = createAsyncThunk(
     "jobPostActivity/getJobPostActivities",
-    async (params: IGetJobPostActivityRequest, {rejectWithValue}): Promise<IPaginationResponse<IJobPostActivityDto>> => {
+    async (params: IGetJobPostActivityRequest, { rejectWithValue }): Promise<IPaginationResponse<IJobPostActivityDto>> => {
         try {
             const response: IPaginationResponse<IJobPostActivityDto> = await http.get("/job-post-activity", {
                 params
@@ -16,9 +16,9 @@ const getJobPostActivities = createAsyncThunk (
         }
     }
 )
-const deleteJobPostActivity = createAsyncThunk (
+const deleteJobPostActivity = createAsyncThunk(
     "jobPostActivity/deleteJobPostActivity",
-    async (jobPostActivityId: number, {rejectWithValue}): Promise<boolean> => {
+    async (jobPostActivityId: number, { rejectWithValue }): Promise<boolean> => {
         try {
             const response: boolean = await http.delete(`/job-post-activity/${jobPostActivityId}`);
             return response;
@@ -27,9 +27,9 @@ const deleteJobPostActivity = createAsyncThunk (
         }
     }
 )
-const getJobPostActivityById = createAsyncThunk (
+const getJobPostActivityById = createAsyncThunk(
     "jobPostActivity/getJobPostActivityById",
-    async (jobPostActivityId: number, {rejectWithValue}): Promise<IJobPostActivityDto> => {
+    async (jobPostActivityId: number, { rejectWithValue }): Promise<IJobPostActivityDto> => {
         try {
             const response: IJobPostActivityDto = await http.get(`/job-post-activity/${jobPostActivityId}`);
             return response;
@@ -39,12 +39,11 @@ const getJobPostActivityById = createAsyncThunk (
     }
 )
 
-const sendEmailToCandidate = createAsyncThunk (
+const sendEmailToCandidate = createAsyncThunk(
     "jobPostActivity/sendEmailToCandidate",
-    async (params: ISendEmailRequest, {rejectWithValue}): Promise<boolean> => {
+    async (params: ISendEmailRequest, { rejectWithValue }): Promise<boolean> => {
         try {
-            const { jobPostActivityId, ...emailData } = params;
-            const response: boolean = await http.post(`/job-post-activity/${jobPostActivityId}/send-email`, emailData);
+            const response: boolean = await http.post(`/job-post-activity/send-email`, params);
             return response;
         } catch (error: any) {
             return rejectWithValue(error.response.data) as any;

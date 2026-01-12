@@ -21,9 +21,24 @@ const ChatWindow = memo(({
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const emojiPickerRef = useRef<HTMLDivElement>(null);
+  const prevMessagesLengthRef = useRef(0);
 
+  // Scroll to bottom when messages change
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    if (messages.length === 0) {
+      prevMessagesLengthRef.current = 0;
+      return;
+    }
+
+    // Nếu là lần đầu load messages hoặc chuyển conversation, scroll ngay không có animation
+    if (prevMessagesLengthRef.current === 0) {
+      messagesEndRef.current?.scrollIntoView({ behavior: 'auto' });
+    } else {
+      // Nếu có tin nhắn mới, scroll smooth
+      messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    }
+    
+    prevMessagesLengthRef.current = messages.length;
   }, [messages]);
 
   // Close emoji picker when clicking outside

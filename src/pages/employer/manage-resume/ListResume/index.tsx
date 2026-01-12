@@ -26,7 +26,7 @@ import type { IJobPostActivityDto } from '../../../../types/job-post-activity/Jo
 import { POSITION_OPTIONS } from '../../../../constant/selectOptions';
 import { EResumeType } from '../../../../enums/resume/EResumeType';
 import { EJobPostActivityStatus } from '../../../../enums/job-post-activity/EJobPostActivity';
-import SendEmailModal from './components/SendEmailModal';
+import SendEmailModal from '../../../../components/employer/SendEmailModal';
 import ROUTE_PATH from '../../../../routes/routePath';
 
 // Status options cho job activity
@@ -68,7 +68,11 @@ const ManageResumePage = () => {
 
   // Xem chi tiết
   const handleView = (activity: IJobPostActivityDto) => {
-    navigate(ROUTE_PATH.EMPLOYER_RESUME_DETAIL.replace(':jobPostActivityId', activity.id.toString()));
+    if (!activity.resumeId) {
+      message.warning('Hồ sơ này chưa có thông tin CV');
+      return;
+    }
+    navigate(ROUTE_PATH.EMPLOYER_RESUME_DETAIL.replace(':resumeId', activity.resumeId.toString()));
   };
 
   // Xóa
@@ -330,7 +334,7 @@ const ManageResumePage = () => {
       {/* Modal gửi email */}
       <SendEmailModal
         open={emailModalVisible}
-        activity={selectedEmailActivity}
+        toEmail={selectedEmailActivity?.email || ''}
         onCancel={handleEmailModalCancel}
         onSend={handleEmailSend}
       />

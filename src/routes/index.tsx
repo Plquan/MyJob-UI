@@ -30,8 +30,10 @@ import ManageResumePage from "../pages/employer/manage-resume/ListResume";
 import ResumeDetailPage from "../pages/employer/manage-resume/ResumeDetail";
 import ChatPage from "../pages/chat";
 import FindCandidatePage from "../pages/employer/find-candidate";
+import FindCandidateResumeDetailPage from "../pages/employer/find-candidate/ResumeDetail";
 import ManagePackagePage from "../pages/employer/manage-package";
 import GuidePage from "../pages/guide";
+import PaymentRedirect from "../components/PaymentRedirect";
 
 const AppRoutes = () => {
     return (
@@ -68,6 +70,7 @@ const AppRoutes = () => {
                         <Route path={ROUTE_PATH.EMPLOYER_MANAGE_RESUME} element={<ManageResumePage />} />
                         <Route path={ROUTE_PATH.EMPLOYER_RESUME_DETAIL} element={<ResumeDetailPage />} />
                         <Route path={ROUTE_PATH.EMPLOYER_FIND_CANDIDATE} element={<FindCandidatePage />} />
+                        <Route path={ROUTE_PATH.EMPLOYER_FIND_CANDIDATE_DETAIL} element={<FindCandidateResumeDetailPage />} />
                         <Route path={ROUTE_PATH.EMPLOYER_MANAGE_PACKAGE} element={<ManagePackagePage />} />
                     </Route>
                 </Route>
@@ -83,6 +86,8 @@ const AppRoutes = () => {
                     <Route path={ROUTE_PATH.ADMIN_MANAGE_PACKAGE} element={<RoleManagement />} />
                 </Route>
                 <Route path={ROUTE_PATH.PRODUCTS} element={<ProductPage />} />
+                <Route path={ROUTE_PATH.PAYMENT_SUCCESS} element={<PaymentRedirect />} />
+                <Route path={ROUTE_PATH.PAYMENT_CANCEL} element={<PaymentRedirect />} />
 
             </Routes>
         </BrowserRouter>

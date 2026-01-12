@@ -79,7 +79,19 @@ const getResumeById = createAsyncThunk(
     "resume/getResumeById",
     async (resumeId: number, { rejectWithValue }) => {
         try {
-            const response: IResume = await http.get(`/resume/search-resumes/${resumeId}`);
+            const response: IResume = await http.get(`/resume/${resumeId}`);
+            return response;
+        } catch (error: any) {
+            return rejectWithValue(error.response?.data || error);
+        }
+    }
+);
+
+const getResumeDetail = createAsyncThunk(
+    "resume/getResumeDetail",
+    async (resumeId: number, { rejectWithValue }) => {
+        try {
+            const response: IResume = await http.get(`/resume/get-resume-detail/${resumeId}`);
             return response;
         } catch (error: any) {
             return rejectWithValue(error.response?.data || error);
@@ -95,6 +107,7 @@ const attachedResumeThunks = {
     updateAttachedResume,
     setSelectedResume,
     searchResumes,
-    getResumeById
+    getResumeById,
+    getResumeDetail
 }
 export default attachedResumeThunks
