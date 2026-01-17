@@ -37,8 +37,8 @@ export interface IPackageUsage {
   id: number;
   packageId: number;
   companyId: number;
-  candidateSearchUsed: number;
-  jobPostUsed: number;
+  candidateSearchRemaining: number;
+  jobPostRemaining: number;
   createdAt: Date;
   updatedAt: Date;
   package: IPackageDto;

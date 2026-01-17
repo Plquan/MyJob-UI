@@ -32,8 +32,8 @@ const ManagePackage = () => {
     return diffDays > 0 ? diffDays : 0;
   };
 
-  const getProgressStatus = (used: number, limit: number) => {
-    const percentage = (used / limit) * 100;
+  const getProgressStatus = (remaining: number, limit: number) => {
+    const percentage = ((limit - remaining) / limit) * 100;
     if (percentage >= 90) return 'exception';
     if (percentage >= 70) return 'normal';
     return 'success';
@@ -138,15 +138,15 @@ const ManagePackage = () => {
               <div className="flex items-center">
                 <FileTextOutlined className="text-green-500 mr-2" />
                 <span className="font-medium">Đăng tin tuyển dụng</span>
-                <span className="text-xs text-gray-500 ml-2">(Số lượng tin tối đa)</span>
+                <span className="text-xs text-gray-500 ml-2">(Số lượt còn lại)</span>
               </div>
               <span className="text-sm text-gray-600">
-                {companyPackage.jobPostUsed} / {companyPackage.package.jobPostLimit}
+                {companyPackage.jobPostRemaining} / {companyPackage.package.jobPostLimit}
               </span>
             </div>
             <Progress
-              percent={Math.round((companyPackage.jobPostUsed / companyPackage.package.jobPostLimit) * 100)}
-              status={getProgressStatus(companyPackage.jobPostUsed, companyPackage.package.jobPostLimit)}
+              percent={Math.round(((companyPackage.package.jobPostLimit - companyPackage.jobPostRemaining) / companyPackage.package.jobPostLimit) * 100)}
+              status={getProgressStatus(companyPackage.jobPostRemaining, companyPackage.package.jobPostLimit)}
               strokeColor="#52c41a"
             />
           </div>
@@ -157,15 +157,15 @@ const ManagePackage = () => {
               <div className="flex items-center">
                 <UserOutlined className="text-blue-500 mr-2" />
                 <span className="font-medium">Tìm ứng viên</span>
-                <span className="text-xs text-gray-500 ml-2">(Số lượt tìm tối đa)</span>
+                <span className="text-xs text-gray-500 ml-2">(Số lượt còn lại)</span>
               </div>
               <span className="text-sm text-gray-600">
-                {companyPackage.candidateSearchUsed} / {companyPackage.package.candidateSearchLimit}
+                {companyPackage.candidateSearchRemaining} / {companyPackage.package.candidateSearchLimit}
               </span>
             </div>
             <Progress
-              percent={Math.round((companyPackage.candidateSearchUsed / companyPackage.package.candidateSearchLimit) * 100)}
-              status={getProgressStatus(companyPackage.candidateSearchUsed, companyPackage.package.candidateSearchLimit)}
+              percent={Math.round(((companyPackage.package.candidateSearchLimit - companyPackage.candidateSearchRemaining) / companyPackage.package.candidateSearchLimit) * 100)}
+              status={getProgressStatus(companyPackage.candidateSearchRemaining, companyPackage.package.candidateSearchLimit)}
               strokeColor="#1890ff"
             />
           </div>

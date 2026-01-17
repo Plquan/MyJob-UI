@@ -35,6 +35,10 @@ const TableJobPost = () => {
         }
     };
 
+    const handleStatusUpdate = () => {
+        dispatch(jobPostActions.getAllJobPosts(adminJobPostRequestParams));
+    };
+
     return (
         <div>
             <Space style={{ marginBottom: 16 }} wrap>
@@ -51,14 +55,15 @@ const TableJobPost = () => {
                     style={{ width: 200 }}
                     value={adminJobPostRequestParams.jobPostStatus}
                 >
-                    <Option value={0}>Chờ duyệt</Option>
-                    <Option value={1}>Đã duyệt</Option>
-                    <Option value={2}>Từ chối</Option>
+                    <Option value={1}>Chờ duyệt</Option>
+                    <Option value={2}>Đã duyệt</Option>
+                    <Option value={3}>Từ chối</Option>
+                    <Option value={4}>Đã đóng</Option>
                 </Select>
             </Space>
 
             <Table
-                columns={JobPostColumns()}
+                columns={JobPostColumns(handleStatusUpdate)}
                 dataSource={adminJobPosts.items}
                 loading={loading}
                 pagination={{

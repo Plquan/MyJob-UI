@@ -5,6 +5,7 @@ import {
   FileTextOutlined,
   GiftOutlined,
   UserOutlined,
+  BellOutlined,
 } from '@ant-design/icons';
 import { useLocation, useNavigate } from 'react-router-dom';
 import type { MenuProps } from 'antd';
@@ -57,6 +58,11 @@ const items: MenuProps['items'] = [
     key: ROUTE_PATH.EMPLOYER_MANAGE_PACKAGE,
     label: 'Gói dịch vụ',
     icon: <GiftOutlined />,
+  },
+  {
+    key: ROUTE_PATH.EMPLOYER_NOTIFICATIONS,
+    label: 'Thông báo',
+    icon: <BellOutlined />,
   },
 ];
 

@@ -10,6 +10,9 @@ import DefaultLayout from "../layouts/DefaultLayout";
 import CandidateLayout from "../layouts/CandidateLayout";
 import OverviewDashboard from "../pages/candidate/overview";
 import MyCompanyTab from "../pages/candidate/my-saved";
+import MyAppliedJobs from "../pages/candidate/my-applied-jobs";
+import CandidateNotifications from "../pages/candidate/notifications";
+import EmployerNotifications from "../pages/employer/notifications";
 import EmployerDashboard from "../pages/employer/dashboard";
 import CompanyDetail from "../pages/company-detail";
 import JobDetail from "../pages/jobs/job-detail";
@@ -39,6 +42,7 @@ import SavedResumePage from "../pages/employer/saved-resume";
 import AdminLoginPage from "../pages/auth/admin/LoginPage";
 import ManageProvincePage from "../pages/admin/manage-province";
 import ManageCareerPage from "../pages/admin/manage-career";
+import AdminDashboard from "../pages/admin/dashboard";
 
 const AppRoutes = () => {
     return (
@@ -56,6 +60,8 @@ const AppRoutes = () => {
                         <Route path={ROUTE_PATH.CANDIDATE_OVERVIEW} element={<OverviewDashboard />} />
                         <Route path={ROUTE_PATH.CANDIDATE_MY_COMPANIES} element={<MyCompanyTab />} />
                         <Route path={ROUTE_PATH.CANDIDATE_ONLINE_RESUME} element={<OnelineResumePage />} />
+                        <Route path={ROUTE_PATH.CANDIDATE_MY_APPLIED_JOBS} element={<MyAppliedJobs />} />
+                        <Route path={ROUTE_PATH.CANDIDATE_NOTIFICATIONS} element={<CandidateNotifications />} />
                     </Route>
                 </Route>
 
@@ -79,6 +85,7 @@ const AppRoutes = () => {
                         <Route path={ROUTE_PATH.EMPLOYER_FIND_CANDIDATE_DETAIL} element={<FindCandidateResumeDetailPage />} />
                         <Route path={ROUTE_PATH.EMPLOYER_SAVED_RESUMES} element={<SavedResumePage />} />
                         <Route path={ROUTE_PATH.EMPLOYER_MANAGE_PACKAGE} element={<ManagePackagePage />} />
+                        <Route path={ROUTE_PATH.EMPLOYER_NOTIFICATIONS} element={<EmployerNotifications />} />
                     </Route>
                 </Route>
 
@@ -89,7 +96,7 @@ const AppRoutes = () => {
 
                 <Route element={<ProtectRoute role={EUserRole.ADMIN} />}>
                     <Route element={<AdminLayout />}>
-                        <Route path={ROUTE_PATH.ADMIN_DASHBOARD} element={<Navigate to={ROUTE_PATH.ADMIN_MANAGE_ROLE} replace />} />
+                        <Route path={ROUTE_PATH.ADMIN_DASHBOARD} element={<AdminDashboard />} />
                         <Route path={ROUTE_PATH.ADMIN_MANAGE_ROLE} element={<ManageRolePage />} />
                         <Route path={ROUTE_PATH.ADMIN_MANAGE_USER} element={<ManageUserPage />} />
                         <Route path={ROUTE_PATH.ADMIN_MANAGE_PACKAGE} element={<PackageManagement />} />

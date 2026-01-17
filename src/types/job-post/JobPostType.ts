@@ -17,8 +17,6 @@ export interface ICompanyJobPost {
   academicLevel: number;
   jobType: number;
   isHot: boolean;
-  isUrgent: boolean;
-  isActive: boolean;
   contactPersonName?: string;
   contactPersonEmail?: string;
   contactPersonPhone?: string;
@@ -27,6 +25,10 @@ export interface ICompanyJobPost {
   createdAt: Date;
   updatedAt: Date;
   status: number;
+  company?: {
+    id: number;
+    companyName: string;
+  };
 }
 
 export interface IJobPostFilter {
@@ -57,9 +59,6 @@ export interface ICreateJobPostReq {
   academicLevel: number;
   genderRequirement: number;
   jobType: number;
-  isHot: boolean;
-  isUrgent: boolean;
-  isActive: boolean;
   contactPersonName: string;
   contactPersonEmail: string;
   contactPersonPhone: string;

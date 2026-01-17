@@ -21,6 +21,11 @@ const items: MenuProps['items'] = [
     icon: <ApartmentOutlined />,
   },
   {
+    key: ROUTE_PATH.ADMIN_MANAGE_JOB_POST,
+    label: 'Quản lí tin tuyển dụng',
+    icon: <FileTextOutlined />,
+  },
+  {
     key: 'recruitment',
     label: 'Quản lí chung',
     icon: <FileTextOutlined />,
@@ -39,11 +44,6 @@ const items: MenuProps['items'] = [
     key: ROUTE_PATH.ADMIN_MANAGE_PACKAGE,
     label: 'Quản lí gói dịch vụ',
     icon: <GiftOutlined />,
-  },
-  {
-    key: ROUTE_PATH.ADMIN_MANAGE_JOB_POST,
-    label: 'Quản lí tin tuyển dụng',
-    icon: <FileTextOutlined />,
   },
 ];
 

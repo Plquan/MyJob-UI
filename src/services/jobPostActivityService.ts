@@ -1,4 +1,4 @@
-import { updateJobPostActivityStatusRequest } from "@/types/job-post-activity/JobPostActivity";
+import { IAppliedJobsResponse, IGetAppliedJobsRequest, updateJobPostActivityStatusRequest } from "@/types/job-post-activity/JobPostActivity";
 import http from "@/ultils/axios/axiosCustom";
 
 class JobPostActivityService {
@@ -9,6 +9,11 @@ class JobPostActivityService {
 
     async sendEmailToCandidate(request: { to: string; subject: string; content: string }): Promise<boolean> {
         const response = await http.post<boolean>("/job-post-activity/send-email", request);
+        return response as any;
+    }
+
+    async getMyAppliedJobs(params: IGetAppliedJobsRequest): Promise<IAppliedJobsResponse> {
+        const response = await http.get<IAppliedJobsResponse>("/job-post-activity/my-applied-jobs", { params });
         return response as any;
     }
 

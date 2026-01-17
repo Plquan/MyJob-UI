@@ -6,6 +6,7 @@ import {
   AuditOutlined,
   IdcardOutlined,
   MessageOutlined,
+  FileTextOutlined,
 } from "@ant-design/icons";
 import { useNavigate, useLocation } from "react-router-dom";
 import ROUTE_PATH from "../../../../routes/routePath";
@@ -39,9 +40,19 @@ export default function CandidateSidebar() {
       label: "Quản lí cv",
     },
     {
+      key: ROUTE_PATH.CANDIDATE_MY_APPLIED_JOBS,
+      icon: <FileTextOutlined />,
+      label: "Công việc của tôi",
+    },
+    {
       key: ROUTE_PATH.CANDIDATE_MY_COMPANIES,
       icon: <BookmarkIcon className="w-4 h-4"/>,
       label: "Danh sách đã lưu",
+    },
+    {
+      key: ROUTE_PATH.CANDIDATE_NOTIFICATIONS,
+      icon: <BellOutlined />,
+      label: "Thông báo",
     },
     {
       key: "/account",

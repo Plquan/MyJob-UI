@@ -1,5 +1,6 @@
 import type { ICompanyJobPost } from "../job-post/JobPostType";
 import type { IMyJobFile } from "../myJobFile/myJobFileType";
+import type { IPackageUsage } from "../package/PackageType";
 
 export interface ICompanyData {
   id: number;
@@ -18,8 +19,10 @@ export interface ICompanyData {
   description?: string;
   employeeSize?: number;
   address: string;
+  hotExpiredAt?: Date;
   createdAt: Date;
   updatedAt: Date;
+  packageUsages?: IPackageUsage[];
 }
 
 export interface ICompanyWithImagesData {

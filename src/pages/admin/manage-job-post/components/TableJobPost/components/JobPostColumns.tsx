@@ -1,9 +1,12 @@
 import type { ColumnsType } from "antd/es/table";
 import type { ICompanyJobPost } from "../../../../../../types/job-post/JobPostType";
-import { Tag } from "antd";
+import { Select, message } from "antd";
 import dayjs from "dayjs";
+import http from "../../../../../../ultils/axios/axiosCustom";
 
-export const JobPostColumns = (): ColumnsType<ICompanyJobPost> => [
+const { Option } = Select;
+
+export const JobPostColumns = (onStatusUpdate: () => void): ColumnsType<ICompanyJobPost> => [
     {
         title: "ID",
         dataIndex: "id",
@@ -18,32 +21,54 @@ export const JobPostColumns = (): ColumnsType<ICompanyJobPost> => [
         ellipsis: true,
     },
     {
-        title: "Company ID",
-        dataIndex: "companyId",
-        key: "companyId",
-        width: 120,
+        title: "Công ty",
+        dataIndex: ["company", "companyName"],
+        key: "companyName",
+        width: 200,
+        ellipsis: true,
+        render: (_, record) => {
+            return record.company?.companyName || `Company ID: ${record.companyId}`;
+        },
     },
     {
         title: "Trạng thái",
         dataIndex: "status",
         key: "status",
-        width: 130,
-        render: (status: number) => {
-            const statusConfig: Record<number, { text: string; color: string }> = {
-                0: { text: "Chờ duyệt", color: "gold" },
-                1: { text: "Đã duyệt", color: "green" },
-                2: { text: "Từ chối", color: "red" },
+        width: 180,
+        render: (status: number, record: ICompanyJobPost) => {
+            const handleStatusChange = async (newStatus: number) => {
+                try {
+                    await http.put(`/job-post/update-status/${record.id}`, { status: newStatus });
+                    message.success("Cập nhật trạng thái thành công");
+                    onStatusUpdate(); // Refresh table
+                } catch (error: any) {
+                    console.error("Failed to update status:", error);
+                    message.error("Cập nhật trạng thái thất bại");
+                }
             };
-            const config = statusConfig[status] || { text: "Không xác định", color: "default" };
-            return <Tag color={config.color}>{config.text}</Tag>;
+
+            return (
+                <Select
+                    value={status}
+                    onChange={handleStatusChange}
+                    style={{ width: "100%" }}
+                    size="small"
+                >
+                    <Option value={1}>
+                        <span style={{ color: "#FF9500" }}>● Chờ duyệt</span>
+                    </Option>
+                    <Option value={2}>
+                        <span style={{ color: "#22C55E" }}>● Đã duyệt</span>
+                    </Option>
+                    <Option value={3}>
+                        <span style={{ color: "#EF4444" }}>● Từ chối</span>
+                    </Option>
+                    <Option value={4}>
+                        <span style={{ color: "#9CA3AF" }}>● Đã đóng</span>
+                    </Option>
+                </Select>
+            );
         },
-    },
-    {
-        title: "Lượng ứng tuyển",
-        dataIndex: "activityCount",
-        key: "activityCount",
-        width: 150,
-        align: "center",
     },
     {
         title: "Lương (VND)",

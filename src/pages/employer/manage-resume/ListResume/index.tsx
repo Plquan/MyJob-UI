@@ -32,8 +32,6 @@ import ROUTE_PATH from '../../../../routes/routePath';
 // Status options cho job activity
 const JOB_ACTIVITY_STATUS_OPTIONS = [
   { value: EJobPostActivityStatus.PENDING, label: "Chờ xử lý" },
-  { value: EJobPostActivityStatus.CONTACTED, label: "Đã liên hệ" },
-  { value: EJobPostActivityStatus.TESTED, label: "Đã test" },
   { value: EJobPostActivityStatus.INTERVIEWED, label: "Đã phỏng vấn" },
   { value: EJobPostActivityStatus.ACCEPTED, label: "Đã chấp nhận" },
   { value: EJobPostActivityStatus.REJECTED, label: "Đã từ chối" },

@@ -17,6 +17,8 @@ const ROUTE_PATH = {
   CANDIDATE_PROFILE: '/ung-vien/ho-so',
   CANDIDATE_MY_COMPANIES: '/candidate/cong-ty-cua-toi',
   CANDIDATE_ONLINE_RESUME: '/candidate/online-resume',
+  CANDIDATE_MY_APPLIED_JOBS: '/candidate/my-applied-jobs',
+  CANDIDATE_NOTIFICATIONS: '/candidate/notifications',
   CHAT: '/chat',
 
   //company
@@ -36,6 +38,7 @@ const ROUTE_PATH = {
   EMPLOYER_FIND_CANDIDATE_DETAIL: '/employer/find-candidate/:resumeId',
   EMPLOYER_SAVED_RESUMES: '/employer/saved-resumes',
   EMPLOYER_MANAGE_PACKAGE: '/employer/manage-package',
+  EMPLOYER_NOTIFICATIONS: '/employer/notifications',
 
   //admin
   ADMIN_DASHBOARD: '/admin',
