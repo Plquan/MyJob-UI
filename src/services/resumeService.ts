@@ -7,6 +7,11 @@ class ResumeService {
         return response as any;
     }
 
+    async getResumeDetail(resumeId: number): Promise<any> {
+        const response = await http.get(`/resume/get-resume-detail/${resumeId}`);
+        return response as any;
+    }
+
 }
 
 export default new ResumeService();

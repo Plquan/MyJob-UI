@@ -7,7 +7,7 @@ const ResumeDetail = () => {
 
   return (
     <ResumeDetailView
-      jobPostActivityId={resumeId || ''}
+      resumeId={resumeId}
       onBackPath={ROUTE_PATH.EMPLOYER_MANAGE_RESUME}
       onFetchErrorPath={ROUTE_PATH.EMPLOYER_MANAGE_RESUME}
     />

@@ -1,12 +1,18 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import http from "../../ultils/axios/axiosCustom";
 import type { IMyJobFile } from "../../types/myJobFile/myJobFileType";
-import type { ICompanyDetail, ICompanyStatistics, ICompanyWithImagesData, IGetCompaniesReqParams } from "../../types/company/CompanyType";
+import type {
+    ICompanyDetail,
+    ICompanyStatistics,
+    ICompanyWithImagesData,
+    IGetCompaniesReqParams,
+    IUpdateCompanyInfoRequest
+} from "../../types/company/CompanyType";
 import type { IPaginationResponse } from "../../types/AppType";
 
-const getEmployerCompany = createAsyncThunk (
+const getEmployerCompany = createAsyncThunk(
     "company/getEmployerCompany",
-    async (_, {rejectWithValue}): Promise<ICompanyWithImagesData> => {
+    async (_, { rejectWithValue }): Promise<ICompanyWithImagesData> => {
         try {
             const response: ICompanyWithImagesData = await http.get("/company/get-employer-company");
             return response;
@@ -16,9 +22,9 @@ const getEmployerCompany = createAsyncThunk (
     }
 )
 
-const uploadCompanyLogo = createAsyncThunk (
+const uploadCompanyLogo = createAsyncThunk(
     "company/uploadCompanyLogo",
-    async (file: FormData, {rejectWithValue}): Promise<IMyJobFile> => {
+    async (file: FormData, { rejectWithValue }): Promise<IMyJobFile> => {
         try {
             const response: IMyJobFile = await http.put("/company/upload-company-logo", file);
             return response;
@@ -28,9 +34,9 @@ const uploadCompanyLogo = createAsyncThunk (
     }
 )
 
-const uploadCompanyCoverImage = createAsyncThunk (
+const uploadCompanyCoverImage = createAsyncThunk(
     "company/uploadCompanyCoverImage",
-    async (file: FormData, {rejectWithValue}): Promise<IMyJobFile> => {
+    async (file: FormData, { rejectWithValue }): Promise<IMyJobFile> => {
         try {
             const response: IMyJobFile = await http.put("/company/upload-company-cover-image", file);
             return response;
@@ -39,9 +45,9 @@ const uploadCompanyCoverImage = createAsyncThunk (
         }
     }
 )
-const uploadCompanyImages = createAsyncThunk (
+const uploadCompanyImages = createAsyncThunk(
     "company/uploadCompanyImages",
-    async (file: FormData, {rejectWithValue}): Promise<IMyJobFile> => {
+    async (file: FormData, { rejectWithValue }): Promise<IMyJobFile> => {
         try {
             const response: IMyJobFile = await http.post("/company/upload-company-images", file);
             return response;
@@ -51,9 +57,9 @@ const uploadCompanyImages = createAsyncThunk (
     }
 )
 
-const deleteCompanyImage = createAsyncThunk (
+const deleteCompanyImage = createAsyncThunk(
     "company/deleteCompanyImage",
-    async (imageId: Number, {rejectWithValue}): Promise<IMyJobFile> => {
+    async (imageId: Number, { rejectWithValue }): Promise<IMyJobFile> => {
         try {
             const response: IMyJobFile = await http.delete(`/company/delete-company-image/${imageId}`);
             return response;
@@ -63,9 +69,9 @@ const deleteCompanyImage = createAsyncThunk (
     }
 )
 
-const getCompanies = createAsyncThunk (
+const getCompanies = createAsyncThunk(
     "company/getCompanies",
-    async (params: IGetCompaniesReqParams = { page: 1, limit: 10 }, {rejectWithValue}): Promise<IPaginationResponse<ICompanyWithImagesData>> => {
+    async (params: IGetCompaniesReqParams = { page: 1, limit: 10 }, { rejectWithValue }): Promise<IPaginationResponse<ICompanyWithImagesData>> => {
         try {
             const response: IPaginationResponse<ICompanyWithImagesData> = await http.get("/company", {
                 params: {
@@ -80,9 +86,9 @@ const getCompanies = createAsyncThunk (
         }
     }
 )
-const getCompanyDetail = createAsyncThunk (
+const getCompanyDetail = createAsyncThunk(
     "company/getCompanyDetail",
-    async (companyId: number, {rejectWithValue}): Promise<ICompanyDetail> => {
+    async (companyId: number, { rejectWithValue }): Promise<ICompanyDetail> => {
         try {
             const response: ICompanyDetail = await http.get(`/company/get-company-detail/${companyId}`);
             return response;
@@ -92,9 +98,9 @@ const getCompanyDetail = createAsyncThunk (
     }
 )
 
-const toggleFollowCompany = createAsyncThunk (
+const toggleFollowCompany = createAsyncThunk(
     "company/toggleFollowCompany",
-    async (companyId: number, {rejectWithValue}): Promise<boolean> => {
+    async (companyId: number, { rejectWithValue }): Promise<boolean> => {
         try {
             const response: boolean = await http.post(`company/toggle-follow-company?companyId=${companyId}`);
             return response;
@@ -104,9 +110,9 @@ const toggleFollowCompany = createAsyncThunk (
     }
 )
 
-const getSavedCompanies = createAsyncThunk (
+const getSavedCompanies = createAsyncThunk(
     "company/getSavedCompanies",
-    async (_, {rejectWithValue}): Promise<ICompanyWithImagesData[]> => {
+    async (_, { rejectWithValue }): Promise<ICompanyWithImagesData[]> => {
         try {
             const response: ICompanyWithImagesData[] = await http.get("/company/saved-companies");
             return response;
@@ -116,9 +122,9 @@ const getSavedCompanies = createAsyncThunk (
     }
 )
 
-const getEmployerStatistics = createAsyncThunk (
+const getEmployerStatistics = createAsyncThunk(
     "company/getEmployerStatistics",
-    async (params: { startDate?: string; endDate?: string } | undefined, {rejectWithValue}): Promise<ICompanyStatistics> => {
+    async (params: { startDate?: string; endDate?: string } | undefined, { rejectWithValue }): Promise<ICompanyStatistics> => {
         try {
             const response: ICompanyStatistics = await http.get("/company/employer-statistics", {
                 params: {
@@ -133,6 +139,20 @@ const getEmployerStatistics = createAsyncThunk (
     }
 )
 
+const updateCompanyInfo = createAsyncThunk(
+    "company/updateCompanyInfo",
+    async (data: IUpdateCompanyInfoRequest, { rejectWithValue }): Promise<ICompanyWithImagesData> => {
+        try {
+            await http.put("/company/update-company-info", data);
+            // After update, refresh company data
+            const companyData: ICompanyWithImagesData = await http.get("/company/get-employer-company");
+            return companyData;
+        } catch (error: any) {
+            return rejectWithValue(error.response?.data?.message || "Lỗi khi cập nhật thông tin công ty") as any;
+        }
+    }
+)
+
 const companyThunks = {
     getEmployerCompany,
     uploadCompanyLogo,
@@ -143,7 +163,8 @@ const companyThunks = {
     getCompanyDetail,
     toggleFollowCompany,
     getSavedCompanies,
-    getEmployerStatistics
+    getEmployerStatistics,
+    updateCompanyInfo
 }
 
 export default companyThunks

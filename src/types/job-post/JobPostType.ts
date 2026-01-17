@@ -1,6 +1,6 @@
 export interface ICompanyJobPost {
   id: number;
-  careerId:number;
+  careerId: number;
   companyId: number;
   provinceId: number;
   jobName: string;
@@ -15,15 +15,15 @@ export interface ICompanyJobPost {
   typeOfWorkPlace: number;
   experience: number;
   academicLevel: number;
-  jobType: number; 
+  jobType: number;
   isHot: boolean;
-  isUrgent: boolean; 
+  isUrgent: boolean;
   isActive: boolean;
   contactPersonName?: string;
   contactPersonEmail?: string;
   contactPersonPhone?: string;
   views: number;
-  applications:number;
+  applications: number;
   createdAt: Date;
   updatedAt: Date;
   status: number;
@@ -55,7 +55,7 @@ export interface ICreateJobPostReq {
   typeOfWorkPlace: number;
   experience: number;
   academicLevel: number;
-  genderRequirement:number;
+  genderRequirement: number;
   jobType: number;
   isHot: boolean;
   isUrgent: boolean;

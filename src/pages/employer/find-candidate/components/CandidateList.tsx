@@ -26,10 +26,10 @@ const CandidateList = ({
   return (
     <div className="flex-1">
       <div className="flex justify-between items-center mb-4">
-        <h3 className="text-base font-semibold text-gray-900">Kết quả tìm thấy: 
-          <span className="text-base font-semibold text-[#154C91]">
-           {searchResults.totalItems} hồ sơ
-        </span></h3>
+        <h3 className="text-base font-semibold text-gray-900">Kết quả tìm thấy:
+          <span className="text-base font-semibold text-[#154C91] ml-1">
+            {searchResults.totalItems} hồ sơ
+          </span></h3>
       </div>
 
       <Spin spinning={loading}>
@@ -43,11 +43,11 @@ const CandidateList = ({
           <>
             <div className="space-y-3">
               {searchResults.items.map((resume) => (
-                <CandidateCard 
-                  key={resume.id} 
-                  resume={resume} 
-                  onClick={onCandidateClick} 
-                  size="large" 
+                <CandidateCard
+                  key={resume.id}
+                  resume={resume}
+                  onClick={onCandidateClick}
+                  size="large"
                 />
               ))}
             </div>

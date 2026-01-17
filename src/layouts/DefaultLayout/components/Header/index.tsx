@@ -38,6 +38,11 @@ const DefaultHeader = () => {
       icon: <FileTextOutlined />,
       label: <NavLink to="/guide">{t('header.guideSearch')}</NavLink>,
     },
+    {
+      key: '/contact',
+      icon: <FileTextOutlined />,
+      label: <NavLink to="/contact">{t('header.contact')}</NavLink>,
+    },
   ];
 
 

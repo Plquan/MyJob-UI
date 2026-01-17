@@ -4,6 +4,7 @@ const ROUTE_PATH = {
   CANDIDATE_REGISTER: '/candidate/register',
   EMPLOYER_LOGIN: '/employer/login',
   EMPLOYER_REGISTER: '/employer/register',
+  ADMIN_LOGIN: '/admin/login',
 
   //home
   HOME: '/',
@@ -33,13 +34,17 @@ const ROUTE_PATH = {
   EMPLOYER_RESUME_DETAIL: '/employer/manage-resume/:resumeId',
   EMPLOYER_FIND_CANDIDATE: '/employer/find-candidate',
   EMPLOYER_FIND_CANDIDATE_DETAIL: '/employer/find-candidate/:resumeId',
+  EMPLOYER_SAVED_RESUMES: '/employer/saved-resumes',
   EMPLOYER_MANAGE_PACKAGE: '/employer/manage-package',
 
   //admin
-  ADMIN_DASHBOARD: '/admin/dashboard',
+  ADMIN_DASHBOARD: '/admin',
   ADMIN_MANAGE_ROLE: '/admin/manage-role',
   ADMIN_MANAGE_PACKAGE: '/admin/manage-package',
   ADMIN_MANAGE_USER: '/admin/manage-user',
+  ADMIN_MANAGE_JOB_POST: '/admin/manage-job-post',
+  ADMIN_MANAGE_PROVINCE: '/admin/manage-province',
+  ADMIN_MANAGE_CAREER: '/admin/manage-career',
 
   //packages
   PRODUCTS: '/products',

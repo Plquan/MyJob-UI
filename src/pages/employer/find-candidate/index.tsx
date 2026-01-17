@@ -16,6 +16,8 @@ const FindCandidate = () => {
   const { provinces } = useSelector((state: RootState) => state.provinceStore);
   const { careers } = useSelector((state: RootState) => state.careerStore);
 
+  const [hasSearched, setHasSearched] = useState(false);
+
   const [filters, setFilters] = useState({
     title: '',
     provinceId: undefined as number | undefined,
@@ -28,7 +30,10 @@ const FindCandidate = () => {
   });
 
   useEffect(() => {
-    handleSearch();
+    // Only trigger search on pagination change if user has already performed a search
+    if (hasSearched) {
+      handleSearch();
+    }
   }, [searchParams.page, searchParams.limit]);
 
   const handleSearch = () => {
@@ -40,6 +45,7 @@ const FindCandidate = () => {
         limit: searchParams.limit,
       })
     );
+    setHasSearched(true);
   };
 
   const handleFilterChange = (key: string, value: any) => {
@@ -104,7 +110,6 @@ const FindCandidate = () => {
           hasActiveFilters={hasActiveFilters}
           onFilterChange={handleFilterChange}
           onResetFilters={handleResetFilters}
-          onApplyFilters={handleApplyFilters}
         />
 
         {/* Candidate List */}

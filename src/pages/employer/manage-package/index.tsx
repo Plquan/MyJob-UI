@@ -6,7 +6,6 @@ import {
   TrophyOutlined,
   CrownOutlined,
   ShoppingCartOutlined,
-  ClockCircleOutlined,
 } from '@ant-design/icons';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -95,11 +94,10 @@ const ManagePackage = () => {
     }>
 
       {/* Package Info Card */}
-      <Card className="mb-6">
+      <Card className="mb-6!">
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center">
-            <CrownOutlined className="text-xl text-yellow-500 mr-2" />
-            <span className="text-lg font-semibold">{companyPackage.package.name}</span>
+            <span className="text-lg font-semibold mr-2">{companyPackage.package.name}</span>
             <Tag color="green" className="ml-2">Đang hoạt động</Tag>
           </div>
           <Button
@@ -125,14 +123,14 @@ const ManagePackage = () => {
             <div className="text-sm text-gray-600">Còn lại</div>
             <div className={`text-base font-semibold ${isExpiringSoon ? 'text-red-600' : 'text-green-600'}`}>
               {daysRemaining} ngày
-              {isExpiringSoon && <Tag color="red" className="ml-2">Sắp hết hạn</Tag>}
+              {isExpiringSoon && <Tag color="red" className="ml-2!">Sắp hết hạn</Tag>}
             </div>
           </Col>
         </Row>
       </Card>
 
       {/* Usage Statistics */}
-      <Card className="mb-6" title="Sử dụng gói dịch vụ">
+      <Card className="mb-6!" title="Sử dụng gói dịch vụ">
         <div className="space-y-6">
           {/* Job Post Usage */}
           <div>
@@ -140,6 +138,7 @@ const ManagePackage = () => {
               <div className="flex items-center">
                 <FileTextOutlined className="text-green-500 mr-2" />
                 <span className="font-medium">Đăng tin tuyển dụng</span>
+                <span className="text-xs text-gray-500 ml-2">(Số lượng tin tối đa)</span>
               </div>
               <span className="text-sm text-gray-600">
                 {companyPackage.jobPostUsed} / {companyPackage.package.jobPostLimit}
@@ -158,6 +157,7 @@ const ManagePackage = () => {
               <div className="flex items-center">
                 <UserOutlined className="text-blue-500 mr-2" />
                 <span className="font-medium">Tìm ứng viên</span>
+                <span className="text-xs text-gray-500 ml-2">(Số lượt tìm tối đa)</span>
               </div>
               <span className="text-sm text-gray-600">
                 {companyPackage.candidateSearchUsed} / {companyPackage.package.candidateSearchLimit}
@@ -173,13 +173,16 @@ const ManagePackage = () => {
       </Card>
 
       {/* Bonus Features */}
-      <Card title="Bonus">
+      <Card title="Tính năng đặc biệt">
         <Row gutter={[16, 16]}>
           <Col xs={24} sm={12}>
             <div className="flex items-center justify-between p-3 bg-gray-50 rounded">
               <div className="flex items-center">
                 <TrophyOutlined className="text-orange-500 text-lg mr-2" />
-                <span>Công ty nổi bật</span>
+                <div className="flex flex-col">
+                  <span className="font-medium">Công ty nổi bật</span>
+                  <span className="text-xs text-gray-500">Thời gian hiển thị nổi bật</span>
+                </div>
               </div>
               <Tag color="gold">{companyPackage.package.highlightCompanyDurationInDays} ngày</Tag>
             </div>
@@ -188,7 +191,10 @@ const ManagePackage = () => {
             <div className="flex items-center justify-between p-3 bg-gray-50 rounded">
               <div className="flex items-center">
                 <ThunderboltOutlined className="text-red-500 text-lg mr-2" />
-                <span>Job nổi bật</span>
+                <div className="flex flex-col">
+                  <span className="font-medium">Job nổi bật</span>
+                  <span className="text-xs text-gray-500">Thời gian hiển thị nổi bật</span>
+                </div>
               </div>
               <Tag color="orange">{companyPackage.package.jobHotDurationInDays} ngày</Tag>
             </div>

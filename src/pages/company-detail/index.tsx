@@ -15,19 +15,27 @@ import CompanyImages from "./components/CompanyImages";
 import JobCard from "../../components/JobCard";
 import { createOrGetConversationThunk } from "../../stores/chatStore/chatThunk";
 import ROUTE_PATH from "../../routes/routePath";
+import { jobPostActions } from "../../stores/jobPostStore/jobPostReducer";
 
 export default function CompanyDetail() {
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
   const { companyId } = useParams<{ companyId: string }>();
-  const { companyDetail, loading } = useSelector((state: RootState) => state.companyStore);
+  const { companyDetail, loading: companyLoading } = useSelector((state: RootState) => state.companyStore);
+  const { jobPosts, loading: jobLoading } = useSelector((state: RootState) => state.jobPostStore);
   const { currentUser } = useSelector((state: RootState) => state.authStore);
   const user = currentUser;
   const [isCreatingChat, setIsCreatingChat] = React.useState(false);
 
   React.useEffect(() => {
     if (companyId) {
-      dispatch(companyActions.getCompanyDetail(parseInt(companyId)) as any);
+      dispatch(companyActions.getCompanyDetail(parseInt(companyId)));
+      // Fetch job posts for this company
+      dispatch(jobPostActions.getJobPost({
+        companyId: parseInt(companyId),
+        limit: 10, // Adjust limit as needed
+        page: 1
+      }));
     }
   }, [dispatch, companyId]);
 
@@ -44,7 +52,7 @@ export default function CompanyDetail() {
           user2Id: company.userId,
         })
       ).unwrap();
-      
+
       navigate(ROUTE_PATH.CHAT);
     } catch (error) {
       console.error('Failed to create conversation:', error);
@@ -57,9 +65,8 @@ export default function CompanyDetail() {
   const companyImages = companyDetail?.images
     ?.filter(img => img.fileType === "COMPANY_IMAGE")
     ?.map(img => img.url) || [];
-  const jobPosts = companyDetail?.jobPosts || [];
 
-  if (loading) {
+  if (companyLoading) {
     return (
       <div className="flex justify-center items-center min-h-screen">
         <Spin size="large" />
@@ -144,10 +151,14 @@ export default function CompanyDetail() {
           <div className="mt-6">
             <div className="font-bold text-lg mb-2 text-[#2d2172]">Việc làm đang tuyển</div>
             <div className="py-4">
-              {jobPosts.length > 0 ? (
+              {jobLoading ? (
+                <div className="flex justify-center py-4">
+                  <Spin />
+                </div>
+              ) : jobPosts.items.length > 0 ? (
                 <div className="space-y-4">
-                  {jobPosts.map((job) => (
-                  <h1></h1>
+                  {jobPosts.items.map((job) => (
+                    <JobCard key={job.id} job={job} />
                   ))}
                 </div>
               ) : (
@@ -162,10 +173,10 @@ export default function CompanyDetail() {
             <div className="font-bold text-lg mb-2 text-[#2d2172]">Website</div>
             <div className="text-sm break-words">
               {company.websiteUrl ? (
-                <a 
-                  href={company.websiteUrl.startsWith('http') ? company.websiteUrl : `https://${company.websiteUrl}`} 
-                  className="text-blue-600 hover:underline block" 
-                  target="_blank" 
+                <a
+                  href={company.websiteUrl.startsWith('http') ? company.websiteUrl : `https://${company.websiteUrl}`}
+                  className="text-blue-600 hover:underline block"
+                  target="_blank"
                   rel="noopener noreferrer"
                 >
                   {company.websiteUrl}

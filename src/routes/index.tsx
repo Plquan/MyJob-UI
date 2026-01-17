@@ -4,7 +4,7 @@ import CompanyLoginPage from "../pages/auth/employer/LoginPage";
 import CompanyRegisterPage from "../pages/auth/employer/RegisterPage";
 import HomePage from "../pages/home";
 import CompanyPage from "../pages/company";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
 import ROUTE_PATH from "./routePath";
 import DefaultLayout from "../layouts/DefaultLayout";
 import CandidateLayout from "../layouts/CandidateLayout";
@@ -16,7 +16,6 @@ import JobDetail from "../pages/jobs/job-detail";
 import ManageRolePage from "../pages/admin/manage-role";
 import AdminLayout from "../layouts/AdminLayout";
 import ManageUserPage from "../pages/admin/manage-user";
-import RoleManagement from "../pages/admin/manage-package";
 import OnelineResumePage from "../pages/candidate/manage-online-resume";
 import CandidateProfilePage from "../pages/candidate/manage-cv";
 import EmployerCompanyPage from "../pages/employer/company";
@@ -34,6 +33,12 @@ import FindCandidateResumeDetailPage from "../pages/employer/find-candidate/Resu
 import ManagePackagePage from "../pages/employer/manage-package";
 import GuidePage from "../pages/guide";
 import PaymentRedirect from "../components/PaymentRedirect";
+import PackageManagement from "../pages/admin/manage-package";
+import AdminJobPostManagement from "../pages/admin/manage-job-post";
+import SavedResumePage from "../pages/employer/saved-resume";
+import AdminLoginPage from "../pages/auth/admin/LoginPage";
+import ManageProvincePage from "../pages/admin/manage-province";
+import ManageCareerPage from "../pages/admin/manage-career";
 
 const AppRoutes = () => {
     return (
@@ -43,6 +48,7 @@ const AppRoutes = () => {
                 <Route path={ROUTE_PATH.CANDIDATE_REGISTER} element={<CandidateRegisterPage />} />
                 <Route path={ROUTE_PATH.EMPLOYER_LOGIN} element={<CompanyLoginPage />} />
                 <Route path={ROUTE_PATH.EMPLOYER_REGISTER} element={<CompanyRegisterPage />} />
+                <Route path={ROUTE_PATH.ADMIN_LOGIN} element={<AdminLoginPage />} />
 
                 <Route element={<ProtectRoute role={EUserRole.CANDIDATE} />}>
                     <Route element={<CandidateLayout />}>
@@ -71,6 +77,7 @@ const AppRoutes = () => {
                         <Route path={ROUTE_PATH.EMPLOYER_RESUME_DETAIL} element={<ResumeDetailPage />} />
                         <Route path={ROUTE_PATH.EMPLOYER_FIND_CANDIDATE} element={<FindCandidatePage />} />
                         <Route path={ROUTE_PATH.EMPLOYER_FIND_CANDIDATE_DETAIL} element={<FindCandidateResumeDetailPage />} />
+                        <Route path={ROUTE_PATH.EMPLOYER_SAVED_RESUMES} element={<SavedResumePage />} />
                         <Route path={ROUTE_PATH.EMPLOYER_MANAGE_PACKAGE} element={<ManagePackagePage />} />
                     </Route>
                 </Route>
@@ -80,10 +87,16 @@ const AppRoutes = () => {
                 <Route path={ROUTE_PATH.CHAT} element={<ChatPage />} />
 
 
-                <Route element={<AdminLayout />}>
-                    <Route path={ROUTE_PATH.ADMIN_MANAGE_ROLE} element={<ManageRolePage />} />
-                    <Route path={ROUTE_PATH.ADMIN_MANAGE_USER} element={<ManageUserPage />} />
-                    <Route path={ROUTE_PATH.ADMIN_MANAGE_PACKAGE} element={<RoleManagement />} />
+                <Route element={<ProtectRoute role={EUserRole.ADMIN} />}>
+                    <Route element={<AdminLayout />}>
+                        <Route path={ROUTE_PATH.ADMIN_DASHBOARD} element={<Navigate to={ROUTE_PATH.ADMIN_MANAGE_ROLE} replace />} />
+                        <Route path={ROUTE_PATH.ADMIN_MANAGE_ROLE} element={<ManageRolePage />} />
+                        <Route path={ROUTE_PATH.ADMIN_MANAGE_USER} element={<ManageUserPage />} />
+                        <Route path={ROUTE_PATH.ADMIN_MANAGE_PACKAGE} element={<PackageManagement />} />
+                        <Route path={ROUTE_PATH.ADMIN_MANAGE_JOB_POST} element={<AdminJobPostManagement />} />
+                        <Route path={ROUTE_PATH.ADMIN_MANAGE_PROVINCE} element={<ManageProvincePage />} />
+                        <Route path={ROUTE_PATH.ADMIN_MANAGE_CAREER} element={<ManageCareerPage />} />
+                    </Route>
                 </Route>
                 <Route path={ROUTE_PATH.PRODUCTS} element={<ProductPage />} />
                 <Route path={ROUTE_PATH.PAYMENT_SUCCESS} element={<PaymentRedirect />} />

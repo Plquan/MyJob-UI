@@ -25,33 +25,51 @@ const ProtectRoute = ({ role, roles, requireAuth }: ProtectRouteProps): JSX.Elem
   // Nếu có roles array, check xem user có trong danh sách không
   if (roles && roles.length > 0) {
     if (hasCheckedAuth && !isAuthenticated) {
-      return <Navigate to={ROUTE_PATH.CANDIDATE_LOGIN} />;
+      // Redirect to first role's login page
+      const firstRole = roles[0];
+      if (firstRole === EUserRole.CANDIDATE) {
+        return <Navigate to={ROUTE_PATH.CANDIDATE_LOGIN} />;
+      } else if (firstRole === EUserRole.EMPLOYER) {
+        return <Navigate to={ROUTE_PATH.EMPLOYER_LOGIN} />;
+      } else if (firstRole === EUserRole.ADMIN) {
+        return <Navigate to={ROUTE_PATH.ADMIN_LOGIN} />;
+      }
     }
     if (hasCheckedAuth && isAuthenticated && currentUser?.role && !roles.includes(currentUser.role)) {
-      return <Navigate to={ROUTE_PATH.HOME} />;
+      // Đã login nhưng sai role -> redirect về login tương ứng
+      const firstRole = roles[0];
+      if (firstRole === EUserRole.CANDIDATE) {
+        return <Navigate to={ROUTE_PATH.CANDIDATE_LOGIN} />;
+      } else if (firstRole === EUserRole.EMPLOYER) {
+        return <Navigate to={ROUTE_PATH.EMPLOYER_LOGIN} />;
+      } else if (firstRole === EUserRole.ADMIN) {
+        return <Navigate to={ROUTE_PATH.ADMIN_LOGIN} />;
+      }
     }
     return <Outlet />;
   }
 
-  // Nếu có role đơn, check theo cách cũ
+  // Nếu có role đơn, check theo role
   if (role) {
+    // Chưa login -> redirect đến login tương ứng
     if (hasCheckedAuth && !isAuthenticated) {
       if (role === EUserRole.CANDIDATE) {
         return <Navigate to={ROUTE_PATH.CANDIDATE_LOGIN} />;
       } else if (role === EUserRole.EMPLOYER) {
         return <Navigate to={ROUTE_PATH.EMPLOYER_LOGIN} />;
       } else if (role === EUserRole.ADMIN) {
-        return <Navigate to={ROUTE_PATH.EMPLOYER_LOGIN} />;
+        return <Navigate to={ROUTE_PATH.ADMIN_LOGIN} />;
       }
     }
 
+    // Đã login nhưng sai role -> redirect về login tương ứng
     if (hasCheckedAuth && isAuthenticated && currentUser?.role !== role) {
       if (role === EUserRole.CANDIDATE) {
         return <Navigate to={ROUTE_PATH.CANDIDATE_LOGIN} />;
       } else if (role === EUserRole.EMPLOYER) {
         return <Navigate to={ROUTE_PATH.EMPLOYER_LOGIN} />;
       } else if (role === EUserRole.ADMIN) {
-        return <Navigate to={ROUTE_PATH.EMPLOYER_LOGIN} />;
+        return <Navigate to={ROUTE_PATH.ADMIN_LOGIN} />;
       }
     }
   }

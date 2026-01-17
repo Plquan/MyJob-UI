@@ -16,10 +16,10 @@ const items: TabsProps['items'] = [
   },
 ]
 
-const RoleManagement = () => (
+const PackageManagement = () => (
   <Card title={"Quản lí gói dịch vụ"}>
-    <Tabs defaultActiveKey="role-management" items={items} />
+    <Tabs defaultActiveKey="package-management" items={items} />
   </Card>
 )
 
-export default RoleManagement;
+export default PackageManagement;

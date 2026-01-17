@@ -27,17 +27,6 @@ const deleteJobPostActivity = createAsyncThunk(
         }
     }
 )
-const getJobPostActivityById = createAsyncThunk(
-    "jobPostActivity/getJobPostActivityById",
-    async (jobPostActivityId: number, { rejectWithValue }): Promise<IJobPostActivityDto> => {
-        try {
-            const response: IJobPostActivityDto = await http.get(`/job-post-activity/${jobPostActivityId}`);
-            return response;
-        } catch (error: any) {
-            return rejectWithValue(error.response.data) as any;
-        }
-    }
-)
 
 const sendEmailToCandidate = createAsyncThunk(
     "jobPostActivity/sendEmailToCandidate",
@@ -55,7 +44,6 @@ const sendEmailToCandidate = createAsyncThunk(
 const jobPostActivityThunks = {
     getJobPostActivities,
     deleteJobPostActivity,
-    getJobPostActivityById,
     sendEmailToCandidate
 }
 

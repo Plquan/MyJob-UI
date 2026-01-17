@@ -193,21 +193,21 @@ export const companySlice = createSlice({
             message.error((action.payload as { message: string }).message);
         })
 
-         // toggle follow company
-         builder.addCase(companyThunks.toggleFollowCompany.pending, (state, action) => {
+        // toggle follow company
+        builder.addCase(companyThunks.toggleFollowCompany.pending, (state, action) => {
             const companyId = action.meta.arg;
             state.submitting.followCompany[companyId] = true;
         });
         builder.addCase(companyThunks.toggleFollowCompany.fulfilled, (state, action) => {
             const companyId = action.meta.arg;
             const isFollowed = action.payload;
-            
+
             // Update in companies list
             const company = state.companies.items.find(c => c.company.id === companyId);
             if (company) {
                 company.isFollowed = isFollowed;
             }
-            
+
             // Update in savedCompanies list
             if (isFollowed) {
                 // Add to savedCompanies if not already there
@@ -219,7 +219,7 @@ export const companySlice = createSlice({
                 // Remove from savedCompanies
                 state.savedCompanies = state.savedCompanies.filter(c => c.company.id !== companyId);
             }
-            
+
             state.submitting.followCompany[companyId] = false;
         });
         builder.addCase(companyThunks.toggleFollowCompany.rejected, (state, action) => {
@@ -252,6 +252,25 @@ export const companySlice = createSlice({
         builder.addCase(companyThunks.getEmployerStatistics.rejected, (state, action) => {
             state.loadingStatistics = false;
             message.error((action.payload as string) || "Có lỗi xảy ra khi lấy thống kê");
+        })
+
+        // update company info
+        builder.addCase(companyThunks.updateCompanyInfo.pending, (state) => {
+            state.submitting.company = true;
+        });
+        builder.addCase(companyThunks.updateCompanyInfo.fulfilled, (state, action) => {
+            state.companyInfo = action.payload.company;
+            state.logo = action.payload.images?.find(image => image && image.fileType === FileType.LOGO);
+            state.coverImage = action.payload.images?.find(image => image && image.fileType === FileType.COVER_IMAGE);
+            state.companyImages = action.payload.images?.filter(
+                image => image && image.fileType === FileType.COMPANY_IMAGE
+            ) ?? [];
+            state.submitting.company = false;
+            message.success("Cập nhật thông tin công ty thành công");
+        });
+        builder.addCase(companyThunks.updateCompanyInfo.rejected, (state, action) => {
+            state.submitting.company = false;
+            message.error((action.payload as string) || "Cập nhật thông tin công ty thất bại");
         })
 
     }

@@ -1,5 +1,5 @@
 import { Select, Button } from 'antd';
-import { 
+import {
   CloseCircleOutlined,
   TeamOutlined,
   TrophyOutlined,
@@ -31,7 +31,6 @@ interface AdvancedFiltersProps {
   hasActiveFilters: boolean;
   onFilterChange: (key: string, value: any) => void;
   onResetFilters: () => void;
-  onApplyFilters: () => void;
 }
 
 const AdvancedFilters = ({
@@ -40,15 +39,8 @@ const AdvancedFilters = ({
   hasActiveFilters,
   onFilterChange,
   onResetFilters,
-  onApplyFilters,
 }: AdvancedFiltersProps) => {
-  
-  const handleSelectChange = (key: string, value: any) => {
-    onFilterChange(key, value);
-    setTimeout(() => {
-      onApplyFilters();
-    }, 100);
-  };
+
   return (
     <div className="w-full lg:w-80 shrink-0">
       <>
@@ -77,7 +69,7 @@ const AdvancedFilters = ({
             <Select
               placeholder="Tất cả ngành nghề"
               value={filters.careerId}
-              onChange={(value) => handleSelectChange('careerId', value)}
+              onChange={(value) => onFilterChange('careerId', value)}
               allowClear
               className="w-full"
               showSearch
@@ -102,7 +94,7 @@ const AdvancedFilters = ({
             <Select
               placeholder="Tất cả kinh nghiệm"
               value={filters.experience}
-              onChange={(value) => handleSelectChange('experience', value)}
+              onChange={(value) => onFilterChange('experience', value)}
               allowClear
               className="w-full"
             >
@@ -123,7 +115,7 @@ const AdvancedFilters = ({
             <Select
               placeholder="Tất cả vị trí"
               value={filters.position}
-              onChange={(value) => handleSelectChange('position', value)}
+              onChange={(value) => onFilterChange('position', value)}
               allowClear
               className="w-full"
             >
@@ -144,7 +136,7 @@ const AdvancedFilters = ({
             <Select
               placeholder="Tất cả trình độ"
               value={filters.academicLevel}
-              onChange={(value) => handleSelectChange('academicLevel', value)}
+              onChange={(value) => onFilterChange('academicLevel', value)}
               allowClear
               className="w-full"
             >
@@ -165,7 +157,7 @@ const AdvancedFilters = ({
             <Select
               placeholder="Tất cả hình thức"
               value={filters.typeOfWorkPlace}
-              onChange={(value) => handleSelectChange('typeOfWorkPlace', value)}
+              onChange={(value) => onFilterChange('typeOfWorkPlace', value)}
               allowClear
               className="w-full"
             >
@@ -186,7 +178,7 @@ const AdvancedFilters = ({
             <Select
               placeholder="Tất cả loại hình"
               value={filters.jobType}
-              onChange={(value) => handleSelectChange('jobType', value)}
+              onChange={(value) => onFilterChange('jobType', value)}
               allowClear
               className="w-full"
             >

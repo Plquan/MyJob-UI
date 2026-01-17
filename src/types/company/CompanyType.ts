@@ -57,6 +57,23 @@ export interface IGetCompaniesReqParams {
   companyName?: string;
 }
 
+export interface IUpdateCompanyInfoRequest {
+  companyName: string;
+  companyEmail: string;
+  companyPhone: string;
+  taxCode: string;
+  provinceId: number;
+  address: string;
+  description?: string;
+  websiteUrl?: string;
+  facebookUrl?: string;
+  youtubeUrl?: string;
+  linkedInUrl?: string;
+  since?: string;
+  fieldOperation?: string;
+  employeeSize?: number;
+}
+
 export interface ICompanyStatistics {
   totalJobPosts: number;
   pendingJobPosts: number;

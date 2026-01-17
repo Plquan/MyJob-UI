@@ -47,6 +47,10 @@ const items: MenuProps['items'] = [
         key: ROUTE_PATH.EMPLOYER_FIND_CANDIDATE,
         label: 'Tìm ứng viên mới',
       },
+      {
+        key: ROUTE_PATH.EMPLOYER_SAVED_RESUMES,
+        label: 'Hồ sơ đã lưu',
+      },
     ],
   },
   {

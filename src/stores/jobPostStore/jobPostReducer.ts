@@ -13,6 +13,11 @@ interface JobPostState {
         totalItems: number;
         totalPages: number;
     },
+    adminJobPosts: {
+        items: ICompanyJobPost[];
+        totalItems: number;
+        totalPages: number;
+    },
     jobPosts: {
         items: IJobPost[];
         totalItems: number;
@@ -25,6 +30,12 @@ interface JobPostState {
         jobName?: string;
     },
     companyJobPostRequestParams: {
+        page: number;
+        limit: number;
+        search?: string;
+        jobPostStatus?: number;
+    },
+    adminJobPostRequestParams: {
         page: number;
         limit: number;
         search?: string;
@@ -43,6 +54,11 @@ const initialState: JobPostState = {
         totalItems: 0,
         totalPages: 0
     },
+    adminJobPosts: {
+        items: [],
+        totalItems: 0,
+        totalPages: 0
+    },
     jobPosts: {
         items: [],
         totalItems: 0,
@@ -55,6 +71,12 @@ const initialState: JobPostState = {
         jobName: undefined
     },
     companyJobPostRequestParams: {
+        page: 1,
+        limit: 10,
+        search: undefined,
+        jobPostStatus: undefined
+    },
+    adminJobPostRequestParams: {
         page: 1,
         limit: 10,
         search: undefined,
@@ -107,6 +129,29 @@ export const jobPostSlice = createSlice({
         setJobPostStatus: (state, action: PayloadAction<number | undefined>) => {
             state.companyJobPostRequestParams.jobPostStatus = action.payload;
             state.companyJobPostRequestParams.page = 1;
+        },
+        setAdminJobPostRequestParams: (state, action: PayloadAction<Partial<{ page: number; limit: number; search?: string; jobPostStatus?: number }>>) => {
+            state.adminJobPostRequestParams = {
+                ...state.adminJobPostRequestParams,
+                ...action.payload
+            };
+            if (action.payload.search !== undefined || action.payload.jobPostStatus !== undefined) {
+                state.adminJobPostRequestParams.page = 1;
+            }
+        },
+        setAdminJobPostPage: (state, action: PayloadAction<number>) => {
+            state.adminJobPostRequestParams.page = action.payload;
+        },
+        setAdminJobPostLimit: (state, action: PayloadAction<number>) => {
+            state.adminJobPostRequestParams.limit = action.payload;
+        },
+        setAdminJobPostSearch: (state, action: PayloadAction<string | undefined>) => {
+            state.adminJobPostRequestParams.search = action.payload;
+            state.adminJobPostRequestParams.page = 1;
+        },
+        setAdminJobPostStatus: (state, action: PayloadAction<number | undefined>) => {
+            state.adminJobPostRequestParams.jobPostStatus = action.payload;
+            state.adminJobPostRequestParams.page = 1;
         },
     },
     extraReducers: (builder) => {
@@ -197,18 +242,18 @@ export const jobPostSlice = createSlice({
         builder.addCase(jobPostThunks.toggleSaveJobPost.fulfilled, (state, action) => {
             const jobPostId = action.meta.arg;
             const isSaved = action.payload;
-            
+
             // Update in jobPosts list
             const jobPost = state.jobPosts.items.find(c => c.id === jobPostId);
             if (jobPost) {
                 jobPost.isSaved = isSaved;
             }
-            
+
             // Update in jobPostDetail
             if (state.jobPostDetail && state.jobPostDetail.id === jobPostId) {
                 state.jobPostDetail.isSaved = isSaved;
             }
-            
+
             // Update in savedJobPosts list
             if (isSaved) {
                 // Add to savedJobPosts if not already there
@@ -223,7 +268,7 @@ export const jobPostSlice = createSlice({
                 // Remove from savedJobPosts
                 state.savedJobPosts = state.savedJobPosts.filter(j => j.id !== jobPostId);
             }
-            
+
             state.isSubmiting[jobPostId] = false;
         });
         builder.addCase(jobPostThunks.toggleSaveJobPost.rejected, (state, action) => {
@@ -265,6 +310,30 @@ export const jobPostSlice = createSlice({
             state.loading = false;
         });
         builder.addCase(jobPostThunks.getSavedJobPosts.rejected, (state, action) => {
+            state.loading = false;
+            message.error((action.payload as { message: string })?.message || "Có lỗi xảy ra");
+        })
+
+        // get all job posts for admin
+        builder.addCase(jobPostThunks.getAllJobPosts.pending, (state) => {
+            state.loading = true;
+        });
+        builder.addCase(jobPostThunks.getAllJobPosts.fulfilled, (state, action) => {
+            if (action.payload && Array.isArray(action.payload.items)) {
+                state.adminJobPosts.items = action.payload.items;
+                state.adminJobPosts.totalItems = action.payload.totalItems || 0;
+                state.adminJobPosts.totalPages = action.payload.totalPages || 0;
+            } else {
+                state.adminJobPosts.items = [];
+                state.adminJobPosts.totalItems = 0;
+                state.adminJobPosts.totalPages = 0;
+            }
+            state.loading = false;
+        });
+        builder.addCase(jobPostThunks.getAllJobPosts.rejected, (state, action) => {
+            state.adminJobPosts.items = [];
+            state.adminJobPosts.totalItems = 0;
+            state.adminJobPosts.totalPages = 0;
             state.loading = false;
             message.error((action.payload as { message: string })?.message || "Có lỗi xảy ra");
         })
