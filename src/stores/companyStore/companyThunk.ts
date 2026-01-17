@@ -78,6 +78,7 @@ const getCompanies = createAsyncThunk(
                     page: params.page,
                     limit: params.limit,
                     companyName: params.companyName || "",
+                    ...(params.provinceId && { provinceId: params.provinceId }),
                 }
             });
             return response;

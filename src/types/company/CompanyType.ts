@@ -55,6 +55,7 @@ export interface IGetCompaniesReqParams {
   page: number;
   limit: number;
   companyName?: string;
+  provinceId?: number;
 }
 
 export interface IUpdateCompanyInfoRequest {

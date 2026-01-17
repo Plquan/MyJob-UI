@@ -17,6 +17,7 @@ interface CompanyState {
         page: number;
         limit: number;
         companyName?: string;
+        provinceId?: number;
     },
     logo?: IMyJobFile,
     coverImage?: IMyJobFile,
@@ -56,7 +57,8 @@ const initialState: CompanyState = {
     requestParams: {
         page: 1,
         limit: 10,
-        companyName: undefined
+        companyName: undefined,
+        provinceId: undefined
     },
     employerStatistics: undefined,
 
@@ -65,12 +67,12 @@ export const companySlice = createSlice({
     name: "Company",
     initialState,
     reducers: {
-        setRequestParams: (state, action: PayloadAction<Partial<{ page: number; limit: number; companyName?: string }>>) => {
+        setRequestParams: (state, action: PayloadAction<Partial<{ page: number; limit: number; companyName?: string; provinceId?: number }>>) => {
             state.requestParams = {
                 ...state.requestParams,
                 ...action.payload
             };
-            if (action.payload.companyName !== undefined) {
+            if (action.payload.companyName !== undefined || action.payload.provinceId !== undefined) {
                 state.requestParams.page = 1;
             }
         },
@@ -82,6 +84,10 @@ export const companySlice = createSlice({
         },
         setCompanyName: (state, action: PayloadAction<string | undefined>) => {
             state.requestParams.companyName = action.payload;
+            state.requestParams.page = 1;
+        },
+        setProvinceId: (state, action: PayloadAction<number | undefined>) => {
+            state.requestParams.provinceId = action.payload;
             state.requestParams.page = 1;
         },
     },

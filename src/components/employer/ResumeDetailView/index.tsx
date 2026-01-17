@@ -207,8 +207,8 @@ const ResumeDetailView = ({
         try {
             const conversation = await dispatch(
                 createOrGetConversationThunk({
-                    user1Id: currentUser.id,
-                    user2Id: resumeDetail.candidate.id
+                    user1Id: resumeDetail.candidate.id,
+                    user2Id: currentUser.id
                 })
             ).unwrap();
 

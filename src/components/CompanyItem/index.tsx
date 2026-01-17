@@ -43,9 +43,8 @@ const CompanyItem = ({ company }: CompanyItemProps) => {
   return (
     <Card
       key={company.company.id}
-      hoverable
-      className="border-1! border-gray-300!"
-      onClick={() => navigate(ROUTE_PATH.COMPANY_DETAIL.replace(':companyId', company.company.id.toString()))}
+      className="border-1! border-gray-300! h-full flex flex-col"
+      styles={{ body: { flex: 1, display: 'flex', flexDirection: 'column' } }}
     >
       <div className="relative">
         <img
@@ -72,8 +71,8 @@ const CompanyItem = ({ company }: CompanyItemProps) => {
         <span className="ml-1">0 lượt theo dõi</span>
       </div>
 
-      <div className="pt-3">
-        <h3 className="text-xl font-semibold mb-1">{company.company.companyName}</h3>
+      <div className="pt-3 flex flex-col flex-1">
+        <h3 className="text-xl font-semibold mb-1 cursor-pointer" onClick={() => navigate(ROUTE_PATH.COMPANY_DETAIL.replace(':companyId', company.company.id.toString()))}>{company.company.companyName}</h3>
         <div className="space-y-1 text-gray-600 text-xs">
           <div className="flex items-center">
             <FlagOutlined className="text-sm" />
@@ -93,14 +92,14 @@ const CompanyItem = ({ company }: CompanyItemProps) => {
           </div>
         </div>
 
-        <div className="mt-4">
+        <div className="mt-auto pt-4">
           <Button
             onClick={handleToggleFollow}
             loading={companySubmiting}
             icon={company.isFollowed ? <BookmarkIcon className="w-4 h-4" stroke="white" fill="white" /> : <BookmarkIcon className="w-4 h-4" />
 
             }
-            className={`w-full ${company.isFollowed ? "bg-[#154C91]! border-[#154C91]!" : "border-gray-200!"} 
+            className={`w-full hover:border-1 hover:border-[#154C91]! ${company.isFollowed ? "bg-[#154C91]! border-[#154C91]!" : "border-gray-200!"} 
              ${company.isFollowed ? "text-white!" : "text-gray-900!"}`}>
             {company.isFollowed ? "Đang theo dõi" : "Theo dõi"}
           </Button>

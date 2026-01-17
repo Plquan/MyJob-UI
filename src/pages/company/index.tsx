@@ -15,9 +15,10 @@ const CompanyPage = () => {
     dispatch(companyActions.getCompanies({
       page: requestParams.page,
       limit: requestParams.limit,
-      companyName: requestParams.companyName
+      companyName: requestParams.companyName,
+      provinceId: requestParams.provinceId
     }));
-  }, [dispatch, requestParams.page, requestParams.limit, requestParams.companyName]);
+  }, [dispatch, requestParams.page, requestParams.limit, requestParams.companyName, requestParams.provinceId]);
 
   return (
     <>
