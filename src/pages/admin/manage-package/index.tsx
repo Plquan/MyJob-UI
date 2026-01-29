@@ -1,6 +1,7 @@
 import { Card, Tabs } from 'antd';
 import type { TabsProps } from 'antd';
 import TablePackage from './components/TablePackage';
+import PaymentHistoryTable from './components/PaymentHistoryTable';
 
 
 const items: TabsProps['items'] = [
@@ -12,7 +13,7 @@ const items: TabsProps['items'] = [
   {
     key: '2',
     label: 'Thanh toán',
-    children: "",
+    children: <PaymentHistoryTable />,
   },
 ]
 

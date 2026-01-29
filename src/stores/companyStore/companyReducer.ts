@@ -13,6 +13,7 @@ interface CompanyState {
         totalPages: number;
     },
     savedCompanies: ICompanyWithImagesData[],
+    featuredCompanies: ICompanyWithImagesData[],
     requestParams: {
         page: number;
         limit: number;
@@ -25,6 +26,7 @@ interface CompanyState {
     companyDetail?: ICompanyDetail,
     employerStatistics?: ICompanyStatistics,
     loading: boolean,
+    loadingFeaturedCompanies: boolean,
     loadingStatistics: boolean,
     submitting: {
         logo: boolean;
@@ -39,6 +41,7 @@ interface CompanyState {
 const initialState: CompanyState = {
     loading: false,
     loadingStatistics: false,
+    loadingFeaturedCompanies: false,
     submitting: {
         logo: false,
         cover: false,
@@ -54,6 +57,7 @@ const initialState: CompanyState = {
         totalPages: 0
     },
     savedCompanies: [],
+    featuredCompanies: [],
     requestParams: {
         page: 1,
         limit: 10,
@@ -277,6 +281,20 @@ export const companySlice = createSlice({
         builder.addCase(companyThunks.updateCompanyInfo.rejected, (state, action) => {
             state.submitting.company = false;
             message.error((action.payload as string) || "Cập nhật thông tin công ty thất bại");
+        })
+
+        // get featured companies
+        builder.addCase(companyThunks.getFeaturedCompanies.pending, (state) => {
+            state.loadingFeaturedCompanies = true;
+        });
+        builder.addCase(companyThunks.getFeaturedCompanies.fulfilled, (state, action) => {
+            state.featuredCompanies = action.payload;
+            state.loadingFeaturedCompanies = false;
+        });
+        builder.addCase(companyThunks.getFeaturedCompanies.rejected, (state, action) => {
+            state.featuredCompanies = [];
+            state.loadingFeaturedCompanies = false;
+            // Don't show error message for featured companies as it's not critical
         })
 
     }

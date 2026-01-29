@@ -1,44 +1,42 @@
-import { Card, DatePicker, message } from 'antd';
+import { Card, DatePicker } from 'antd';
 import { Column } from '@ant-design/charts';
 import { useState, useEffect } from 'react';
 import type { Dayjs } from 'dayjs';
 import dayjs from 'dayjs';
-import statisticsService from '@/services/statisticsService';
-import type { IRevenuePackageChartDataDto } from '@/types/statistics/StatisticsType';
+import type { IRevenuePackageChartDataDto, IStatisticsQueryParams } from '@/types/statistics/StatisticsType';
 
 const { RangePicker } = DatePicker;
 
-export default function RevenuePackageChart() {
-    const [loading, setLoading] = useState(true);
+interface RevenuePackageChartProps {
+    data: IRevenuePackageChartDataDto[];
+    onDateRangeChange?: (params?: IStatisticsQueryParams) => void;
+    dateParams?: IStatisticsQueryParams;
+    loading?: boolean;
+}
+
+export default function RevenuePackageChart({ data, onDateRangeChange, dateParams, loading = false }: RevenuePackageChartProps) {
     const [dateRange, setDateRange] = useState<[Dayjs | null, Dayjs | null] | null>(null);
-    const [data, setData] = useState<IRevenuePackageChartDataDto[]>([]);
 
     useEffect(() => {
-        fetchData();
-    }, []);
-
-    const fetchData = async (params?: { startDate?: string; endDate?: string }) => {
-        try {
-            setLoading(true);
-            const result = await statisticsService.getRevenuePackageChart(params);
-            setData(result);
-        } catch (error: any) {
-            console.error('Failed to fetch revenue package chart data:', error);
-            message.error('Không thể tải dữ liệu doanh thu');
-        } finally {
-            setLoading(false);
+        if (dateParams?.startDate && dateParams?.endDate) {
+            setDateRange([
+                dayjs(dateParams.startDate),
+                dayjs(dateParams.endDate)
+            ]);
+        } else {
+            setDateRange(null);
         }
-    };
+    }, [dateParams]);
 
     const handleDateChange = (dates: [Dayjs | null, Dayjs | null] | null) => {
         setDateRange(dates);
         if (dates && dates[0] && dates[1]) {
-            fetchData({
+            onDateRangeChange?.({
                 startDate: dates[0].format('YYYY-MM-DD'),
                 endDate: dates[1].format('YYYY-MM-DD'),
             });
         } else {
-            fetchData();
+            onDateRangeChange?.(undefined);
         }
     };
 
@@ -54,7 +52,7 @@ export default function RevenuePackageChart() {
         minColumnWidth: 30,
         label: {
             position: 'top' as const,
-            formatter: (datum: any) => `${(datum.revenue / 1000000).toFixed(0)}M`,
+            formatter: (datum: any) => `${((datum.revenue ?? 0) / 1000000).toFixed(0)}M`,
         },
         xAxis: {
             label: {
@@ -71,7 +69,7 @@ export default function RevenuePackageChart() {
             formatter: (datum: any) => {
                 return {
                     name: 'Doanh thu',
-                    value: `${datum.revenue.toLocaleString('vi-VN')} VND`,
+                    value: `${(datum.revenue ?? 0).toLocaleString('vi-VN')} VND`,
                 };
             },
         },
@@ -101,7 +99,8 @@ export default function RevenuePackageChart() {
             }
             styles={{ body: { height: '330px' } }}
         >
-            {!loading && <Column {...chartConfig} height={280} />}
+            {!loading && data.length > 0 && <Column {...chartConfig} height={280} />}
+            {!loading && data.length === 0 && <div style={{ textAlign: 'center', padding: '40px' }}>Không có dữ liệu</div>}
         </Card>
     );
 }

@@ -170,7 +170,13 @@ const DefaultHeader = () => {
                   <Avatar size="small" src={currentUser.avatar} />
                 </Badge>
 
-                <span className="max-w-[120px] truncate">{currentUser.role === EUserRole.CANDIDATE ? currentUser.candidate?.fullName : currentUser.company?.companyName}</span>
+                <span className="max-w-[120px] truncate">
+                  {currentUser.role === EUserRole.CANDIDATE 
+                    ? currentUser.candidate?.fullName 
+                    : currentUser.role === EUserRole.ADMIN
+                    ? currentUser.email
+                    : currentUser.company?.companyName}
+                </span>
               </div>
             </Dropdown>
           ) : (

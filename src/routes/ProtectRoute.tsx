@@ -35,7 +35,8 @@ const ProtectRoute = ({ role, roles, requireAuth }: ProtectRouteProps): JSX.Elem
         return <Navigate to={ROUTE_PATH.ADMIN_LOGIN} />;
       }
     }
-    if (hasCheckedAuth && isAuthenticated && currentUser?.role && !roles.includes(currentUser.role)) {
+    // Chỉ check khi currentUser đã được load
+    if (hasCheckedAuth && isAuthenticated && currentUser && currentUser.role && !roles.includes(currentUser.role)) {
       // Đã login nhưng sai role -> redirect về login tương ứng
       const firstRole = roles[0];
       if (firstRole === EUserRole.CANDIDATE) {
@@ -63,7 +64,8 @@ const ProtectRoute = ({ role, roles, requireAuth }: ProtectRouteProps): JSX.Elem
     }
 
     // Đã login nhưng sai role -> redirect về login tương ứng
-    if (hasCheckedAuth && isAuthenticated && currentUser?.role !== role) {
+    // Chỉ check khi currentUser đã được load
+    if (hasCheckedAuth && isAuthenticated && currentUser && currentUser.role !== role) {
       if (role === EUserRole.CANDIDATE) {
         return <Navigate to={ROUTE_PATH.CANDIDATE_LOGIN} />;
       } else if (role === EUserRole.EMPLOYER) {

@@ -1,4 +1,4 @@
-import { Card, Row, Col, Progress, Tag, Button, Spin } from 'antd';
+import { Card, Row, Col, Progress, Tag, Button, Spin, Modal, message } from 'antd';
 import {
   UserOutlined,
   FileTextOutlined,
@@ -6,8 +6,9 @@ import {
   TrophyOutlined,
   CrownOutlined,
   ShoppingCartOutlined,
+  ClockCircleOutlined,
 } from '@ant-design/icons';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { packageActions } from '@/stores/packageStore/packageReducer';
@@ -18,6 +19,8 @@ const ManagePackage = () => {
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
   const { companyPackage, loading } = useSelector((state: RootState) => state.packageStore);
+  const [isRenewModalOpen, setIsRenewModalOpen] = useState(false);
+  const [isProcessingPayment, setIsProcessingPayment] = useState(false);
 
   useEffect(() => {
     dispatch(packageActions.getCompanyPackage());
@@ -47,7 +50,52 @@ const ManagePackage = () => {
   };
 
   const daysRemaining = calculateDaysRemaining();
-  const isExpiringSoon = daysRemaining <= 10;
+  const isExpired = daysRemaining === 0;
+  const isExpiringSoon = daysRemaining > 0 && daysRemaining <= 10;
+
+  const handleRenewClick = () => {
+    setIsRenewModalOpen(true);
+  };
+
+  const handleRenewConfirm = async () => {
+    if (!companyPackage?.package?.id) {
+      message.error('Không tìm thấy thông tin gói dịch vụ');
+      return;
+    }
+
+    try {
+      setIsProcessingPayment(true);
+      
+      // Create checkout session with Stripe
+      const baseUrl = window.location.origin;
+      const successUrl = `${baseUrl}${ROUTE_PATH.PAYMENT_SUCCESS}`;
+      const cancelUrl = `${baseUrl}${ROUTE_PATH.PAYMENT_CANCEL}`;
+
+      const response = await dispatch(
+        packageActions.createCheckoutSession({
+          packageId: companyPackage.package.id,
+          successUrl,
+          cancelUrl,
+        })
+      ).unwrap();
+
+      // Redirect to Stripe checkout
+      if (response.url) {
+        window.location.href = response.url;
+      } else {
+        message.error('Không thể tạo phiên thanh toán');
+        setIsProcessingPayment(false);
+      }
+    } catch (error: any) {
+      message.error(error?.message || 'Không thể tạo phiên thanh toán');
+      setIsProcessingPayment(false);
+      console.error('Checkout session creation failed:', error);
+    }
+  };
+
+  const handleRenewCancel = () => {
+    setIsRenewModalOpen(false);
+  };
 
   if (loading) {
     return (
@@ -103,7 +151,7 @@ const ManagePackage = () => {
           <Button
             type="primary"
             // icon={<ClockCircleOutlined />}
-            onClick={() => navigate(ROUTE_PATH.PRODUCTS)}
+            onClick={handleRenewClick}
             className="bg-[#154C91]!"
           >
             Gia hạn
@@ -121,9 +169,10 @@ const ManagePackage = () => {
           </Col>
           <Col xs={24} sm={8}>
             <div className="text-sm text-gray-600">Còn lại</div>
-            <div className={`text-base font-semibold ${isExpiringSoon ? 'text-red-600' : 'text-green-600'}`}>
+            <div className={`text-base font-semibold ${isExpired || isExpiringSoon ? 'text-red-600' : 'text-green-600'}`}>
               {daysRemaining} ngày
-              {isExpiringSoon && <Tag color="red" className="ml-2!">Sắp hết hạn</Tag>}
+              {isExpired && <Tag color="red" className="ml-2!">Hết hạn</Tag>}
+              {isExpiringSoon && <Tag color="yellow" className="ml-2!">Sắp hết hạn</Tag>}
             </div>
           </Col>
         </Row>
@@ -199,8 +248,45 @@ const ManagePackage = () => {
               <Tag color="orange">{companyPackage.package.jobHotDurationInDays} ngày</Tag>
             </div>
           </Col>
+          <Col xs={24} sm={12}>
+            <div className="flex items-center justify-between p-3 bg-gray-50 rounded">
+              <div className="flex items-center">
+                <ClockCircleOutlined className="text-blue-500 text-lg mr-2" />
+                <div className="flex flex-col">
+                  <span className="font-medium">Số ngày hiện thị</span>
+                  <span className="text-xs text-gray-500">Thời hạn hiển thị tin tuyển dụng</span>
+                </div>
+              </div>
+              <Tag color="blue">{companyPackage.package.jobPostDurationInDays} ngày</Tag>
+            </div>
+          </Col>
         </Row>
       </Card>
+
+      {/* Renew Confirmation Modal */}
+      <Modal
+        title="Xác nhận gia hạn"
+        open={isRenewModalOpen}
+        onOk={handleRenewConfirm}
+        onCancel={handleRenewCancel}
+        okText="Có, gia hạn"
+        cancelText="Hủy"
+        centered
+        confirmLoading={isProcessingPayment}
+        okButtonProps={{ disabled: isProcessingPayment }}
+      >
+        <p>Bạn có chắc chắn muốn gia hạn gói dịch vụ <b className="text-blue-600">{companyPackage?.package?.name}</b>?</p>
+        {companyPackage?.package && (
+          <div className="mt-4 p-3 bg-gray-50 rounded">
+            <p className="text-sm text-gray-600 mb-1">
+              Giá: <strong className="text-green-600">{formatCurrency(companyPackage.package.price)}</strong>
+            </p>
+            <p className="text-sm text-gray-600">
+              Thời hạn: <strong>{companyPackage.package.durationInDays} ngày</strong>
+            </p>
+          </div>
+        )}
+      </Modal>
     </Card>
   );
 };

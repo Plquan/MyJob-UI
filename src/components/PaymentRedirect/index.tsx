@@ -19,12 +19,13 @@ const PaymentRedirect = () => {
       // Refresh company package info after successful payment
       dispatch(packageActions.getCompanyPackage());
       message.success('Thanh toán thành công! Gói dịch vụ của bạn đã được kích hoạt.');
+      // Redirect to manage package page to see updated package info
+      navigate(ROUTE_PATH.EMPLOYER_MANAGE_PACKAGE, { replace: true });
     } else if (isCancel) {
       message.warning('Thanh toán đã bị hủy. Vui lòng thử lại nếu bạn muốn tiếp tục.');
+      // Redirect to manage package page
+      navigate(ROUTE_PATH.EMPLOYER_MANAGE_PACKAGE, { replace: true });
     }
-
-    // Redirect to products page
-    navigate(ROUTE_PATH.PRODUCTS, { replace: true });
   }, [location.pathname, navigate, dispatch]);
 
   return null;

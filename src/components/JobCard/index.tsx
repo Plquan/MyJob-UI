@@ -50,7 +50,7 @@ const JobCard: React.FC<JobCardProps> = ({ job, onClick, size = 'default' }) => 
           : 'w-10 h-10 mr-2'
           }`}>
           <img
-            src={job.company.logo}
+            src={job?.company?.logo || ''}
             className="w-full h-full object-contain p-1!"
           />
         </div>
@@ -64,7 +64,7 @@ const JobCard: React.FC<JobCardProps> = ({ job, onClick, size = 'default' }) => 
             >
               {job.jobName}
             </span>
-            <div className={`flex flex-col items-end ${isLarge ? 'gap-1.5 md:gap-2' : 'gap-1'
+            <div className={`flex flex-row items-center ${isLarge ? 'gap-1 md:gap-1' : 'gap-1'
               }`}>
               {job.isHot && (
                 <Tag color="gold" className={`font-bold ${isLarge ? 'text-xs md:text-sm' : ''}`}>
@@ -76,13 +76,18 @@ const JobCard: React.FC<JobCardProps> = ({ job, onClick, size = 'default' }) => 
                   Mới
                 </Tag>
               )}
+              {job.isExpired && (
+                <Tag color="red" className={`font-bold ${isLarge ? 'text-xs md:text-sm' : ''}`}>
+                  Đã hết hạn
+                </Tag>
+              )}
             </div>
           </div>
           <span className={`text-gray-600 truncate ${isLarge
             ? 'text-sm md:text-base mt-1 md:mt-1'
             : 'text-xs mt-1'
             }`}>
-            {job.company.companyName}
+            {job?.company?.companyName || 'N/A'}
           </span>
         </div>
       </div>

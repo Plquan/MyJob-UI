@@ -32,6 +32,11 @@ const CompanyItem = ({ company }: CompanyItemProps) => {
   const companySubmiting = submitting.followCompany[company.company.id] ?? false;
   const { requireCandidate } = useAuthorization([EUserRole.CANDIDATE]);
 
+  // Kiểm tra công ty còn hot (chưa hết hotExpiredAt)
+  const isHot = company.company.hotExpiredAt 
+    ? new Date() < new Date(company.company.hotExpiredAt) 
+    : false;
+
   const handleToggleFollow = async (e: React.MouseEvent) => {
     e.stopPropagation();
     if (!requireCandidate()) {
@@ -43,7 +48,11 @@ const CompanyItem = ({ company }: CompanyItemProps) => {
   return (
     <Card
       key={company.company.id}
-      className="border-1! border-gray-300! h-full flex flex-col"
+      className={`border-1! h-full flex flex-col ${
+        isHot 
+          ? 'border-gray-300! bg-gradient-to-br! from-[rgb(0,0,0)]! to-[rgb(123,104,238)]! shadow-md' 
+          : 'border-gray-300!'
+      }`}
       styles={{ body: { flex: 1, display: 'flex', flexDirection: 'column' } }}
     >
       <div className="relative">
@@ -66,28 +75,28 @@ const CompanyItem = ({ company }: CompanyItemProps) => {
         </div>
       </div>
 
-      <div className="flex justify-end items-center text-xs text-gray-600 mt-2">
-        <UsergroupAddOutlined style={{ fontSize: 14 }} />
+      <div className={`flex justify-end items-center text-xs mt-2 ${isHot ? 'text-white' : 'text-gray-600'}`}>
+        <UsergroupAddOutlined style={{ fontSize: 14, color: isHot ? 'white' : undefined }} />
         <span className="ml-1">0 lượt theo dõi</span>
       </div>
 
       <div className="pt-3 flex flex-col flex-1">
-        <h3 className="text-xl font-semibold mb-1 cursor-pointer" onClick={() => navigate(ROUTE_PATH.COMPANY_DETAIL.replace(':companyId', company.company.id.toString()))}>{company.company.companyName}</h3>
-        <div className="space-y-1 text-gray-600 text-xs">
+        <h3 className={`text-xl font-semibold mb-1 cursor-pointer ${isHot ? 'text-white' : ''}`} onClick={() => navigate(ROUTE_PATH.COMPANY_DETAIL.replace(':companyId', company.company.id.toString()))}>{company.company.companyName}</h3>
+        <div className={`space-y-1 text-xs ${isHot ? 'text-white' : 'text-gray-600'}`}>
           <div className="flex items-center">
-            <FlagOutlined className="text-sm" />
+            <FlagOutlined className="text-sm" style={{ color: isHot ? 'white' : undefined }} />
             <span className="ml-2">{company.company.fieldOperation || 'Chưa cập nhật'}</span>
           </div>
           <div className="flex items-center">
-            <EnvironmentOutlined className="text-sm" />
+            <EnvironmentOutlined className="text-sm" style={{ color: isHot ? 'white' : undefined }} />
             <span className="ml-2">{company.company.address}</span>
           </div>
           <div className="flex items-center">
-            <TeamOutlined className="text-sm" />
+            <TeamOutlined className="text-sm" style={{ color: isHot ? 'white' : undefined }} />
             <span className="ml-2">{company.company.employeeSize ? `${company.company.employeeSize}+ nhân viên` : 'Chưa cập nhật'}</span>
           </div>
           <div className="flex items-center">
-            <CarryOutOutlined className="text-sm" />
+            <CarryOutOutlined className="text-sm" style={{ color: isHot ? 'white' : undefined }} />
             <span className="ml-2">0 việc làm</span>
           </div>
         </div>

@@ -20,9 +20,9 @@ const LoginForm = () => {
         try {
             setLoading(true)
             await dispatch(authActions.login(values)).unwrap()
-            dispatch(authActions.getCurrentUser())
+            await dispatch(authActions.getCurrentUser()).unwrap()
             toast.success("Đăng nhập thành công")
-            navigate(ROUTE_PATH.ADMIN_MANAGE_ROLE)
+            navigate(ROUTE_PATH.ADMIN_DASHBOARD)
         } catch (error: any) {
             toast.error(error.message);
         }

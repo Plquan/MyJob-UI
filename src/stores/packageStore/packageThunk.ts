@@ -1,7 +1,7 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import http from "../../ultils/axios/axiosCustom";
 import type { ICreatePackagedata, IPackageDto, IUpdatePackageData, IPackageUsage } from "../../types/package/PackageType";
-import type { ICreateCheckoutSessionRequest, ICreateCheckoutSessionResponse } from "../../types/payment/PaymentType";
+import type { ICreateCheckoutSessionRequest, ICreateCheckoutSessionResponse, IPaymentHistoryDto } from "../../types/payment/PaymentType";
 
 const getAllPackages = createAsyncThunk (
     "package/getAllPackages",
@@ -98,6 +98,18 @@ const createCheckoutSession = createAsyncThunk (
     }
 )
 
+const getPaymentHistory = createAsyncThunk (
+    "package/getPaymentHistory",
+    async (_, {rejectWithValue}): Promise<IPaymentHistoryDto[]> => {
+        try {
+            const response: IPaymentHistoryDto[] = await http.get("/payment/history");
+            return response;
+        } catch (error: any) {
+            return rejectWithValue(error.response?.data || { message: 'Failed to get payment history' }) as any;
+        }
+    }
+)
+
 const packageThunks = {
     getAllPackages,
     createPackage,
@@ -106,7 +118,8 @@ const packageThunks = {
     getPackages,
     purchasePackage,
     getCompanyPackage,
-    createCheckoutSession
+    createCheckoutSession,
+    getPaymentHistory
 }
 export default packageThunks;
 

@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { IPackageDto, IPackageUsage } from "../../types/package/PackageType";
+import type { IPaymentHistoryDto } from "../../types/payment/PaymentType";
 import packageThunks from "./packageThunk";
 import { message } from "antd";
 
@@ -7,6 +8,7 @@ interface PackageState {
     allPackages: IPackageDto[],
     packages: IPackageDto[],
     companyPackage: IPackageUsage | null,
+    paymentHistory: IPaymentHistoryDto[],
     loading: boolean,
     isSubmiting: boolean,
     error?: string,
@@ -16,6 +18,7 @@ const initialState: PackageState = {
     allPackages: [],
     packages: [],
     companyPackage: null,
+    paymentHistory: [],
     loading: false,
     isSubmiting: false,
     error: undefined,
@@ -118,6 +121,19 @@ export const packageSlice = createSlice({
             state.loading = false;
         });
         builder.addCase(packageThunks.getCompanyPackage.rejected, (state, action) => {
+            state.loading = false;
+            message.error((action.payload as { message: string }).message);
+        });
+
+        // get payment history
+        builder.addCase(packageThunks.getPaymentHistory.pending, (state) => {
+            state.loading = true;
+        });
+        builder.addCase(packageThunks.getPaymentHistory.fulfilled, (state, action) => {
+            state.paymentHistory = action.payload;
+            state.loading = false;
+        });
+        builder.addCase(packageThunks.getPaymentHistory.rejected, (state, action) => {
             state.loading = false;
             message.error((action.payload as { message: string }).message);
         });

@@ -84,7 +84,7 @@ const PackageModal: React.FC<AddPackageModalProps> = ({
         </Row>
 
         <Row gutter={16}>
-          <Col span={8}>
+          <Col span={6}>
             <Form.Item
               label="Thời hạn gói"
               name="durationInDays"
@@ -99,7 +99,29 @@ const PackageModal: React.FC<AddPackageModalProps> = ({
               />
             </Form.Item>
           </Col>
-          <Col span={8}>
+          <Col span={6}>
+            <Form.Item
+              label="Thời hạn tin đăng (ngày)"
+              name="jobPostDurationInDays"
+              rules={[
+                {
+                  validator: (_, value) => {
+                    if (value !== undefined && value !== null && value <= 0) {
+                      return Promise.reject(new Error('Thời hạn tin đăng phải lớn hơn 0!'));
+                    }
+                    return Promise.resolve();
+                  }
+                }
+              ]}
+            >
+              <InputNumber
+                placeholder="Thời hạn tin đăng"
+                style={{ width: '100%' }}
+                min={1}
+              />
+            </Form.Item>
+          </Col>
+          <Col span={6}>
             <Form.Item
               label="Tin nổi bật (ngày)"
               name="jobHotDurationInDays"
@@ -111,7 +133,7 @@ const PackageModal: React.FC<AddPackageModalProps> = ({
               />
             </Form.Item>
           </Col>
-          <Col span={8}>
+          <Col span={6}>
             <Form.Item
               label="Công ty nổi bật (ngày)"
               name="highlightCompanyDurationInDays"

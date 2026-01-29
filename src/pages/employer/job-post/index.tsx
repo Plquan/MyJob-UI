@@ -118,6 +118,14 @@ const ManageJobPostPage = () => {
       render: (date) => date ? new Date(date).toLocaleDateString('vi-VN') : 'Không giới hạn',
     },
     {
+      title: 'Thời hạn đăng tin',
+      dataIndex: 'expiredAt',
+      key: 'expiredAt',
+      align: 'center',
+      width: 120,
+      render: (date) => date ? new Date(date).toLocaleDateString('vi-VN') : 'Không giới hạn',
+    },
+    {
       title: 'Lượt nộp',
       dataIndex: 'applications',
       key: 'applications',

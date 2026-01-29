@@ -154,6 +154,20 @@ const updateCompanyInfo = createAsyncThunk(
     }
 )
 
+const getFeaturedCompanies = createAsyncThunk(
+    "company/getFeaturedCompanies",
+    async (limit: number = 12, { rejectWithValue }): Promise<ICompanyWithImagesData[]> => {
+        try {
+            const response: ICompanyWithImagesData[] = await http.get("/company/featured", {
+                params: { limit }
+            });
+            return response;
+        } catch (error: any) {
+            return rejectWithValue(error.response?.data || error.message) as any;
+        }
+    }
+)
+
 const companyThunks = {
     getEmployerCompany,
     uploadCompanyLogo,
@@ -165,7 +179,8 @@ const companyThunks = {
     toggleFollowCompany,
     getSavedCompanies,
     getEmployerStatistics,
-    updateCompanyInfo
+    updateCompanyInfo,
+    getFeaturedCompanies
 }
 
 export default companyThunks

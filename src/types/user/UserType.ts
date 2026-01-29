@@ -9,11 +9,17 @@ export interface IUser {
     updatedAt: Date;
 }
 
+export interface IUserData extends IUser {
+    fullName?: string;
+    avatar?: string;
+    roleName?: string;
+    groupRoles?: number[];
+}
+
 export interface IPagingResponse {
-    users: IUser[];
-    page: number;
-    limit: number;
-    totalItem: number;
+    items: IUserData[];
+    totalItems: number;
+    totalPages: number;
 }
 
 export interface IUpdateUser {

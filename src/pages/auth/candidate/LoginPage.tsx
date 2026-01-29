@@ -14,16 +14,6 @@ const LoginPage = () => {
         <h2 className="text-center text-xl font-semibold! mb-8 pt-3">Đăng nhập</h2>
 
         <LoginForm />
-
-        <Divider plain className="text-base font-semibold">Hoặc</Divider>
-        <div className="flex flex-col gap-2 mb-4">
-          <Button icon={<GoogleOutlined />} className="w-full h-10 rounded-md border text-base flex items-center justify-center">
-            Đăng nhập với Google
-          </Button>
-          <Button icon={<GithubOutlined />} className="w-full h-10 rounded-md border text-base flex items-center justify-center">
-            Đăng nhập với GitHub
-          </Button>
-        </div>
         <Divider plain className="text-base font-semibold"></Divider>
         <div className="text-center text-sm mb-3 mt-7">
           <a href="#" className="text-blue-500 hover:underline">Quên mật khẩu?</a>

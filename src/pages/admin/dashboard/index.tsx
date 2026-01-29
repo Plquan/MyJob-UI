@@ -2,7 +2,7 @@ import { Card, Row, Col, Spin, message } from 'antd';
 import { UserOutlined, BankOutlined, FileTextOutlined, FormOutlined, DollarOutlined } from '@ant-design/icons';
 import { useState, useEffect } from 'react';
 import statisticsService from '@/services/statisticsService';
-import type { IStatsDto } from '@/types/statistics/StatisticsType';
+import type { IDashboardStatsDto, IStatisticsQueryParams } from '@/types/statistics/StatisticsType';
 import UserChart from './components/UserChart';
 import JobPostChart from './components/JobPostChart';
 import TopCareersChart from './components/TopCareersChart';
@@ -11,57 +11,64 @@ import RevenuePackageChart from './components/RevenuePackageChart';
 
 export default function AdminDashboard() {
     const [loading, setLoading] = useState(true);
-    const [stats, setStats] = useState<IStatsDto | null>(null);
+    const [dashboardData, setDashboardData] = useState<IDashboardStatsDto | null>(null);
+    const [dateParams, setDateParams] = useState<IStatisticsQueryParams | undefined>(undefined);
 
     useEffect(() => {
-        fetchStats();
+        fetchDashboardData();
     }, []);
 
-    const fetchStats = async () => {
+    const fetchDashboardData = async (params?: IStatisticsQueryParams) => {
         try {
             setLoading(true);
-            const data = await statisticsService.getStats();
-            setStats(data);
+            const data = await statisticsService.getDashboardStats(params);
+            setDashboardData(data);
+            setDateParams(params);
         } catch (error: any) {
-            console.error('Failed to fetch stats:', error);
-            message.error('Không thể tải dữ liệu thống kê tổng quan');
+            console.error('Failed to fetch dashboard data:', error);
+            message.error('Không thể tải dữ liệu thống kê. Vui lòng thử lại sau.');
         } finally {
             setLoading(false);
         }
     };
 
+    const handleDateRangeChange = (params?: IStatisticsQueryParams) => {
+        fetchDashboardData(params);
+    };
+
+    const stats = dashboardData?.stats;
     const statsCards = stats ? [
         {
             title: 'Ứng viên',
-            value: stats.jobSeekers,
+            value: stats.jobSeekers ?? 0,
             icon: <UserOutlined />,
             color: 'border-pink-200',
             textColor: 'text-pink-500',
         },
         {
             title: 'Nhà tuyển dụng',
-            value: stats.employers,
+            value: stats.employers ?? 0,
             icon: <BankOutlined />,
             color: 'border-orange-200',
             textColor: 'text-orange-500',
         },
         {
             title: 'Bài đăng tuyển dụng',
-            value: stats.jobPosts,
+            value: stats.jobPosts ?? 0,
             icon: <FileTextOutlined />,
             color: 'border-yellow-200',
             textColor: 'text-yellow-600',
         },
         {
             title: 'Lượt ứng tuyển',
-            value: stats.applications,
+            value: stats.applications ?? 0,
             icon: <FormOutlined />,
             color: 'border-purple-200',
             textColor: 'text-purple-500',
         },
         {
             title: 'Doanh thu',
-            value: stats.revenue,
+            value: stats.revenue ?? 0,
             icon: <DollarOutlined />,
             color: 'border-green-200',
             textColor: 'text-green-600',
@@ -85,7 +92,7 @@ export default function AdminDashboard() {
                                     <div className="flex items-center gap-3">
                                         <span className={`text-2xl ${item.textColor}`}>{item.icon}</span>
                                         <span className={`text-xl font-semibold ${item.textColor}`}>
-                                            {item.value.toLocaleString()}
+                                            {(item.value ?? 0).toLocaleString('vi-VN')}
                                         </span>
                                     </div>
                                 </div>
@@ -99,27 +106,52 @@ export default function AdminDashboard() {
             <Row gutter={[16, 16]}>
                 {/* User Chart - Full Width */}
                 <Col xs={24}>
-                    <UserChart />
+                    <UserChart 
+                        data={dashboardData?.userChart || []}
+                        onDateRangeChange={handleDateRangeChange}
+                        dateParams={dateParams}
+                        loading={loading}
+                    />
                 </Col>
 
                 {/* Job Post Chart */}
                 <Col xs={24} lg={12}>
-                    <JobPostChart />
+                    <JobPostChart 
+                        data={dashboardData?.jobPostChart || []}
+                        onDateRangeChange={handleDateRangeChange}
+                        dateParams={dateParams}
+                        loading={loading}
+                    />
                 </Col>
 
                 {/* Revenue by Service Package Chart */}
                 <Col xs={24} lg={12}>
-                    <RevenuePackageChart />
+                    <RevenuePackageChart 
+                        data={dashboardData?.revenuePackageChart || []}
+                        onDateRangeChange={handleDateRangeChange}
+                        dateParams={dateParams}
+                        loading={loading}
+                    />
                 </Col>
 
                 {/* Top 5 Careers */}
                 <Col xs={24} lg={12}>
-                    <TopCareersChart />
+                    <TopCareersChart 
+                        data={dashboardData?.topCareers || []}
+                        onDateRangeChange={handleDateRangeChange}
+                        dateParams={dateParams}
+                        loading={loading}
+                    />
                 </Col>
 
                 {/* Application Chart */}
                 <Col xs={24} lg={12}>
-                    <ApplicationChart />
+                    <ApplicationChart 
+                        data={dashboardData?.applicationChart || []}
+                        onDateRangeChange={handleDateRangeChange}
+                        dateParams={dateParams}
+                        loading={loading}
+                    />
                 </Col>
             </Row>
         </Card>

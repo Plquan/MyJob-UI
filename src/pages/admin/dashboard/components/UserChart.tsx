@@ -1,51 +1,49 @@
-import { Card, DatePicker, message } from 'antd';
+import { Card, DatePicker } from 'antd';
 import { Line } from '@ant-design/charts';
 import { useState, useEffect } from 'react';
 import type { Dayjs } from 'dayjs';
 import dayjs from 'dayjs';
-import statisticsService from '@/services/statisticsService';
-import type { IUserChartDataDto } from '@/types/statistics/StatisticsType';
+import type { IUserChartDataDto, IStatisticsQueryParams } from '@/types/statistics/StatisticsType';
 
 const { RangePicker } = DatePicker;
 
-export default function UserChart() {
-    const [loading, setLoading] = useState(true);
+interface UserChartProps {
+    data: IUserChartDataDto[];
+    onDateRangeChange?: (params?: IStatisticsQueryParams) => void;
+    dateParams?: IStatisticsQueryParams;
+    loading?: boolean;
+}
+
+export default function UserChart({ data, onDateRangeChange, dateParams, loading = false }: UserChartProps) {
     const [dateRange, setDateRange] = useState<[Dayjs | null, Dayjs | null] | null>(null);
-    const [data, setData] = useState<IUserChartDataDto[]>([]);
 
     useEffect(() => {
-        fetchData();
-    }, []);
-
-    const fetchData = async (params?: { startDate?: string; endDate?: string }) => {
-        try {
-            setLoading(true);
-            const result = await statisticsService.getUserChart(params);
-            setData(result);
-        } catch (error: any) {
-            console.error('Failed to fetch user chart data:', error);
-            message.error('Không thể tải dữ liệu biểu đồ người dùng');
-        } finally {
-            setLoading(false);
+        if (dateParams?.startDate && dateParams?.endDate) {
+            setDateRange([
+                dayjs(dateParams.startDate),
+                dayjs(dateParams.endDate)
+            ]);
+        } else {
+            setDateRange(null);
         }
-    };
+    }, [dateParams]);
 
     const handleDateChange = (dates: [Dayjs | null, Dayjs | null] | null) => {
         setDateRange(dates);
         if (dates && dates[0] && dates[1]) {
-            fetchData({
+            onDateRangeChange?.({
                 startDate: dates[0].format('YYYY-MM-DD'),
                 endDate: dates[1].format('YYYY-MM-DD'),
             });
         } else {
-            fetchData();
+            onDateRangeChange?.(undefined);
         }
     };
 
     const chartConfig = {
         data: data.flatMap(item => [
-            { date: item.date, value: item.jobSeeker, category: 'Job Seeker' },
-            { date: item.date, value: item.employer, category: 'Employer' }
+            { date: item.date, value: item.jobSeeker ?? 0, category: 'Job Seeker' },
+            { date: item.date, value: item.employer ?? 0, category: 'Employer' }
         ]),
         xField: 'date',
         yField: 'value',
@@ -99,7 +97,8 @@ export default function UserChart() {
             }
             styles={{ body: { height: '330px' } }}
         >
-            {!loading && <Line {...chartConfig} height={280} />}
+            {!loading && data.length > 0 && <Line {...chartConfig} height={280} />}
+            {!loading && data.length === 0 && <div style={{ textAlign: 'center', padding: '40px' }}>Không có dữ liệu</div>}
         </Card>
     );
 }

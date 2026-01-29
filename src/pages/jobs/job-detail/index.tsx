@@ -26,6 +26,12 @@ const JobDetail = () => {
   const currentJob = jobPostDetail;
   const isSaved = currentJob?.isSaved ?? false;
   const currentJobSubmiting = jobPostId ? (isSubmiting[parseInt(jobPostId)] ?? false) : false;
+  
+  // Kiểm tra deadline đã hết hạn chưa
+  const isDeadlineExpired = useMemo(() => {
+    if (!currentJob?.deadline) return false;
+    return new Date() > new Date(currentJob.deadline);
+  }, [currentJob?.deadline]);
 
   // Lấy tên tỉnh từ store
   const provinceName = useMemo(() => {
@@ -147,17 +153,17 @@ const JobDetail = () => {
               <div className="flex flex-col md:flex-row gap-4 px-6 pb-6 pt-5">
                 <Button
                   onClick={handleApplyJob}
-                  disabled={currentJobSubmiting || currentJob.isApplied}
+                  disabled={currentJobSubmiting || currentJob.isApplied || isDeadlineExpired}
                   type="primary"
                   className={`
                         px-8 font-semibold text-base h-10 hover:opacity-90
-                        ${currentJob.isApplied
+                        ${currentJob.isApplied || isDeadlineExpired
                       ? 'bg-gray-300! border-gray-300! cursor-not-allowed'
                       : 'bg-[#6A5ACD]! border-[#6A5ACD]!'
                     }
                   `}
                 >
-                  {currentJob.isApplied ? 'Đã nộp đơn' : 'Nộp đơn ngay'}
+                  {currentJob.isApplied ? 'Đã nộp đơn' : isDeadlineExpired ? 'Đã hết hạn' : 'Nộp đơn ngay'}
                 </Button>
 
                 <Button
